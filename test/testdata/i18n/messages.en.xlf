@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?><xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file datatype="plaintext" original="ng2.template" source-language="de" target-language="en">
+    <body>
+      <trans-unit datatype="html" id="78eab955529ba0f1817c84991d9175f55bfdf937">
+        <source>Bearbeiten Beschreibung</source>
+        <target state="needs-l10n">Bearbeiten Beschreibung</target>
+        <note from="description" priority="1">data.edit.titles.description</note>
+      </trans-unit>
+      <trans-unit approved="yes" datatype="html" id="a52ba049c16778bdb2e5a19a41acaadf87b104dc">
+        <source>Beschreibung zu <x id="INTERPOLATION"/> (<x id="INTERPOLATION_1"/>)</source>
+        <target state="final">Description of <x id="INTERPOLATION"/> (<x id="INTERPOLATION_1"/>)</target>
+        <note from="description" priority="1">data.edit.subtitles.description</note>
+      </trans-unit>
+      <trans-unit datatype="html" id="562afff053ef3db841da033731b3610eceb94daa">
+        <source>Die eingegebenen Daten werden im Respository gespeichert und sind für jeden sichtbar.<x ctype="lb" id="LINE_BREAK"/>
+        Die Angaben sollten kurz (max. 1 Zeile) und prägnant sein.</source>
+        <target state="new">Die eingegebenen Daten werden im Respository gespeichert und sind für jeden sichtbar.<x ctype="lb" id="LINE_BREAK"/>
+        Die Angaben sollten kurz (max. 1 Zeile) und prägnant sein.</target>
+        <note from="description" priority="1">data.edit.warning</note>
+      </trans-unit>
+      <trans-unit datatype="html" id="1ead0ad1063d0c9e005fe56c9529aef4c1ef9d21">
+        <source>Schließen</source>
+        <target state="new">Schließen</target>
+      </trans-unit>
+      <trans-unit datatype="html" id="1bbd6e674a2e47f34589534e6557112ea5e4267b">
+        <source>Open start sidenav</source>
+        <target state="new">Open start sidenav</target>
+      </trans-unit>
+      <trans-unit datatype="html" id="c536247d71822c272f8e9155f831e0efb5aa0d31">
+        <source>Startseite</source>
+        <target state="new">Startseite</target>
+      </trans-unit>
+      <trans-unit datatype="html" id="d17aee1ddf9fe1c0afe8440e02ef5ab906a69699">
+        <source>Suche</source>
+        <target state="new">Suche</target>
+      </trans-unit>
+      <trans-unit datatype="html" id="18c6a843a0bb6b8756fad2802e65443e7d316409">
+        <source>Neues</source>
+        <target state="new">Neues</target>
+      </trans-unit>
+      <trans-unit datatype="html" id="6ef3aa3d7b8cfb612bc43a6166ec9b64e442a8c2">
+        <source>Hoststest</source>
+        <target state="new">Hoststest</target>
+      </trans-unit>
+      <trans-unit datatype="html" id="df0f8a49440c7127bd20461526dd1b39f2011e20">
+        <source>Anmelden</source>
+        <target state="new">Anmelden</target>
+      </trans-unit>
+      <trans-unit datatype="html" id="11ae3b22067db259a8b5d0579147021839757cee">
+        <source>Konfigurationseinstellungen</source>
+        <target state="new">Konfigurationseinstellungen</target>
+      </trans-unit>
+      <trans-unit datatype="html" id="c6f9eb504243692f199520ba524124c030edc358">
+        <source>Beispiel Feature</source>
+        <target state="new">Beispiel Feature</target>
+      </trans-unit>
+      <trans-unit datatype="html" id="fad9c2ab2e1c3d96f235cf0a7b2f0e474e3018d5">
+        <source>Abmelden</source>
+        <target state="new">Abmelden</target>
+      </trans-unit>
+      <trans-unit datatype="html" id="7b6ab3390be25bf56182f57b2f7c1a70c841ccdb">
+        <source>Bearbeiten Nachricht</source>
+        <target state="new">Bearbeiten Nachricht</target>
+        <note from="description" priority="1">data.edit.titles.news</note>
+      </trans-unit>
+      <trans-unit datatype="html" id="cbbe655e85b04e5fe0f36342bdff577264a0db22">
+        <source>Nachricht zu <x id="INTERPOLATION"/> (<x id="INTERPOLATION_1"/>)</source>
+        <target state="new">Nachricht zu <x id="INTERPOLATION"/> (<x id="INTERPOLATION_1"/>)</target>
+        <note from="description" priority="1">data.edit.subtitles.news</note>
+      </trans-unit>
+      <trans-unit datatype="html" id="3eca4b3b78179ac893a9a7a1518f8457c8ac327a">
+        <source>Die eingegebenen Daten werden im Respository gespeichert und sind für jeden sichtbar.<x ctype="lb" id="LINE_BREAK"/>
+      Die Angaben sollten kurz (max. 1 Zeile) und prägnant sein.</source>
+        <target state="new">Die eingegebenen Daten werden im Respository gespeichert und sind für jeden sichtbar.<x ctype="lb" id="LINE_BREAK"/>
+      Die Angaben sollten kurz (max. 1 Zeile) und prägnant sein.</target>
+        <note from="description" priority="1">data.edit.warning</note>
+      </trans-unit>
+      <trans-unit datatype="html" id="57e605bfa130afb4de4ee40e496e854a9e8a28a7">
+        <source>Nachrichten</source>
+        <target state="new">Nachrichten</target>
+        <note from="description" priority="1">data.edit.newstitle</note>
+      </trans-unit>
+      <trans-unit datatype="html" id="48278f6a0746f3d2aaed045e2c3949a4be77d0af">
+        <source>Was führt ein deployAll hier aus (Jobliste)</source>
+        <target state="new">Was führt ein deployAll hier aus (Jobliste)</target>
+        <note from="description" priority="1">pagetitle</note>
+      </trans-unit>
+    <trans-unit datatype="html" id="newid4980924802490">
+        <source>lmaa</source>
+        <target state="new">lmaa</target>
+      </trans-unit></body>
+  </file>
+</xliff>

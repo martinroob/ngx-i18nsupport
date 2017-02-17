@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file source-language="en" datatype="plaintext" original="ng2.template">
+    <body>
+      <trans-unit id="78eab955529ba0f1817c84991d9175f55bfdf937" datatype="html">
+        <source>Bearbeiten Beschreibung</source>
+        <target/>
+        <note priority="1" from="description">data.edit.titles.description</note>
+      </trans-unit>
+      <trans-unit id="a52ba049c16778bdb2e5a19a41acaadf87b104dc" datatype="html">
+        <source>Beschreibung zu <x id="INTERPOLATION"/> (<x id="INTERPOLATION_1"/>)</source>
+        <target/>
+        <note priority="1" from="description">data.edit.subtitles.description</note>
+      </trans-unit>
+      <trans-unit id="562afff053ef3db841da033731b3610eceb94daa" datatype="html">
+        <source>Die eingegebenen Daten werden im Respository gespeichert und sind für jeden sichtbar.<x id="LINE_BREAK" ctype="lb"/>
+        Die Angaben sollten kurz (max. 1 Zeile) und prägnant sein.</source>
+        <target/>
+        <note priority="1" from="description">data.edit.warning</note>
+      </trans-unit>
+      <trans-unit id="1ead0ad1063d0c9e005fe56c9529aef4c1ef9d21" datatype="html">
+        <source>Schließen</source>
+        <target/>
+      </trans-unit>
+      <trans-unit id="1bbd6e674a2e47f34589534e6557112ea5e4267b" datatype="html">
+        <source>Open start sidenav</source>
+        <target/>
+      </trans-unit>
+      <trans-unit id="c536247d71822c272f8e9155f831e0efb5aa0d31" datatype="html">
+        <source>Startseite</source>
+        <target/>
+      </trans-unit>
+      <trans-unit id="d17aee1ddf9fe1c0afe8440e02ef5ab906a69699" datatype="html">
+        <source>Suche</source>
+        <target/>
+      </trans-unit>
+      <trans-unit id="18c6a843a0bb6b8756fad2802e65443e7d316409" datatype="html">
+        <source>Neues</source>
+        <target/>
+      </trans-unit>
+      <trans-unit id="6ef3aa3d7b8cfb612bc43a6166ec9b64e442a8c2" datatype="html">
+        <source>Hoststest</source>
+        <target/>
+      </trans-unit>
+      <trans-unit id="df0f8a49440c7127bd20461526dd1b39f2011e20" datatype="html">
+        <source>Anmelden</source>
+        <target/>
+      </trans-unit>
+      <trans-unit id="11ae3b22067db259a8b5d0579147021839757cee" datatype="html">
+        <source>Konfigurationseinstellungen</source>
+        <target/>
+      </trans-unit>
+      <trans-unit id="c6f9eb504243692f199520ba524124c030edc358" datatype="html">
+        <source>Beispiel Feature</source>
+        <target/>
+      </trans-unit>
+      <trans-unit id="fad9c2ab2e1c3d96f235cf0a7b2f0e474e3018d5" datatype="html">
+        <source>Abmelden</source>
+        <target/>
+      </trans-unit>
+      <trans-unit id="7b6ab3390be25bf56182f57b2f7c1a70c841ccdb" datatype="html">
+        <source>Bearbeiten Nachricht</source>
+        <target/>
+        <note priority="1" from="description">data.edit.titles.news</note>
+      </trans-unit>
+      <trans-unit id="cbbe655e85b04e5fe0f36342bdff577264a0db22" datatype="html">
+        <source>Nachricht zu <x id="INTERPOLATION"/> (<x id="INTERPOLATION_1"/>)</source>
+        <target/>
+        <note priority="1" from="description">data.edit.subtitles.news</note>
+      </trans-unit>
+      <trans-unit id="3eca4b3b78179ac893a9a7a1518f8457c8ac327a" datatype="html">
+        <source>Die eingegebenen Daten werden im Respository gespeichert und sind für jeden sichtbar.<x id="LINE_BREAK" ctype="lb"/>
+      Die Angaben sollten kurz (max. 1 Zeile) und prägnant sein.</source>
+        <target/>
+        <note priority="1" from="description">data.edit.warning</note>
+      </trans-unit>
+      <trans-unit id="57e605bfa130afb4de4ee40e496e854a9e8a28a7" datatype="html">
+        <source>Nachrichten</source>
+        <target/>
+        <note priority="1" from="description">data.edit.newstitle</note>
+      </trans-unit>
+      <trans-unit id="48278f6a0746f3d2aaed045e2c3949a4be77d0af" datatype="html">
+        <source>Was führt ein deployAll hier aus (Jobliste)</source>
+        <target/>
+        <note priority="1" from="description">pagetitle</note>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
