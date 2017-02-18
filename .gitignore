@@ -38,3 +38,6 @@ jspm_packages
 
 # build output
 dist
+
+# Webstorm
+.idea

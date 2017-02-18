@@ -5,7 +5,7 @@
 
 import * as program from "commander";
 import * as chalk from "chalk";
-import {XliffMerger} from './xliff-merger';
+import {XliffMerge} from './xliff-merger';
 import {XliffMergeError} from './xliff-merge-error';
 
 let version = '0.0.1'; // TODO Version setzbar beim build
@@ -28,7 +28,7 @@ program
     .parse(process.argv);
 
 try {
-    new XliffMerger(languages, program.profile, program.verbose)
+    new XliffMerge(languages, program.profile, program.verbose)
         .run();
 } catch (err) {
     if (err instanceof XliffMergeError) {

@@ -6,7 +6,7 @@ import {FileUtil} from '../common/file-util';
 
 /**
  * Created by martin on 17.02.2017.
- * XliffMerger - reaf xlif file and put untranslated parts in language specific xlif files.
+ * XliffMerge - reaf xlif file and put untranslated parts in language specific xlif files.
  *
  */
 
@@ -19,7 +19,7 @@ const CheerioOptions: CheerioOptionsInterface = {
     decodeEntities: false,
 }
 
-export class XliffMerger {
+export class XliffMerge {
 
     private parameters: XliffMergeParameters;
 
