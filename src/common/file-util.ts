@@ -51,4 +51,45 @@ export class FileUtil {
         fs.closeSync(fdr);
         fs.closeSync(fdw);
     }
+
+    /**
+     * Delete the folder and all of its content (rm -rf).
+     * @param path
+     */
+    public static deleteFolderRecursive(path: string) {
+        var files = [];
+        if( fs.existsSync(path) ) {
+            files = fs.readdirSync(path);
+            files.forEach(function(file,index){
+                var curPath = path + "/" + file;
+                if(fs.lstatSync(curPath).isDirectory()) { // recurse
+                    FileUtil.deleteFolderRecursive(curPath);
+                } else { // delete file
+                    fs.unlinkSync(curPath);
+                }
+            });
+            fs.rmdirSync(path);
+        }
+    };
+
+    /**
+     * Delete folders content recursively, but do not delete folder.
+     * Folder is left empty at the end.
+     * @param path
+     */
+    public static deleteFolderContentRecursive(path: string) {
+        var files = [];
+        if( fs.existsSync(path) ) {
+            files = fs.readdirSync(path);
+            files.forEach(function(file,index){
+                var curPath = path + "/" + file;
+                if(fs.lstatSync(curPath).isDirectory()) { // recurse
+                    FileUtil.deleteFolderRecursive(curPath);
+                } else { // delete file
+                    fs.unlinkSync(curPath);
+                }
+            });
+        }
+    };
+
 }

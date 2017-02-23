@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file source-language="en" datatype="plaintext" original="ng2.template">
+    <body>
+      <trans-unit id="57e605bfa130afb4de4ee40e496e854a9e8a28a7" datatype="html">
+        <source>Nachrichten</source>
+        <target/>
+        <note priority="1" from="description">data.edit.newstitle</note>
+      </trans-unit>
+      <trans-unit id="78eab955529ba0f1817c84991d9175f55bfdf937" datatype="html">
+        <source>Bearbeiten Beschreibung</source>
+        <target/>
+        <note priority="1" from="description">data.edit.titles.description</note>
+      </trans-unit>
+      <trans-unit id="a52ba049c16778bdb2e5a19a41acaadf87b104dc" datatype="html">
+        <source>Beschreibung zu <x id="INTERPOLATION"/> (<x id="INTERPOLATION_1"/>)</source>
+        <target/>
+        <note priority="1" from="description">data.edit.subtitles.description</note>
+      </trans-unit>
+      <trans-unit id="1ead0ad1063d0c9e005fe56c9529aef4c1ef9d21" datatype="html">
+        <source>Schließen</source>
+        <target/>
+      </trans-unit>
+      <trans-unit id="c536247d71822c272f8e9155f831e0efb5aa0d31" datatype="html">
+        <source>Startseite</source>
+        <target/>
+      </trans-unit>
+      <trans-unit id="d17aee1ddf9fe1c0afe8440e02ef5ab906a69699" datatype="html">
+        <source>Suche</source>
+        <target/>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

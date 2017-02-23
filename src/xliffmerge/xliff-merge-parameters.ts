@@ -7,33 +7,13 @@
 import fs = require("fs");
 import {XliffMergeError} from './xliff-merge-error';
 import {Stats} from 'fs';
-import {Logger, LogLevel} from '../common/logger';
+import {CommandOutput} from '../common/command-output';
 import {isNullOrUndefined} from 'util';
-
-/**
- * Definition of the possible values used in the config file
- */
-interface IConfigFile {
-    // content is wrapped in "xliffmergeOptions" to allow to use it embedded in another config file (e.g. tsconfig.json)
-    xliffmergeOptions?: IXliffMergeOptions;
-}
-
-interface IXliffMergeOptions {
-    verbose?: boolean;   // Flag to generate debug output messages
-    defaultLanguage?: string;    // the default language (the language, which is used in the original templates)
-    srcDir?: string;    // Directory, where the master file is
-    i18nFile?: string;  // master file, if not absolute, it is relative to srcDir
-    i18nFormat?: string; // xlf (unused in the moment)
-    encoding?: string;  // encoding to write xml
-    genDir?: string;    // directory, where the files are written to
-    angularCompilerOptions?: {
-        genDir?: string;    // same as genDir, just to be compatible with ng-xi18n
-    };
-    removeUnusedIds?: boolean;
-}
+import {ProgramOptions, IConfigFile} from './xliff-merge';
 
 export class XliffMergeParameters {
 
+    private _quiet: boolean;
     private _verbose: boolean;
     private _defaultLanguage: string;
     private _srcDir: string;
@@ -44,37 +24,91 @@ export class XliffMergeParameters {
     private _languages: string[];
     private _removeUnusedIds: boolean;
 
-    constructor(languages: string[], profilePath: string, verbose: boolean) {
-        this._verbose = verbose;
-        this.readFromProfile(profilePath);
-        // if languages are given as parameters, they ovveride everything said in profile
-        if (!!languages && languages.length > 0) {
-            this._languages = languages;
-            if (!this._defaultLanguage) {
-                this._defaultLanguage = this._languages[0];
-            }
-        }
-        if (this.verbose()) {
-            this.showAllParameters();
-        }
-        this.checkParameters();
+    public errorsFound: XliffMergeError[];
+    public warningsFound: string[];
+
+    /**
+     * Create Parameters.
+     * @param options command options
+     * @param profileContent given profile (if not, it is read from the profile path from options).
+     * @return {XliffMergeParameters}
+     */
+    public static createFromOptions(options: ProgramOptions, profileContent?: IConfigFile) {
+        let parameters = new XliffMergeParameters();
+        parameters.configure(options, profileContent);
+        return parameters;
     }
 
-    private readFromProfile(profilePath: string) {
+    private constructor() {
+        this.errorsFound = [];
+        this.warningsFound = [];
+    }
+
+    /**
+     * Initialize me from the profile content.
+     * (public only for test usage).
+     * @param options
+     * @param profileContent if null, read it from profile.
+     */
+    private configure(options: ProgramOptions, profileContent?: IConfigFile) {
+        this.errorsFound = [];
+        this.warningsFound = [];
+        if (!profileContent) {
+            profileContent = this.readProfile(options);
+        }
+        let validProfile: boolean = (!!profileContent);
+        if (options.quiet) {
+            this._quiet = options.quiet;
+        }
+        if (options.verbose) {
+            this._verbose = options.verbose;
+        }
+        if (validProfile) {
+            this.initializeFromConfig(profileContent);
+            // if languages are given as parameters, they ovveride everything said in profile
+            if (!!options.languages && options.languages.length > 0) {
+                this._languages = options.languages;
+                if (!this._defaultLanguage) {
+                    this._defaultLanguage = this._languages[0];
+                }
+            }
+            this.checkParameters();
+        }
+    }
+
+    /**
+     * Read profile.
+     * @param profilePath
+     * @return the read profile (empty, if none, null if errors)
+     */
+    private readProfile(options: ProgramOptions): IConfigFile {
+        let profilePath: string = options.profilePath;
         if (!profilePath) {
-            return;
+            return {};
         }
         let content:string;
         try {
             content = fs.readFileSync(profilePath, 'UTF-8');
         } catch (err) {
-            console.log('error');
-            throw new XliffMergeError('could not read profile ' + profilePath);
+            this.errorsFound.push(new XliffMergeError('could not read profile "' + profilePath + '"'));
+            return null;
         }
-        // TODO error handling
         let profileContent: IConfigFile = JSON.parse(content);
+        return profileContent;
+    }
+
+    private initializeFromConfig(profileContent: IConfigFile) {
+        if (!profileContent) {
+            return;
+        }
         let profile = profileContent.xliffmergeOptions;
         if (profile) {
+            if (!isNullOrUndefined(profile.quiet)) {
+                this._quiet = profile.quiet;
+            }
+            if (!isNullOrUndefined(profile.verbose)) {
+                this._verbose = profile.verbose;
+            }
             if (profile.defaultLanguage) {
                 this._defaultLanguage = profile.defaultLanguage;
             }
@@ -99,18 +133,18 @@ export class XliffMergeParameters {
                 this._removeUnusedIds = profile.removeUnusedIds;
             }
         } else {
-            Logger.log(LogLevel.WARN, 'did not find "xliffmergeOptions" in profile, using defaults');
+            this.warningsFound.push('did not find "xliffmergeOptions" in profile, using defaults');
         }
     }
 
     /**
      * Check all Parameters, wether they are complete and consistent.
-     * @throws an exception, if something is wrong with the parameters.
+     * if something is wrong with the parameters, it is collected in errorsFound.
      */
     private checkParameters(): void {
         this.checkLanguageSyntax(this.defaultLanguage());
         if (this.languages().length == 0) {
-            throw new XliffMergeError('no languages specified');
+            this.errorsFound.push(new XliffMergeError('no languages specified'));
         }
         this.languages().forEach((lang) => {
             this.checkLanguageSyntax(lang);
@@ -124,7 +158,7 @@ export class XliffMergeParameters {
             err = e;
         }
         if (!!err || !stats.isDirectory()) {
-            throw new XliffMergeError('srcDir "' + this.srcDir() + '" is not a directory');
+            this.errorsFound.push(new XliffMergeError('srcDir "' + this.srcDir() + '" is not a directory'));
         }
         // genDir should exists
         try {
@@ -133,13 +167,13 @@ export class XliffMergeParameters {
             err = e;
         }
         if (!!err || !stats.isDirectory()) {
-            throw new XliffMergeError('genDir "' + this.genDir() + '" is not a directory');
+            this.errorsFound.push(new XliffMergeError('genDir "' + this.genDir() + '" is not a directory'));
         }
         // master file MUST exist
         try {
             fs.accessSync(this.i18nFile(), fs.constants.R_OK);
         } catch (err) {
-            throw new XliffMergeError('i18nFile "' + this.i18nFile() + '" is not readable');
+            this.errorsFound.push(new XliffMergeError('i18nFile "' + this.i18nFile() + '" is not readable'));
         }
      }
 
@@ -152,24 +186,28 @@ export class XliffMergeParameters {
     private checkLanguageSyntax(lang: string) {
         let pattern = /^[a-zA-Z]{1,8}(-[a-zA-Z0-9]{1,8})*$/;
         if (!pattern.test(lang)) {
-            throw new XliffMergeError('language "' + lang + '" is not valid');
+            this.errorsFound.push(new XliffMergeError('language "' + lang + '" is not valid'));
         }
     }
 
     public verbose(): boolean {
-        return this._verbose;
+        return (isNullOrUndefined(this._verbose)) ? false : this._verbose;
+    }
+
+    public quiet(): boolean {
+        return (isNullOrUndefined(this._quiet)) ? false : this._quiet;
     }
 
     /**
-     * Debug output all parameters to console.
+     * Debug output all parameters to commandOutput.
      */
-    private showAllParameters(): void {
-        console.log('xliffmerge Used Parameters');
-        console.log('defaultLanguage:\t', this.defaultLanguage());
-        console.log('srcDir:\t', this.srcDir());
-        console.log('genDir:\t', this.genDir());
-        console.log('i18nFile:\t', this.i18nFile());
-        console.log('languages:\t', this.languages());
+    public showAllParameters(commandOutput: CommandOutput): void {
+        commandOutput.debug('xliffmerge Used Parameters:');
+        commandOutput.debug('defaultLanguage:\t"%s"', this.defaultLanguage());
+        commandOutput.debug('srcDir:\t"%s"', this.srcDir());
+        commandOutput.debug('genDir:\t"%s"', this.genDir());
+        commandOutput.debug('i18nFile:\t"%s"', this.i18nFile());
+        commandOutput.debug('languages:\t%s', this.languages());
     }
     /**
      * Default-Language, default en.
@@ -201,7 +239,7 @@ export class XliffMergeParameters {
      * @return {string}
      */
     public i18nFile(): string {
-        return this._i18nFile ? this._i18nFile : this.srcDir() + '/' + 'messages.xlf';
+        return this.srcDir() + '/' + (this._i18nFile ? this._i18nFile : 'messages.xlf');
     }
 
     /**

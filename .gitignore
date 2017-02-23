@@ -39,5 +39,8 @@ jspm_packages
 # build output
 dist
 
+# temporary dir for test runs
+test/work
+
 # Webstorm
 .idea

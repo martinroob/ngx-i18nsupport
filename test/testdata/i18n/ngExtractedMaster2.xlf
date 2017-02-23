@@ -26,14 +26,6 @@
         <source>Open start sidenav</source>
         <target/>
       </trans-unit>
-      <trans-unit id="c536247d71822c272f8e9155f831e0efb5aa0d31" datatype="html">
-        <source>Startseite</source>
-        <target/>
-      </trans-unit>
-      <trans-unit id="d17aee1ddf9fe1c0afe8440e02ef5ab906a69699" datatype="html">
-        <source>Suche</source>
-        <target/>
-      </trans-unit>
       <trans-unit id="18c6a843a0bb6b8756fad2802e65443e7d316409" datatype="html">
         <source>Neues</source>
         <target/>
