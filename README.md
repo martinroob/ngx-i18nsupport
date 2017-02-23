@@ -1,6 +1,9 @@
 ngx-i18nsupport
 =========
 
+[![Build Status](https://travis-ci.org/martinroob/ngx-i18nsupport.svg?branch=master)](https://travis-ci.org/martinroob/ngx-i18nsupport)
+
+
 Some tooling to be used for Angular i18n workflows.
 
 Angular has a specific way of dealing with internationalization (i18n).
