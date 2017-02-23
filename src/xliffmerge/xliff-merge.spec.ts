@@ -151,6 +151,9 @@ describe('XliffMerge test spec', () => {
         let ID_REMOVED_SUCHEN = "d17aee1ddf9fe1c0afe8440e02ef5ab906a69699"; // another removed ID
 
         beforeEach(() => {
+            if (!fs.existsSync(WORKDIR)){
+                fs.mkdirSync(WORKDIR);
+            }
             // cleanup workdir
             FileUtil.deleteFolderContentRecursive(WORKDIR);
         });
