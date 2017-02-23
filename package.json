@@ -12,7 +12,7 @@
   "scripts": {
     "build": "tsc -p ./src/tsconfig.json && cpx ./src/xliffmerge/xliffmerge ./dist/xliffmerge",
     "xliffmerge": "npm link && xliffmerge",
-    "test": "jasmine"
+    "test": "./node_modules/.bin/jasmine-node dist/out-tsc"
   },
   "repository": {
     "type": "git",
@@ -35,7 +35,7 @@
     "@types/jasmine": "^2.5.43",
     "@types/node": "^7.0.5",
     "cpx": "^1.5.0",
-    "jasmine": "^2.5.3",
+    "jasmine-node": "^1.14.5",
     "typescript": "^2.1.6"
   },
   "dependencies": {
