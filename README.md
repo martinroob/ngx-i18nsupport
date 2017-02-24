@@ -1,8 +1,11 @@
+[![Build Status][travis-badge]][travis-badge-url]
+[![Dependency Status][david-badge]][david-badge-url]
+[![devDependency Status][david-dev-badge]][david-dev-badge-url]
+[![Code coverage][coverage-badge]][coverage-badge-url]
+[![npm][npm-badge]][npm-badge-url]
+
 ngx-i18nsupport
 =========
-
-[![Build Status](https://travis-ci.org/martinroob/ngx-i18nsupport.svg?branch=master)](https://travis-ci.org/martinroob/ngx-i18nsupport)
-
 
 Some tooling to be used for Angular i18n workflows.
 
@@ -159,3 +162,14 @@ But if you are interesting, send me an email, so that we can discuss it.
   [Deploying an i18n Angular app with angular-cli](https://medium.com/@feloy/deploying-an-i18n-angular-app-with-angular-cli-fc788f17e358)
 * Roland Oldengarm: [Angular 2: Automated i18n workflow using gulp](http://rolandoldengarm.com/index.php/2016/10/17/angular-2-automated-i18n-workflow-using-gulp/)
 * [XLIFF Spec](http://docs.oasis-open.org/xliff/xliff-core/xliff-core.html)
+
+[travis-badge]: https://travis-ci.org/martinroob/ngx-i18nsupport.svg?branch=master
+[travis-badge-url]: https://travis-ci.org/martinroob/ngx-i18nsupport
+[david-badge]: https://david-dm.org/martinroob/ngx-i18nsupport.svg
+[david-badge-url]: https://david-dm.org/martinroob/ngx-i18nsupport
+[david-dev-badge]: https://david-dm.org/martinroob/ngx-i18nsupport/dev-status.svg
+[david-dev-badge-url]: https://david-dm.org/martinroob/ngx-i18nsupport?type=dev
+[npm-badge]: https://badge.fury.io/js/ngx-i18nsupport.svg
+[npm-badge-url]: https://badge.fury.io/js/ngx-i18nsupport
+[coverage-badge]: https://coveralls.io/repos/github/martinroob/ngx-i18nsupport/badge.svg?branch=master
+[coverage-badge-url]: https://coveralls.io/github/martinroob/ngx-i18nsupport?branch=master
