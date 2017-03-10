@@ -4,6 +4,7 @@
     "srcDir": "i18n",
     "genDir": "i18n",
     "angularCompilerOptions": { "genDir": "i18n" },
-    "lmaa": "not used"
+    "lmaa": "not used",
+    "languages": ["de", "en"]
   }
 }

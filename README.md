@@ -9,6 +9,19 @@ ngx-i18nsupport
 
 Some tooling to be used for Angular i18n workflows.
 
+>This page contains just a very short description about the installation process and usage.
+For details have a look at the [Tutorial for using xliffmerge](https://github.com/martinroob/ngx-i18nsupport/wiki/Tutorial-for-using-xliffmerge-with-angular-cli) contained in the Wiki pages.
+
+## Table of Contents
+
+* [Introduction](#introduction)
+* [Installation](#installation)
+* [Usage](#usage)
+* [Tests](#tests)
+* [Contributing](#contributing)
+* [References](#references)
+
+## Introduction
 Angular has a specific way of dealing with internationalization (i18n).
 It is described in the official documentation Angular Cookbook [Internationalization (i18n)](https://angular.io/docs/ts/latest/cookbook/i18n.html).
 
@@ -39,12 +52,12 @@ and there are translation units, that do not exist any more.
   
 This will install a script called `xliffmerge`.
   
-You can then integrate the script in your angular i18n workflow, typically in the `package.json` script sections:
+You can then integrate the script in your angular i18n workflow, typically in the `package.json` script section:
   
 <pre>
 "scripts": [
   ...
-  "extract-i18n": "cd src && ng-x18n -p tsconfig.json && xliffmerge"
+  "extract-i18n": "ng xi18n --output-path src/i18n && xliffmerge --profile xliffmerge.json en de"
  ]
 </pre>
 
@@ -70,9 +83,10 @@ Options:
   "srcDir: "i18n", // directory, where the master file is expected
   "genDir": "i18n", // directory, where files are written to (normally identical with srcDir)
   "i18nFile": "messages.xlf", // master file (relativ to srcDir)
-  "i18nFormat": "xlf", // not used actually
-  "encoding": "UTF-8",  // expected encoding of xlf files
+  "i18nFormat": "xlf", // "xlf" for XLIFF or "xmb" for XML Message Bundles
+  "encoding": "UTF-8",  // expected encoding of xlf or xmb files
   "defaultLanguage": "en",  // the native language used in your templates
+  "languages": ["en", "de"], // list of languages (if not spefified at command line)
   "removeUnusedIds": true, // flag, if unused IDs should be removed during merge
   "verbose": false, // controls output
   "quiet": false, // controls output

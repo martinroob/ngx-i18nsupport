@@ -1,6 +1,6 @@
 {
   "name": "ngx-i18nsupport",
-  "version": "0.0.4",
+  "version": "0.1.0",
   "description": "Some tooling to be used with the Angular 2 i18n worklflow",
   "main": "index.js",
   "bin": {
@@ -10,7 +10,7 @@
     "node": ">=6.9"
   },
   "scripts": {
-    "build": "tsc -p ./src/tsconfig.json && cpx ./src/xliffmerge/xliffmerge ./dist/xliffmerge",
+    "build": "tsc -p ./src/tsconfig.json && cpx ./src/xliffmerge/xliffmerge ./dist/xliffmerge && cpx package.json ./dist/out-tsc",
     "xliffmerge": "npm link && xliffmerge",
     "pretest": "npm run build",
     "test": "./node_modules/.bin/jasmine-node dist/out-tsc",

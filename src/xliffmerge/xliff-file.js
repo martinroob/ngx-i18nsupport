@@ -1,77 +1,72 @@
-import * as cheerio from "cheerio";
-import {FileUtil} from '../common/file-util';
-import {isNullOrUndefined, format} from 'util';
-import {XmlReader} from './xml-reader';
-import {ITranslationMessagesFile, ITransUnit} from './i-translation-messages-file';
+"use strict";
+var cheerio = require("cheerio");
+var file_util_1 = require("../common/file-util");
+var util_1 = require("util");
+var xml_reader_1 = require("./xml-reader");
 /**
  * Created by martin on 23.02.2017.
  * Ab xliff file read from a source file.
  * Defines some relevant get and set method for reading and modifying such a file.
  */
-
 /**
  * Read-Options for cheerio, enable xml mode.
  * @type {{xmlMode: boolean}}
  */
-const CheerioOptions: CheerioOptionsInterface = {
+var CheerioOptions = {
     xmlMode: true,
     decodeEntities: false,
 };
-
-class TransUnit implements ITransUnit {
-
-    constructor(private _transUnit: CheerioElement, private _id: string) {
-
+var TransUnit = (function () {
+    function TransUnit(_transUnit, _id) {
+        this._transUnit = _transUnit;
+        this._id = _id;
     }
-
-    public get id(): string {
-        return this._id;
-    }
-
-    public sourceContent(): string {
+    Object.defineProperty(TransUnit.prototype, "id", {
+        get: function () {
+            return this._id;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    TransUnit.prototype.sourceContent = function () {
         return cheerio('source', this._transUnit).html();
-    }
-
-    public targetContent(): string {
+    };
+    TransUnit.prototype.targetContent = function () {
         return cheerio('target', this._transUnit).html();
-    }
-
-    public targetState(): string {
+    };
+    TransUnit.prototype.targetState = function () {
         return cheerio('target', this._transUnit).attr('state');
-    }
-
+    };
     /**
      * the real xml element used for trans unit.
      * Here it is a <trans-unit> element defined in XLIFF Spec.
      * @return {CheerioElement}
      */
-    public asXmlElement(): CheerioElement {
+    TransUnit.prototype.asXmlElement = function () {
         return this._transUnit;
-    }
-
+    };
     /**
      * Translate trans unit.
      * (very simple, just for tests)
      * @param translation the translated string
      */
-    public translate(translation: string) {
-        let target = cheerio('target', this._transUnit);
+    TransUnit.prototype.translate = function (translation) {
+        var target = cheerio('target', this._transUnit);
         if (!target) {
-            let source = cheerio('source', this._transUnit);
+            var source = cheerio('source', this._transUnit);
             source.parent().append('<target/>');
             target = cheerio('target', source.parent());
         }
         target.html(translation);
         target.attr('state', 'final');
-    }
-
+    };
     /**
      * Copy source to target to use it as dummy translation.
      * (better than missing value)
      */
-    public useSourceAsTarget(isDefaultLang: boolean) {
-        let source = cheerio('source', this._transUnit);
-        let target = cheerio('target', this._transUnit);
+    TransUnit.prototype.useSourceAsTarget = function (isDefaultLang) {
+        var source = cheerio('source', this._transUnit);
+        var target = cheerio('target', this._transUnit);
         if (!target) {
             source.parent().append('<target/>');
             target = cheerio('target', source.parent());
@@ -79,15 +74,18 @@ class TransUnit implements ITransUnit {
         target.html(source.html());
         if (isDefaultLang) {
             target.attr('state', 'final');
-        } else {
+        }
+        else {
             target.attr('state', 'new');
         }
+    };
+    return TransUnit;
+}());
+var XliffFile = (function () {
+    function XliffFile() {
+        this._warnings = [];
+        this._numberOfTransUnitsWithMissingId = 0;
     }
-
-}
-
-export class XliffFile implements ITranslationMessagesFile {
-
     /**
      * Read an xlf-File.
      * @param path Path to file
@@ -95,156 +93,126 @@ export class XliffFile implements ITranslationMessagesFile {
      * This is read from the file, but if you know it before, you can avoid reading the file twice.
      * @return {XliffFile}
      */
-    public static fromFile(path: string, encoding?: string): XliffFile {
-        let xlf = new XliffFile();
-        let xmlContent = XmlReader.readXmlFileContent(path, encoding);
+    XliffFile.fromFile = function (path, encoding) {
+        var xlf = new XliffFile();
+        var xmlContent = xml_reader_1.XmlReader.readXmlFileContent(path, encoding);
         xlf.initializeFromContent(xmlContent.content, path, xmlContent.encoding);
         return xlf;
-    }
-
-    private filename: string;
-
-    private encoding: string;
-
-    private xliffContent: CheerioStatic;
-
-    // trans-unit elements and their id from the file
-    private transUnits: ITransUnit[];
-
-    private _warnings: string[];
-    private _numberOfTransUnitsWithMissingId: number;
-
-    constructor() {
-        this._warnings = [];
-        this._numberOfTransUnitsWithMissingId = 0;
-    }
-
-    private initializeFromContent(xmlString: string, path: string, encoding: string): XliffFile {
+    };
+    XliffFile.prototype.initializeFromContent = function (xmlString, path, encoding) {
         this.filename = path;
         this.encoding = encoding;
         this.xliffContent = cheerio.load(xmlString, CheerioOptions);
         return this;
-    }
-
-    public forEachTransUnit(callback: ((transunit: ITransUnit) => void)) {
+    };
+    XliffFile.prototype.forEachTransUnit = function (callback) {
         this.initializeTransUnits();
-        this.transUnits.forEach((tu) => callback(tu));
-    }
-
-    public warnings(): string[] {
+        this.transUnits.forEach(function (tu) { return callback(tu); });
+    };
+    XliffFile.prototype.warnings = function () {
         this.initializeTransUnits();
         return this._warnings;
-    }
-
-    public numberOfTransUnits(): number {
+    };
+    XliffFile.prototype.numberOfTransUnits = function () {
         this.initializeTransUnits();
         return this.transUnits.length;
-    }
-
-    public numberOfTransUnitsWithMissingId(): number {
+    };
+    XliffFile.prototype.numberOfTransUnitsWithMissingId = function () {
         this.initializeTransUnits();
         return this._numberOfTransUnitsWithMissingId;
-    }
-
+    };
     /**
      * Get trans-unit with given id.
      * @param id
      * @return {Cheerio}
      */
-    public transUnitWithId(id: string): ITransUnit {
+    XliffFile.prototype.transUnitWithId = function (id) {
         this.initializeTransUnits();
-        return this.transUnits.find((tu) => tu.id == id);
-    }
-
-    private initializeTransUnits() {
-        if (isNullOrUndefined(this.transUnits)) {
+        return this.transUnits.find(function (tu) { return tu.id == id; });
+    };
+    XliffFile.prototype.initializeTransUnits = function () {
+        var _this = this;
+        if (util_1.isNullOrUndefined(this.transUnits)) {
             this.transUnits = [];
-            let transUnitsInFile = this.xliffContent('trans-unit');
-            transUnitsInFile.each((index, transunit: CheerioElement) => {
-                let id = cheerio(transunit).attr('id');
+            var transUnitsInFile = this.xliffContent('trans-unit');
+            transUnitsInFile.each(function (index, transunit) {
+                var id = cheerio(transunit).attr('id');
                 if (!id) {
-                    this._warnings.push(format('oops, trans-unit without "id" found in master, please check file %s', this.filename));
-                    this._numberOfTransUnitsWithMissingId++;
+                    _this._warnings.push(util_1.format('oops, trans-unit without "id" found in master, please check file %s', _this.filename));
+                    _this._numberOfTransUnitsWithMissingId++;
                 }
-                this.transUnits.push(new TransUnit(transunit, id));
+                _this.transUnits.push(new TransUnit(transunit, id));
             });
         }
-    }
-
+    };
     /**
      * Get source language.
      * @return {string}
      */
-    public sourceLanguage(): string {
+    XliffFile.prototype.sourceLanguage = function () {
         return this.xliffContent('file').attr('source-language');
-    }
-
+    };
     /**
      * Edit the source language.
      * @param language
      */
-    public setSourceLanguage(language: string) {
+    XliffFile.prototype.setSourceLanguage = function (language) {
         this.xliffContent('file').attr('source-language', language);
-    }
-
+    };
     /**
      * Get target language.
      * @return {string}
      */
-    public targetLanguage(): string {
+    XliffFile.prototype.targetLanguage = function () {
         return this.xliffContent('file').attr('target-language');
-    }
-
+    };
     /**
      * Edit the target language.
      * @param language
      */
-    public setTargetLanguage(language: string) {
+    XliffFile.prototype.setTargetLanguage = function (language) {
         this.xliffContent('file').attr('target-language', language);
-    }
-
+    };
     /**
      * Copy source to target to use it as dummy translation.
      * (better than missing value)
      */
-    public useSourceAsTarget(transUnit: ITransUnit, isDefaultLang: boolean) {
+    XliffFile.prototype.useSourceAsTarget = function (transUnit, isDefaultLang) {
         transUnit.useSourceAsTarget(isDefaultLang);
-    }
-
+    };
     /**
      * Translate a given trans unit.
      * (very simple, just for tests)
      * @param transUnit
      * @param translation the translated string
      */
-    public translate(transUnit: ITransUnit, translation: string) {
+    XliffFile.prototype.translate = function (transUnit, translation) {
         transUnit.translate(translation);
-    }
-
+    };
     /**
      * Add a new trans-unit.
      * @param transUnit
      */
-    public addNewTransUnit(transUnit: ITransUnit) {
+    XliffFile.prototype.addNewTransUnit = function (transUnit) {
         this.xliffContent('body').append(cheerio(transUnit.asXmlElement()));
         this.initializeTransUnits();
         this.transUnits.push(transUnit);
-    }
-
+    };
     /**
      * Remove the trans-unit with the given id.
      * @param id
      */
-    public removeTransUnitWithId(id: string) {
+    XliffFile.prototype.removeTransUnitWithId = function (id) {
         this.xliffContent('#' + id).remove();
         this.initializeTransUnits();
-        this.transUnits = this.transUnits.filter((tu) => tu.id != id);
-    }
-
+        this.transUnits = this.transUnits.filter(function (tu) { return tu.id != id; });
+    };
     /**
      * Save edited content to file.
      */
-    public save() {
-        FileUtil.replaceContent(this.filename, this.xliffContent.xml(), this.encoding);
-    }
-}
+    XliffFile.prototype.save = function () {
+        file_util_1.FileUtil.replaceContent(this.filename, this.xliffContent.xml(), this.encoding);
+    };
+    return XliffFile;
+}());
+exports.XliffFile = XliffFile;
