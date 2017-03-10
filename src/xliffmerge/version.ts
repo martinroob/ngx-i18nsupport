@@ -1,5 +1,8 @@
 /**
  * Created by martin on 19.02.2017.
  */
+import * as path from 'path';
 
-export const VERSION = '0.0.1'; // TODO Version setzbar beim build
+const pkg = require(path.resolve(__dirname, '..', 'package.json'));
+
+export const VERSION = (pkg? pkg.version : 'unknown');
