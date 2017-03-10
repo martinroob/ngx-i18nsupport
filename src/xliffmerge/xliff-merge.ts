@@ -5,12 +5,12 @@ import {XliffMergeError} from './xliff-merge-error';
 import {FileUtil} from '../common/file-util';
 import {VERSION} from './version';
 import WritableStream = NodeJS.WritableStream;
-import {XliffFile, TransUnit} from './xliff-file';
 import {isNullOrUndefined} from 'util';
+import {ITranslationMessagesFile, ITransUnit, TranslationMessagesFileReader} from './i-translation-messages-file';
 
 /**
  * Created by martin on 17.02.2017.
- * XliffMerge - reaf xlif file and put untranslated parts in language specific xlif files.
+ * XliffMerge - read xliff or xmb file and put untranslated parts in language specific xliff or xmb files.
  *
  */
 
@@ -36,7 +36,7 @@ export interface IXliffMergeOptions {
     languages?: string[];   // all languages, if not specified via commandline
     srcDir?: string;    // Directory, where the master file is
     i18nFile?: string;  // master file, if not absolute, it is relative to srcDir
-    i18nFormat?: string; // xlf (unused in the moment)
+    i18nFormat?: string; // xlf or xmb
     encoding?: string;  // encoding to write xml
     genDir?: string;    // directory, where the files are written to
     angularCompilerOptions?: {
@@ -54,7 +54,7 @@ export class XliffMerge {
     }
 
     static parseArgs(argv: string[]): ProgramOptions {
-        let languages;
+        let languages: string[] = null;
         delete program.verbose;
         delete program.quiet;
         delete program.profilePath;
@@ -69,7 +69,8 @@ export class XliffMerge {
                 console.log('  <language> has to be a valid language short string, e,g. "en", "de", "de-ch"');
                 console.log('');
                 console.log('  configfile can contain the following values:');
-                console.log('\tdefaultLanguage');
+                console.log('\tquiet verbose defaultLanguage languages srcDir i18nFile i18nFormat encoding genDir removeUnusedIds');
+                console.log('\tfor details please consult the home page https://github.com/martinroob/ngx-i18nsupport');
             })
             .action((languageArray) => {
                 languages = languageArray;
@@ -100,7 +101,7 @@ export class XliffMerge {
     /**
      * The read master xlf file.
      */
-    private master: XliffFile;
+    private master: ITranslationMessagesFile; // XliffFile or XmbFile
 
     /**
      * For Tests, create instance with given profile
@@ -138,8 +139,6 @@ export class XliffMerge {
 
     /**
      * Ausführen merge-Process.
-     * @param languages Array mit den Sprachen (de, en, ..)
-     * @param profilePath Pfad zur Profile-Datei
      */
     private doRun() {
         if (this.options && this.options.quiet) {
@@ -166,7 +165,6 @@ export class XliffMerge {
                 this.commandOutput.warn(warn);
             }
         }
-        let languages: string[] = this.parameters.languages();
         this.readMaster();
         this.parameters.languages().forEach((lang: string) => {
             this.processLanguage(lang);
@@ -183,7 +181,7 @@ export class XliffMerge {
     }
 
     private readMaster() {
-        this.master = XliffFile.fromFile(this.parameters.i18nFile(), this.parameters.encoding());
+        this.master = TranslationMessagesFileReader.fromFile(this.parameters.i18nFormat(), this.parameters.i18nFile(), this.parameters.encoding());
         this.master.warnings().forEach((warning: string) =>{
             this.commandOutput.warn(warning);
         });
@@ -194,27 +192,12 @@ export class XliffMerge {
             this.commandOutput.warn('master contains %s trans-units, but there are %s without id', count, missingIdCount);
         }
         let sourceLang: string = this.master.sourceLanguage();
-        if (sourceLang !== this.parameters.defaultLanguage()) {
+        if (sourceLang && sourceLang !== this.parameters.defaultLanguage()) {
             this.commandOutput.warn('master says to have source-language="%s", should be "%s" (your defaultLanguage)', sourceLang, this.parameters.defaultLanguage());
             this.master.setSourceLanguage(this.parameters.defaultLanguage());
             this.master.save();
             this.commandOutput.warn('changed master source-language="%s" to "%s"', sourceLang, this.parameters.defaultLanguage());
         }
-    }
-
-    /**
-     * Read the encoding from the xml.
-     * xml File starts with .. encoding=".."
-     * @param xmlString
-     * @return {any}
-     */
-    private encodingFromXml(xmlString: string): string {
-        let index = xmlString.indexOf('encoding="');
-        if (index < 0) {
-            return 'UTF-8'; // default in xml if not explicitly set
-        }
-        let endIndex = xmlString.indexOf('"', index + 10); // 10 = length of 'encoding="'
-        return xmlString.substring(index + 10, endIndex);
     }
 
     private processLanguage(lang: string) {
@@ -231,46 +214,46 @@ export class XliffMerge {
      * create a new file for the language, which contains no translations, but all keys.
      * in principle, this is just a copy of the master with target-language set.
      * @param lang
-     * @param languageXliffFile
+     * @param languageXliffFilePath
      */
-    private createUntranslatedXliff(lang: string, languageXliffFile: string) {
+    private createUntranslatedXliff(lang: string, languageXliffFilePath: string) {
         // copy master ...
-        FileUtil.copy(this.parameters.i18nFile(), languageXliffFile);
+        FileUtil.copy(this.parameters.i18nFile(), languageXliffFilePath);
 
         // read copy and set target-language
-        let xliff: XliffFile = XliffFile.fromFile(languageXliffFile, this.parameters.encoding());
-        xliff.setTargetLanguage(lang);
+        let languageSpecificMessagesFile: ITranslationMessagesFile = TranslationMessagesFileReader.fromFile(this.parameters.i18nFormat(), languageXliffFilePath, this.parameters.encoding());
+        languageSpecificMessagesFile.setTargetLanguage(lang);
 
         // copy source to target
         let isDefaultLang: boolean = (lang == this.parameters.defaultLanguage());
-        xliff.forEachTransUnit((transUnit: TransUnit) => {
-            xliff.useSourceAsTarget(transUnit, isDefaultLang);
-        })
+        languageSpecificMessagesFile.forEachTransUnit((transUnit: ITransUnit) => {
+            languageSpecificMessagesFile.useSourceAsTarget(transUnit, isDefaultLang);
+        });
         // write it to file
-        xliff.save();
-        this.commandOutput.info('created new file "%s" for target-language="%s"', languageXliffFile, lang);
+        languageSpecificMessagesFile.save();
+        this.commandOutput.info('created new file "%s" for target-language="%s"', languageXliffFilePath, lang);
         if (!isDefaultLang) {
-            this.commandOutput.warn('please translate file "%s" to target-language="%s"', languageXliffFile, lang);
+            this.commandOutput.warn('please translate file "%s" to target-language="%s"', languageXliffFilePath, lang);
         }
     }
 
     /**
      * Merge all
      * @param lang
-     * @param languageXliffFile
+     * @param languageXliffFilePath
      */
-    private mergeMasterTo(lang: string, languageXliffFile: string) {
+    private mergeMasterTo(lang: string, languageXliffFilePath: string) {
         // read lang specific file
-        let xliff: XliffFile = XliffFile.fromFile(languageXliffFile, this.parameters.encoding());
+        let languageSpecificMessagesFile: ITranslationMessagesFile = TranslationMessagesFileReader.fromFile(this.parameters.i18nFormat(), languageXliffFilePath, this.parameters.encoding());
 
         let isDefaultLang: boolean = (lang == this.parameters.defaultLanguage());
         let newCount = 0;
         this.master.forEachTransUnit((masterTransUnit) => {
-            let transUnit: TransUnit = xliff.transUnitWithId(masterTransUnit.id);
+            let transUnit: ITransUnit = languageSpecificMessagesFile.transUnitWithId(masterTransUnit.id);
             if (!transUnit) {
                 // oops, no translation, must be a new key, so add it
-                xliff.useSourceAsTarget(masterTransUnit, isDefaultLang);
-                xliff.addNewTransUnit(masterTransUnit);
+                languageSpecificMessagesFile.useSourceAsTarget(masterTransUnit, isDefaultLang);
+                languageSpecificMessagesFile.addNewTransUnit(masterTransUnit);
                 newCount++;
             }
         });
@@ -280,11 +263,11 @@ export class XliffMerge {
 
         // remove all elements that are no longer used
         let removeCount = 0;
-        xliff.forEachTransUnit((transUnit: TransUnit) => {
+        languageSpecificMessagesFile.forEachTransUnit((transUnit: ITransUnit) => {
             let existsInMaster = !isNullOrUndefined(this.master.transUnitWithId(transUnit.id));
             if (!existsInMaster) {
                 if (this.parameters.removeUnusedIds()) {
-                    xliff.removeTransUnitWithId(transUnit.id);
+                    languageSpecificMessagesFile.removeTransUnitWithId(transUnit.id);
                 }
                 removeCount++;
             }
@@ -301,10 +284,10 @@ export class XliffMerge {
             this.commandOutput.info('file for "%s" was up to date', lang);
         } else {
             // write it to file
-            xliff.save();
-            this.commandOutput.info('updated file "%s" for target-language="%s"', languageXliffFile, lang);
+            languageSpecificMessagesFile.save();
+            this.commandOutput.info('updated file "%s" for target-language="%s"', languageXliffFilePath, lang);
             if (newCount > 0 && !isDefaultLang) {
-                this.commandOutput.warn('please translate file "%s" to target-language="%s"', languageXliffFile, lang);
+                this.commandOutput.warn('please translate file "%s" to target-language="%s"', languageXliffFilePath, lang);
             }
 
         }

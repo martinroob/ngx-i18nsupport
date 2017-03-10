@@ -8,7 +8,9 @@
 
 ### Features
 
-* **documentation:** added Usage Tutorial (as part of the wiki)
+* **xliffmerge:** Added support for xmb format ([#4](https://github.com/martinroob/ngx-i18nsupport/issues/4))
+* **xliffmerge:** languages can now be specified in the profile ([#6](https://github.com/martinroob/ngx-i18nsupport/issues/6))
+* **documentation:** added Usage Tutorial (as part of the wiki) ([#3](https://github.com/martinroob/ngx-i18nsupport/issues/3))
 * **documentation:** added this Changelog.md
 
 <a name="0.0.4"></a>

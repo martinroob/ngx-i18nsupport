@@ -1,12 +1,11 @@
 import * as cheerio from "cheerio";
-import {FileUtil} from '../common/file-util';
-import {isNullOrUndefined, format} from 'util';
-import {XmlReader} from './xml-reader';
 import {ITranslationMessagesFile, ITransUnit} from './i-translation-messages-file';
+import {XmlReader} from './xml-reader';
+import {isNullOrUndefined, format} from 'util';
+import {FileUtil} from '../common/file-util';
 /**
- * Created by martin on 23.02.2017.
- * Ab xliff file read from a source file.
- * Defines some relevant get and set method for reading and modifying such a file.
+ * Created by martin on 10.03.2017.
+ * xmb-File access.
  */
 
 /**
@@ -20,7 +19,7 @@ const CheerioOptions: CheerioOptionsInterface = {
 
 class TransUnit implements ITransUnit {
 
-    constructor(private _transUnit: CheerioElement, private _id: string) {
+    constructor(private _msg: CheerioElement, private _id: string) {
 
     }
 
@@ -29,24 +28,33 @@ class TransUnit implements ITransUnit {
     }
 
     public sourceContent(): string {
-        return cheerio('source', this._transUnit).html();
+        return cheerio(this._msg).html();
     }
 
     public targetContent(): string {
-        return cheerio('target', this._transUnit).html();
+        // in fact, target and source are just the same in xmb
+        return cheerio(this._msg).html();
     }
 
     public targetState(): string {
-        return cheerio('target', this._transUnit).attr('state');
+        return null; // not supported in xmb
     }
 
     /**
      * the real xml element used for trans unit.
-     * Here it is a <trans-unit> element defined in XLIFF Spec.
+     * Here it is a <msg> element.
      * @return {CheerioElement}
      */
     public asXmlElement(): CheerioElement {
-        return this._transUnit;
+        return this._msg;
+    }
+
+    /**
+     * Copy source to target to use it as dummy translation.
+     * (better than missing value)
+     * In xmb there is nothing to do, because there is only a target, no source.
+     */
+    public useSourceAsTarget(isDefaultLang: boolean) {
     }
 
     /**
@@ -55,58 +63,33 @@ class TransUnit implements ITransUnit {
      * @param translation the translated string
      */
     public translate(translation: string) {
-        let target = cheerio('target', this._transUnit);
-        if (!target) {
-            let source = cheerio('source', this._transUnit);
-            source.parent().append('<target/>');
-            target = cheerio('target', source.parent());
-        }
+        let target = cheerio(this._msg);
         target.html(translation);
-        target.attr('state', 'final');
-    }
-
-    /**
-     * Copy source to target to use it as dummy translation.
-     * (better than missing value)
-     */
-    public useSourceAsTarget(isDefaultLang: boolean) {
-        let source = cheerio('source', this._transUnit);
-        let target = cheerio('target', this._transUnit);
-        if (!target) {
-            source.parent().append('<target/>');
-            target = cheerio('target', source.parent());
-        }
-        target.html(source.html());
-        if (isDefaultLang) {
-            target.attr('state', 'final');
-        } else {
-            target.attr('state', 'new');
-        }
     }
 
 }
 
-export class XliffFile implements ITranslationMessagesFile {
+export class XmbFile implements ITranslationMessagesFile {
 
     /**
-     * Read an xlf-File.
+     * Read an xmb-File.
      * @param path Path to file
      * @param encoding optional encoding of the xml.
      * This is read from the file, but if you know it before, you can avoid reading the file twice.
-     * @return {XliffFile}
+     * @return {XmbFile}
      */
-    public static fromFile(path: string, encoding?: string): XliffFile {
-        let xlf = new XliffFile();
+    public static fromFile(path: string, encoding?: string): XmbFile {
+        let xmb = new XmbFile();
         let xmlContent = XmlReader.readXmlFileContent(path, encoding);
-        xlf.initializeFromContent(xmlContent.content, path, xmlContent.encoding);
-        return xlf;
+        xmb.initializeFromContent(xmlContent.content, path, xmlContent.encoding);
+        return xmb;
     }
 
     private filename: string;
 
     private encoding: string;
 
-    private xliffContent: CheerioStatic;
+    private xmbContent: CheerioStatic;
 
     // trans-unit elements and their id from the file
     private transUnits: ITransUnit[];
@@ -119,16 +102,41 @@ export class XliffFile implements ITranslationMessagesFile {
         this._numberOfTransUnitsWithMissingId = 0;
     }
 
-    private initializeFromContent(xmlString: string, path: string, encoding: string): XliffFile {
+    private initializeFromContent(xmlString: string, path: string, encoding: string): XmbFile {
         this.filename = path;
         this.encoding = encoding;
-        this.xliffContent = cheerio.load(xmlString, CheerioOptions);
+        this.xmbContent = cheerio.load(xmlString, CheerioOptions);
         return this;
+    }
+
+    private initializeTransUnits() {
+        if (isNullOrUndefined(this.transUnits)) {
+            this.transUnits = [];
+            let transUnitsInFile = this.xmbContent('msg');
+            transUnitsInFile.each((index, msg: CheerioElement) => {
+                let id = cheerio(msg).attr('id');
+                if (!id) {
+                    this._warnings.push(format('oops, msg without "id" found in master, please check file %s', this.filename));
+                    this._numberOfTransUnitsWithMissingId++;
+                }
+                this.transUnits.push(new TransUnit(msg, id));
+            });
+        }
     }
 
     public forEachTransUnit(callback: ((transunit: ITransUnit) => void)) {
         this.initializeTransUnits();
         this.transUnits.forEach((tu) => callback(tu));
+    }
+
+    /**
+     * Get trans-unit with given id.
+     * @param id
+     * @return {Cheerio}
+     */
+    public transUnitWithId(id: string): ITransUnit {
+        this.initializeTransUnits();
+        return this.transUnits.find((tu) => tu.id == id);
     }
 
     public warnings(): string[] {
@@ -147,65 +155,45 @@ export class XliffFile implements ITranslationMessagesFile {
     }
 
     /**
-     * Get trans-unit with given id.
-     * @param id
-     * @return {Cheerio}
-     */
-    public transUnitWithId(id: string): ITransUnit {
-        this.initializeTransUnits();
-        return this.transUnits.find((tu) => tu.id == id);
-    }
-
-    private initializeTransUnits() {
-        if (isNullOrUndefined(this.transUnits)) {
-            this.transUnits = [];
-            let transUnitsInFile = this.xliffContent('trans-unit');
-            transUnitsInFile.each((index, transunit: CheerioElement) => {
-                let id = cheerio(transunit).attr('id');
-                if (!id) {
-                    this._warnings.push(format('oops, trans-unit without "id" found in master, please check file %s', this.filename));
-                    this._numberOfTransUnitsWithMissingId++;
-                }
-                this.transUnits.push(new TransUnit(transunit, id));
-            });
-        }
-    }
-
-    /**
      * Get source language.
+     * Unsupported in xmb.
      * @return {string}
      */
     public sourceLanguage(): string {
-        return this.xliffContent('file').attr('source-language');
+        return null;
     }
 
     /**
      * Edit the source language.
+     * Unsupported in xmb.
      * @param language
      */
     public setSourceLanguage(language: string) {
-        this.xliffContent('file').attr('source-language', language);
+        // do nothing, xmb has no notation for this.
     }
 
     /**
      * Get target language.
+     * Unsupported in xmb.
      * @return {string}
      */
     public targetLanguage(): string {
-        return this.xliffContent('file').attr('target-language');
+        return null;
     }
 
     /**
      * Edit the target language.
+     * Unsupported in xmb.
      * @param language
      */
     public setTargetLanguage(language: string) {
-        this.xliffContent('file').attr('target-language', language);
+        // do nothing, xmb has no notation for this.
     }
 
     /**
      * Copy source to target to use it as dummy translation.
      * (better than missing value)
+     * In xmb there is nothing to do, because there is only a target, no source.
      */
     public useSourceAsTarget(transUnit: ITransUnit, isDefaultLang: boolean) {
         transUnit.useSourceAsTarget(isDefaultLang);
@@ -226,7 +214,7 @@ export class XliffFile implements ITranslationMessagesFile {
      * @param transUnit
      */
     public addNewTransUnit(transUnit: ITransUnit) {
-        this.xliffContent('body').append(cheerio(transUnit.asXmlElement()));
+        this.xmbContent('messagebundle').append(cheerio(transUnit.asXmlElement()));
         this.initializeTransUnits();
         this.transUnits.push(transUnit);
     }
@@ -236,7 +224,7 @@ export class XliffFile implements ITranslationMessagesFile {
      * @param id
      */
     public removeTransUnitWithId(id: string) {
-        this.xliffContent('#' + id).remove();
+        this.xmbContent('#' + id).remove();
         this.initializeTransUnits();
         this.transUnits = this.transUnits.filter((tu) => tu.id != id);
     }
@@ -245,6 +233,6 @@ export class XliffFile implements ITranslationMessagesFile {
      * Save edited content to file.
      */
     public save() {
-        FileUtil.replaceContent(this.filename, this.xliffContent.xml(), this.encoding);
+        FileUtil.replaceContent(this.filename, this.xmbContent.xml(), this.encoding);
     }
 }
