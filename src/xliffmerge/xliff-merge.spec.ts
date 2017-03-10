@@ -81,6 +81,15 @@ describe('XliffMerge test spec', () => {
             done();
         });
 
+        it('should read test config file', (done) => {
+            let ws: WriterToString = new WriterToString();
+            let commandOut = new CommandOutput(ws);
+            let xliffMergeCmd = XliffMerge.createFromOptions(commandOut, {profilePath: './test/testdata/xliffmergeconfig.json', verbose: true}, null);
+            xliffMergeCmd.run();
+            expect(ws.writtenData()).toContain('languages:	de,en');
+            done();
+        });
+
         it('should output an errror (srcDir not readable) when called with a non existing srcDir', (done) => {
             let ws: WriterToString = new WriterToString();
             let commandOut = new CommandOutput(ws);
@@ -139,6 +148,20 @@ describe('XliffMerge test spec', () => {
             xliffMergeCmd.run();
             expect(ws.writtenData()).toContain('ERROR');
             expect(ws.writtenData()).toContain('language "de/ch" is not valid');
+            done();
+        });
+
+        it('should read languages from config file', (done) => {
+            let ws: WriterToString = new WriterToString();
+            let commandOut = new CommandOutput(ws);
+            let profileContent: IConfigFile = {
+                xliffmergeOptions: {
+                    languages: ['de', 'en', 'fr'],
+                }
+            }
+            let xliffMergeCmd = XliffMerge.createFromOptions(commandOut, {verbose: true}, profileContent);
+            xliffMergeCmd.run();
+            expect(ws.writtenData()).toContain('languages:	de,en,fr');
             done();
         });
 

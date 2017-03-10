@@ -1,6 +1,4 @@
-import * as program from "commander";
-import * as chalk from "chalk";
-import * as cheerio from "cheerio";
+import * as program from 'commander';
 import {CommandOutput} from '../common/command-output';
 import {XliffMergeParameters} from "./xliff-merge-parameters";
 import {XliffMergeError} from './xliff-merge-error';
@@ -35,6 +33,7 @@ export interface IXliffMergeOptions {
     quiet?: boolean;   // Flag to only output error messages
     verbose?: boolean;   // Flag to generate debug output messages
     defaultLanguage?: string;    // the default language (the language, which is used in the original templates)
+    languages?: string[];   // all languages, if not specified via commandline
     srcDir?: string;    // Directory, where the master file is
     i18nFile?: string;  // master file, if not absolute, it is relative to srcDir
     i18nFormat?: string; // xlf (unused in the moment)

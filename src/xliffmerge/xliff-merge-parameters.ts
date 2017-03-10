@@ -112,6 +112,9 @@ export class XliffMergeParameters {
             if (profile.defaultLanguage) {
                 this._defaultLanguage = profile.defaultLanguage;
             }
+            if (profile.languages) {
+                this._languages = profile.languages;
+            }
             if (profile.srcDir) {
                 this._srcDir = profile.srcDir;
             }
