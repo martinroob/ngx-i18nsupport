@@ -3,6 +3,6 @@
  */
 import * as path from 'path';
 
-const pkg = require(path.resolve(__dirname, '..', 'package.json'));
+const pkg = require(path.resolve(__dirname, '..', '..', 'package.json'));
 
 export const VERSION = (pkg? pkg.version : 'unknown');
