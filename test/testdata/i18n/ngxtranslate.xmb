@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE messagebundle [
+        <!ELEMENT messagebundle (msg)*>
+        <!ATTLIST messagebundle class CDATA #IMPLIED>
+
+        <!ELEMENT msg (#PCDATA|ph|source)*>
+        <!ATTLIST msg id CDATA #IMPLIED>
+        <!ATTLIST msg seq CDATA #IMPLIED>
+        <!ATTLIST msg name CDATA #IMPLIED>
+        <!ATTLIST msg desc CDATA #IMPLIED>
+        <!ATTLIST msg meaning CDATA #IMPLIED>
+        <!ATTLIST msg obsolete (obsolete) #IMPLIED>
+        <!ATTLIST msg xml:space (default|preserve) "default">
+        <!ATTLIST msg is_hidden CDATA #IMPLIED>
+
+        <!ELEMENT source (#PCDATA)>
+
+        <!ELEMENT ph (#PCDATA|ex)*>
+        <!ATTLIST ph name CDATA #REQUIRED>
+
+        <!ELEMENT ex (#PCDATA)>
+        ]>
+<messagebundle>
+    <msg id="2047558209369508311">Meine erste I18N-Anwendung</msg>
+    <msg id="4371668001355139802">Anwendung läuft!</msg>
+    <msg id="1650190705028986163" desc="ngx-translate" meaning="myapp">Meine Anwendung</msg>
+    <msg id="6830980354990918030" desc="ngx-translate" meaning="dateservice.monday">Montag</msg>
+    <msg id="6375749062310329756" desc="ngx-translate" meaning="dateservice.tuesday">Dienstag</msg>
+    <msg id="8721860357562818797" desc="ngx-translate" meaning="dateservice.wednesday">Mittwoch</msg>
+    <msg id="1711956122115192435" desc="ngx-translate" meaning="dateservice.thursday">Donnerstag</msg>
+    <msg id="6553664200740484336" desc="ngx-translate" meaning="dateservice.friday">Freitag</msg>
+    <msg id="3334880142338745041" desc="ngx-translate" meaning="dateservice.saturday">Samstag</msg>
+    <msg id="1409816038285774052" desc="ngx-translate" meaning="dateservice.sunday">Sonntag</msg>
+    <msg id="7644074577681906834" desc="ngx-translate" meaning="placeholders.test1placeholder"><ph name="INTERPOLATION"><ex>INTERPOLATION</ex></ph>: Eine Nachricht mit einem Platzhalter</msg>
+    <msg id="9223042936546558865" desc="ngx-translate" meaning="placeholders.test2placeholder"><ph name="INTERPOLATION"><ex>INTERPOLATION</ex></ph>: Eine Nachricht mit 2 Platzhaltern: <ph name="INTERPOLATION_1"><ex>INTERPOLATION_1</ex></ph></msg>
+    <msg id="7049669989298349710" desc="ngx-translate" meaning="placeholders.test2placeholderRepeated"><ph name="INTERPOLATION"><ex>INTERPOLATION</ex></ph>: Eine Nachricht mit 2 Platzhaltern: <ph name="INTERPOLATION"><ex>INTERPOLATION</ex></ph> <ph name="INTERPOLATION_1"><ex>INTERPOLATION_1</ex></ph></msg>
+    <msg id="6651165993266138235" desc="ngx-translate" meaning="embeddedhtml.bold">Diese Nachricht ist <ph name="START_BOLD_TEXT"><ex>&lt;b&gt;</ex></ph>WICHTIG<ph name="CLOSE_BOLD_TEXT"><ex>&lt;/b&gt;</ex></ph></msg>
+    <msg id="7609655310648429098" desc="ngx-translate" meaning="embeddedhtml.boldstrong">Diese Nachricht ist <ph name="START_BOLD_TEXT"><ex>&lt;b&gt;</ex></ph><ph name="START_TAG_STRONG"><ex>&lt;strong&gt;</ex></ph>SEHR WICHTIG<ph name="CLOSE_TAG_STRONG"><ex>&lt;/strong&gt;</ex></ph><ph name="CLOSE_BOLD_TEXT"><ex>&lt;/b&gt;</ex></ph></msg>
+    <msg id="7610784844464920497" desc="ngx-translate" meaning="embeddedhtml.strange">Diese Nachricht ist <ph name="START_TAG_STRANGE"><ex>&lt;strange&gt;</ex></ph><ph name="INTERPOLATION"><ex>INTERPOLATION</ex></ph><ph name="CLOSE_TAG_STRANGE"><ex>&lt;/strange&gt;</ex></ph></msg>
+</messagebundle>

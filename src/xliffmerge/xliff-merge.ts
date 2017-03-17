@@ -7,43 +7,14 @@ import {VERSION} from './version';
 import WritableStream = NodeJS.WritableStream;
 import {isNullOrUndefined} from 'util';
 import {ITranslationMessagesFile, ITransUnit, TranslationMessagesFileReader} from './i-translation-messages-file';
+import {ProgramOptions, IConfigFile} from './i-xliff-merge-options';
+import {NgxTranslateExtractor} from './ngx-translate-extractor';
 
 /**
  * Created by martin on 17.02.2017.
  * XliffMerge - read xliff or xmb file and put untranslated parts in language specific xliff or xmb files.
  *
  */
-
-export interface ProgramOptions {
-    quiet?: boolean;
-    verbose?: boolean;
-    profilePath?: string;
-    languages?: string[];
-}
-
-/**
- * Definition of the possible values used in the config file
- */
-export interface IConfigFile {
-    // content is wrapped in "xliffmergeOptions" to allow to use it embedded in another config file (e.g. tsconfig.json)
-    xliffmergeOptions?: IXliffMergeOptions;
-}
-
-export interface IXliffMergeOptions {
-    quiet?: boolean;   // Flag to only output error messages
-    verbose?: boolean;   // Flag to generate debug output messages
-    defaultLanguage?: string;    // the default language (the language, which is used in the original templates)
-    languages?: string[];   // all languages, if not specified via commandline
-    srcDir?: string;    // Directory, where the master file is
-    i18nFile?: string;  // master file, if not absolute, it is relative to srcDir
-    i18nFormat?: string; // xlf or xmb
-    encoding?: string;  // encoding to write xml
-    genDir?: string;    // directory, where the files are written to
-    angularCompilerOptions?: {
-        genDir?: string;    // same as genDir, just to be compatible with ng-xi18n
-    };
-    removeUnusedIds?: boolean;
-}
 
 export class XliffMerge {
 
@@ -180,6 +151,15 @@ export class XliffMerge {
         return this.parameters.generatedI18nFile(lang);
     }
 
+    /**
+     * Return the name of the generated ngx-translation file for given lang.
+     * @param lang
+     * @return {string}
+     */
+    public generatedNgxTranslateFile(lang: string): string {
+        return this.parameters.generatedNgxTranslateFile(lang);
+    }
+
     private readMaster() {
         this.master = TranslationMessagesFileReader.fromFile(this.parameters.i18nFormat(), this.parameters.i18nFile(), this.parameters.encoding());
         this.master.warnings().forEach((warning: string) =>{
@@ -207,6 +187,10 @@ export class XliffMerge {
             this.createUntranslatedXliff(lang, languageXliffFile);
         } else {
             this.mergeMasterTo(lang, languageXliffFile);
+        }
+        if (this.parameters.supportNgxTranslate()) {
+            let languageSpecificMessagesFile: ITranslationMessagesFile = TranslationMessagesFileReader.fromFile(this.parameters.i18nFormat(), languageXliffFile, this.parameters.encoding());
+            NgxTranslateExtractor.extract(languageSpecificMessagesFile, this.parameters.generatedNgxTranslateFile(lang));
         }
     }
 

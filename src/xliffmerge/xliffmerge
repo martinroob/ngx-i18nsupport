@@ -1,2 +1,2 @@
 #!/usr/bin/env node
-require('../../dist/out-tsc/xliffmerge/main.js')
+require('../../dist/xliffmerge/main.js')

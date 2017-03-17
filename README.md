@@ -12,6 +12,9 @@ Some tooling to be used for Angular i18n workflows.
 >This page contains just a very short description about the installation process and usage.
 For details have a look at the [Tutorial for using xliffmerge](https://github.com/martinroob/ngx-i18nsupport/wiki/Tutorial-for-using-xliffmerge-with-angular-cli) contained in the Wiki pages.
 
+>There is also some support to use dynamic translations based on `ngx-translate` in parallel. 
+See details at the Wiki page [ngx translate usage](https://github.com/martinroob/ngx-i18nsupport/wiki/ngx-translate-usage)
+
 ## Table of Contents
 
 * [Introduction](#introduction)
@@ -88,6 +91,7 @@ Options:
   "defaultLanguage": "en",  // the native language used in your templates
   "languages": ["en", "de"], // list of languages (if not spefified at command line)
   "removeUnusedIds": true, // flag, if unused IDs should be removed during merge
+  "supportNgxTranslate": true, // flag to active json translation files for ngx-translate
   "verbose": false, // controls output
   "quiet": false, // controls output
 }

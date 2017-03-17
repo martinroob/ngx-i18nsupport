@@ -1,3 +1,18 @@
+<a name="0.2.0"></a>
+# [0.2.0](https://github.com/martinroob/ngx-i18nsupport/compare/v0.1.0...v0.2.0) (2017-03-17)
+
+
+### Bug Fixes
+
+* **xliffmerge:** Wrong version displayed ([#2](https://github.com/martinroob/ngx-i18nsupport/issues/2)) (second try to fix it)
+* **xliffmerge:** Code coverage display is too low ([#8](https://github.com/martinroob/ngx-i18nsupport/issues/8))
+
+### Features
+
+* **xliffmerge:** Added support for placeholders, linebreaks, embedded html ([#9](https://github.com/martinroob/ngx-i18nsupport/issues/9))
+* **xliffmerge:** Added support for ngx-translate ([#5](https://github.com/martinroob/ngx-i18nsupport/issues/5))
+* **documentation:** added ngx-translate integration page (as part of the wiki) ([#5](https://github.com/martinroob/ngx-i18nsupport/issues/5))
+
 <a name="0.1.0"></a>
 # [0.1.0](https://github.com/martinroob/ngx-i18nsupport/compare/v0.0.4...v0.1.0) (2017-03-10)
 

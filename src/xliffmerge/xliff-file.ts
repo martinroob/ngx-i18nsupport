@@ -16,6 +16,7 @@ import {ITranslationMessagesFile, ITransUnit} from './i-translation-messages-fil
 const CheerioOptions: CheerioOptionsInterface = {
     xmlMode: true,
     decodeEntities: false,
+
 };
 
 class TransUnit implements ITransUnit {
@@ -32,12 +33,68 @@ class TransUnit implements ITransUnit {
         return cheerio('source', this._transUnit).html();
     }
 
+    /**
+     * the translated value (containing all markup, depends on the concrete format used).
+     */
     public targetContent(): string {
         return cheerio('target', this._transUnit).html();
     }
 
+    /**
+     * the translated value, but all placeholders are replaced with {{n}} (starting at 0)
+     * and all embedded html is replaced by direct html markup.
+     */
+    targetContentNormalized(): string {
+        let directHtml = this.targetContent();
+        if (!directHtml) {
+            return directHtml;
+        }
+        let normalized = directHtml;
+        let re0: RegExp = /<x id="INTERPOLATION"><\/x>/g;
+        normalized = normalized.replace(re0, '{{0}}');
+        let reN: RegExp = /<x id="INTERPOLATION_(\d*)"><\/x>/g;
+        normalized = normalized.replace(reN, '{{$1}}');
+
+        let reStartBold: RegExp = /<x id="START_BOLD_TEXT" ctype="x-b"><\/x>/g;
+        normalized = normalized.replace(reStartBold, '<b>');
+        let reCloseBold: RegExp = /<x id="CLOSE_BOLD_TEXT" ctype="x-b"><\/x>/g;
+        normalized = normalized.replace(reCloseBold, '</b>');
+
+        let reStartAnyTag: RegExp = /<x id="START_TAG_(\w*)" ctype="x-(\w*)"><\/x>/g;
+        normalized = normalized.replace(reStartAnyTag, '<$2>');
+        let reCloseAnyTag: RegExp = /<x id="CLOSE_TAG_(\w*)" ctype="x-(\w*)"><\/x>/g;
+        normalized = normalized.replace(reCloseAnyTag, '</$2>');
+
+        return normalized;
+    }
+
+    /**
+     * State of the translation.
+     * (new, final, ...)
+     */
     public targetState(): string {
         return cheerio('target', this._transUnit).attr('state');
+    }
+
+    /**
+     * The description set in the template as value of the i18n-attribute.
+     * e.g. i18n="mydescription".
+     * In xliff this is stored as a note element with attribute from="description".
+     */
+    public description(): string {
+        let descriptionElem = cheerio('note', this._transUnit).filter((index, elem) => cheerio(elem).attr('from') == 'description');
+        return descriptionElem ? descriptionElem.html() : null;
+    }
+
+    /**
+     * The meaning (intent) set in the template as value of the i18n-attribute.
+     * This is the part in front of the | symbol.
+     * e.g. i18n="meaning|mydescription".
+     * In xliff this is stored as a note element with attribute from="meaning".
+     */
+    public meaning(): string {
+        let meaningElem = cheerio('note', this._transUnit).filter((index, elem) => cheerio(elem).attr('from') == 'meaning');
+        return meaningElem ? meaningElem.html() : null;
     }
 
     /**
@@ -61,7 +118,10 @@ class TransUnit implements ITransUnit {
             source.parent().append('<target/>');
             target = cheerio('target', source.parent());
         }
-        target.html(translation);
+        let translationContainer: CheerioStatic = cheerio.load('<dummy>' + translation + '</dummy>', CheerioOptions);
+        let translationParts: Cheerio = translationContainer('dummy');
+        target.contents().remove();
+        translationParts.contents().each((index, element) => {target.append(cheerio(element));});
         target.attr('state', 'final');
     }
 
@@ -123,6 +183,9 @@ export class XliffFile implements ITranslationMessagesFile {
         this.filename = path;
         this.encoding = encoding;
         this.xliffContent = cheerio.load(xmlString, CheerioOptions);
+        if (this.xliffContent('xliff').length < 1) {
+            throw new Error(format('File "%s" seems to be no xliff file (should contain an xliff element)', path));
+        }
         return this;
     }
 
