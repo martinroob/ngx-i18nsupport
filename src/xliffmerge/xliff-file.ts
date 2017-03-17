@@ -16,6 +16,7 @@ import {ITranslationMessagesFile, ITransUnit} from './i-translation-messages-fil
 const CheerioOptions: CheerioOptionsInterface = {
     xmlMode: true,
     decodeEntities: false,
+
 };
 
 class TransUnit implements ITransUnit {
@@ -61,7 +62,10 @@ class TransUnit implements ITransUnit {
             source.parent().append('<target/>');
             target = cheerio('target', source.parent());
         }
-        target.html(translation);
+        let translationContainer: CheerioStatic = cheerio.load('<dummy>' + translation + '</dummy>', CheerioOptions);
+        let translationParts: Cheerio = translationContainer('dummy');
+        target.contents().remove();
+        translationParts.contents().each((index, element) => {target.append(cheerio(element));});
         target.attr('state', 'final');
     }
 

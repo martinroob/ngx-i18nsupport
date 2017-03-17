@@ -23,4 +23,9 @@
 <messagebundle>
     <msg id="2047558209369508311">Meine erste I18N-Anwendung</msg>
     <msg id="4371668001355139802">Anwendung läuft!</msg>
+    <msg id="9030312858648510700" desc="placeholder sample">Eintrag <ph name="INTERPOLATION"><ex>INTERPOLATION</ex></ph> von <ph name="INTERPOLATION_1"><ex>INTERPOLATION_1</ex></ph> hinzugefügt.</msg>
+    <msg id="7149517499881679376" desc="linebreak sample">Dieser Text
+        enthält einen Zeilenumbruch.</msg>
+    <msg id="8998006760999956868" desc="embedded html sample">Dieser Text enthält <ph name="START_BOLD_TEXT"><ex>&lt;b&gt;</ex></ph>eingebettetes html<ph name="CLOSE_BOLD_TEXT"><ex>&lt;/b&gt;</ex></ph></msg>
+    <msg id="8998006760999956868" desc="embedded html sample">Dieser Text enthält <ph name="START_BOLD_TEXT"><ex>&lt;b&gt;</ex></ph>eingebettetes html<ph name="CLOSE_BOLD_TEXT"><ex>&lt;/b&gt;</ex></ph></msg>
 </messagebundle>

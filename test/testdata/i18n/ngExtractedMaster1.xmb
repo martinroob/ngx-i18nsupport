@@ -24,4 +24,7 @@
     <msg id="2047558209369508311">Meine erste I18N-Anwendung</msg>
     <msg id="7499557905529977371" desc="Beschreibung der Anwendung">Diese Anwendung ist eine reine Demonstration und hat keine wirklich nutzbare Funktion.</msg>
     <msg id="3274258156935474372" desc="sampleapp.appdescription" meaning="ngx-translate">Diese Anwendung ist eine reine Demonstration und hat keine wirklich nutzbare Funktion.</msg>
+    <msg id="9030312858648510700" desc="placeholder sample">Eintrag <ph name="INTERPOLATION"><ex>INTERPOLATION</ex></ph> von <ph name="INTERPOLATION_1"><ex>INTERPOLATION_1</ex></ph> hinzugefügt.</msg>
+    <msg id="7149517499881679376" desc="linebreak sample">Dieser Text
+        enthält einen Zeilenumbruch.</msg>
 </messagebundle>

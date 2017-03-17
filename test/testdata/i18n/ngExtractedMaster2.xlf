@@ -22,6 +22,22 @@
         <source>Schließen</source>
         <target/>
       </trans-unit>
+      <trans-unit id="af0819ea4a5db68737ebcabde2f5e432b66352e8" datatype="html">
+        <source>Eintrag <x id="INTERPOLATION"/> von <x id="INTERPOLATION_1"/> hinzugefügt.</source>
+        <target/>
+        <note priority="1" from="description">placeholder sample</note>
+      </trans-unit>
+      <trans-unit id="e4e521770b592e6fca431a4a131efcfd13f35634" datatype="html">
+        <source>Dieser Text
+          enthält einen Zeilenumbruch.</source>
+        <target/>
+        <note priority="1" from="description">linebreak sample</note>
+      </trans-unit>
+      <trans-unit id="7e8dd1fd1c57afafc38550ce80b5bcc1ced49f85" datatype="html">
+        <source>Dieser Text enthält <x id="START_BOLD_TEXT" ctype="x-b"/>eingebettetes html<x id="CLOSE_BOLD_TEXT" ctype="x-b"/></source>
+        <target/>
+        <note priority="1" from="description">embedded html sample</note>
+      </trans-unit>
       <trans-unit id="1bbd6e674a2e47f34589534e6557112ea5e4267b" datatype="html">
         <source>Open start sidenav</source>
         <target/>
