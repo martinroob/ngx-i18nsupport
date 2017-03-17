@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="de" datatype="plaintext" original="ng2.template" target-language="de">
+        <body>
+            <trans-unit id="a8f10794864e49b16224b22faaf4a86229b6c53d" datatype="html">
+                <source>Meine erste I18N-Anwendung</source>
+                <target state="final">Meine erste I18N-Anwendung</target>
+            </trans-unit>
+            <trans-unit id="1189e6770476cd4eef2d4462a98add152b80961e" datatype="html">
+                <source>Anwendung läuft!</source>
+                <target state="final">Anwendung läuft!</target>
+            </trans-unit>
+        <trans-unit id="c9b7317aaed32be01b0aed1affb0c786c68e3b8a" datatype="html">
+            <source>Meine Anwendung</source>
+            <target state="final">Meine Anwendung</target>
+            <note priority="1" from="description">ngx-translate</note>
+            <note priority="1" from="meaning">myapp</note>
+        </trans-unit><trans-unit id="84e8cd8ba480129d90f512cc3462bb43efcf389f" datatype="html">
+            <source>Montag</source>
+            <target state="final">Montag</target>
+            <note priority="1" from="description">ngx-translate</note>
+            <note priority="1" from="meaning">dateservice.monday</note>
+        </trans-unit><trans-unit id="17c1cd6502939b16dc845405188851cf43de95c2" datatype="html">
+            <source>Dienstag</source>
+            <target state="final">Dienstag</target>
+            <note priority="1" from="description">ngx-translate</note>
+            <note priority="1" from="meaning">dateservice.tuesday</note>
+        </trans-unit><trans-unit id="3921ef1cef5993d6c144ab3d4e83fcd41a646996" datatype="html">
+            <source>Mittwoch</source>
+            <target state="final">Mittwoch</target>
+            <note priority="1" from="description">ngx-translate</note>
+            <note priority="1" from="meaning">dateservice.wednesday</note>
+        </trans-unit><trans-unit id="01c0b7afc2c360d3b758c837ed5346cf0e0d42f0" datatype="html">
+            <source>Donnerstag</source>
+            <target state="final">Donnerstag</target>
+            <note priority="1" from="description">ngx-translate</note>
+            <note priority="1" from="meaning">dateservice.thursday</note>
+        </trans-unit><trans-unit id="a029f04be594f3ab3ce07bbdf86273e8e64b90dd" datatype="html">
+            <source>Freitag</source>
+            <target state="final">Freitag</target>
+            <note priority="1" from="description">ngx-translate</note>
+            <note priority="1" from="meaning">dateservice.friday</note>
+        </trans-unit><trans-unit id="65c668dc94b23a178ac19a24d15e974968178c82" datatype="html">
+            <source>Samstag</source>
+            <target state="final">Samstag</target>
+            <note priority="1" from="description">ngx-translate</note>
+            <note priority="1" from="meaning">dateservice.saturday</note>
+        </trans-unit><trans-unit id="73651d190597b45ba4217e313c4d2b8b6f548d25" datatype="html">
+            <source>Sonntag</source>
+            <target state="final">Sonntag</target>
+            <note priority="1" from="description">ngx-translate</note>
+            <note priority="1" from="meaning">dateservice.sunday</note>
+        </trans-unit><trans-unit id="ace25ed235d50c49e55bdbe3f05eed9841c5c868" datatype="html">
+            <source><x id="INTERPOLATION"/>: Eine Nachricht mit einem Platzhalter</source>
+            <target state="final"><x id="INTERPOLATION"/>: Eine Nachricht mit einem Platzhalter</target>
+            <note priority="1" from="description">ngx-translate</note>
+            <note priority="1" from="meaning">placeholders.test1placeholder</note>
+        </trans-unit><trans-unit id="51fb50a55e02c81fe3dda08acae315c023a4ec7f" datatype="html">
+            <source><x id="INTERPOLATION"/>: Eine Nachricht mit 2 Platzhaltern: <x id="INTERPOLATION_1"/></source>
+            <target state="final"><x id="INTERPOLATION"/>: Eine Nachricht mit 2 Platzhaltern: <x id="INTERPOLATION_1"/></target>
+            <note priority="1" from="description">ngx-translate</note>
+            <note priority="1" from="meaning">placeholders.test2placeholder</note>
+        </trans-unit><trans-unit id="a8329fa76f592156c75bc7c28252b0e3b5be8be4" datatype="html">
+            <source><x id="INTERPOLATION"/>: Eine Nachricht mit 2 Platzhaltern: <x id="INTERPOLATION"/> <x id="INTERPOLATION_1"/></source>
+            <target state="final"><x id="INTERPOLATION"/>: Eine Nachricht mit 2 Platzhaltern: <x id="INTERPOLATION"/> <x id="INTERPOLATION_1"/></target>
+            <note priority="1" from="description">ngx-translate</note>
+            <note priority="1" from="meaning">placeholders.test2placeholderRepeated</note>
+        </trans-unit><trans-unit id="09ad017365cccd622927c2fc561338e20a50ba1f" datatype="html">
+            <source>Diese Nachricht ist <x id="START_BOLD_TEXT" ctype="x-b"/>WICHTIG<x id="CLOSE_BOLD_TEXT" ctype="x-b"/></source>
+            <target state="final">Diese Nachricht ist <x id="START_BOLD_TEXT" ctype="x-b"/>WICHTIG<x id="CLOSE_BOLD_TEXT" ctype="x-b"/></target>
+            <note priority="1" from="description">ngx-translate</note>
+            <note priority="1" from="meaning">embeddedhtml.bold</note>
+        </trans-unit><trans-unit id="0999372407913995c73849412ff26cf8a67ebbea" datatype="html">
+            <source>Diese Nachricht ist <x id="START_BOLD_TEXT" ctype="x-b"/><x id="START_TAG_STRONG" ctype="x-strong"/>SEHR WICHTIG<x id="CLOSE_TAG_STRONG" ctype="x-strong"/><x id="CLOSE_BOLD_TEXT" ctype="x-b"/></source>
+            <target state="final">Diese Nachricht ist <x id="START_BOLD_TEXT" ctype="x-b"/><x id="START_TAG_STRONG" ctype="x-strong"/>SEHR WICHTIG<x id="CLOSE_TAG_STRONG" ctype="x-strong"/><x id="CLOSE_BOLD_TEXT" ctype="x-b"/></target>
+            <note priority="1" from="description">ngx-translate</note>
+            <note priority="1" from="meaning">embeddedhtml.boldstrong</note>
+        </trans-unit>
+        <trans-unit id="c466dca00414aa81d71e3ef0c9709bc65bd888c4" datatype="html">
+            <source>Diese Nachricht ist <x id="START_TAG_STRANGE" ctype="x-strange"/><x id="INTERPOLATION"/><x id="CLOSE_TAG_STRANGE" ctype="x-strange"/></source>
+            <target state="final">Diese Nachricht ist <x id="START_TAG_STRANGE" ctype="x-strange"/><x id="INTERPOLATION"/><x id="CLOSE_TAG_STRANGE" ctype="x-strange"/></target>
+            <note priority="1" from="description">ngx-translate</note>
+            <note priority="1" from="meaning">embeddedhtml.strange</note>
+        </trans-unit>
+        </body>
+    </file>
+</xliff>

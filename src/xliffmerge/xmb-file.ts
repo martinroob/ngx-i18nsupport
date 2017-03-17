@@ -31,13 +31,62 @@ class TransUnit implements ITransUnit {
         return cheerio(this._msg).html();
     }
 
+    /**
+     * the translated value (containing all markup, depends on the concrete format used).
+     */
     public targetContent(): string {
         // in fact, target and source are just the same in xmb
         return cheerio(this._msg).html();
     }
 
+    /**
+     * the translated value, but all placeholders are replaced with {{n}} (starting at 0)
+     * and all embedded html is replaced by direct html markup.
+     */
+    targetContentNormalized(): string {
+        let directHtml = this.targetContent();
+        if (!directHtml) {
+            return directHtml;
+        }
+        let normalized = directHtml;
+        let re0: RegExp = /<ph name="INTERPOLATION"><ex>INTERPOLATION<\/ex><\/ph>/g;
+        normalized = normalized.replace(re0, '{{0}}');
+        let reN: RegExp = /<ph name="INTERPOLATION_1"><ex>INTERPOLATION_(\d*)<\/ex><\/ph>/g;
+        normalized = normalized.replace(reN, '{{$1}}');
+
+        let reStartAnyTag: RegExp = /<ph name="START_\w*"><ex>&amp;lt;(\w*)&amp;gt;<\/ex><\/ph>/g;
+        normalized = normalized.replace(reStartAnyTag, '<$1>');
+        let reCloseAnyTag: RegExp = /<ph name="CLOSE_\w*"><ex>&amp;lt;\/(\w*)&amp;gt;<\/ex><\/ph>/g;
+        normalized = normalized.replace(reCloseAnyTag, '</$1>');
+
+        return normalized;
+    }
+
+    /**
+     * State of the translation.
+     * (not supported in xmb)
+     */
     public targetState(): string {
         return null; // not supported in xmb
+    }
+
+    /**
+     * The description set in the template as value of the i18n-attribute.
+     * e.g. i18n="mydescription".
+     * In xmb this is stored in the attribute "desc".
+     */
+    public description(): string {
+        return cheerio(this._msg).attr('desc');
+    }
+
+    /**
+     * The meaning (intent) set in the template as value of the i18n-attribute.
+     * This is the part in front of the | symbol.
+     * e.g. i18n="meaning|mydescription".
+     * In xmb this is stored in the attribute "meaning".
+     */
+    public meaning(): string {
+        return cheerio(this._msg).attr('meaning');
     }
 
     /**
@@ -106,6 +155,9 @@ export class XmbFile implements ITranslationMessagesFile {
         this.filename = path;
         this.encoding = encoding;
         this.xmbContent = cheerio.load(xmlString, CheerioOptions);
+        if (this.xmbContent('messagebundle').length != 1) {
+            throw new Error(format('File "%s" seems to be no xmb file (should contain a messagebundle element)', path));
+        }
         return this;
     }
 

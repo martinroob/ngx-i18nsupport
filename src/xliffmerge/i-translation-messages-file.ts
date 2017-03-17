@@ -40,9 +40,35 @@ export interface ITransUnit {
 
     sourceContent(): string;
 
+    /**
+     * the translated value (containing all markup, depends on the concrete format used).
+     */
     targetContent(): string;
 
+    /**
+     * the translated value, but all placeholders are replaced with {{n}} (starting at 0)
+     * and all embedded html is replaced by direct html markup.
+     */
+    targetContentNormalized(): string;
+
+    /**
+     * State of the translation.
+     * (new, final, ...)
+     */
     targetState(): string;
+
+    /**
+     * The description set in the template as value of the i18n-attribute.
+     * e.g. i18n="mydescription".
+     */
+    description(): string;
+
+    /**
+     * The meaning (intent) set in the template as value of the i18n-attribute.
+     * This is the part in front of the | symbol.
+     * e.g. i18n="meaning|mydescription".
+     */
+    meaning(): string;
 
     /**
      * the real xml element used for trans unit.

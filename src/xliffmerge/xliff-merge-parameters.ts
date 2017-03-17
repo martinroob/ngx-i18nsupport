@@ -9,7 +9,7 @@ import {XliffMergeError} from './xliff-merge-error';
 import {Stats} from 'fs';
 import {CommandOutput} from '../common/command-output';
 import {isNullOrUndefined} from 'util';
-import {ProgramOptions, IConfigFile} from './xliff-merge';
+import {ProgramOptions, IConfigFile} from './i-xliff-merge-options';
 
 export class XliffMergeParameters {
 
@@ -23,6 +23,7 @@ export class XliffMergeParameters {
     private _genDir: string;
     private _languages: string[];
     private _removeUnusedIds: boolean;
+    private _supportNgxTranslate: boolean;
 
     public errorsFound: XliffMergeError[];
     public warningsFound: string[];
@@ -138,6 +139,9 @@ export class XliffMergeParameters {
             if (profile.removeUnusedIds) {
                 this._removeUnusedIds = profile.removeUnusedIds;
             }
+            if (profile.supportNgxTranslate) {
+                this._supportNgxTranslate = profile.supportNgxTranslate;
+            }
         } else {
             this.warningsFound.push('did not find "xliffmergeOptions" in profile, using defaults');
         }
@@ -218,7 +222,11 @@ export class XliffMergeParameters {
         commandOutput.debug('genDir:\t"%s"', this.genDir());
         commandOutput.debug('i18nFile:\t"%s"', this.i18nFile());
         commandOutput.debug('languages:\t%s', this.languages());
+        commandOutput.debug('languages:\t%s', this.languages());
+        commandOutput.debug('removeUnusedIds:\t%s', this.removeUnusedIds());
+        commandOutput.debug('supportNgxTranslate:\t%s', this.supportNgxTranslate());
     }
+
     /**
      * Default-Language, default en.
      * @return {string}
@@ -262,12 +270,21 @@ export class XliffMergeParameters {
     }
 
     /**
-     * evtl zu generierendes I18n-File mit den Übersetzungen für eine Sprache.
-     * @param lang
-     * @return {string}
+     * potentially to be generated I18n-File with the translations for one language.
+     * @param lang language shortcut
+     * @return {string} Path of file
      */
     public generatedI18nFile(lang: string): string {
         return this.genDir() + '/' + 'messages.' + lang + '.' + this.i18nFormat();
+    }
+
+    /**
+     * potentially to be generated translate-File for ngx-translate with the translations for one language.
+     * @param lang language shortcut
+     * @return {string} Path of file
+     */
+    public generatedNgxTranslateFile(lang: string): string {
+        return this.genDir() + '/' + 'messages.' + lang + '.' + 'json';
     }
 
     /**
@@ -288,5 +305,9 @@ export class XliffMergeParameters {
 
     public removeUnusedIds(): boolean {
         return (isNullOrUndefined(this._removeUnusedIds)) ? true : this._removeUnusedIds;
+    }
+
+    public supportNgxTranslate(): boolean {
+        return (isNullOrUndefined(this._supportNgxTranslate)) ? false : this._supportNgxTranslate;
     }
 }

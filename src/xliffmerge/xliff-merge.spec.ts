@@ -1,6 +1,7 @@
 import fs = require("fs");
 import child_process = require("child_process");
-import {XliffMerge, ProgramOptions, IConfigFile} from './xliff-merge';
+import {XliffMerge} from './xliff-merge';
+import {ProgramOptions, IConfigFile} from './i-xliff-merge-options';
 import {CommandOutput} from '../common/command-output';
 import WritableStream = NodeJS.WritableStream;
 import {WriterToString} from '../common/writer-to-string';
@@ -403,6 +404,146 @@ describe('XliffMerge test spec', () => {
 
     });
 
+    describe('ngx-translate processing for format xlf', () => {
+
+        let MASTER1FILE = 'ngxtranslate.xlf';
+        let MASTER1SRC = SRCDIR + MASTER1FILE;
+        let MASTERFILE = 'messages.xlf';
+        let MASTER = WORKDIR + MASTERFILE;
+
+        let ID_NODESC_NOMEANING = "a8f10794864e49b16224b22faaf4a86229b6c53d"; // an ID without set meaning and description
+        let ID_MONDAY = "84e8cd8ba480129d90f512cc3462bb43efcf389f"; // an ID from ngxtranslate.xlf with meaning "x.y" and description "ngx-translate"
+
+        beforeEach(() => {
+            if (!fs.existsSync(WORKDIR)){
+                fs.mkdirSync(WORKDIR);
+            }
+            // cleanup workdir
+            FileUtil.deleteFolderContentRecursive(WORKDIR);
+        });
+
+        it('should return null for unset description and meaning in master  xlf file', (done) => {
+            FileUtil.copy(MASTER1SRC, MASTER);
+            let master: XliffFile = XliffFile.fromFile(MASTER);
+            expect(master.transUnitWithId(ID_NODESC_NOMEANING).description()).toBeFalsy();
+            expect(master.transUnitWithId(ID_NODESC_NOMEANING).meaning()).toBeFalsy();
+            done();
+        });
+
+        it('should find description and meaning in master  xlf file', (done) => {
+            FileUtil.copy(MASTER1SRC, MASTER);
+            let master: XliffFile = XliffFile.fromFile(MASTER);
+            expect(master.transUnitWithId(ID_MONDAY).description()).toBe('ngx-translate');
+            expect(master.transUnitWithId(ID_MONDAY).meaning()).toBe('dateservice.monday');
+            done();
+        });
+
+        it('should find description and meaning in translated xlf file', (done) => {
+            FileUtil.copy(MASTER1SRC, MASTER);
+            let ws: WriterToString = new WriterToString();
+            let commandOut = new CommandOutput(ws);
+            let profileContent: IConfigFile = {
+                xliffmergeOptions: {
+                    defaultLanguage: 'de',
+                    srcDir: WORKDIR,
+                    genDir: WORKDIR,
+                    i18nFile: MASTERFILE
+                }
+            };
+            let xliffMergeCmd = XliffMerge.createFromOptions(commandOut, {languages: ['de']}, profileContent);
+            xliffMergeCmd.run();
+            expect(ws.writtenData()).not.toContain('ERROR');
+            let langFile: XliffFile = XliffFile.fromFile(xliffMergeCmd.generatedI18nFile('de'));
+            expect(langFile.transUnitWithId(ID_MONDAY).description()).toBe('ngx-translate');
+            expect(langFile.transUnitWithId(ID_MONDAY).meaning()).toBe('dateservice.monday');
+            done();
+        });
+
+        it('should write translation json file for ngx-translate', (done) => {
+            FileUtil.copy(MASTER1SRC, MASTER);
+            let ws: WriterToString = new WriterToString();
+            let commandOut = new CommandOutput(ws);
+            let profileContent: IConfigFile = {
+                xliffmergeOptions: {
+                    defaultLanguage: 'de',
+                    srcDir: WORKDIR,
+                    genDir: WORKDIR,
+                    i18nFile: MASTERFILE,
+                    supportNgxTranslate: true
+                }
+            };
+            let xliffMergeCmd = XliffMerge.createFromOptions(commandOut, {languages: ['de']}, profileContent);
+            xliffMergeCmd.run();
+            expect(ws.writtenData()).not.toContain('ERROR');
+            let translationJsonFilename = xliffMergeCmd.generatedNgxTranslateFile('de');
+            expect(FileUtil.exists(translationJsonFilename)).toBeTruthy();
+            let fileContent = FileUtil.read(translationJsonFilename, 'UTF-8');
+            let translation: any = JSON.parse(fileContent);
+            expect(translation).toBeTruthy();
+            expect(translation.myapp).toBeTruthy();
+            expect(translation.dateservice.monday).toBe("Montag");
+            expect(translation.dateservice.friday).toBe("Freitag");
+            done();
+        });
+
+        it('should handle placeholders in json file for ngx-translate', (done) => {
+            FileUtil.copy(MASTER1SRC, MASTER);
+            let ws: WriterToString = new WriterToString();
+            let commandOut = new CommandOutput(ws);
+            let profileContent: IConfigFile = {
+                xliffmergeOptions: {
+                    defaultLanguage: 'de',
+                    srcDir: WORKDIR,
+                    genDir: WORKDIR,
+                    i18nFile: MASTERFILE,
+                    supportNgxTranslate: true
+                }
+            };
+            let xliffMergeCmd = XliffMerge.createFromOptions(commandOut, {languages: ['de']}, profileContent);
+            xliffMergeCmd.run();
+            expect(ws.writtenData()).not.toContain('ERROR');
+            let translationJsonFilename = xliffMergeCmd.generatedNgxTranslateFile('de');
+            expect(FileUtil.exists(translationJsonFilename)).toBeTruthy();
+            let fileContent = FileUtil.read(translationJsonFilename, 'UTF-8');
+            let translation: any = JSON.parse(fileContent);
+            expect(translation).toBeTruthy();
+            expect(translation.placeholders).toBeTruthy();
+            expect(translation.placeholders.test1placeholder).toBe('{{0}}: Eine Nachricht mit einem Platzhalter');
+            expect(translation.placeholders.test2placeholder).toBe('{{0}}: Eine Nachricht mit 2 Platzhaltern: {{1}}');
+            expect(translation.placeholders.test2placeholderRepeated).toBe('{{0}}: Eine Nachricht mit 2 Platzhaltern: {{0}} {{1}}');
+            done();
+        });
+
+        it('should handle embedded html markup in json file for ngx-translate', (done) => {
+            FileUtil.copy(MASTER1SRC, MASTER);
+            let ws: WriterToString = new WriterToString();
+            let commandOut = new CommandOutput(ws);
+            let profileContent: IConfigFile = {
+                xliffmergeOptions: {
+                    defaultLanguage: 'de',
+                    srcDir: WORKDIR,
+                    genDir: WORKDIR,
+                    i18nFile: MASTERFILE,
+                    supportNgxTranslate: true
+                }
+            };
+            let xliffMergeCmd = XliffMerge.createFromOptions(commandOut, {languages: ['de']}, profileContent);
+            xliffMergeCmd.run();
+            expect(ws.writtenData()).not.toContain('ERROR');
+            let translationJsonFilename = xliffMergeCmd.generatedNgxTranslateFile('de');
+            expect(FileUtil.exists(translationJsonFilename)).toBeTruthy();
+            let fileContent = FileUtil.read(translationJsonFilename, 'UTF-8');
+            let translation: any = JSON.parse(fileContent);
+            expect(translation).toBeTruthy();
+            expect(translation.embeddedhtml).toBeTruthy();
+            expect(translation.embeddedhtml.bold).toBe('Diese Nachricht ist <b>WICHTIG</b>');
+            expect(translation.embeddedhtml.boldstrong).toBe('Diese Nachricht ist <b><strong>SEHR WICHTIG</strong></b>');
+            expect(translation.embeddedhtml.strange).toBe('Diese Nachricht ist <strange>{{0}}</strange>');
+            done();
+        });
+
+    });
+
     describe('Merge process checks for format xmb', () => {
 
         let MASTER1FILE = 'ngExtractedMaster1.xmb';
@@ -559,4 +700,147 @@ describe('XliffMerge test spec', () => {
 
     });
 
+    describe('ngx-translate processing for format xmb', () => {
+
+        let MASTER1FILE = 'ngxtranslate.xmb';
+        let MASTER1SRC = SRCDIR + MASTER1FILE;
+        let MASTERFILE = 'messages.xmb';
+        let MASTER = WORKDIR + MASTERFILE;
+
+        let ID_NODESC_NOMEANING = "2047558209369508311"; // an ID without set meaning and description
+        let ID_MONDAY = "6830980354990918030"; // an ID from ngxtranslate.xmb with meaning "x.y" and description "ngx-translate"
+
+        beforeEach(() => {
+            if (!fs.existsSync(WORKDIR)){
+                fs.mkdirSync(WORKDIR);
+            }
+            // cleanup workdir
+            FileUtil.deleteFolderContentRecursive(WORKDIR);
+        });
+
+        it('should return null for unset description and meaning in master xmb file', (done) => {
+            FileUtil.copy(MASTER1SRC, MASTER);
+            let master: XmbFile = XmbFile.fromFile(MASTER);
+            expect(master.transUnitWithId(ID_NODESC_NOMEANING).description()).toBeFalsy();
+            expect(master.transUnitWithId(ID_NODESC_NOMEANING).meaning()).toBeFalsy();
+            done();
+        });
+
+        it('should find description and meaning in master  xmb file', (done) => {
+            FileUtil.copy(MASTER1SRC, MASTER);
+            let master: XmbFile = XmbFile.fromFile(MASTER);
+            expect(master.transUnitWithId(ID_MONDAY).description()).toBe('ngx-translate');
+            expect(master.transUnitWithId(ID_MONDAY).meaning()).toBe('dateservice.monday');
+            done();
+        });
+
+        it('should find description and meaning in translated xmb file', (done) => {
+            FileUtil.copy(MASTER1SRC, MASTER);
+            let ws: WriterToString = new WriterToString();
+            let commandOut = new CommandOutput(ws);
+            let profileContent: IConfigFile = {
+                xliffmergeOptions: {
+                    defaultLanguage: 'de',
+                    srcDir: WORKDIR,
+                    genDir: WORKDIR,
+                    i18nFile: MASTERFILE,
+                    i18nFormat: 'xmb'
+                }
+            };
+            let xliffMergeCmd = XliffMerge.createFromOptions(commandOut, {languages: ['de']}, profileContent);
+            xliffMergeCmd.run();
+            expect(ws.writtenData()).not.toContain('ERROR');
+            let langFile: XmbFile = XmbFile.fromFile(xliffMergeCmd.generatedI18nFile('de'));
+            expect(langFile.transUnitWithId(ID_MONDAY).description()).toBe('ngx-translate');
+            expect(langFile.transUnitWithId(ID_MONDAY).meaning()).toBe('dateservice.monday');
+            done();
+        });
+
+        it('should write translation json file for ngx-translate', (done) => {
+            FileUtil.copy(MASTER1SRC, MASTER);
+            let ws: WriterToString = new WriterToString();
+            let commandOut = new CommandOutput(ws);
+            let profileContent: IConfigFile = {
+                xliffmergeOptions: {
+                    defaultLanguage: 'de',
+                    srcDir: WORKDIR,
+                    genDir: WORKDIR,
+                    i18nFile: MASTERFILE,
+                    i18nFormat: 'xmb',
+                    supportNgxTranslate: true
+                }
+            };
+            let xliffMergeCmd = XliffMerge.createFromOptions(commandOut, {languages: ['de']}, profileContent);
+            xliffMergeCmd.run();
+            expect(ws.writtenData()).not.toContain('ERROR');
+            let translationJsonFilename = xliffMergeCmd.generatedNgxTranslateFile('de');
+            expect(FileUtil.exists(translationJsonFilename)).toBeTruthy();
+            let fileContent = FileUtil.read(translationJsonFilename, 'UTF-8');
+            let translation: any = JSON.parse(fileContent);
+            expect(translation).toBeTruthy();
+            expect(translation.myapp).toBeTruthy();
+            expect(translation.dateservice.monday).toBe("Montag");
+            expect(translation.dateservice.friday).toBe("Freitag");
+            done();
+        });
+
+        it('should handle placeholders in json file for ngx-translate', (done) => {
+            FileUtil.copy(MASTER1SRC, MASTER);
+            let ws: WriterToString = new WriterToString();
+            let commandOut = new CommandOutput(ws);
+            let profileContent: IConfigFile = {
+                xliffmergeOptions: {
+                    defaultLanguage: 'de',
+                    srcDir: WORKDIR,
+                    genDir: WORKDIR,
+                    i18nFile: MASTERFILE,
+                    i18nFormat: 'xmb',
+                    supportNgxTranslate: true
+                }
+            };
+            let xliffMergeCmd = XliffMerge.createFromOptions(commandOut, {languages: ['de']}, profileContent);
+            xliffMergeCmd.run();
+            expect(ws.writtenData()).not.toContain('ERROR');
+            let translationJsonFilename = xliffMergeCmd.generatedNgxTranslateFile('de');
+            expect(FileUtil.exists(translationJsonFilename)).toBeTruthy();
+            let fileContent = FileUtil.read(translationJsonFilename, 'UTF-8');
+            let translation: any = JSON.parse(fileContent);
+            expect(translation).toBeTruthy();
+            expect(translation.placeholders).toBeTruthy();
+            expect(translation.placeholders.test1placeholder).toBe('{{0}}: Eine Nachricht mit einem Platzhalter');
+            expect(translation.placeholders.test2placeholder).toBe('{{0}}: Eine Nachricht mit 2 Platzhaltern: {{1}}');
+            expect(translation.placeholders.test2placeholderRepeated).toBe('{{0}}: Eine Nachricht mit 2 Platzhaltern: {{0}} {{1}}');
+            done();
+        });
+
+        it('should handle embedded html markup in json file for ngx-translate', (done) => {
+            FileUtil.copy(MASTER1SRC, MASTER);
+            let ws: WriterToString = new WriterToString();
+            let commandOut = new CommandOutput(ws);
+            let profileContent: IConfigFile = {
+                xliffmergeOptions: {
+                    defaultLanguage: 'de',
+                    srcDir: WORKDIR,
+                    genDir: WORKDIR,
+                    i18nFile: MASTERFILE,
+                    i18nFormat: 'xmb',
+                    supportNgxTranslate: true
+                }
+            };
+            let xliffMergeCmd = XliffMerge.createFromOptions(commandOut, {languages: ['de']}, profileContent);
+            xliffMergeCmd.run();
+            expect(ws.writtenData()).not.toContain('ERROR');
+            let translationJsonFilename = xliffMergeCmd.generatedNgxTranslateFile('de');
+            expect(FileUtil.exists(translationJsonFilename)).toBeTruthy();
+            let fileContent = FileUtil.read(translationJsonFilename, 'UTF-8');
+            let translation: any = JSON.parse(fileContent);
+            expect(translation).toBeTruthy();
+            expect(translation.embeddedhtml).toBeTruthy();
+            expect(translation.embeddedhtml.bold).toBe('Diese Nachricht ist <b>WICHTIG</b>');
+            expect(translation.embeddedhtml.boldstrong).toBe('Diese Nachricht ist <b><strong>SEHR WICHTIG</strong></b>');
+            expect(translation.embeddedhtml.strange).toBe('Diese Nachricht ist <strange>{{0}}</strange>');
+            done();
+        });
+
+    });
 });
