@@ -6,9 +6,11 @@ import {CommandOutput} from '../common/command-output';
 import WritableStream = NodeJS.WritableStream;
 import {WriterToString} from '../common/writer-to-string';
 import {FileUtil} from '../common/file-util';
+import {ITranslationMessagesFile} from './i-translation-messages-file';
+import {ITransUnit} from './i-trans-unit';
 import {XliffFile} from './xliff-file';
-import {ITransUnit, ITranslationMessagesFile} from './i-translation-messages-file';
 import {XmbFile} from './xmb-file';
+import {TranslationMessagesFileReader} from './translation-messages-file-reader';
 /**
  * Created by martin on 18.02.2017.
  * Testcases for XliffMerge.
@@ -24,6 +26,24 @@ describe('XliffMerge test spec', () => {
      */
     let WORKDIR = 'test/work/';
     let SRCDIR = 'test/testdata/i18n/';
+
+    let ENCODING = 'UTF-8';
+
+    /**
+     * Helper function to read Xliff from File
+     * @type {string}
+     */
+    function readXliff(path: string): XliffFile {
+        return <XliffFile> TranslationMessagesFileReader.fromFile('xlf', path, ENCODING);
+    }
+
+    /**
+     * Helper function to read Xmb from File
+     * @type {string}
+     */
+    function readXmb(path: string): XmbFile {
+        return <XmbFile> TranslationMessagesFileReader.fromFile('xmb', path, ENCODING);
+    }
 
     describe('test the tooling used in the tests', () => {
         it('should write output to string (Test WriterToString)', () => {
@@ -227,7 +247,6 @@ describe('XliffMerge test spec', () => {
     });
 
     describe('Merge process checks for format xlf', () => {
-
         let MASTER1FILE = 'ngExtractedMaster1.xlf';
         let MASTER2FILE = 'ngExtractedMaster2.xlf';
         let MASTER1SRC = SRCDIR + MASTER1FILE;
@@ -250,7 +269,7 @@ describe('XliffMerge test spec', () => {
 
         it('should fix source language, if the masters lang is not the default', (done) => {
             FileUtil.copy(MASTER1SRC, MASTER);
-            let master: XliffFile = XliffFile.fromFile(MASTER);
+            let master: XliffFile = readXliff(MASTER);
             expect(master.sourceLanguage()).toBe('en'); // master is german, but ng-18n extracts it as en
             let ws: WriterToString = new WriterToString();
             let commandOut = new CommandOutput(ws);
@@ -267,7 +286,7 @@ describe('XliffMerge test spec', () => {
             expect(ws.writtenData()).not.toContain('ERROR');
             expect(ws.writtenData()).toContain('master says to have source-language="en"');
             expect(ws.writtenData()).toContain('changed master source-language="en" to "de"');
-            let newmaster: XliffFile = XliffFile.fromFile(MASTER);
+            let newmaster: XliffFile = readXliff(MASTER);
             expect(newmaster.sourceLanguage()).toBe('de'); // master is german
             done();
         });
@@ -287,7 +306,7 @@ describe('XliffMerge test spec', () => {
             let xliffMergeCmd = XliffMerge.createFromOptions(commandOut, {languages: ['de']}, profileContent);
             xliffMergeCmd.run();
             expect(ws.writtenData()).not.toContain('ERROR');
-            let langFile: XliffFile = XliffFile.fromFile(xliffMergeCmd.generatedI18nFile('de'));
+            let langFile: XliffFile = readXliff(xliffMergeCmd.generatedI18nFile('de'));
             expect(langFile.sourceLanguage()).toBe('de');
             expect(langFile.targetLanguage()).toBe('de');
             langFile.forEachTransUnit((tu: ITransUnit) => {
@@ -312,14 +331,14 @@ describe('XliffMerge test spec', () => {
             let xliffMergeCmd = XliffMerge.createFromOptions(commandOut, {languages: ['de', 'en']}, profileContent);
             xliffMergeCmd.run();
             expect(ws.writtenData()).not.toContain('ERROR');
-            let langFileGerman: XliffFile = XliffFile.fromFile(xliffMergeCmd.generatedI18nFile('de'));
+            let langFileGerman: XliffFile = readXliff(xliffMergeCmd.generatedI18nFile('de'));
             expect(langFileGerman.sourceLanguage()).toBe('de');
             expect(langFileGerman.targetLanguage()).toBe('de');
             langFileGerman.forEachTransUnit((tu: ITransUnit) => {
                 expect(tu.targetContent()).toBe(tu.sourceContent());
                 expect(tu.targetState()).toBe('final');
             });
-            let langFileEnglish: XliffFile = XliffFile.fromFile(xliffMergeCmd.generatedI18nFile('en'));
+            let langFileEnglish: XliffFile = readXliff(xliffMergeCmd.generatedI18nFile('en'));
             expect(langFileEnglish.sourceLanguage()).toBe('de');
             expect(langFileEnglish.targetLanguage()).toBe('en');
             langFileEnglish.forEachTransUnit((tu: ITransUnit) => {
@@ -346,11 +365,11 @@ describe('XliffMerge test spec', () => {
             expect(ws.writtenData()).not.toContain('ERROR');
 
             // now translate some texts in the English version
-            let langFileEnglish: XliffFile = XliffFile.fromFile(xliffMergeCmd.generatedI18nFile('en'));
+            let langFileEnglish: XliffFile = readXliff(xliffMergeCmd.generatedI18nFile('en'));
             let tu: ITransUnit = langFileEnglish.transUnitWithId(ID_TRANSLATED_SCHLIESSEN);
             expect(tu).toBeTruthy();
             langFileEnglish.translate(tu, 'Close');
-            langFileEnglish.save();
+            TranslationMessagesFileReader.save(langFileEnglish);
 
             // next step, use another master
             FileUtil.copy(MASTER2SRC, MASTER);
@@ -363,7 +382,7 @@ describe('XliffMerge test spec', () => {
             expect(ws.writtenData()).toContain('removed 2 unused trans-units in "en"');
 
             // look, that the new file contains the old translation
-            langFileEnglish = XliffFile.fromFile(xliffMergeCmd.generatedI18nFile('en'));
+            langFileEnglish = readXliff(xliffMergeCmd.generatedI18nFile('en'));
             expect(langFileEnglish.transUnitWithId(ID_TRANSLATED_SCHLIESSEN).targetContent()).toBe('Close');
 
             // look, that the removed IDs are really removed.
@@ -389,14 +408,14 @@ describe('XliffMerge test spec', () => {
             expect(ws.writtenData()).not.toContain('ERROR');
 
             // now translate some texts in the English version
-            let langFileEnglish: ITranslationMessagesFile = XliffFile.fromFile(xliffMergeCmd.generatedI18nFile('en'));
+            let langFileEnglish: ITranslationMessagesFile = readXliff(xliffMergeCmd.generatedI18nFile('en'));
             let tu: ITransUnit = langFileEnglish.transUnitWithId(ID_WITH_PLACEHOLDER);
             expect(tu).toBeTruthy();
             langFileEnglish.translate(tu, 'Item <x id="INTERPOLATION"/> of <x id="INTERPOLATION_1"/> added.');
-            langFileEnglish.save();
+            TranslationMessagesFileReader.save(langFileEnglish);
 
             // look, that the new file contains the translation
-            langFileEnglish = XliffFile.fromFile(xliffMergeCmd.generatedI18nFile('en'));
+            langFileEnglish = readXliff(xliffMergeCmd.generatedI18nFile('en'));
             expect(langFileEnglish.transUnitWithId(ID_WITH_PLACEHOLDER).targetContent()).toBe('Item <x id="INTERPOLATION"></x> of <x id="INTERPOLATION_1"></x> added.');
 
             done();
@@ -424,7 +443,7 @@ describe('XliffMerge test spec', () => {
 
         it('should return null for unset description and meaning in master  xlf file', (done) => {
             FileUtil.copy(MASTER1SRC, MASTER);
-            let master: XliffFile = XliffFile.fromFile(MASTER);
+            let master: XliffFile = readXliff(MASTER);
             expect(master.transUnitWithId(ID_NODESC_NOMEANING).description()).toBeFalsy();
             expect(master.transUnitWithId(ID_NODESC_NOMEANING).meaning()).toBeFalsy();
             done();
@@ -432,7 +451,7 @@ describe('XliffMerge test spec', () => {
 
         it('should find description and meaning in master  xlf file', (done) => {
             FileUtil.copy(MASTER1SRC, MASTER);
-            let master: XliffFile = XliffFile.fromFile(MASTER);
+            let master: XliffFile = readXliff(MASTER);
             expect(master.transUnitWithId(ID_MONDAY).description()).toBe('ngx-translate');
             expect(master.transUnitWithId(ID_MONDAY).meaning()).toBe('dateservice.monday');
             done();
@@ -453,7 +472,7 @@ describe('XliffMerge test spec', () => {
             let xliffMergeCmd = XliffMerge.createFromOptions(commandOut, {languages: ['de']}, profileContent);
             xliffMergeCmd.run();
             expect(ws.writtenData()).not.toContain('ERROR');
-            let langFile: XliffFile = XliffFile.fromFile(xliffMergeCmd.generatedI18nFile('de'));
+            let langFile: XliffFile = readXliff(xliffMergeCmd.generatedI18nFile('de'));
             expect(langFile.transUnitWithId(ID_MONDAY).description()).toBe('ngx-translate');
             expect(langFile.transUnitWithId(ID_MONDAY).meaning()).toBe('dateservice.monday');
             done();
@@ -583,7 +602,7 @@ describe('XliffMerge test spec', () => {
             let xliffMergeCmd = XliffMerge.createFromOptions(commandOut, {languages: ['de']}, profileContent);
             xliffMergeCmd.run();
             expect(ws.writtenData()).not.toContain('ERROR');
-            let langFile: ITranslationMessagesFile = XmbFile.fromFile(xliffMergeCmd.generatedI18nFile('de'));
+            let langFile: ITranslationMessagesFile = readXmb(xliffMergeCmd.generatedI18nFile('de'));
             expect(langFile.sourceLanguage()).toBeFalsy(); // not supported in xmb
             expect(langFile.targetLanguage()).toBeFalsy();
             langFile.forEachTransUnit((tu: ITransUnit) => {
@@ -609,11 +628,11 @@ describe('XliffMerge test spec', () => {
             let xliffMergeCmd = XliffMerge.createFromOptions(commandOut, {languages: ['de', 'en']}, profileContent);
             xliffMergeCmd.run();
             expect(ws.writtenData()).not.toContain('ERROR');
-            let langFileGerman: ITranslationMessagesFile = XmbFile.fromFile(xliffMergeCmd.generatedI18nFile('de'));
+            let langFileGerman: ITranslationMessagesFile = readXmb(xliffMergeCmd.generatedI18nFile('de'));
             langFileGerman.forEachTransUnit((tu: ITransUnit) => {
                 expect(tu.targetContent()).toBe(tu.sourceContent());
             });
-            let langFileEnglish: ITranslationMessagesFile = XmbFile.fromFile(xliffMergeCmd.generatedI18nFile('en'));
+            let langFileEnglish: ITranslationMessagesFile = readXmb(xliffMergeCmd.generatedI18nFile('en'));
             langFileEnglish.forEachTransUnit((tu: ITransUnit) => {
                 expect(tu.targetContent()).toBe(tu.sourceContent());
             });
@@ -638,11 +657,11 @@ describe('XliffMerge test spec', () => {
             expect(ws.writtenData()).not.toContain('ERROR');
 
             // now translate some texts in the English version
-            let langFileEnglish: ITranslationMessagesFile = XmbFile.fromFile(xliffMergeCmd.generatedI18nFile('en'));
+            let langFileEnglish: ITranslationMessagesFile = readXmb(xliffMergeCmd.generatedI18nFile('en'));
             let tu: ITransUnit = langFileEnglish.transUnitWithId(ID_TRANSLATED_MYFIRST);
             expect(tu).toBeTruthy();
             langFileEnglish.translate(tu, 'My first app');
-            langFileEnglish.save();
+            TranslationMessagesFileReader.save(langFileEnglish);
 
             // next step, use another master
             FileUtil.copy(MASTER2SRC, MASTER);
@@ -655,7 +674,7 @@ describe('XliffMerge test spec', () => {
             expect(ws.writtenData()).toContain('removed 2 unused trans-units in "en"');
 
             // look, that the new file contains the old translation
-            langFileEnglish = XmbFile.fromFile(xliffMergeCmd.generatedI18nFile('en'));
+            langFileEnglish = readXmb(xliffMergeCmd.generatedI18nFile('en'));
             expect(langFileEnglish.transUnitWithId(ID_TRANSLATED_MYFIRST).targetContent()).toBe('My first app');
 
             // look, that the new file contains the new translation
@@ -685,14 +704,14 @@ describe('XliffMerge test spec', () => {
             expect(ws.writtenData()).not.toContain('ERROR');
 
             // now translate some texts in the English version
-            let langFileEnglish: ITranslationMessagesFile = XmbFile.fromFile(xliffMergeCmd.generatedI18nFile('en'));
+            let langFileEnglish: ITranslationMessagesFile = readXmb(xliffMergeCmd.generatedI18nFile('en'));
             let tu: ITransUnit = langFileEnglish.transUnitWithId(ID_WITH_PLACEHOLDER);
             expect(tu).toBeTruthy();
             langFileEnglish.translate(tu, 'Item <ph name="INTERPOLATION"><ex>INTERPOLATION</ex></ph> of <ph name="INTERPOLATION_1"><ex>INTERPOLATION_1</ex></ph> added.');
-            langFileEnglish.save();
+            TranslationMessagesFileReader.save(langFileEnglish);
 
             // look, that the new file contains the translation
-            langFileEnglish = XmbFile.fromFile(xliffMergeCmd.generatedI18nFile('en'));
+            langFileEnglish = readXmb(xliffMergeCmd.generatedI18nFile('en'));
             expect(langFileEnglish.transUnitWithId(ID_WITH_PLACEHOLDER).targetContent()).toBe('Item <ph name="INTERPOLATION"><ex>INTERPOLATION</ex></ph> of <ph name="INTERPOLATION_1"><ex>INTERPOLATION_1</ex></ph> added.');
 
             done();
@@ -720,7 +739,7 @@ describe('XliffMerge test spec', () => {
 
         it('should return null for unset description and meaning in master xmb file', (done) => {
             FileUtil.copy(MASTER1SRC, MASTER);
-            let master: XmbFile = XmbFile.fromFile(MASTER);
+            let master: XmbFile = readXmb(MASTER);
             expect(master.transUnitWithId(ID_NODESC_NOMEANING).description()).toBeFalsy();
             expect(master.transUnitWithId(ID_NODESC_NOMEANING).meaning()).toBeFalsy();
             done();
@@ -728,7 +747,7 @@ describe('XliffMerge test spec', () => {
 
         it('should find description and meaning in master  xmb file', (done) => {
             FileUtil.copy(MASTER1SRC, MASTER);
-            let master: XmbFile = XmbFile.fromFile(MASTER);
+            let master: XmbFile = readXmb(MASTER);
             expect(master.transUnitWithId(ID_MONDAY).description()).toBe('ngx-translate');
             expect(master.transUnitWithId(ID_MONDAY).meaning()).toBe('dateservice.monday');
             done();
@@ -750,7 +769,7 @@ describe('XliffMerge test spec', () => {
             let xliffMergeCmd = XliffMerge.createFromOptions(commandOut, {languages: ['de']}, profileContent);
             xliffMergeCmd.run();
             expect(ws.writtenData()).not.toContain('ERROR');
-            let langFile: XmbFile = XmbFile.fromFile(xliffMergeCmd.generatedI18nFile('de'));
+            let langFile: XmbFile = readXmb(xliffMergeCmd.generatedI18nFile('de'));
             expect(langFile.transUnitWithId(ID_MONDAY).description()).toBe('ngx-translate');
             expect(langFile.transUnitWithId(ID_MONDAY).meaning()).toBe('dateservice.monday');
             done();

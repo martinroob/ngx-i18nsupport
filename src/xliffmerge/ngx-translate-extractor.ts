@@ -1,6 +1,7 @@
-import {ITranslationMessagesFile, ITransUnit} from './i-translation-messages-file';
+import {ITranslationMessagesFile} from './i-translation-messages-file';
 import {FileUtil} from '../common/file-util';
 import {isNullOrUndefined} from 'util';
+import {ITransUnit} from './i-trans-unit';
 /**
  * Created by roobm on 15.03.2017.
  * A tool for extracting messages in ngx-translate format.
@@ -46,7 +47,7 @@ export class NgxTranslateExtractor {
      *  Extract messages and convert them to ngx translations.
      *  @return the translation objects.
      */
-    public extract(): NgxMessage[] {
+    private extract(): NgxMessage[] {
         let result: NgxMessage[] = [];
         this.messagesFile.forEachTransUnit((tu: ITransUnit) => {
             let description = tu.description();
