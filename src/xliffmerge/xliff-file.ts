@@ -1,8 +1,7 @@
 import * as cheerio from "cheerio";
-import {FileUtil} from '../common/file-util';
 import {isNullOrUndefined, format} from 'util';
-import {XmlReader} from './xml-reader';
-import {ITranslationMessagesFile, ITransUnit} from './i-translation-messages-file';
+import {ITranslationMessagesFile} from './i-translation-messages-file';
+import {ITransUnit} from './i-trans-unit';
 /**
  * Created by martin on 23.02.2017.
  * Ab xliff file read from a source file.
@@ -148,23 +147,9 @@ class TransUnit implements ITransUnit {
 
 export class XliffFile implements ITranslationMessagesFile {
 
-    /**
-     * Read an xlf-File.
-     * @param path Path to file
-     * @param encoding optional encoding of the xml.
-     * This is read from the file, but if you know it before, you can avoid reading the file twice.
-     * @return {XliffFile}
-     */
-    public static fromFile(path: string, encoding?: string): XliffFile {
-        let xlf = new XliffFile();
-        let xmlContent = XmlReader.readXmlFileContent(path, encoding);
-        xlf.initializeFromContent(xmlContent.content, path, xmlContent.encoding);
-        return xlf;
-    }
+    private _filename: string;
 
-    private filename: string;
-
-    private encoding: string;
+    private _encoding: string;
 
     private xliffContent: CheerioStatic;
 
@@ -174,14 +159,23 @@ export class XliffFile implements ITranslationMessagesFile {
     private _warnings: string[];
     private _numberOfTransUnitsWithMissingId: number;
 
-    constructor() {
+    /**
+     * Create an xlf-File from source.
+     * @param xmlString source read from file.
+     * @param path Path to file
+     * @param encoding optional encoding of the xml.
+     * This is read from the file, but if you know it before, you can avoid reading the file twice.
+     * @return {XliffFile}
+     */
+    constructor(xmlString: string, path: string, encoding: string) {
         this._warnings = [];
         this._numberOfTransUnitsWithMissingId = 0;
+        this.initializeFromContent(xmlString, path, encoding);
     }
 
     private initializeFromContent(xmlString: string, path: string, encoding: string): XliffFile {
-        this.filename = path;
-        this.encoding = encoding;
+        this._filename = path;
+        this._encoding = encoding;
         this.xliffContent = cheerio.load(xmlString, CheerioOptions);
         if (this.xliffContent('xliff').length < 1) {
             throw new Error(format('File "%s" seems to be no xliff file (should contain an xliff element)', path));
@@ -305,9 +299,24 @@ export class XliffFile implements ITranslationMessagesFile {
     }
 
     /**
-     * Save edited content to file.
+     * The filename where the data is read from.
      */
-    public save() {
-        FileUtil.replaceContent(this.filename, this.xliffContent.xml(), this.encoding);
+    public filename(): string {
+        return this._filename;
     }
+
+    /**
+     * The encoding if the xml content (UTF-8, ISO-8859-1, ...)
+     */
+    public encoding(): string {
+        return this._encoding;
+    }
+
+    /**
+     * The xml to be saved after changes are made.
+     */
+    public editedContent(): string {
+        return this.xliffContent.xml();
+    }
+
 }
