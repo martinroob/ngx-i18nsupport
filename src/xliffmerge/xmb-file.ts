@@ -1,8 +1,7 @@
 import * as cheerio from "cheerio";
-import {ITranslationMessagesFile, ITransUnit} from './i-translation-messages-file';
-import {XmlReader} from './xml-reader';
+import {ITranslationMessagesFile} from './i-translation-messages-file';
 import {isNullOrUndefined, format} from 'util';
-import {FileUtil} from '../common/file-util';
+import {ITransUnit} from './i-trans-unit';
 /**
  * Created by martin on 10.03.2017.
  * xmb-File access.
@@ -120,23 +119,9 @@ class TransUnit implements ITransUnit {
 
 export class XmbFile implements ITranslationMessagesFile {
 
-    /**
-     * Read an xmb-File.
-     * @param path Path to file
-     * @param encoding optional encoding of the xml.
-     * This is read from the file, but if you know it before, you can avoid reading the file twice.
-     * @return {XmbFile}
-     */
-    public static fromFile(path: string, encoding?: string): XmbFile {
-        let xmb = new XmbFile();
-        let xmlContent = XmlReader.readXmlFileContent(path, encoding);
-        xmb.initializeFromContent(xmlContent.content, path, xmlContent.encoding);
-        return xmb;
-    }
+    private _filename: string;
 
-    private filename: string;
-
-    private encoding: string;
+    private _encoding: string;
 
     private xmbContent: CheerioStatic;
 
@@ -146,14 +131,23 @@ export class XmbFile implements ITranslationMessagesFile {
     private _warnings: string[];
     private _numberOfTransUnitsWithMissingId: number;
 
-    constructor() {
+    /**
+     * Create an xmb-File from source.
+     * @param xmlString file content
+     * @param path Path to file
+     * @param encoding optional encoding of the xml.
+     * This is read from the file, but if you know it before, you can avoid reading the file twice.
+     * @return {XmbFile}
+     */
+    constructor(xmlString: string, path: string, encoding: string) {
         this._warnings = [];
         this._numberOfTransUnitsWithMissingId = 0;
+        this.initializeFromContent(xmlString, path, encoding);
     }
 
     private initializeFromContent(xmlString: string, path: string, encoding: string): XmbFile {
-        this.filename = path;
-        this.encoding = encoding;
+        this._filename = path;
+        this._encoding = encoding;
         this.xmbContent = cheerio.load(xmlString, CheerioOptions);
         if (this.xmbContent('messagebundle').length != 1) {
             throw new Error(format('File "%s" seems to be no xmb file (should contain a messagebundle element)', path));
@@ -282,9 +276,24 @@ export class XmbFile implements ITranslationMessagesFile {
     }
 
     /**
-     * Save edited content to file.
+     * The filename where the data is read from.
      */
-    public save() {
-        FileUtil.replaceContent(this.filename, this.xmbContent.xml(), this.encoding);
+    public filename(): string {
+        return this._filename;
     }
+
+    /**
+     * The encoding if the xml content (UTF-8, ISO-8859-1, ...)
+     */
+    public encoding(): string {
+        return this._encoding;
+    }
+
+    /**
+     * The xml to be saved after changes are made.
+     */
+    public editedContent(): string {
+        return this.xmbContent.xml();
+    }
+
 }

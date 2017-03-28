@@ -2,99 +2,13 @@ import {XliffFile} from './xliff-file';
 import {XmbFile} from './xmb-file';
 import {FileUtil} from '../common/file-util';
 import {format} from 'util';
+import {ITransUnit} from './i-trans-unit';
+
 /**
  * The Common interface of XliffFile and XmbFile.
  * The merge process only uses this interface.
  * Created by martin on 10.03.2017.
  */
-
-/**
- * Helper class to read file depending on format.
- */
-export class TranslationMessagesFileReader {
-
-    /**
-     * Read file function, result depends on format, either XliffFile or XmbFile.
-     * @param format
-     * @param path
-     * @param encoding
-     * @return {XliffFile}
-     */
-    public static fromFile(i18nFormat: string, path: string, encoding: string): ITranslationMessagesFile {
-        if (i18nFormat === 'xlf') {
-            return XliffFile.fromFile(path, encoding);
-        }
-        if (i18nFormat === 'xmb') {
-            return XmbFile.fromFile(path, encoding);
-        }
-        throw new Error(format('oops, unsupported format "%s"', i18nFormat));
-    }
-}
-
-/**
- * Interface of a translation unit in the file.
- */
-export interface ITransUnit {
-
-    readonly id: string;
-
-    sourceContent(): string;
-
-    /**
-     * the translated value (containing all markup, depends on the concrete format used).
-     */
-    targetContent(): string;
-
-    /**
-     * the translated value, but all placeholders are replaced with {{n}} (starting at 0)
-     * and all embedded html is replaced by direct html markup.
-     */
-    targetContentNormalized(): string;
-
-    /**
-     * State of the translation.
-     * (new, final, ...)
-     */
-    targetState(): string;
-
-    /**
-     * The description set in the template as value of the i18n-attribute.
-     * e.g. i18n="mydescription".
-     */
-    description(): string;
-
-    /**
-     * The meaning (intent) set in the template as value of the i18n-attribute.
-     * This is the part in front of the | symbol.
-     * e.g. i18n="meaning|mydescription".
-     */
-    meaning(): string;
-
-    /**
-     * the real xml element used for trans unit.
-     * @return {CheerioElement}
-     */
-    asXmlElement(): CheerioElement;
-
-    /**
-     * Copy source to target to use it as dummy translation.
-     * (better than missing value)
-     */
-    useSourceAsTarget(isDefaultLang: boolean);
-
-    /**
-     * Translate trans unit.
-     * (very simple, just for tests)
-     * @param translation the translated string
-     */
-    translate(translation: string);
-}
-
-/**
- * The Common interface of XliffFile and XmbFile.
- * The merge process only uses this interface.
- */
-
 export interface ITranslationMessagesFile {
 
     /**
@@ -180,8 +94,18 @@ export interface ITranslationMessagesFile {
     translate(transUnit: ITransUnit, translation: string);
 
     /**
-     * Save edited content to file.
+     * The filename where the data is read from.
      */
-    save();
+    filename(): string;
+
+    /**
+     * The encoding if the xml content (UTF-8, ISO-8859-1, ...)
+     */
+    encoding(): string;
+
+    /**
+     * The xml content to be saved after changes are made.
+     */
+    editedContent(): string;
 
 }

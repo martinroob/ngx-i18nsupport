@@ -6,9 +6,11 @@ import {FileUtil} from '../common/file-util';
 import {VERSION} from './version';
 import WritableStream = NodeJS.WritableStream;
 import {isNullOrUndefined} from 'util';
-import {ITranslationMessagesFile, ITransUnit, TranslationMessagesFileReader} from './i-translation-messages-file';
+import {ITranslationMessagesFile} from './i-translation-messages-file';
 import {ProgramOptions, IConfigFile} from './i-xliff-merge-options';
 import {NgxTranslateExtractor} from './ngx-translate-extractor';
+import {ITransUnit} from './i-trans-unit';
+import {TranslationMessagesFileReader} from './translation-messages-file-reader';
 
 /**
  * Created by martin on 17.02.2017.
@@ -175,7 +177,7 @@ export class XliffMerge {
         if (sourceLang && sourceLang !== this.parameters.defaultLanguage()) {
             this.commandOutput.warn('master says to have source-language="%s", should be "%s" (your defaultLanguage)', sourceLang, this.parameters.defaultLanguage());
             this.master.setSourceLanguage(this.parameters.defaultLanguage());
-            this.master.save();
+            TranslationMessagesFileReader.save(this.master);
             this.commandOutput.warn('changed master source-language="%s" to "%s"', sourceLang, this.parameters.defaultLanguage());
         }
     }
@@ -214,7 +216,7 @@ export class XliffMerge {
             languageSpecificMessagesFile.useSourceAsTarget(transUnit, isDefaultLang);
         });
         // write it to file
-        languageSpecificMessagesFile.save();
+        TranslationMessagesFileReader.save(languageSpecificMessagesFile);
         this.commandOutput.info('created new file "%s" for target-language="%s"', languageXliffFilePath, lang);
         if (!isDefaultLang) {
             this.commandOutput.warn('please translate file "%s" to target-language="%s"', languageXliffFilePath, lang);
@@ -268,7 +270,7 @@ export class XliffMerge {
             this.commandOutput.info('file for "%s" was up to date', lang);
         } else {
             // write it to file
-            languageSpecificMessagesFile.save();
+            TranslationMessagesFileReader.save(languageSpecificMessagesFile);
             this.commandOutput.info('updated file "%s" for target-language="%s"', languageXliffFilePath, lang);
             if (newCount > 0 && !isDefaultLang) {
                 this.commandOutput.warn('please translate file "%s" to target-language="%s"', languageXliffFilePath, lang);

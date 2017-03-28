@@ -1,3 +1,11 @@
+<a name="0.2.1"></a>
+# [0.2.1](https://github.com/martinroob/ngx-i18nsupport/compare/v0.2.0...v0.2.1) (2017-03-27)
+
+
+### Bug Fixes
+
+* **xliffmerge:** Wrong line endings in bin ([#12](https://github.com/martinroob/ngx-i18nsupport/issues/12))
+
 <a name="0.2.0"></a>
 # [0.2.0](https://github.com/martinroob/ngx-i18nsupport/compare/v0.1.0...v0.2.0) (2017-03-17)
 
