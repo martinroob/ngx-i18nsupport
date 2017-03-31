@@ -82,20 +82,35 @@ Options:
 
 `json-configurationfile` is a json file with the following allowed content (every value is optional):
 <pre>
-"xliffmerge": {
-  "srcDir: "i18n", // directory, where the master file is expected
-  "genDir": "i18n", // directory, where files are written to (normally identical with srcDir)
-  "i18nFile": "messages.xlf", // master file (relativ to srcDir)
-  "i18nFormat": "xlf", // "xlf" for XLIFF or "xmb" for XML Message Bundles
-  "encoding": "UTF-8",  // expected encoding of xlf or xmb files
-  "defaultLanguage": "en",  // the native language used in your templates
-  "languages": ["en", "de"], // list of languages (if not spefified at command line)
-  "removeUnusedIds": true, // flag, if unused IDs should be removed during merge
-  "supportNgxTranslate": true, // flag to active json translation files for ngx-translate
-  "verbose": false, // controls output
-  "quiet": false, // controls output
+{
+  "xliffmergeOptions": {
+    "srcDir": "i18n",
+    "genDir": "i18n",
+    "i18nFile": "messages.xlf",
+    "i18nFormat": "xlf",
+    "encoding": "UTF-8",
+    "defaultLanguage": "en",
+    "languages": ["en", "de"],
+    "removeUnusedIds": true,
+    "supportNgxTranslate": true,
+    "verbose": false,
+    "quiet": false,
+  }
 }
 </pre>
+
+The options are:
+- `srcDir` (string, default "."): directory, where the master file is expected
+- `genDir` (string, default "."): directory, where files are written to (normally identical with srcDir)
+- `i18nFile` (string, default "messages.xlf"): master file (relativ to srcDir)
+- `i18nFormat` (string, default "xlf"): "xlf" for XLIFF or "xmb" for XML Message Bundles
+- `encoding` (string, default "UTF-8"): expected encoding of xlf or xmb files
+- `defaultLanguage` (string, default "en"): the native language used in your templates
+- `languages` (array of strings): list of languages (if not spefified at command line)
+- `removeUnusedIds` (boolean, default `true`): flag, if unused IDs should be removed during merge
+- `supportNgxTranslate` (boolean, default `false`): flag to active json translation files for ngx-translate
+- `verbose` (boolean, default `false`): controls output
+- `quiet` (boolean, default `false`): controls output
 
 ### Generate (untranslated) language files, if not already there
 When you run `xliffmerge`, it will read the master xliff file **messages.xlf**.
