@@ -146,6 +146,9 @@ This is shown by the **state** `new`.
 The next step you have to do is to translate the file (or to let it translate).
 Depending on the software you use for translation you can filter for that state `new`.
 
+>Have a look at my sister project [TinyTranslator](https://github.com/martinroob/tiny-translator).
+It can filter for new untranslated entries and allows to edit xlf file very easily.
+
 The file for English on the other hand is correct.
 So, due to the fact, that English is the **default language** here, the state is `translated`.
 
@@ -176,6 +179,8 @@ it will remove it from the language file
 
 So after running it, you just have to translate the new parts.
 
+>Once again: [TinyTranslator](https://github.com/martinroob/tiny-translator) might help you to do that.
+
 ## Tests
 
   `npm test`
@@ -194,7 +199,8 @@ But if you are interesting, send me an email, so that we can discuss it.
 * Phillippe Martin
   [Deploying an i18n Angular app with angular-cli](https://medium.com/@feloy/deploying-an-i18n-angular-app-with-angular-cli-fc788f17e358)
 * Roland Oldengarm: [Angular 2: Automated i18n workflow using gulp](http://rolandoldengarm.com/index.php/2016/10/17/angular-2-automated-i18n-workflow-using-gulp/)
-* [XLIFF Spec](http://docs.oasis-open.org/xliff/xliff-core/xliff-core.html)
+* XLIFF Specification: [XLIFF Spec](http://docs.oasis-open.org/xliff/xliff-core/xliff-core.html)
+* My Tiny Translator Tool: [TinyTranslator](https://github.com/martinroob/tiny-translator)
 
 [travis-badge]: https://travis-ci.org/martinroob/ngx-i18nsupport.svg?branch=master
 [travis-badge-url]: https://travis-ci.org/martinroob/ngx-i18nsupport
