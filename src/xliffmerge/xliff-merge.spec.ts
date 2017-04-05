@@ -45,6 +45,14 @@ describe('XliffMerge test spec', () => {
         return <XmbFile> TranslationMessagesFileReader.fromFile('xmb', path, ENCODING);
     }
 
+    /**
+     * Helper function to read Xmb from 2 Files, the xmb and the master
+     * @type {string}
+     */
+    function readXmbWithMaster(path: string, masterPath: string): XmbFile {
+        return <XmbFile> TranslationMessagesFileReader.fromFile('xmb', path, ENCODING, masterPath);
+    }
+
     describe('test the tooling used in the tests', () => {
         it('should write output to string (Test WriterToString)', () => {
             let ws: WriterToString = new WriterToString();
@@ -603,8 +611,8 @@ describe('XliffMerge test spec', () => {
             xliffMergeCmd.run();
             expect(ws.writtenData()).not.toContain('ERROR');
             let langFile: ITranslationMessagesFile = readXmb(xliffMergeCmd.generatedI18nFile('de'));
-            expect(langFile.sourceLanguage()).toBeFalsy(); // not supported in xmb
-            expect(langFile.targetLanguage()).toBeFalsy();
+            expect(langFile.sourceLanguage()).toBeFalsy(); // not supported in xmb when there is no master
+            expect(langFile.targetLanguage()).toBe('de'); // guess from filename
             langFile.forEachTransUnit((tu: ITransUnit) => {
                 expect(tu.targetContent()).toBe(tu.sourceContent());
                 expect(tu.targetState()).toBeFalsy();
@@ -714,6 +722,56 @@ describe('XliffMerge test spec', () => {
             langFileEnglish = readXmb(xliffMergeCmd.generatedI18nFile('en'));
             expect(langFileEnglish.transUnitWithId(ID_WITH_PLACEHOLDER).targetContent()).toBe('Item <ph name="INTERPOLATION"><ex>INTERPOLATION</ex></ph> of <ph name="INTERPOLATION_1"><ex>INTERPOLATION_1</ex></ph> added.');
 
+            done();
+        });
+
+        it('should return status new for all trans units using format xmb with master file', (done) => {
+            FileUtil.copy(MASTER1SRC, MASTER);
+            let ws: WriterToString = new WriterToString();
+            let commandOut = new CommandOutput(ws);
+            let profileContent: IConfigFile = {
+                xliffmergeOptions: {
+                    defaultLanguage: 'de',
+                    srcDir: WORKDIR,
+                    genDir: WORKDIR,
+                    i18nFile: MASTERFILE,
+                    i18nFormat: 'xmb'
+                }
+            };
+            let xliffMergeCmd = XliffMerge.createFromOptions(commandOut, {languages: ['de', 'en']}, profileContent);
+            xliffMergeCmd.run();
+            expect(ws.writtenData()).not.toContain('ERROR');
+            let langFileEnglish: ITranslationMessagesFile = readXmbWithMaster(xliffMergeCmd.generatedI18nFile('en'), MASTER);
+            langFileEnglish.forEachTransUnit((tu: ITransUnit) => {
+                expect(tu.targetState()).toBe('new');
+            });
+            done();
+        });
+
+        it('should return status final for a translated trans unit using format xmb with master file', (done) => {
+            FileUtil.copy(MASTER1SRC, MASTER);
+            let ws: WriterToString = new WriterToString();
+            let commandOut = new CommandOutput(ws);
+            let profileContent: IConfigFile = {
+                xliffmergeOptions: {
+                    defaultLanguage: 'de',
+                    srcDir: WORKDIR,
+                    genDir: WORKDIR,
+                    i18nFile: MASTERFILE,
+                    i18nFormat: 'xmb'
+                }
+            };
+            let xliffMergeCmd = XliffMerge.createFromOptions(commandOut, {languages: ['de', 'en']}, profileContent);
+            xliffMergeCmd.run();
+            expect(ws.writtenData()).not.toContain('ERROR');
+            let langFileEnglish: ITranslationMessagesFile = readXmbWithMaster(xliffMergeCmd.generatedI18nFile('en'), MASTER);
+            // now translate some texts in the English version
+            let tu: ITransUnit = langFileEnglish.transUnitWithId(ID_TRANSLATED_MYFIRST);
+            expect(tu).toBeTruthy();
+            expect(tu.sourceContent()).toBe('Meine erste I18N-Anwendung');
+            expect(tu.targetState()).toBe('new');
+            langFileEnglish.translate(tu, 'my first i18n application');
+            expect(tu.targetState()).toBe('final');
             done();
         });
 
