@@ -12,6 +12,12 @@ import {ITransUnit} from './i-trans-unit';
 export interface ITranslationMessagesFile {
 
     /**
+     * File type.
+     * Currently 'XLIFF 1.2' or 'XMB'
+     */
+    fileType(): string;
+
+    /**
      * warnings found in the file
      */
     warnings(): string[];

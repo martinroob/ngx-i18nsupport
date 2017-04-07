@@ -18,7 +18,7 @@ const CheerioOptions: CheerioOptionsInterface = {
 
 class TransUnit implements ITransUnit {
 
-    constructor(private _msg: CheerioElement, private _id: string) {
+    constructor(private _msg: CheerioElement, private _id: string, private _sourceTransUnitFromMaster: ITransUnit) {
 
     }
 
@@ -64,8 +64,17 @@ class TransUnit implements ITransUnit {
     /**
      * State of the translation.
      * (not supported in xmb)
+     * If we have a master, we assumed it is translated if the content is not the same as the masters one.
      */
     public targetState(): string {
+        if (this._sourceTransUnitFromMaster) {
+            let sourceContent = this._sourceTransUnitFromMaster.sourceContent();
+            if (!sourceContent || sourceContent == this.targetContent()) {
+                return 'new';
+            } else {
+                return 'final';
+            }
+        }
         return null; // not supported in xmb
     }
 
@@ -131,26 +140,37 @@ export class XmbFile implements ITranslationMessagesFile {
     private _warnings: string[];
     private _numberOfTransUnitsWithMissingId: number;
 
+    // attached master file, if any
+    // used as source to determine state ...
+    private _masterFile: XmbFile;
+
     /**
      * Create an xmb-File from source.
      * @param xmlString file content
      * @param path Path to file
      * @param encoding optional encoding of the xml.
      * This is read from the file, but if you know it before, you can avoid reading the file twice.
+     * @param optionalMaster in case of xmb the master file, that contains the original texts.
+     * (this is used to support state infos, that are based on comparing original with translated version)
      * @return {XmbFile}
      */
-    constructor(xmlString: string, path: string, encoding: string) {
+    constructor(xmlString: string, path: string, encoding: string, optionalMaster?: {xmlContent: string, path: string, encoding: string}) {
         this._warnings = [];
         this._numberOfTransUnitsWithMissingId = 0;
-        this.initializeFromContent(xmlString, path, encoding);
+        this.initializeFromContent(xmlString, path, encoding, optionalMaster);
     }
 
-    private initializeFromContent(xmlString: string, path: string, encoding: string): XmbFile {
+    private initializeFromContent(xmlString: string, path: string, encoding: string, optionalMaster?: {xmlContent: string, path: string, encoding: string}): XmbFile {
+console.log('creating xmb file', xmlString.length, path, optionalMaster);
         this._filename = path;
         this._encoding = encoding;
         this.xmbContent = cheerio.load(xmlString, CheerioOptions);
         if (this.xmbContent('messagebundle').length != 1) {
             throw new Error(format('File "%s" seems to be no xmb file (should contain a messagebundle element)', path));
+        }
+        if (optionalMaster) {
+            this._masterFile = new XmbFile(optionalMaster.xmlContent, optionalMaster.path, optionalMaster.encoding);
+            // TODO check, wether this can be the master ...
         }
         return this;
     }
@@ -165,9 +185,21 @@ export class XmbFile implements ITranslationMessagesFile {
                     this._warnings.push(format('oops, msg without "id" found in master, please check file %s', this.filename));
                     this._numberOfTransUnitsWithMissingId++;
                 }
-                this.transUnits.push(new TransUnit(msg, id));
+                let masterUnit: ITransUnit = null;
+                if (this._masterFile) {
+                    masterUnit = this._masterFile.transUnitWithId(id);
+                }
+                this.transUnits.push(new TransUnit(msg, id, masterUnit));
             });
         }
+    }
+
+    /**
+     * File type.
+     * Here 'XMB'
+     */
+    public fileType(): string {
+        return 'XMB';
     }
 
     public forEachTransUnit(callback: ((transunit: ITransUnit) => void)) {
@@ -201,12 +233,32 @@ export class XmbFile implements ITranslationMessagesFile {
     }
 
     /**
+     * Guess language from filename.
+     * If filename is foo.xy.xmb, than language is assumed to be xy.
+     * @return {string} Language or null
+     */
+    private guessLanguageFromFilename(): string {
+        if (this._filename) {
+            let parts: string[] = this._filename.split('.');
+            if (parts.length > 2 && parts[parts.length -1].toLowerCase() == 'xmb') {
+                return parts[parts.length - 2];
+            }
+        }
+        return null;
+    }
+
+    /**
      * Get source language.
      * Unsupported in xmb.
+     * Try to guess it from master filename if any..
      * @return {string}
      */
     public sourceLanguage(): string {
-        return null;
+        if (this._masterFile) {
+            return this._masterFile.guessLanguageFromFilename();
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -221,10 +273,11 @@ export class XmbFile implements ITranslationMessagesFile {
     /**
      * Get target language.
      * Unsupported in xmb.
+     * Try to guess it from filename if any..
      * @return {string}
      */
     public targetLanguage(): string {
-        return null;
+        return this.guessLanguageFromFilename();
     }
 
     /**
@@ -283,7 +336,7 @@ export class XmbFile implements ITranslationMessagesFile {
     }
 
     /**
-     * The encoding if the xml content (UTF-8, ISO-8859-1, ...)
+     * The encoding of the xml content (UTF-8, ISO-8859-1, ...)
      */
     public encoding(): string {
         return this._encoding;

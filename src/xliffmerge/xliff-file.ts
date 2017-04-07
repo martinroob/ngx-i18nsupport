@@ -183,6 +183,14 @@ export class XliffFile implements ITranslationMessagesFile {
         return this;
     }
 
+    /**
+     * File type.
+     * Here 'XLIFF 1.2'
+     */
+    public fileType(): string {
+        return 'XLIFF 1.2';
+    }
+
     public forEachTransUnit(callback: ((transunit: ITransUnit) => void)) {
         this.initializeTransUnits();
         this.transUnits.forEach((tu) => callback(tu));
