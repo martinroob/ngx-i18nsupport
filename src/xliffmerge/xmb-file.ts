@@ -161,7 +161,6 @@ export class XmbFile implements ITranslationMessagesFile {
     }
 
     private initializeFromContent(xmlString: string, path: string, encoding: string, optionalMaster?: {xmlContent: string, path: string, encoding: string}): XmbFile {
-console.log('creating xmb file', xmlString.length, path, optionalMaster);
         this._filename = path;
         this._encoding = encoding;
         this.xmbContent = cheerio.load(xmlString, CheerioOptions);
