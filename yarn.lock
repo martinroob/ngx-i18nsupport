@@ -1069,9 +1069,9 @@ nan@^2.3.0:
   version "2.6.1"
   resolved "https://registry.yarnpkg.com/nan/-/nan-2.6.1.tgz#8c84f7b14c96b89f57fbc838012180ec8ca39a01"
 
-ngx-i18nsupport-lib@^0.0.2:
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/ngx-i18nsupport-lib/-/ngx-i18nsupport-lib-0.0.2.tgz#1dcb75c58bed075cec4791b43f3aec87e2842563"
+ngx-i18nsupport-lib@^0.0.3:
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/ngx-i18nsupport-lib/-/ngx-i18nsupport-lib-0.0.3.tgz#22c022fdf67300f51ea1c5228d7b2bd2c8fe404b"
   dependencies:
     cheerio "^0.22.0"
 
