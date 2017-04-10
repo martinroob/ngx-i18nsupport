@@ -1,7 +1,6 @@
-import {ITranslationMessagesFile} from './i-translation-messages-file';
+import {ITranslationMessagesFile, ITransUnit} from 'ngx-i18nsupport-lib';
 import {FileUtil} from '../common/file-util';
 import {isNullOrUndefined} from 'util';
-import {ITransUnit} from './i-trans-unit';
 /**
  * Created by roobm on 15.03.2017.
  * A tool for extracting messages in ngx-translate format.

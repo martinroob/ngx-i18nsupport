@@ -5,7 +5,6 @@
   "main": "index.js",
   "module": "./src",
   "es2015": "./src",
-  "typings": "./ngx-i18nsupport.d.ts",
   "bin": {
     "xliffmerge": "./dist/xliffmerge/xliffmerge"
   },
@@ -18,7 +17,8 @@
     "pretest": "npm run build",
     "test": "./node_modules/.bin/jasmine-node dist",
     "precover": "npm run build",
-    "cover": "./node_modules/.bin/istanbul cover --root dist --include-all-sources ./node_modules/jasmine-node/bin/jasmine-node -- dist"
+    "cover": "./node_modules/.bin/istanbul cover --root dist --include-all-sources ./node_modules/jasmine-node/bin/jasmine-node -- dist",
+    "prepublish": "npm run build"
   },
   "repository": {
     "type": "git",
@@ -28,7 +28,8 @@
     "i18n",
     "tooling",
     "angular",
-    "xliff"
+    "xliff",
+    "xmb"
   ],
   "author": "Martin Roob <martinroob65@gmail.com> (www.roobsoft.de)",
   "license": "MIT",
@@ -37,7 +38,6 @@
   },
   "homepage": "https://github.com/martinroob/ngx-i18nsupport#readme",
   "devDependencies": {
-    "@types/cheerio": "^0.17.31",
     "@types/jasmine": "^2.5.43",
     "@types/node": "^7.0.5",
     "coveralls": "^2.11.16",
@@ -48,7 +48,7 @@
   },
   "dependencies": {
     "chalk": "^1.1.3",
-    "cheerio": "^0.22.0",
-    "commander": "^2.9.0"
+    "commander": "^2.9.0",
+    "ngx-i18nsupport-lib": "^0.0.2"
   }
 }

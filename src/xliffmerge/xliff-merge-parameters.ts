@@ -4,7 +4,7 @@
  * The parameters are read form the profile or defaults are used.
  */
 
-import fs = require("fs");
+import * as fs from "fs";
 import {XliffMergeError} from './xliff-merge-error';
 import {Stats} from 'fs';
 import {CommandOutput} from '../common/command-output';

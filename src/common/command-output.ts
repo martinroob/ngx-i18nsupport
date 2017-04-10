@@ -11,7 +11,7 @@
 
 import * as chalk from "chalk";
 import WritableStream = NodeJS.WritableStream;
-import util = require('util');
+import * as util from "util";
 
 enum LogLevel {
     "ERROR",

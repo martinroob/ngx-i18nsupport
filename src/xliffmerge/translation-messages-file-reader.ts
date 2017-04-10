@@ -1,13 +1,9 @@
 /**
  * Created by roobm on 21.03.2017.
  */
-import {ITranslationMessagesFile} from './i-translation-messages-file';
-import {XmlReader} from './xml-reader';
-import {XliffFile} from './xliff-file';
-import {XmbFile} from './xmb-file';
-import {format} from 'util';
+import {TranslationMessagesFileFactory, ITranslationMessagesFile, ITransUnit} from 'ngx-i18nsupport-lib';
 import {FileUtil} from '../common/file-util';
-import {TranslationMessagesFileFactory} from './translation-messages-file-factory';
+import {XmlReader} from './xml-reader';
 
 /**
  * Helper class to read translation files depending on format.

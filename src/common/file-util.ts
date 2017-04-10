@@ -1,4 +1,5 @@
-import fs = require("fs");
+import * as fs from "fs";
+
 /**
  * Created by martin on 17.02.2017.
  * Some (a few) simple utils for file operations.

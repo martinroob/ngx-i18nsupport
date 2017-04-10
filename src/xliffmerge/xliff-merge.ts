@@ -6,10 +6,9 @@ import {FileUtil} from '../common/file-util';
 import {VERSION} from './version';
 import WritableStream = NodeJS.WritableStream;
 import {isNullOrUndefined} from 'util';
-import {ITranslationMessagesFile} from './i-translation-messages-file';
+import {ITranslationMessagesFile, ITransUnit} from 'ngx-i18nsupport-lib';
 import {ProgramOptions, IConfigFile} from './i-xliff-merge-options';
 import {NgxTranslateExtractor} from './ngx-translate-extractor';
-import {ITransUnit} from './i-trans-unit';
 import {TranslationMessagesFileReader} from './translation-messages-file-reader';
 
 /**
