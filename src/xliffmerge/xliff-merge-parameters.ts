@@ -24,6 +24,7 @@ export class XliffMergeParameters {
     private _languages: string[];
     private _removeUnusedIds: boolean;
     private _supportNgxTranslate: boolean;
+    private _useSourceAsTarget: boolean;
 
     public errorsFound: XliffMergeError[];
     public warningsFound: string[];
@@ -142,6 +143,9 @@ export class XliffMergeParameters {
             if (profile.supportNgxTranslate) {
                 this._supportNgxTranslate = profile.supportNgxTranslate;
             }
+            if (!isNullOrUndefined(profile.useSourceAsTarget)) {
+                this._useSourceAsTarget = profile.useSourceAsTarget;
+            }
         } else {
             this.warningsFound.push('did not find "xliffmergeOptions" in profile, using defaults');
         }
@@ -225,6 +229,7 @@ export class XliffMergeParameters {
         commandOutput.debug('languages:\t%s', this.languages());
         commandOutput.debug('removeUnusedIds:\t%s', this.removeUnusedIds());
         commandOutput.debug('supportNgxTranslate:\t%s', this.supportNgxTranslate());
+        commandOutput.debug('useSourceAsTarget:\t%s', this.useSourceAsTarget());
     }
 
     /**
@@ -309,5 +314,13 @@ export class XliffMergeParameters {
 
     public supportNgxTranslate(): boolean {
         return (isNullOrUndefined(this._supportNgxTranslate)) ? false : this._supportNgxTranslate;
+    }
+
+    /**
+     * Whether source must be used as target for new trans-units
+     * Default is true
+     */
+    public useSourceAsTarget(): boolean {
+        return (isNullOrUndefined(this._useSourceAsTarget)) ? true : this._useSourceAsTarget;
     }
 }

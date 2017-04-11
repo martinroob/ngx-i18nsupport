@@ -300,7 +300,8 @@ describe('XliffMerge test spec', () => {
                     defaultLanguage: 'de',
                     srcDir: WORKDIR,
                     genDir: WORKDIR,
-                    i18nFile: MASTERFILE
+                    i18nFile: MASTERFILE,
+		    useSourceAsTarget: false
                 }
             };
             let xliffMergeCmd = XliffMerge.createFromOptions(commandOut, {languages: ['de']}, profileContent);
@@ -343,6 +344,39 @@ describe('XliffMerge test spec', () => {
             expect(langFileEnglish.targetLanguage()).toBe('en');
             langFileEnglish.forEachTransUnit((tu: ITransUnit) => {
                 expect(tu.targetContent()).toBe(tu.sourceContent());
+                expect(tu.targetState()).toBe('new');
+            });
+            done();
+        });
+
+        it('should generate translated file for all languages with empty targets for non default languages', (done) => {
+            FileUtil.copy(MASTER1SRC, MASTER);
+            let ws: WriterToString = new WriterToString();
+            let commandOut = new CommandOutput(ws);
+            let profileContent: IConfigFile = {
+                xliffmergeOptions: {
+                    defaultLanguage: 'de',
+                    srcDir: WORKDIR,
+                    genDir: WORKDIR,
+                    i18nFile: MASTERFILE,
+		    useSourceAsTarget: false
+                }
+            };
+            let xliffMergeCmd = XliffMerge.createFromOptions(commandOut, {languages: ['de', 'en']}, profileContent);
+            xliffMergeCmd.run();
+            expect(ws.writtenData()).not.toContain('ERROR');
+            let langFileGerman: XliffFile = readXliff(xliffMergeCmd.generatedI18nFile('de'));
+            expect(langFileGerman.sourceLanguage()).toBe('de');
+            expect(langFileGerman.targetLanguage()).toBe('de');
+            langFileGerman.forEachTransUnit((tu: ITransUnit) => {
+                expect(tu.targetContent()).toBe(tu.sourceContent());
+                expect(tu.targetState()).toBe('final');
+            });
+            let langFileEnglish: XliffFile = readXliff(xliffMergeCmd.generatedI18nFile('en'));
+            expect(langFileEnglish.sourceLanguage()).toBe('de');
+            expect(langFileEnglish.targetLanguage()).toBe('en');
+            langFileEnglish.forEachTransUnit((tu: ITransUnit) => {
+                expect(tu.targetContent()).toBe('');
                 expect(tu.targetState()).toBe('new');
             });
             done();

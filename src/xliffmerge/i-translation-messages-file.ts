@@ -83,7 +83,7 @@ export interface ITranslationMessagesFile {
      * Copy source to target to use it as dummy translation.
      * (better than missing value)
      */
-    useSourceAsTarget(transUnit: ITransUnit, isDefaultLang: boolean);
+    useSourceAsTarget(transUnit: ITransUnit, isDefaultLang: boolean, copyContent: boolean);
 
     /**
      * Translate a given trans unit.

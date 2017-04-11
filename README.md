@@ -93,6 +93,7 @@ Options:
     "languages": ["en", "de"],
     "removeUnusedIds": true,
     "supportNgxTranslate": true,
+    "useSourceAsTarget": false,
     "verbose": false,
     "quiet": false,
   }
@@ -109,6 +110,7 @@ The options are:
 - `languages` (array of strings): list of languages (if not spefified at command line)
 - `removeUnusedIds` (boolean, default `true`): flag, if unused IDs should be removed during merge
 - `supportNgxTranslate` (boolean, default `false`): flag to active json translation files for ngx-translate
+- `useSourceAsTarget` (boolean, default `true`): flag, if source should be copied to target for new trans-units
 - `verbose` (boolean, default `false`): controls output
 - `quiet` (boolean, default `false`): controls output
 
