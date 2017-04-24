@@ -51,7 +51,7 @@ export interface ITransUnit {
      * Copy source to target to use it as dummy translation.
      * (better than missing value)
      */
-    useSourceAsTarget(isDefaultLang: boolean);
+    useSourceAsTarget(isDefaultLang: boolean, copyContent: boolean);
 
     /**
      * Translate trans unit.

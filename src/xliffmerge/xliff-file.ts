@@ -128,14 +128,18 @@ class TransUnit implements ITransUnit {
      * Copy source to target to use it as dummy translation.
      * (better than missing value)
      */
-    public useSourceAsTarget(isDefaultLang: boolean) {
+    public useSourceAsTarget(isDefaultLang: boolean, copyContent: boolean) {
         let source = cheerio('source', this._transUnit);
         let target = cheerio('target', this._transUnit);
         if (!target) {
-            source.parent().append('<target/>');
+	    source.parent().append('<target/>');
             target = cheerio('target', source.parent());
         }
-        target.html(source.html());
+	if (isDefaultLang || copyContent) {
+            target.html(source.html());
+	} else {
+	    target.html('');
+	}
         if (isDefaultLang) {
             target.attr('state', 'final');
         } else {
@@ -264,8 +268,8 @@ export class XliffFile implements ITranslationMessagesFile {
      * Copy source to target to use it as dummy translation.
      * (better than missing value)
      */
-    public useSourceAsTarget(transUnit: ITransUnit, isDefaultLang: boolean) {
-        transUnit.useSourceAsTarget(isDefaultLang);
+    public useSourceAsTarget(transUnit: ITransUnit, isDefaultLang: boolean, copyContent: boolean) {
+        transUnit.useSourceAsTarget(isDefaultLang, copyContent);
     }
 
     /**
