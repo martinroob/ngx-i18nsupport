@@ -1,3 +1,10 @@
+<a name="0.3.0"></a>
+# [0.3.0](https://github.com/martinroob/ngx-i18nsupport/compare/v0.2.3...v0.3.0) (2017-04-24)
+
+### Features
+
+* **xliffmerge:** Added useSourceAsTargetOption, allows empty translations if set to false.
+
 <a name="0.2.1"></a>
 # [0.2.1](https://github.com/martinroob/ngx-i18nsupport/compare/v0.2.0...v0.2.1) (2017-03-27)
 
