@@ -1,3 +1,10 @@
+<a name="0.3.1"></a>
+# [0.3.1](https://github.com/martinroob/ngx-i18nsupport/compare/v0.3.0...v0.3.1) (2017-04-25)
+
+### Bug Fixes
+
+* **xliffmerge:** compilation problem in WriterToString ([#19](https://github.com/martinroob/ngx-i18nsupport/issues/19))
+
 <a name="0.3.0"></a>
 # [0.3.0](https://github.com/martinroob/ngx-i18nsupport/compare/v0.2.3...v0.3.0) (2017-04-24)
 
