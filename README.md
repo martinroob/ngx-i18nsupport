@@ -82,20 +82,37 @@ Options:
 
 `json-configurationfile` is a json file with the following allowed content (every value is optional):
 <pre>
-"xliffmerge": {
-  "srcDir: "i18n", // directory, where the master file is expected
-  "genDir": "i18n", // directory, where files are written to (normally identical with srcDir)
-  "i18nFile": "messages.xlf", // master file (relativ to srcDir)
-  "i18nFormat": "xlf", // "xlf" for XLIFF or "xmb" for XML Message Bundles
-  "encoding": "UTF-8",  // expected encoding of xlf or xmb files
-  "defaultLanguage": "en",  // the native language used in your templates
-  "languages": ["en", "de"], // list of languages (if not spefified at command line)
-  "removeUnusedIds": true, // flag, if unused IDs should be removed during merge
-  "supportNgxTranslate": true, // flag to active json translation files for ngx-translate
-  "verbose": false, // controls output
-  "quiet": false, // controls output
+{
+  "xliffmergeOptions": {
+    "srcDir": "i18n",
+    "genDir": "i18n",
+    "i18nFile": "messages.xlf",
+    "i18nFormat": "xlf",
+    "encoding": "UTF-8",
+    "defaultLanguage": "en",
+    "languages": ["en", "de"],
+    "removeUnusedIds": true,
+    "supportNgxTranslate": true,
+    "useSourceAsTarget": false,
+    "verbose": false,
+    "quiet": false,
+  }
 }
 </pre>
+
+The options are:
+- `srcDir` (string, default "."): directory, where the master file is expected
+- `genDir` (string, default "."): directory, where files are written to (normally identical with srcDir)
+- `i18nFile` (string, default "messages.xlf"): master file (relativ to srcDir)
+- `i18nFormat` (string, default "xlf"): "xlf" for XLIFF or "xmb" for XML Message Bundles
+- `encoding` (string, default "UTF-8"): expected encoding of xlf or xmb files
+- `defaultLanguage` (string, default "en"): the native language used in your templates
+- `languages` (array of strings): list of languages (if not spefified at command line)
+- `removeUnusedIds` (boolean, default `true`): flag, if unused IDs should be removed during merge
+- `supportNgxTranslate` (boolean, default `false`): flag to active json translation files for ngx-translate
+- `useSourceAsTarget` (boolean, default `true`): flag, if source should be copied to target for new trans-units
+- `verbose` (boolean, default `false`): controls output
+- `quiet` (boolean, default `false`): controls output
 
 ### Generate (untranslated) language files, if not already there
 When you run `xliffmerge`, it will read the master xliff file **messages.xlf**.
@@ -131,6 +148,9 @@ This is shown by the **state** `new`.
 The next step you have to do is to translate the file (or to let it translate).
 Depending on the software you use for translation you can filter for that state `new`.
 
+>Have a look at my sister project [TinyTranslator](https://github.com/martinroob/tiny-translator).
+It can filter for new untranslated entries and allows to edit xlf file very easily.
+
 The file for English on the other hand is correct.
 So, due to the fact, that English is the **default language** here, the state is `translated`.
 
@@ -161,6 +181,8 @@ it will remove it from the language file
 
 So after running it, you just have to translate the new parts.
 
+>Once again: [TinyTranslator](https://github.com/martinroob/tiny-translator) might help you to do that.
+
 ## Tests
 
   `npm test`
@@ -179,7 +201,8 @@ But if you are interesting, send me an email, so that we can discuss it.
 * Phillippe Martin
   [Deploying an i18n Angular app with angular-cli](https://medium.com/@feloy/deploying-an-i18n-angular-app-with-angular-cli-fc788f17e358)
 * Roland Oldengarm: [Angular 2: Automated i18n workflow using gulp](http://rolandoldengarm.com/index.php/2016/10/17/angular-2-automated-i18n-workflow-using-gulp/)
-* [XLIFF Spec](http://docs.oasis-open.org/xliff/xliff-core/xliff-core.html)
+* XLIFF Specification: [XLIFF Spec](http://docs.oasis-open.org/xliff/xliff-core/xliff-core.html)
+* My Tiny Translator Tool: [TinyTranslator](https://github.com/martinroob/tiny-translator)
 
 [travis-badge]: https://travis-ci.org/martinroob/ngx-i18nsupport.svg?branch=master
 [travis-badge-url]: https://travis-ci.org/martinroob/ngx-i18nsupport

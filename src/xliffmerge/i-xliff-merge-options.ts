@@ -36,5 +36,6 @@ export interface IXliffMergeOptions {
     };
     removeUnusedIds?: boolean;
     supportNgxTranslate?: boolean;  // Flag, wether output for ngs-translate should be generated
+    useSourceAsTarget?: boolean; // Flag, whether source must be used as target for new trans-units
 }
 

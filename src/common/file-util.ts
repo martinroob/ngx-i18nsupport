@@ -93,4 +93,11 @@ export class FileUtil {
         }
     };
 
+    /**
+     * Delete a file.
+     * @param path
+     */
+    public static deleteFile(path: string) {
+        fs.unlinkSync(path);
+    }
 }

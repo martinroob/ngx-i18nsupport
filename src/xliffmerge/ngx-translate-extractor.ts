@@ -39,7 +39,13 @@ export class NgxTranslateExtractor {
      */
     public extractTo(outputFile: string) {
         let translations: NgxTranslations = this.toNgxTranslations(this.extract());
-        FileUtil.replaceContent(outputFile, JSON.stringify(translations, null, 4), 'UTF-8')
+        if (translations && Object.keys(translations).length > 0) {
+            FileUtil.replaceContent(outputFile, JSON.stringify(translations, null, 4), 'UTF-8')
+        } else {
+            if (FileUtil.exists(outputFile)) {
+                FileUtil.deleteFile(outputFile);
+            }
+        }
     }
 
     /**

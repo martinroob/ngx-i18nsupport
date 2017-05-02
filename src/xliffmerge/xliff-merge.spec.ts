@@ -354,6 +354,39 @@ describe('XliffMerge test spec', () => {
             done();
         });
 
+        it('should generate translated file for all languages with empty targets for non default languages', (done) => {
+            FileUtil.copy(MASTER1SRC, MASTER);
+            let ws: WriterToString = new WriterToString();
+            let commandOut = new CommandOutput(ws);
+            let profileContent: IConfigFile = {
+                xliffmergeOptions: {
+                    defaultLanguage: 'de',
+                    srcDir: WORKDIR,
+                    genDir: WORKDIR,
+                    i18nFile: MASTERFILE,
+		    useSourceAsTarget: false
+                }
+            };
+            let xliffMergeCmd = XliffMerge.createFromOptions(commandOut, {languages: ['de', 'en']}, profileContent);
+            xliffMergeCmd.run();
+            expect(ws.writtenData()).not.toContain('ERROR');
+            let langFileGerman: ITranslationMessagesFile = readXliff(xliffMergeCmd.generatedI18nFile('de'));
+            expect(langFileGerman.sourceLanguage()).toBe('de');
+            expect(langFileGerman.targetLanguage()).toBe('de');
+            langFileGerman.forEachTransUnit((tu: ITransUnit) => {
+                expect(tu.targetContent()).toBe(tu.sourceContent());
+                expect(tu.targetState()).toBe('final');
+            });
+            let langFileEnglish: ITranslationMessagesFile = readXliff(xliffMergeCmd.generatedI18nFile('en'));
+            expect(langFileEnglish.sourceLanguage()).toBe('de');
+            expect(langFileEnglish.targetLanguage()).toBe('en');
+            langFileEnglish.forEachTransUnit((tu: ITransUnit) => {
+                expect(tu.targetContent()).toBe('');
+                expect(tu.targetState()).toBe('new');
+            });
+            done();
+        });
+
         it('should merge translated file for all languages', (done) => {
             FileUtil.copy(MASTER1SRC, MASTER);
             let ws: WriterToString = new WriterToString();
@@ -422,7 +455,7 @@ describe('XliffMerge test spec', () => {
 
             // look, that the new file contains the translation
             langFileEnglish = readXliff(xliffMergeCmd.generatedI18nFile('en'));
-            expect(langFileEnglish.transUnitWithId(ID_WITH_PLACEHOLDER).targetContent()).toBe('Item <x id="INTERPOLATION"></x> of <x id="INTERPOLATION_1"></x> added.');
+            expect(langFileEnglish.transUnitWithId(ID_WITH_PLACEHOLDER).targetContent()).toBe('Item <x id="INTERPOLATION"/> of <x id="INTERPOLATION_1"/> added.');
 
             done();
         });
@@ -433,6 +466,7 @@ describe('XliffMerge test spec', () => {
 
         let MASTER1FILE = 'ngxtranslate.xlf';
         let MASTER1SRC = SRCDIR + MASTER1FILE;
+        let MASTER_WITHOUT_NGX_TRANSLATE_STUFF = SRCDIR + 'ngExtractedMaster1.xlf';
         let MASTERFILE = 'messages.xlf';
         let MASTER = WORKDIR + MASTERFILE;
 
@@ -567,6 +601,27 @@ describe('XliffMerge test spec', () => {
             done();
         });
 
+        it('should not write empty translation json file for ngx-translate, if there are no translation (issue #18)', (done) => {
+            FileUtil.copy(MASTER_WITHOUT_NGX_TRANSLATE_STUFF, MASTER);
+            let ws: WriterToString = new WriterToString();
+            let commandOut = new CommandOutput(ws);
+            let profileContent: IConfigFile = {
+                xliffmergeOptions: {
+                    defaultLanguage: 'de',
+                    srcDir: WORKDIR,
+                    genDir: WORKDIR,
+                    i18nFile: MASTERFILE,
+                    supportNgxTranslate: true
+                }
+            };
+            let xliffMergeCmd = XliffMerge.createFromOptions(commandOut, {languages: ['de']}, profileContent);
+            xliffMergeCmd.run();
+            expect(ws.writtenData()).not.toContain('ERROR');
+            let translationJsonFilename = xliffMergeCmd.generatedNgxTranslateFile('de');
+            expect(FileUtil.exists(translationJsonFilename)).toBeFalsy();
+            done();
+        });
+
     });
 
     describe('Merge process checks for format xmb', () => {
@@ -676,7 +731,7 @@ describe('XliffMerge test spec', () => {
             xliffMergeCmd = XliffMerge.createFromOptions(commandOut, {languages: ['de', 'en']}, profileContent);
             xliffMergeCmd.run();
             expect(ws.writtenData()).not.toContain('ERROR');
-            expect(ws.writtenData()).toContain('merged 2 trans-units from master to "en"');
+            expect(ws.writtenData()).toContain('merged 1 trans-units from master to "en"');
             expect(ws.writtenData()).toContain('removed 2 unused trans-units in "en"');
 
             // look, that the new file contains the old translation
@@ -779,6 +834,7 @@ describe('XliffMerge test spec', () => {
 
         let MASTER1FILE = 'ngxtranslate.xmb';
         let MASTER1SRC = SRCDIR + MASTER1FILE;
+        let MASTER_WITHOUT_NGX_TRANSLATE_STUFF = SRCDIR + 'ngExtractedMaster1.xmb';
         let MASTERFILE = 'messages.xmb';
         let MASTER = WORKDIR + MASTERFILE;
 
@@ -914,6 +970,28 @@ describe('XliffMerge test spec', () => {
             expect(translation.embeddedhtml.bold).toBe('Diese Nachricht ist <b>WICHTIG</b>');
             expect(translation.embeddedhtml.boldstrong).toBe('Diese Nachricht ist <b><strong>SEHR WICHTIG</strong></b>');
             expect(translation.embeddedhtml.strange).toBe('Diese Nachricht ist <strange>{{0}}</strange>');
+            done();
+        });
+
+        it('should not write empty translation json file for ngx-translate, if there are no translation (issue #18)', (done) => {
+            FileUtil.copy(MASTER_WITHOUT_NGX_TRANSLATE_STUFF, MASTER);
+            let ws: WriterToString = new WriterToString();
+            let commandOut = new CommandOutput(ws);
+            let profileContent: IConfigFile = {
+                xliffmergeOptions: {
+                    defaultLanguage: 'de',
+                    srcDir: WORKDIR,
+                    genDir: WORKDIR,
+                    i18nFile: MASTERFILE,
+                    i18nFormat: 'xmb',
+                    supportNgxTranslate: true
+                }
+            };
+            let xliffMergeCmd = XliffMerge.createFromOptions(commandOut, {languages: ['de']}, profileContent);
+            xliffMergeCmd.run();
+            expect(ws.writtenData()).not.toContain('ERROR');
+            let translationJsonFilename = xliffMergeCmd.generatedNgxTranslateFile('de');
+            expect(FileUtil.exists(translationJsonFilename)).toBeFalsy();
             done();
         });
 

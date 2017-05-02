@@ -10,12 +10,15 @@
     "moduleResolution": "node",
     "outDir": "../dist",
     "sourceMap": true,
-    "target": "es6",
+    "target": "es5",
     "typeRoots": [
       "../node_modules/@types"
     ]
   },
   "include": [
     "**/*"
+  ],
+  "exclude": [
+    "node_modules"
   ]
 }

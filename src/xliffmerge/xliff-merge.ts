@@ -209,10 +209,10 @@ export class XliffMerge {
         let languageSpecificMessagesFile: ITranslationMessagesFile = TranslationMessagesFileReader.fromFile(this.parameters.i18nFormat(), languageXliffFilePath, this.parameters.encoding());
         languageSpecificMessagesFile.setTargetLanguage(lang);
 
-        // copy source to target
+        // copy source to target if necessary
         let isDefaultLang: boolean = (lang == this.parameters.defaultLanguage());
         languageSpecificMessagesFile.forEachTransUnit((transUnit: ITransUnit) => {
-            languageSpecificMessagesFile.useSourceAsTarget(transUnit, isDefaultLang);
+	    languageSpecificMessagesFile.useSourceAsTarget(transUnit, isDefaultLang, this.parameters.useSourceAsTarget());
         });
         // write it to file
         TranslationMessagesFileReader.save(languageSpecificMessagesFile);
@@ -237,7 +237,7 @@ export class XliffMerge {
             let transUnit: ITransUnit = languageSpecificMessagesFile.transUnitWithId(masterTransUnit.id);
             if (!transUnit) {
                 // oops, no translation, must be a new key, so add it
-                languageSpecificMessagesFile.useSourceAsTarget(masterTransUnit, isDefaultLang);
+                languageSpecificMessagesFile.useSourceAsTarget(masterTransUnit, isDefaultLang, this.parameters.useSourceAsTarget());
                 languageSpecificMessagesFile.addNewTransUnit(masterTransUnit);
                 newCount++;
             }

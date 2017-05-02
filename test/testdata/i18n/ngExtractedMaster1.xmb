@@ -21,10 +21,11 @@
         <!ELEMENT ex (#PCDATA)>
         ]>
 <messagebundle>
-    <msg id="2047558209369508311">Meine erste I18N-Anwendung</msg>
-    <msg id="7499557905529977371" desc="Beschreibung der Anwendung">Diese Anwendung ist eine reine Demonstration und hat keine wirklich nutzbare Funktion.</msg>
-    <msg id="3274258156935474372" desc="sampleapp.appdescription" meaning="ngx-translate">Diese Anwendung ist eine reine Demonstration und hat keine wirklich nutzbare Funktion.</msg>
-    <msg id="9030312858648510700" desc="placeholder sample">Eintrag <ph name="INTERPOLATION"><ex>INTERPOLATION</ex></ph> von <ph name="INTERPOLATION_1"><ex>INTERPOLATION_1</ex></ph> hinzugefügt.</msg>
-    <msg id="7149517499881679376" desc="linebreak sample">Dieser Text
+    <msg id="2047558209369508311"><source>S:/experimente/sampleapp41/src/app/app.component.ts:1</source>Meine erste I18N-Anwendung</msg>
+    <msg id="4371668001355139802"><source>S:/experimente/sampleapp41/src/app/app.component.ts:2</source><source>S:/experimente/sampleapp41/src/app/app.component.ts:3</source>Anwendung läuft!</msg>
+    <msg id="7499557905529977371" desc="Beschreibung der Anwendung"><source>S:/experimente/sampleapp41/src/app/app.component.ts:4</source>Diese Anwendung ist eine reine Demonstration und hat keine wirklich nutzbare Funktion.</msg>
+    <msg id="3274258156935474372" desc="sampleapp.appdescription" meaning="ngx-translate"><source>S:/experimente/sampleapp41/src/app/app.component.ts:5</source>Diese Anwendung ist eine reine Demonstration und hat keine wirklich nutzbare Funktion.</msg>
+    <msg id="9030312858648510700" desc="placeholder sample"><source>S:/experimente/sampleapp41/src/app/app.component.ts:6</source>Eintrag <ph name="INTERPOLATION"><ex>INTERPOLATION</ex></ph> von <ph name="INTERPOLATION_1"><ex>INTERPOLATION_1</ex></ph> hinzugefügt.</msg>
+    <msg id="7149517499881679376" desc="linebreak sample"><source>S:/experimente/sampleapp41/src/app/app.component.ts:7,8</source>Dieser Text
         enthält einen Zeilenumbruch.</msg>
 </messagebundle>
