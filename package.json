@@ -1,6 +1,6 @@
 {
   "name": "ngx-i18nsupport",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "description": "Some tooling to be used with the Angular 2 i18n workflow",
   "main": "index.js",
   "module": "./src",
