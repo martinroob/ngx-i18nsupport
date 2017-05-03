@@ -306,7 +306,8 @@ describe('XliffMerge test spec', () => {
                     defaultLanguage: 'de',
                     srcDir: WORKDIR,
                     genDir: WORKDIR,
-                    i18nFile: MASTERFILE
+                    i18nFile: MASTERFILE,
+		    useSourceAsTarget: false
                 }
             };
             let xliffMergeCmd = XliffMerge.createFromOptions(commandOut, {languages: ['de']}, profileContent);
