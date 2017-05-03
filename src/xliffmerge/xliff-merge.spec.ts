@@ -542,6 +542,7 @@ describe('XliffMerge test spec', () => {
             expect(translation.myapp).toBeTruthy();
             expect(translation.dateservice.monday).toBe("Montag");
             expect(translation.dateservice.friday).toBe("Freitag");
+            expect(translation.explicitlysetids.test1).toBe("Explizit gesetzte ID");
             done();
         });
 
@@ -912,6 +913,8 @@ describe('XliffMerge test spec', () => {
             expect(translation.myapp).toBeTruthy();
             expect(translation.dateservice.monday).toBe("Montag");
             expect(translation.dateservice.friday).toBe("Freitag");
+            expect(translation.explicitlysetids.test1).toBe("Explizit gesetzte ID");
+            expect(Object.keys(translation).length).toBe(5);
             done();
         });
 

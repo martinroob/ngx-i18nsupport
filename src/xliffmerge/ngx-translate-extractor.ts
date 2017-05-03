@@ -55,18 +55,46 @@ export class NgxTranslateExtractor {
     private extract(): NgxMessage[] {
         let result: NgxMessage[] = [];
         this.messagesFile.forEachTransUnit((tu: ITransUnit) => {
-            let description = tu.description();
-            let id = tu.meaning();
-            if (description && description === 'ngx-translate') {
-                let messagetext = this.toTranslateString(tu.targetContentNormalized());
-                result.push({id: id, message: messagetext});
+            let ngxId = this.ngxTranslateIdFromTU(tu);
+            if (ngxId) {
+                let messagetext = tu.targetContentNormalized();
+                result.push({id: ngxId, message: messagetext});
             }
         });
         return result;
     }
 
-    private toTranslateString(contentFromTU: string): string {
-        return contentFromTU;
+    /**
+     * Check, wether this tu should be extracted for ngx-translate usage, and return its id for ngx-translate.
+     * There are 2 possibilities:
+     * 1. description is set to "ngx-translate" and meaning contains the id.
+     * 2. id is explicitly set to a string.
+     * @param tu
+     * @return an id or null, if this tu should not be extracted.
+     */
+    private ngxTranslateIdFromTU(tu: ITransUnit): string {
+        if (this.isExplicitlySetId(tu.id)) {
+            return tu.id;
+        }
+        let description = tu.description();
+        if (description && description === 'ngx-translate') {
+            return tu.meaning();
+        }
+    }
+
+    /**
+     * Test, wether ID was explicitly set (via i18n="@myid).
+     * Just heuristic, an ID is explicitly that, if it does not look like a generated one.
+     * @param id
+     * @return {boolean}
+     */
+    private isExplicitlySetId(id: string): boolean {
+        if (isNullOrUndefined(id)) {
+            return false;
+        }
+        // generated IDs are either decimal or sha1 hex
+        let reForGeneratedId = /^[0-9a-f]{11,}$/;
+        return !reForGeneratedId.test(id);
     }
 
     /**

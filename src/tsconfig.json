@@ -15,10 +15,7 @@
       "../node_modules/@types"
     ]
   },
-  "include": [
+  "includes": [
     "**/*"
-  ],
-  "exclude": [
-    "node_modules"
   ]
 }
