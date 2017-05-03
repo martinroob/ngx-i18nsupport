@@ -1,3 +1,20 @@
+<a name="0.4-0"></a>
+# [0.4.0](https://github.com/martinroob/ngx-i18nsupport/compare/v0.3.1...v0.4.0) (2017-05-03)
+
+### Bug Fixes
+
+* **xliffmerge:** xliffmerge creates empty json files ([#18](https://github.com/martinroob/ngx-i18nsupport/issues/18))
+
+### Features
+
+* **xliffmerge:** create an API to access parsing functionality. ([#11](https://github.com/martinroob/ngx-i18nsupport/issues/11)). 
+The API is in a separate npm package [ngx-i18nsupport-lib](https://github.com/martinroob/ngx-i18nsupport-lib).
+
+* **xliffmerge:** use explicitly set IDs for ngx-translate data generation. ([#15](https://github.com/martinroob/ngx-i18nsupport/issues/15))
+For detail have a look at the Wiki page [ngx translate usage](https://github.com/martinroob/ngx-i18nsupport/wiki/ngx-translate-usage).
+
+* **xliffmerge:** Handle new source element introduced with Angular 4. ([#21](https://github.com/martinroob/ngx-i18nsupport/issues/21))
+
 <a name="0.3.1"></a>
 # [0.3.1](https://github.com/martinroob/ngx-i18nsupport/compare/v0.3.0...v0.3.1) (2017-04-25)
 

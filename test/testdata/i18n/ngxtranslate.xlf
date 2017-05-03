@@ -82,6 +82,14 @@
             <note priority="1" from="description">ngx-translate</note>
             <note priority="1" from="meaning">embeddedhtml.strange</note>
         </trans-unit>
+            <trans-unit id="explicitlysetids.test1" datatype="html">
+                <source>Explizit gesetzte ID</source>
+                <target state="final">Explizit gesetzte ID</target>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">S:/experimente/sampleapp41/src/app/ngx-translate-test-data/ngx-translate-test-data.component.ts</context>
+                    <context context-type="linenumber">18</context>
+                </context-group>
+            </trans-unit>
         </body>
     </file>
 </xliff>
