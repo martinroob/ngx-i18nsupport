@@ -1,4 +1,11 @@
-<a name="0.4-0"></a>
+<a name="0.5.0"></a>
+# [0.5.0](https://github.com/martinroob/ngx-i18nsupport/compare/v0.4.0...v0.5.0) (2017-05-05)
+
+### Features
+
+* **xliffmerge:** added XLIFF 2.0 support. ([#20](https://github.com/martinroob/ngx-i18nsupport/issues/20))
+
+<a name="0.4.0"></a>
 # [0.4.0](https://github.com/martinroob/ngx-i18nsupport/compare/v0.3.1...v0.4.0) (2017-05-03)
 
 ### Bug Fixes

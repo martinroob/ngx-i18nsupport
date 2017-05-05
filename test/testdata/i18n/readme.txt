@@ -10,3 +10,4 @@ It contains the same IDs as Master1, but some additional ones.
 ngttranslate.xlf is an extracted master with some messages with description and meaning to be used with ngx-translate.
 
 The xmb files are the same in principle, but for format xmb.
+And the xlf2 files are for XLIFF 2.0

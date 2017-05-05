@@ -73,7 +73,7 @@ export class XliffMerge {
     /**
      * The read master xlf file.
      */
-    private master: ITranslationMessagesFile; // XliffFile or XmbFile
+    private master: ITranslationMessagesFile; // XliffFile or Xliff2File or XmbFile
 
     /**
      * For Tests, create instance with given profile

@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xliff version="2.0" xmlns="urn:oasis:names:tc:xliff:document:2.0" srcLang="de">
+  <file original="ng.template" id="ngi18n">
+    <unit id="4371668001355139802">
+      <segment>
+        <source>Anwendung läuft!</source>
+      </segment>
+    </unit>
+    <unit id="7499557905529979999">
+      <notes>
+        <note category="description">Added unit</note>
+      </notes>
+      <segment>
+        <source>this message is a new one.</source>
+      </segment>
+    </unit>
+    <unit id="3274258156935474372">
+      <notes>
+        <note category="description">sampleapp.appdescription</note>
+        <note category="meaning">ngx-translate</note>
+      </notes>
+      <segment>
+        <source>Diese Anwendung ist eine reine Demonstration und hat keine wirklich nutzbare Funktion.</source>
+      </segment>
+    </unit>
+    <unit id="9030312858648510700">
+      <notes>
+        <note category="description">placeholder sample</note>
+      </notes>
+      <segment>
+        <source>Eintrag <ph id="0" equiv="INTERPOLATION" disp="{{number()}}"/> von <ph id="1" equiv="INTERPOLATION_1" disp="{{total()}}"/> hinzugefügt.</source>
+      </segment>
+    </unit>
+    <unit id="7149517499881679376">
+      <notes>
+        <note category="description">linebreak sample</note>
+      </notes>
+      <segment>
+        <source>Dieser Text
+  enthält einen Zeilenumbruch.</source>
+      </segment>
+    </unit>
+    <unit id="8998006760999956868">
+      <notes>
+        <note category="description">embedded html sample</note>
+      </notes>
+      <segment>
+        <source>Dieser Text enthält <pc id="0" equivStart="START_BOLD_TEXT" equivEnd="CLOSE_BOLD_TEXT" type="fmt" dispStart="&lt;b&gt;" dispEnd="&lt;/b&gt;">eingebettetes html</pc></source>
+      </segment>
+    </unit>
+    <unit id="5917488050182782344">
+      <segment>
+        <source>Eine Nachricht per ngx-translate</source>
+      </segment>
+    </unit>
+    <unit id="6797180050921917715">
+      <notes>
+        <note category="description">ngx-translate</note>
+        <note category="meaning">appTitle</note>
+      </notes>
+      <segment>
+        <source>Sample App Title</source>
+      </segment>
+    </unit>
+    <unit id="8247252724313224625">
+      <notes>
+        <note category="description">ngx-translate</note>
+        <note category="meaning">messages.example</note>
+      </notes>
+      <segment>
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{priority}}"/>: A message from a service</source>
+      </segment>
+    </unit>
+    <unit id="1650190705028986163">
+      <notes>
+        <note category="description">ngx-translate</note>
+        <note category="meaning">myapp</note>
+      </notes>
+      <segment>
+        <source>Meine Anwendung</source>
+      </segment>
+    </unit>
+    <unit id="6830980354990918030">
+      <notes>
+        <note category="description">ngx-translate</note>
+        <note category="meaning">dateservice.monday</note>
+      </notes>
+      <segment>
+        <source>Montag</source>
+      </segment>
+    </unit>
+    <unit id="6375749062310329756">
+      <notes>
+        <note category="description">ngx-translate</note>
+        <note category="meaning">dateservice.tuesday</note>
+      </notes>
+      <segment>
+        <source>Dienstag</source>
+      </segment>
+    </unit>
+    <unit id="8721860357562818797">
+      <notes>
+        <note category="description">ngx-translate</note>
+        <note category="meaning">dateservice.wednesday</note>
+      </notes>
+      <segment>
+        <source>Mittwoch</source>
+      </segment>
+    </unit>
+    <unit id="1711956122115192435">
+      <notes>
+        <note category="description">ngx-translate</note>
+        <note category="meaning">dateservice.thursday</note>
+      </notes>
+      <segment>
+        <source>Donnerstag</source>
+      </segment>
+    </unit>
+    <unit id="6553664200740484336">
+      <notes>
+        <note category="description">ngx-translate</note>
+        <note category="meaning">dateservice.friday</note>
+      </notes>
+      <segment>
+        <source>Freitag</source>
+      </segment>
+    </unit>
+    <unit id="3334880142338745041">
+      <notes>
+        <note category="description">ngx-translate</note>
+        <note category="meaning">dateservice.saturday</note>
+      </notes>
+      <segment>
+        <source>Samstag</source>
+      </segment>
+    </unit>
+    <unit id="1409816038285774052">
+      <notes>
+        <note category="description">ngx-translate</note>
+        <note category="meaning">dateservice.sunday</note>
+      </notes>
+      <segment>
+        <source>Sonntag</source>
+      </segment>
+    </unit>
+    <unit id="7644074577681906834">
+      <notes>
+        <note category="description">ngx-translate</note>
+        <note category="meaning">placeholders.test1placeholder</note>
+      </notes>
+      <segment>
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{priority}}"/>: Eine Nachricht mit einem Platzhalter</source>
+      </segment>
+    </unit>
+    <unit id="9223042936546558865">
+      <notes>
+        <note category="description">ngx-translate</note>
+        <note category="meaning">placeholders.test2placeholder</note>
+      </notes>
+      <segment>
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{priority}}"/>: Eine Nachricht mit 2 Platzhaltern: <ph id="1" equiv="INTERPOLATION_1" disp="{{placeholder2}}"/></source>
+      </segment>
+    </unit>
+    <unit id="7049669989298349710">
+      <notes>
+        <note category="description">ngx-translate</note>
+        <note category="meaning">placeholders.test2placeholderRepeated</note>
+      </notes>
+      <segment>
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{priority}}"/>: Eine Nachricht mit 2 Platzhaltern: <ph id="1" equiv="INTERPOLATION" disp="{{priority}}"/> <ph id="2" equiv="INTERPOLATION_1" disp="{{placeholder2}}"/></source>
+      </segment>
+    </unit>
+    <unit id="6651165993266138235">
+      <notes>
+        <note category="description">ngx-translate</note>
+        <note category="meaning">embeddedhtml.bold</note>
+      </notes>
+      <segment>
+        <source>Diese Nachricht ist <pc id="0" equivStart="START_BOLD_TEXT" equivEnd="CLOSE_BOLD_TEXT" type="fmt" dispStart="&lt;b&gt;" dispEnd="&lt;/b&gt;">WICHTIG</pc></source>
+      </segment>
+    </unit>
+    <unit id="7609655310648429098">
+      <notes>
+        <note category="description">ngx-translate</note>
+        <note category="meaning">embeddedhtml.boldstrong</note>
+      </notes>
+      <segment>
+        <source>Diese Nachricht ist <pc id="0" equivStart="START_BOLD_TEXT" equivEnd="CLOSE_BOLD_TEXT" type="fmt" dispStart="&lt;b&gt;" dispEnd="&lt;/b&gt;"><pc id="1" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong&gt;" dispEnd="&lt;/strong&gt;">SEHR WICHTIG</pc></pc></source>
+      </segment>
+    </unit>
+    <unit id="7610784844464920497">
+      <notes>
+        <note category="description">ngx-translate</note>
+        <note category="meaning">embeddedhtml.strange</note>
+      </notes>
+      <segment>
+        <source>Diese Nachricht ist <pc id="0" equivStart="START_TAG_STRANGE" equivEnd="CLOSE_TAG_STRANGE" type="other" dispStart="&lt;strange&gt;" dispEnd="&lt;/strange&gt;"><ph id="1" equiv="INTERPOLATION" disp="{{strangeness}}"/></pc></source>
+      </segment>
+    </unit>
+    <unit id="explicitlysetids.test1">
+      <segment>
+        <source>Explizit gesetzte ID</source>
+      </segment>
+    </unit>
+    <unit>
+      <segment>
+        <source>unit without id</source>
+      </segment>
+    </unit>
+  </file>
+</xliff>

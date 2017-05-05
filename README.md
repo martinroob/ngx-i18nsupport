@@ -30,7 +30,7 @@ It is described in the official documentation Angular Cookbook [Internationaliza
 
 Said in one sentence, 
 * markup your strings to translate in your templates with an attribute `i18n`
-* run the Amgular extraction tool (`ng-xi18n`) to extract the strings in an XML Format called [[XLIFF]]((http://docs.oasis-open.org/xliff/xliff-core/xliff-core.html))
+* run the Amgular extraction tool (`ng-xi18n`) to extract the strings in an XML Format called [[XLIFF-1.2]](http://docs.oasis-open.org/xliff/v1.2/os/xliff-core.html)
 * copy and then translate the extracted file for every language you plan to support
 * run the ng compiler to generate a special version of your app for the different languages
 
@@ -104,8 +104,8 @@ The options are:
 - `srcDir` (string, default "."): directory, where the master file is expected
 - `genDir` (string, default "."): directory, where files are written to (normally identical with srcDir)
 - `i18nFile` (string, default "messages.xlf"): master file (relativ to srcDir)
-- `i18nFormat` (string, default "xlf"): "xlf" for XLIFF or "xmb" for XML Message Bundles
-- `encoding` (string, default "UTF-8"): expected encoding of xlf or xmb files
+- `i18nFormat` (string, default "xlf"): `xlf` for XLIFF 1.2 or `xlf2` for XLIFF 2.0 or `xmb` for XML Message Bundles
+- `encoding` (string, default "UTF-8"): expected encoding of xlf, xlf2 or xmb files
 - `defaultLanguage` (string, default "en"): the native language used in your templates
 - `languages` (array of strings): list of languages (if not spefified at command line)
 - `removeUnusedIds` (boolean, default `true`): flag, if unused IDs should be removed during merge
@@ -201,7 +201,8 @@ But if you are interesting, send me an email, so that we can discuss it.
 * Phillippe Martin
   [Deploying an i18n Angular app with angular-cli](https://medium.com/@feloy/deploying-an-i18n-angular-app-with-angular-cli-fc788f17e358)
 * Roland Oldengarm: [Angular 2: Automated i18n workflow using gulp](http://rolandoldengarm.com/index.php/2016/10/17/angular-2-automated-i18n-workflow-using-gulp/)
-* XLIFF Specification: [XLIFF Spec](http://docs.oasis-open.org/xliff/xliff-core/xliff-core.html)
+* XLIFF 1.2 Specification: [XLIFF-1.2](http://docs.oasis-open.org/xliff/v1.2/os/xliff-core.html)
+* XLIFF 2.0 Specification: [XLIFF-2.0](http://docs.oasis-open.org/xliff/xliff-core/v2.0/os/xliff-core-v2.0-os.html)
 * My Tiny Translator Tool: [TinyTranslator](https://github.com/martinroob/tiny-translator)
 
 [travis-badge]: https://travis-ci.org/martinroob/ngx-i18nsupport.svg?branch=master

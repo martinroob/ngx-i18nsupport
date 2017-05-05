@@ -189,9 +189,9 @@ export class XliffMergeParameters {
         } catch (err) {
             this.errorsFound.push(new XliffMergeError('i18nFile "' + this.i18nFile() + '" is not readable'));
         }
-        // i18nFormat must be xlf or xmb
-        if (!(this.i18nFormat() === 'xlf' || this.i18nFormat() === 'xmb')) {
-            this.errorsFound.push(new XliffMergeError('i18nFormat "' + this.i18nFormat() + '" invalid, must be "xlf" or "xmb"'));
+        // i18nFormat must be xlf xlf2 or xmb
+        if (!(this.i18nFormat() === 'xlf' || this.i18nFormat() === 'xlf2' || this.i18nFormat() === 'xmb')) {
+            this.errorsFound.push(new XliffMergeError('i18nFormat "' + this.i18nFormat() + '" invalid, must be "xlf" or "xlf2" or "xmb"'));
         }
      }
 
@@ -267,7 +267,7 @@ export class XliffMergeParameters {
 
     /**
      * Format of the master xlif file.
-     * Default is "xlf", possible are "xlf" or "xmb".
+     * Default is "xlf", possible are "xlf" or "xlf2" or "xmb".
      * @return {string}
      */
     public i18nFormat(): string {
