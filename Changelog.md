@@ -1,3 +1,20 @@
+<a name="0.6.0"></a>
+# [0.6.0](https://github.com/martinroob/ngx-i18nsupport/compare/v0.5.0...v0.6.0) (2017-05-25)
+
+### Bug Fixes
+
+* **xliffmerge:** Format xmb should create xtb files for translations. ([#25](https://github.com/martinroob/ngx-i18nsupport/issues/25)).
+There is no migration tooling, so if you do have translated xmb files, you must manually correct them to xtb. 
+
+* **xliffmerge:** File suffix change. For format XLIFF 2.0 the suffix of the generated files is `xlf` now (was `xlf2`, which is not correct).
+If you already have such files, you should rename them before running xliffmerge. Otherwise they will not be merged.
+
+### Features
+
+* **xliffmerge:** xliffmerge does not merge the new source references. ([#24](https://github.com/martinroob/ngx-i18nsupport/issues/24))
+
+* **xliffmerge:** For format XLIFF 2.0 source references are supported now.
+
 <a name="0.5.0"></a>
 # [0.5.0](https://github.com/martinroob/ngx-i18nsupport/compare/v0.4.0...v0.5.0) (2017-05-05)
 
