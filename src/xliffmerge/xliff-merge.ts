@@ -6,7 +6,7 @@ import {FileUtil} from '../common/file-util';
 import {VERSION} from './version';
 import WritableStream = NodeJS.WritableStream;
 import {isNullOrUndefined} from 'util';
-import {ITranslationMessagesFile, ITransUnit} from 'ngx-i18nsupport-lib';
+import {ITranslationMessagesFile, ITransUnit, FORMAT_XMB, FORMAT_XTB} from 'ngx-i18nsupport-lib';
 import {ProgramOptions, IConfigFile} from './i-xliff-merge-options';
 import {NgxTranslateExtractor} from './ngx-translate-extractor';
 import {TranslationMessagesFileReader} from './translation-messages-file-reader';
@@ -190,7 +190,7 @@ export class XliffMerge {
             this.mergeMasterTo(lang, languageXliffFile);
         }
         if (this.parameters.supportNgxTranslate()) {
-            let languageSpecificMessagesFile: ITranslationMessagesFile = TranslationMessagesFileReader.fromFile(this.parameters.i18nFormat(), languageXliffFile, this.parameters.encoding());
+            let languageSpecificMessagesFile: ITranslationMessagesFile = TranslationMessagesFileReader.fromFile(XliffMerge.translationFormat(this.parameters.i18nFormat()), languageXliffFile, this.parameters.encoding(), this.master.filename());
             NgxTranslateExtractor.extract(languageSpecificMessagesFile, this.parameters.generatedNgxTranslateFile(lang));
         }
     }
@@ -203,22 +203,29 @@ export class XliffMerge {
      */
     private createUntranslatedXliff(lang: string, languageXliffFilePath: string) {
         // copy master ...
-        FileUtil.copy(this.parameters.i18nFile(), languageXliffFilePath);
-
-        // read copy and set target-language
-        let languageSpecificMessagesFile: ITranslationMessagesFile = TranslationMessagesFileReader.fromFile(this.parameters.i18nFormat(), languageXliffFilePath, this.parameters.encoding());
-        languageSpecificMessagesFile.setTargetLanguage(lang);
-
-        // copy source to target if necessary
+        // and set target-language
+        // and copy source to target if necessary
         let isDefaultLang: boolean = (lang == this.parameters.defaultLanguage());
-        languageSpecificMessagesFile.forEachTransUnit((transUnit: ITransUnit) => {
-	    languageSpecificMessagesFile.useSourceAsTarget(transUnit, isDefaultLang, this.parameters.useSourceAsTarget());
-        });
+        let languageSpecificMessagesFile: ITranslationMessagesFile = this.master.createTranslationFileForLang(lang, languageXliffFilePath, isDefaultLang, this.parameters.useSourceAsTarget());
+
         // write it to file
         TranslationMessagesFileReader.save(languageSpecificMessagesFile);
         this.commandOutput.info('created new file "%s" for target-language="%s"', languageXliffFilePath, lang);
         if (!isDefaultLang) {
             this.commandOutput.warn('please translate file "%s" to target-language="%s"', languageXliffFilePath, lang);
+        }
+    }
+
+    /**
+     * Map the input format to the format of the translation.
+     * Normally they are the same but for xmb the translation format is xtb.
+     * @param i18nFormat
+     */
+    private static translationFormat(i18nFormat: string): string {
+        if (i18nFormat === FORMAT_XMB) {
+            return FORMAT_XTB;
+        } else {
+            return i18nFormat;
         }
     }
 
@@ -229,21 +236,30 @@ export class XliffMerge {
      */
     private mergeMasterTo(lang: string, languageXliffFilePath: string) {
         // read lang specific file
-        let languageSpecificMessagesFile: ITranslationMessagesFile = TranslationMessagesFileReader.fromFile(this.parameters.i18nFormat(), languageXliffFilePath, this.parameters.encoding());
+        let languageSpecificMessagesFile: ITranslationMessagesFile = TranslationMessagesFileReader.fromFile(XliffMerge.translationFormat(this.parameters.i18nFormat()), languageXliffFilePath, this.parameters.encoding());
 
         let isDefaultLang: boolean = (lang == this.parameters.defaultLanguage());
         let newCount = 0;
+        let correctSourceRefCount = 0;
         this.master.forEachTransUnit((masterTransUnit) => {
             let transUnit: ITransUnit = languageSpecificMessagesFile.transUnitWithId(masterTransUnit.id);
             if (!transUnit) {
                 // oops, no translation, must be a new key, so add it
-                languageSpecificMessagesFile.useSourceAsTarget(masterTransUnit, isDefaultLang, this.parameters.useSourceAsTarget());
-                languageSpecificMessagesFile.addNewTransUnit(masterTransUnit);
+                languageSpecificMessagesFile.importNewTransUnit(masterTransUnit, isDefaultLang, this.parameters.useSourceAsTarget());
                 newCount++;
+            } else {
+                // check for missing or changed source ref and add it if needed
+                if (!this.areSourceReferencesEqual(masterTransUnit.sourceReferences(), transUnit.sourceReferences())) {
+                    transUnit.setSourceReferences(masterTransUnit.sourceReferences());
+                    correctSourceRefCount++;
+                }
             }
         });
         if (newCount > 0) {
             this.commandOutput.warn('merged %s trans-units from master to "%s"', newCount, lang);
+        }
+        if (correctSourceRefCount > 0) {
+            this.commandOutput.warn('transferred %s source references from master to "%s"', correctSourceRefCount, lang);
         }
 
         // remove all elements that are no longer used
@@ -278,4 +294,27 @@ export class XliffMerge {
         }
     }
 
+    private areSourceReferencesEqual(ref1: {sourcefile: string; linenumber: number;}[], ref2: {sourcefile: string; linenumber: number;}[]): boolean {
+        if ((isNullOrUndefined(ref1) && !isNullOrUndefined(ref2)) || (isNullOrUndefined(ref2) && !isNullOrUndefined(ref1))) {
+            return false;
+        }
+        if (isNullOrUndefined(ref1) && isNullOrUndefined(ref2)) {
+            return true;
+        }
+        // bot refs are set now, convert to set to compare them
+        let set1: Set<string> = new Set<string>();
+        ref1.forEach((ref) => {set1.add(ref.sourcefile + ':' + ref.linenumber)});
+        let set2: Set<string> = new Set<string>();
+        ref2.forEach((ref) => {set2.add(ref.sourcefile + ':' + ref.linenumber)});
+        if (set1.size !== set2.size) {
+            return false;
+        }
+        let match = true;
+        set2.forEach((ref) => {
+            if (!set1.has(ref)) {
+                match = false;
+            }
+        });
+        return match;
+    }
 }

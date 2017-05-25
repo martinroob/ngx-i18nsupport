@@ -1,4 +1,4 @@
-import {ITranslationMessagesFile, ITransUnit} from 'ngx-i18nsupport-lib';
+import {ITranslationMessagesFile, ITransUnit, NORMALIZATION_FORMAT_NGXTRANSLATE} from 'ngx-i18nsupport-lib';
 import {FileUtil} from '../common/file-util';
 import {isNullOrUndefined} from 'util';
 /**
@@ -57,7 +57,7 @@ export class NgxTranslateExtractor {
         this.messagesFile.forEachTransUnit((tu: ITransUnit) => {
             let ngxId = this.ngxTranslateIdFromTU(tu);
             if (ngxId) {
-                let messagetext = tu.targetContentNormalized();
+                let messagetext = tu.targetContentNormalized().asDisplayString(NORMALIZATION_FORMAT_NGXTRANSLATE);
                 result.push({id: ngxId, message: messagetext});
             }
         });

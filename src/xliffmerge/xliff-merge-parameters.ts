@@ -80,7 +80,7 @@ export class XliffMergeParameters {
 
     /**
      * Read profile.
-     * @param profilePath
+     * @param options program options
      * @return the read profile (empty, if none, null if errors)
      */
     private readProfile(options: ProgramOptions): IConfigFile {
@@ -95,8 +95,7 @@ export class XliffMergeParameters {
             this.errorsFound.push(new XliffMergeError('could not read profile "' + profilePath + '"'));
             return null;
         }
-        let profileContent: IConfigFile = JSON.parse(content);
-        return profileContent;
+        return JSON.parse(content);
     }
 
     private initializeFromConfig(profileContent: IConfigFile) {
@@ -280,7 +279,18 @@ export class XliffMergeParameters {
      * @return {string} Path of file
      */
     public generatedI18nFile(lang: string): string {
-        return this.genDir() + '/' + 'messages.' + lang + '.' + this.i18nFormat();
+        return this.genDir() + '/' + 'messages.' + lang + '.' + this.suffixForGeneratedI18nFile();
+    }
+
+    private suffixForGeneratedI18nFile(): string {
+        switch (this.i18nFormat()) {
+            case 'xlf':
+                return 'xlf';
+            case 'xlf2':
+                return 'xlf';
+            case 'xmb':
+                return 'xtb';
+        }
     }
 
     /**
