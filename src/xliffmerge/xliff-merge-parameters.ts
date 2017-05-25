@@ -80,7 +80,7 @@ export class XliffMergeParameters {
 
     /**
      * Read profile.
-     * @param profilePath
+     * @param options program options
      * @return the read profile (empty, if none, null if errors)
      */
     private readProfile(options: ProgramOptions): IConfigFile {
@@ -95,8 +95,7 @@ export class XliffMergeParameters {
             this.errorsFound.push(new XliffMergeError('could not read profile "' + profilePath + '"'));
             return null;
         }
-        let profileContent: IConfigFile = JSON.parse(content);
-        return profileContent;
+        return JSON.parse(content);
     }
 
     private initializeFromConfig(profileContent: IConfigFile) {
@@ -288,7 +287,7 @@ export class XliffMergeParameters {
             case 'xlf':
                 return 'xlf';
             case 'xlf2':
-                return 'xlf2'; // TODO is this ok or should it be xlf too
+                return 'xlf';
             case 'xmb':
                 return 'xtb';
         }
