@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "baseUrl": "",
+    "baseUrl": "tsconfig",
     "declaration": false,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
@@ -8,14 +8,18 @@
     "mapRoot": "./",
     "module": "CommonJS",
     "moduleResolution": "node",
-    "outDir": "../dist",
+    "outDir": "./dist",
     "sourceMap": true,
     "target": "es5",
     "typeRoots": [
-      "../node_modules/@types"
+      "./node_modules/@types"
     ]
   },
-  "includes": [
-    "**/*"
+  "include": [
+    "./src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
   ]
 }

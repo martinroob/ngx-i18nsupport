@@ -280,7 +280,18 @@ export class XliffMergeParameters {
      * @return {string} Path of file
      */
     public generatedI18nFile(lang: string): string {
-        return this.genDir() + '/' + 'messages.' + lang + '.' + this.i18nFormat();
+        return this.genDir() + '/' + 'messages.' + lang + '.' + this.suffixForGeneratedI18nFile();
+    }
+
+    private suffixForGeneratedI18nFile(): string {
+        switch (this.i18nFormat()) {
+            case 'xlf':
+                return 'xlf';
+            case 'xlf2':
+                return 'xlf2'; // TODO is this ok or should it be xlf too
+            case 'xmb':
+                return 'xtb';
+        }
     }
 
     /**
