@@ -1,3 +1,10 @@
+<a name="0.6.1"></a>
+# [0.6.1](https://github.com/martinroob/ngx-i18nsupport/compare/v0.6.0...v0.6.1) (2017-05-26)
+
+### Bug Fixes
+
+* **xliffmerge:** xlifffmerge emits wrong message 'WARNING: transferred 28 source references from master to "de" for format xtb' ([#28](https://github.com/martinroob/ngx-i18nsupport/issues/28)).
+
 <a name="0.6.0"></a>
 # [0.6.0](https://github.com/martinroob/ngx-i18nsupport/compare/v0.5.0...v0.6.0) (2017-05-25)
 
