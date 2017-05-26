@@ -207,6 +207,7 @@ describe('XliffMerge XLIFF 2.0 format tests', () => {
             expect(ws.writtenData()).not.toContain('ERROR');
             expect(ws.writtenData()).toContain('merged 1 trans-units from master to "en"');
             expect(ws.writtenData()).toContain('removed 2 unused trans-units in "en"');
+            expect(ws.writtenData()).toContain('WARNING: transferred 1 source references');
 
             // look, that the new file contains the old translation
             langFileEnglish = readXliff2(xliffMergeCmd.generatedI18nFile('en'));

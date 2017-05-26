@@ -231,6 +231,7 @@ describe('XliffMerge XLIFF 1.2 format tests', () => {
             let xliffMergeCmd = XliffMerge.createFromOptions(commandOut, {languages: ['de', 'en']}, profileContent);
             xliffMergeCmd.run();
             expect(ws.writtenData()).not.toContain('ERROR');
+            expect(ws.writtenData()).toContain('WARNING: transferred 2 source references');
 
             // check that there is a translated english version with missing sourcerefs
             let langFileEnglish: ITranslationMessagesFile = readXliff(xliffMergeCmd.generatedI18nFile('en'));

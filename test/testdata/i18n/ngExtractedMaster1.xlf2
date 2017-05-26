@@ -62,6 +62,7 @@
       <notes>
         <note category="description">ngx-translate</note>
         <note category="meaning">appTitle</note>
+        <note category="location">S:/experimente/sampleapp41/src/app/app.component.ts:10</note>
       </notes>
       <segment>
         <source>Sample App Title</source>

@@ -249,7 +249,7 @@ export class XliffMerge {
                 newCount++;
             } else {
                 // check for missing or changed source ref and add it if needed
-                if (!this.areSourceReferencesEqual(masterTransUnit.sourceReferences(), transUnit.sourceReferences())) {
+                if (transUnit.supportsSetSourceReferences() && !this.areSourceReferencesEqual(masterTransUnit.sourceReferences(), transUnit.sourceReferences())) {
                     transUnit.setSourceReferences(masterTransUnit.sourceReferences());
                     correctSourceRefCount++;
                 }
