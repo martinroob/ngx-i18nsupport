@@ -214,4 +214,4 @@ But if you are interesting, send me an email, so that we can discuss it.
 [npm-badge]: https://badge.fury.io/js/ngx-i18nsupport.svg
 [npm-badge-url]: https://badge.fury.io/js/ngx-i18nsupport
 [coverage-badge]: https://coveralls.io/repos/github/martinroob/ngx-i18nsupport/badge.svg
-[coverage-badge-url]: https://coveralls.io/github/martinroob/ngx-i18nsupport
+[coverage-badge-url]: https://coveralls.io/repos/github/martinroob/ngx-i18nsupport
