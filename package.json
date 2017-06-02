@@ -49,6 +49,6 @@
   "dependencies": {
     "chalk": "^1.1.3",
     "commander": "^2.9.0",
-    "ngx-i18nsupport-lib": "^1.3.0"
+    "ngx-i18nsupport-lib": "^1.3.1"
   }
 }

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file source-language="en" datatype="plaintext" original="ng2.template">
+    <body>
+      <trans-unit id="schrott" datatype="html">
+        <!-- closing a tag that is not open -->
+        <source><x id="CLOSE_BOLD_TEXT" ctype="x-b"/></source>
+        <target/>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
