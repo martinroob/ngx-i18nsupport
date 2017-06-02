@@ -1,3 +1,12 @@
+<a name="0.6.2"></a>
+# [0.6.2](https://github.com/martinroob/ngx-i18nsupport/compare/v0.6.1...v0.6.2) (2017-06-02)
+
+### Bug Fixes
+
+* **xliffmerge:** Improve error messages ([#31](https://github.com/martinroob/ngx-i18nsupport/issues/31)).
+
+* **xliffmerge:** problems with parsing messages that contain same tag multiple times ([lib #26](https://github.com/martinroob/ngx-i18nsupport-lib/issues/26)).
+
 <a name="0.6.1"></a>
 # [0.6.1](https://github.com/martinroob/ngx-i18nsupport/compare/v0.6.0...v0.6.1) (2017-05-26)
 
