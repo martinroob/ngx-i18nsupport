@@ -273,6 +273,29 @@ describe('XliffMerge XLIFF 1.2 format tests', () => {
             done();
         });
 
+        it('should report an error with filename when there is something wrong', (done) => {
+            FileUtil.copy(SRCDIR + 'schrott.xlf', MASTER);
+            let ws: WriterToString = new WriterToString();
+            let commandOut = new CommandOutput(ws);
+            // we activate ngxtranslate support, so that the wrong close tag in schrott produces an error
+            let profileContent: IConfigFile = {
+                xliffmergeOptions: {
+                    defaultLanguage: 'de',
+                    srcDir: WORKDIR,
+                    genDir: WORKDIR,
+                    i18nFile: MASTERFILE,
+                    supportNgxTranslate: true
+                }
+            };
+            let xliffMergeCmd = XliffMerge.createFromOptions(commandOut, {languages: ['de', 'en']}, profileContent);
+            try {
+                xliffMergeCmd.run();
+            } catch (e) {}
+            expect(ws.writtenData()).toContain('ERROR');
+            expect(ws.writtenData()).toContain('messages.de.xlf');
+            done();
+        });
+
     });
 
     describe('ngx-translate processing for format xlf', () => {

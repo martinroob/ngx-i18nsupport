@@ -5,7 +5,7 @@ import {XliffMergeError} from './xliff-merge-error';
 import {FileUtil} from '../common/file-util';
 import {VERSION} from './version';
 import WritableStream = NodeJS.WritableStream;
-import {isNullOrUndefined} from 'util';
+import {format, isNullOrUndefined} from 'util';
 import {ITranslationMessagesFile, ITransUnit, FORMAT_XMB, FORMAT_XTB} from 'ngx-i18nsupport-lib';
 import {ProgramOptions, IConfigFile} from './i-xliff-merge-options';
 import {NgxTranslateExtractor} from './ngx-translate-extractor';
@@ -71,6 +71,12 @@ export class XliffMerge {
     private parameters: XliffMergeParameters;
 
     /**
+     * during processing this will be set to the filename that is processed currently.
+     * Used in the error message, if there is an unexpected problem.
+     */
+    private currentFilename: string;
+
+    /**
      * The read master xlf file.
      */
     private master: ITranslationMessagesFile; // XliffFile or Xliff2File or XmbFile
@@ -103,7 +109,8 @@ export class XliffMerge {
                 return -1;
             } else {
                 // unhandled
-                this.commandOutput.error('oops ' + err);
+                let filenameString = (this.currentFilename) ? format('file "%s", ', this.currentFilename) : '';
+                this.commandOutput.error(filenameString + 'oops ' + err);
                 throw err;
             }
         }
@@ -162,6 +169,7 @@ export class XliffMerge {
     }
 
     private readMaster() {
+        this.currentFilename = this.parameters.i18nFile();
         this.master = TranslationMessagesFileReader.fromFile(this.parameters.i18nFormat(), this.parameters.i18nFile(), this.parameters.encoding());
         this.master.warnings().forEach((warning: string) =>{
             this.commandOutput.warn(warning);
@@ -179,11 +187,13 @@ export class XliffMerge {
             TranslationMessagesFileReader.save(this.master);
             this.commandOutput.warn('changed master source-language="%s" to "%s"', sourceLang, this.parameters.defaultLanguage());
         }
+        this.currentFilename = null;
     }
 
     private processLanguage(lang: string) {
         this.commandOutput.debug('processing language %s', lang);
         let languageXliffFile = this.parameters.generatedI18nFile(lang);
+        this.currentFilename = languageXliffFile;
         if (!FileUtil.exists(languageXliffFile)) {
             this.createUntranslatedXliff(lang, languageXliffFile);
         } else {
@@ -193,6 +203,7 @@ export class XliffMerge {
             let languageSpecificMessagesFile: ITranslationMessagesFile = TranslationMessagesFileReader.fromFile(XliffMerge.translationFormat(this.parameters.i18nFormat()), languageXliffFile, this.parameters.encoding(), this.master.filename());
             NgxTranslateExtractor.extract(languageSpecificMessagesFile, this.parameters.generatedNgxTranslateFile(lang));
         }
+        this.currentFilename = null;
     }
 
     /**
