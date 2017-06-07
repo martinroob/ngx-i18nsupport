@@ -95,7 +95,7 @@ Options:
     "supportNgxTranslate": true,
     "useSourceAsTarget": false,
     "verbose": false,
-    "quiet": false,
+    "quiet": false
   }
 }
 </pre>
