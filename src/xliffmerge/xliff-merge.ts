@@ -10,6 +10,11 @@ import {ITranslationMessagesFile, ITransUnit, FORMAT_XMB, FORMAT_XTB} from 'ngx-
 import {ProgramOptions, IConfigFile} from './i-xliff-merge-options';
 import {NgxTranslateExtractor} from './ngx-translate-extractor';
 import {TranslationMessagesFileReader} from './translation-messages-file-reader';
+import {INormalizedMessage, STATE_NEW} from 'ngx-i18nsupport-lib/dist';
+import {AutoTranslateResult} from '../autotranslate/auto-translate-result';
+import {AutoTranslateSummaryReport} from '../autotranslate/auto-translate-summary-report';
+import {AutoTranslateService} from '../autotranslate/auto-translate-service';
+import {Observable} from 'rxjs';
 
 /**
  * Created by martin on 17.02.2017.
@@ -81,6 +86,8 @@ export class XliffMerge {
      */
     private master: ITranslationMessagesFile; // XliffFile or Xliff2File or XmbFile
 
+    private autoTranslateService: AutoTranslateService;
+
     /**
      * For Tests, create instance with given profile
      * @param commandOutput
@@ -145,6 +152,9 @@ export class XliffMerge {
             }
         }
         this.readMaster();
+        if (this.parameters.autotranslate()) {
+            this.autoTranslateService = new AutoTranslateService(this.parameters.apikey());
+        }
         this.parameters.languages().forEach((lang: string) => {
             this.processLanguage(lang);
         });
@@ -219,6 +229,7 @@ export class XliffMerge {
         let isDefaultLang: boolean = (lang == this.parameters.defaultLanguage());
         let languageSpecificMessagesFile: ITranslationMessagesFile = this.master.createTranslationFileForLang(lang, languageXliffFilePath, isDefaultLang, this.parameters.useSourceAsTarget());
 
+        this.autoTranslate(this.master.sourceLanguage(), lang, languageSpecificMessagesFile);
         // write it to file
         TranslationMessagesFileReader.save(languageSpecificMessagesFile);
         this.commandOutput.info('created new file "%s" for target-language="%s"', languageXliffFilePath, lang);
@@ -295,6 +306,7 @@ export class XliffMerge {
         if (newCount == 0 && removeCount == 0) {
             this.commandOutput.info('file for "%s" was up to date', lang);
         } else {
+            this.autoTranslate(this.master.sourceLanguage(), lang, languageSpecificMessagesFile);
             // write it to file
             TranslationMessagesFileReader.save(languageSpecificMessagesFile);
             this.commandOutput.info('updated file "%s" for target-language="%s"', languageXliffFilePath, lang);
@@ -328,4 +340,92 @@ export class XliffMerge {
         });
         return match;
     }
+
+    /**
+     * Auto translate file via Google Translate.
+     * (if it is enabled for the traget language)
+     * Will translate all new units in file.
+     * Summary will be written to output.
+     * @param from
+     * @param to
+     * @param languageSpecificMessagesFile
+     */
+    private autoTranslate(from: string, to: string, languageSpecificMessagesFile: ITranslationMessagesFile) {
+        if (this.parameters.autotranslateLanguage(to)) {
+            let finished = false;
+            this.asyncAutoTranslate(from, to, languageSpecificMessagesFile).then((summary) => {
+                console.log('finished');
+                finished = true;
+            });
+            /*        while (!finished) {
+             console.log('.');
+             }*/
+        }
+    }
+
+    /**
+     * Auto translate file via Google Translate.
+     * Will translate all new units in file.
+     * @param from
+     * @param to
+     * @param languageSpecificMessagesFile
+     * @return a promise with the execution result as a summary report.
+     */
+    private async asyncAutoTranslate(from: string, to: string, languageSpecificMessagesFile: ITranslationMessagesFile): Promise<AutoTranslateSummaryReport> {
+        let autoTranslateMe = () => {
+            // collect all units, that should be auto translated
+            const allUntranslated: ITransUnit[] = [];
+            languageSpecificMessagesFile.forEachTransUnit((tu) => {
+                if (tu.targetState() === STATE_NEW) {
+                    allUntranslated.push(tu);
+                }
+            });
+            const allTranslatable = allUntranslated.filter((tu) => isNullOrUndefined(tu.sourceContentNormalized().getICUMessage()));
+            const allMessages: string[] = allTranslatable.map((tu) => {
+                return tu.sourceContentNormalized().asDisplayString();
+            });
+            return this.autoTranslateService.translateMultipleStrings(allMessages, from, to)
+                .map((translations: string[]) => {
+                    const summary = new AutoTranslateSummaryReport();
+                    summary.setIgnored(allUntranslated.length - allTranslatable.length);
+                    for (let i = 0; i < translations.length; i++) {
+                        const tu = allTranslatable[i];
+                        const translationText = translations[i];
+                        const result = this.autoTranslateUnit(tu, translationText);
+                        summary.addSingleResult(tu, result);
+                    }
+                    return summary;
+                }).catch((err) => {
+                    const failSummary = new AutoTranslateSummaryReport();
+                    console.log('error ', err.message);
+                    failSummary.setError(err.message, allMessages.length);
+                    return Observable.of(failSummary);
+                }).first().toPromise();
+        };
+        const summary = await autoTranslateMe();
+        console.log('summary', summary);
+        if (summary.error()) {
+            this.commandOutput.error(summary.content());
+        } else {
+            if (summary.total() > 0) {
+                this.commandOutput.warn(summary.content());
+            }
+        }
+        return summary;
+    }
+
+    private autoTranslateUnit(tu: ITransUnit, translatedMessage: string): AutoTranslateResult {
+        const translationMessage: INormalizedMessage = tu.sourceContentNormalized().translate(translatedMessage);
+        const errors = translationMessage.validate();
+        const warnings = translationMessage.validateWarnings();
+        if (!isNullOrUndefined(errors)) {
+            return new AutoTranslateResult(false, 'errors detected, not translated');
+        } else if (!isNullOrUndefined(warnings)) {
+            return new AutoTranslateResult(false, 'warnings detected, not translated');
+        } else {
+            tu.translate(translationMessage);
+            return new AutoTranslateResult(true, null); // success
+        }
+    }
+
 }

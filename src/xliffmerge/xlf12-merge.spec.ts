@@ -296,6 +296,57 @@ describe('XliffMerge XLIFF 1.2 format tests', () => {
             done();
         });
 
+        describe('autotranslate via google translate', () => {
+
+            it('should detect invalid key', (done) => {
+                FileUtil.copy(MASTER1SRC, MASTER);
+                let ws: WriterToString = new WriterToString();
+                let commandOut = new CommandOutput(ws);
+                let profileContent: IConfigFile = {
+                    xliffmergeOptions: {
+                        defaultLanguage: 'de',
+                        srcDir: WORKDIR,
+                        genDir: WORKDIR,
+                        i18nFile: MASTERFILE,
+                        autotranslate: true,
+                        apikey: 'lmaa'
+                    }
+                };
+                let xliffMergeCmd = XliffMerge.createFromOptions(commandOut, {languages: ['de', 'en']}, profileContent);
+                xliffMergeCmd.run();
+                expect(ws.writtenData()).toContain('API key not valid');
+                done();
+            });
+
+/*            it('should auto translate file', (done) => {
+                FileUtil.copy(MASTER1SRC, MASTER);
+                let ws: WriterToString = new WriterToString();
+                let commandOut = new CommandOutput(ws);
+                let profileContent: IConfigFile = {
+                    xliffmergeOptions: {
+                        defaultLanguage: 'de',
+                        srcDir: WORKDIR,
+                        genDir: WORKDIR,
+                        i18nFile: MASTERFILE,
+                        autotranslate: true,
+                        apikey: 'lmaa'
+                    }
+                };
+                let xliffMergeCmd = XliffMerge.createFromOptions(commandOut, {languages: ['de', 'en']}, profileContent);
+                xliffMergeCmd.run();
+                expect(ws.writtenData()).not.toContain('ERROR');
+                let langFileEnglish: ITranslationMessagesFile = readXliff(xliffMergeCmd.generatedI18nFile('en'));
+                expect(langFileEnglish.sourceLanguage()).toBe('de');
+                expect(langFileEnglish.targetLanguage()).toBe('en');
+                langFileEnglish.forEachTransUnit((tu: ITransUnit) => {
+                    expect(tu.targetContent()).toBe('XXX ' + tu.sourceContent());
+                    expect(tu.targetState()).toBe('translated');
+                });
+                done();
+            });*/
+
+        });
+
     });
 
     describe('ngx-translate processing for format xlf', () => {

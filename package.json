@@ -47,8 +47,9 @@
     "typescript": "^2.2.1"
   },
   "dependencies": {
+    "@akanass/rx-http-request": "^2.3.0",
     "chalk": "^1.1.3",
     "commander": "^2.9.0",
-    "ngx-i18nsupport-lib": "^1.3.1"
+    "ngx-i18nsupport-lib": "^1.4.6"
   }
 }
