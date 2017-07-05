@@ -1,6 +1,6 @@
-import {Observable} from 'rxjs';
-import {RxHR} from "@akanass/rx-http-request";
 import {format} from 'util';
+import {Observable} from '@akanass/rx-http-request/node_modules/rxjs';
+import {RxHR} from "@akanass/rx-http-request";
 /**
  * Created by roobm on 03.07.2017.
  */
@@ -74,7 +74,6 @@ export class AutoTranslateService {
 //            proxy: 'http://127.0.0.1:8888' To set a proxy use env var HTTPS_PROXY
         };
         return RxHR.post(realUrl, options).map((data) => {
-            console.log('Data ', data);
             const body: any = data.body;
             if (!body) {
                 throw new Error('no result received');

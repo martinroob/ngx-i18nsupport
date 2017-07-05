@@ -14,7 +14,7 @@ import {INormalizedMessage, STATE_NEW} from 'ngx-i18nsupport-lib/dist';
 import {AutoTranslateResult} from '../autotranslate/auto-translate-result';
 import {AutoTranslateSummaryReport} from '../autotranslate/auto-translate-summary-report';
 import {AutoTranslateService} from '../autotranslate/auto-translate-service';
-import {Observable} from 'rxjs';
+import {Observable} from '@akanass/rx-http-request/node_modules/rxjs';
 
 /**
  * Created by martin on 17.02.2017.
@@ -77,12 +77,6 @@ export class XliffMerge {
     private parameters: XliffMergeParameters;
 
     /**
-     * during processing this will be set to the filename that is processed currently.
-     * Used in the error message, if there is an unexpected problem.
-     */
-    private currentFilename: string;
-
-    /**
      * The read master xlf file.
      */
     private master: ITranslationMessagesFile; // XliffFile or Xliff2File or XmbFile
@@ -112,36 +106,20 @@ export class XliffMerge {
      * This runs async.
      * @param callbackFunction when command is executed, called with the return code (0 for ok), if given.
      */
-    public run(callbackFunction?: ((number) => any)) {
-        try {
-            this.doRun();
-            if (!isNullOrUndefined(callbackFunction)) {
-                callbackFunction(0);
-            }
-            return 0;
-        } catch (err) {
-            if (err instanceof XliffMergeError) {
-                this.commandOutput.error(err.message);
+    public run(callbackFunction?: ((retcode: number) => any)) {
+        this.doRun()
+            .subscribe((retcode: number) => {
                 if (!isNullOrUndefined(callbackFunction)) {
-                    callbackFunction(-1);
+                    callbackFunction(retcode);
                 }
-                return -1;
-            } else {
-                // unhandled
-                let filenameString = (this.currentFilename) ? format('file "%s", ', this.currentFilename) : '';
-                this.commandOutput.error(filenameString + 'oops ' + err);
-                if (!isNullOrUndefined(callbackFunction)) {
-                    callbackFunction(-1);
-                }
-                throw err;
-            }
-        }
+            });
     }
 
     /**
-     * Ausführen merge-Process.
+     * Execute merge-Process.
+     * @return Async operation, on completion returns retcode 0=ok, other = error.
      */
-    private doRun() {
+    private doRun(): Observable<number> {
         if (this.options && this.options.quiet) {
             this.commandOutput.setQuiet();
         }
@@ -159,7 +137,7 @@ export class XliffMerge {
             for (let err of this.parameters.errorsFound) {
                 this.commandOutput.error(err.message);
             }
-            return;
+            return Observable.of(-1);
         }
         if (this.parameters.warningsFound.length > 0) {
             for (let warn of this.parameters.warningsFound) {
@@ -170,9 +148,26 @@ export class XliffMerge {
         if (this.parameters.autotranslate()) {
             this.autoTranslateService = new AutoTranslateService(this.parameters.apikey());
         }
+        const executionForAllLanguages: Observable<number>[] = [];
         this.parameters.languages().forEach((lang: string) => {
-            this.processLanguage(lang);
+            executionForAllLanguages.push(this.processLanguage(lang));
         });
+        return Observable.forkJoin(executionForAllLanguages).map((retcodes: number[]) => {return this.totalRetcode(retcodes)});
+    }
+
+    /**
+     * Give an array of retcodes for the different languages, return the total retcode.
+     * If all are 0, it is 0, otherwise the first non zero.
+     * @param retcodes
+     * @return {number}
+     */
+    private totalRetcode(retcodes: number[]): number {
+        for (let i = 0; i < retcodes.length; i++) {
+            if (retcodes[i] !== 0) {
+                return retcodes[i];
+            }
+        }
+        return 0;
     }
 
     /**
@@ -194,41 +189,72 @@ export class XliffMerge {
     }
 
     private readMaster() {
-        this.currentFilename = this.parameters.i18nFile();
-        this.master = TranslationMessagesFileReader.fromFile(this.parameters.i18nFormat(), this.parameters.i18nFile(), this.parameters.encoding());
-        this.master.warnings().forEach((warning: string) =>{
-            this.commandOutput.warn(warning);
-        });
-        let count = this.master.numberOfTransUnits();
-        let missingIdCount = this.master.numberOfTransUnitsWithMissingId();
-        this.commandOutput.info('master contains %s trans-units', count);
-        if (missingIdCount > 0) {
-            this.commandOutput.warn('master contains %s trans-units, but there are %s without id', count, missingIdCount);
+        try {
+            this.master = TranslationMessagesFileReader.fromFile(this.parameters.i18nFormat(), this.parameters.i18nFile(), this.parameters.encoding());
+            this.master.warnings().forEach((warning: string) =>{
+                this.commandOutput.warn(warning);
+            });
+            let count = this.master.numberOfTransUnits();
+            let missingIdCount = this.master.numberOfTransUnitsWithMissingId();
+            this.commandOutput.info('master contains %s trans-units', count);
+            if (missingIdCount > 0) {
+                this.commandOutput.warn('master contains %s trans-units, but there are %s without id', count, missingIdCount);
+            }
+            let sourceLang: string = this.master.sourceLanguage();
+            if (sourceLang && sourceLang !== this.parameters.defaultLanguage()) {
+                this.commandOutput.warn('master says to have source-language="%s", should be "%s" (your defaultLanguage)', sourceLang, this.parameters.defaultLanguage());
+                this.master.setSourceLanguage(this.parameters.defaultLanguage());
+                TranslationMessagesFileReader.save(this.master);
+                this.commandOutput.warn('changed master source-language="%s" to "%s"', sourceLang, this.parameters.defaultLanguage());
+            }
+        } catch (err) {
+            if (err instanceof XliffMergeError) {
+                this.commandOutput.error(err.message);
+                return Observable.of(-1);
+            } else {
+                // unhandled
+                const currentFilename = this.parameters.i18nFile();
+                let filenameString = (currentFilename) ? format('file "%s", ', currentFilename) : '';
+                this.commandOutput.error(filenameString + 'oops ' + err);
+                throw err;
+            }
         }
-        let sourceLang: string = this.master.sourceLanguage();
-        if (sourceLang && sourceLang !== this.parameters.defaultLanguage()) {
-            this.commandOutput.warn('master says to have source-language="%s", should be "%s" (your defaultLanguage)', sourceLang, this.parameters.defaultLanguage());
-            this.master.setSourceLanguage(this.parameters.defaultLanguage());
-            TranslationMessagesFileReader.save(this.master);
-            this.commandOutput.warn('changed master source-language="%s" to "%s"', sourceLang, this.parameters.defaultLanguage());
-        }
-        this.currentFilename = null;
     }
 
-    private processLanguage(lang: string) {
+    /**
+     * Process the given language.
+     * Async operation.
+     * @param lang
+     * @return {Observable<R|T>|Promise<TResult|T>} on completion 0 for ok, other for error
+     */
+    private processLanguage(lang: string): Observable<number> {
         this.commandOutput.debug('processing language %s', lang);
         let languageXliffFile = this.parameters.generatedI18nFile(lang);
-        this.currentFilename = languageXliffFile;
+        let currentFilename = languageXliffFile;
+        let result: Observable<void>;
         if (!FileUtil.exists(languageXliffFile)) {
-            this.createUntranslatedXliff(lang, languageXliffFile);
+            result = this.createUntranslatedXliff(lang, languageXliffFile);
         } else {
-            this.mergeMasterTo(lang, languageXliffFile);
+            result = this.mergeMasterTo(lang, languageXliffFile);
         }
-        if (this.parameters.supportNgxTranslate()) {
-            let languageSpecificMessagesFile: ITranslationMessagesFile = TranslationMessagesFileReader.fromFile(XliffMerge.translationFormat(this.parameters.i18nFormat()), languageXliffFile, this.parameters.encoding(), this.master.filename());
-            NgxTranslateExtractor.extract(languageSpecificMessagesFile, this.parameters.generatedNgxTranslateFile(lang));
-        }
-        this.currentFilename = null;
+        return result
+            .map(() => {
+                if (this.parameters.supportNgxTranslate()) {
+                    let languageSpecificMessagesFile: ITranslationMessagesFile = TranslationMessagesFileReader.fromFile(XliffMerge.translationFormat(this.parameters.i18nFormat()), languageXliffFile, this.parameters.encoding(), this.master.filename());
+                    NgxTranslateExtractor.extract(languageSpecificMessagesFile, this.parameters.generatedNgxTranslateFile(lang));
+                }
+            })
+            .catch((err) => {
+                if (err instanceof XliffMergeError) {
+                    this.commandOutput.error(err.message);
+                    return Observable.of(-1);
+                } else {
+                    // unhandled
+                    let filenameString = (currentFilename) ? format('file "%s", ', currentFilename) : '';
+                    this.commandOutput.error(filenameString + 'oops ' + err);
+                    throw err;
+                }
+            })
     }
 
     /**
@@ -237,20 +263,22 @@ export class XliffMerge {
      * @param lang
      * @param languageXliffFilePath
      */
-    private createUntranslatedXliff(lang: string, languageXliffFilePath: string) {
+    private createUntranslatedXliff(lang: string, languageXliffFilePath: string): Observable<void> {
         // copy master ...
         // and set target-language
         // and copy source to target if necessary
         let isDefaultLang: boolean = (lang == this.parameters.defaultLanguage());
         let languageSpecificMessagesFile: ITranslationMessagesFile = this.master.createTranslationFileForLang(lang, languageXliffFilePath, isDefaultLang, this.parameters.useSourceAsTarget());
 
-        this.autoTranslate(this.master.sourceLanguage(), lang, languageSpecificMessagesFile);
-        // write it to file
-        TranslationMessagesFileReader.save(languageSpecificMessagesFile);
-        this.commandOutput.info('created new file "%s" for target-language="%s"', languageXliffFilePath, lang);
-        if (!isDefaultLang) {
-            this.commandOutput.warn('please translate file "%s" to target-language="%s"', languageXliffFilePath, lang);
-        }
+        return this.autoTranslate(this.master.sourceLanguage(), lang, languageSpecificMessagesFile).map((summary) => {
+            // write it to file
+            TranslationMessagesFileReader.save(languageSpecificMessagesFile);
+            this.commandOutput.info('created new file "%s" for target-language="%s"', languageXliffFilePath, lang);
+            if (!isDefaultLang) {
+                this.commandOutput.warn('please translate file "%s" to target-language="%s"', languageXliffFilePath, lang);
+            }
+            return null;
+        });
     }
 
     /**
@@ -271,7 +299,7 @@ export class XliffMerge {
      * @param lang
      * @param languageXliffFilePath
      */
-    private mergeMasterTo(lang: string, languageXliffFilePath: string) {
+    private mergeMasterTo(lang: string, languageXliffFilePath: string): Observable<void> {
         // read lang specific file
         let languageSpecificMessagesFile: ITranslationMessagesFile = TranslationMessagesFileReader.fromFile(XliffMerge.translationFormat(this.parameters.i18nFormat()), languageXliffFilePath, this.parameters.encoding());
 
@@ -321,14 +349,16 @@ export class XliffMerge {
         if (newCount == 0 && removeCount == 0) {
             this.commandOutput.info('file for "%s" was up to date', lang);
         } else {
-            this.autoTranslate(this.master.sourceLanguage(), lang, languageSpecificMessagesFile);
-            // write it to file
-            TranslationMessagesFileReader.save(languageSpecificMessagesFile);
-            this.commandOutput.info('updated file "%s" for target-language="%s"', languageXliffFilePath, lang);
-            if (newCount > 0 && !isDefaultLang) {
-                this.commandOutput.warn('please translate file "%s" to target-language="%s"', languageXliffFilePath, lang);
-            }
-
+            return this.autoTranslate(this.master.sourceLanguage(), lang, languageSpecificMessagesFile)
+                .map(() => {
+                    // write it to file
+                    TranslationMessagesFileReader.save(languageSpecificMessagesFile);
+                    this.commandOutput.info('updated file "%s" for target-language="%s"', languageXliffFilePath, lang);
+                    if (newCount > 0 && !isDefaultLang) {
+                        this.commandOutput.warn('please translate file "%s" to target-language="%s"', languageXliffFilePath, lang);
+                    }
+                    return null;
+                });
         }
     }
 
@@ -358,24 +388,23 @@ export class XliffMerge {
 
     /**
      * Auto translate file via Google Translate.
-     * (if it is enabled for the traget language)
      * Will translate all new units in file.
-     * Summary will be written to output.
      * @param from
      * @param to
      * @param languageSpecificMessagesFile
+     * @return a promise with the execution result as a summary report.
      */
-    private autoTranslate(from: string, to: string, languageSpecificMessagesFile: ITranslationMessagesFile) {
-        if (this.parameters.autotranslateLanguage(to)) {
-            let finished = false;
-            this.asyncAutoTranslate(from, to, languageSpecificMessagesFile).then((summary) => {
-                console.log('finished');
-                finished = true;
-            });
-            /*        while (!finished) {
-             console.log('.');
-             }*/
-        }
+    private autoTranslate(from: string, to: string, languageSpecificMessagesFile: ITranslationMessagesFile): Observable<AutoTranslateSummaryReport> {
+        return this.doAutoTranslate(from, to, languageSpecificMessagesFile).map((summary) => {
+            if (summary.error()) {
+                this.commandOutput.error(summary.content());
+            } else {
+                if (summary.total() > 0) {
+                    this.commandOutput.warn(summary.content());
+                }
+            }
+            return summary;
+        });
     }
 
     /**
@@ -386,8 +415,8 @@ export class XliffMerge {
      * @param languageSpecificMessagesFile
      * @return a promise with the execution result as a summary report.
      */
-    private async asyncAutoTranslate(from: string, to: string, languageSpecificMessagesFile: ITranslationMessagesFile): Promise<AutoTranslateSummaryReport> {
-        let autoTranslateMe = () => {
+    private doAutoTranslate(from: string, to: string, languageSpecificMessagesFile: ITranslationMessagesFile): Observable<AutoTranslateSummaryReport> {
+        if (this.parameters.autotranslateLanguage(to)) {
             // collect all units, that should be auto translated
             const allUntranslated: ITransUnit[] = [];
             languageSpecificMessagesFile.forEachTransUnit((tu) => {
@@ -412,21 +441,12 @@ export class XliffMerge {
                     return summary;
                 }).catch((err) => {
                     const failSummary = new AutoTranslateSummaryReport();
-                    console.log('error ', err.message);
                     failSummary.setError(err.message, allMessages.length);
                     return Observable.of(failSummary);
-                }).first().toPromise();
-        };
-        const summary = await autoTranslateMe();
-        console.log('summary', summary);
-        if (summary.error()) {
-            this.commandOutput.error(summary.content());
+                });
         } else {
-            if (summary.total() > 0) {
-                this.commandOutput.warn(summary.content());
-            }
+            return Observable.of(new AutoTranslateSummaryReport());
         }
-        return summary;
     }
 
     private autoTranslateUnit(tu: ITransUnit, translatedMessage: string): AutoTranslateResult {

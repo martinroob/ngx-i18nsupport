@@ -313,9 +313,10 @@ describe('XliffMerge XLIFF 1.2 format tests', () => {
                     }
                 };
                 let xliffMergeCmd = XliffMerge.createFromOptions(commandOut, {languages: ['de', 'en']}, profileContent);
-                xliffMergeCmd.run();
-                expect(ws.writtenData()).toContain('API key not valid');
-                done();
+                xliffMergeCmd.run((retcode) => {
+                    expect(ws.writtenData()).toContain('API key not valid');
+                    done();
+                });
             });
 
 /*            it('should auto translate file', (done) => {
