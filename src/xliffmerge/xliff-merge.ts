@@ -26,8 +26,9 @@ export class XliffMerge {
 
     static main(argv: string[]) {
         let options = XliffMerge.parseArgs(argv);
-        let result = new XliffMerge(new CommandOutput(process.stdout), options).run();
-        process.exit(result);
+        new XliffMerge(new CommandOutput(process.stdout), options).run((result) => {
+            process.exit(result);
+        });
     }
 
     static parseArgs(argv: string[]): ProgramOptions {
@@ -106,18 +107,32 @@ export class XliffMerge {
         this.parameters = null;
     }
 
-    public run(): number {
+    /**
+     * Run the command.
+     * This runs async.
+     * @param callbackFunction when command is executed, called with the return code (0 for ok), if given.
+     */
+    public run(callbackFunction?: ((number) => any)) {
         try {
             this.doRun();
+            if (!isNullOrUndefined(callbackFunction)) {
+                callbackFunction(0);
+            }
             return 0;
         } catch (err) {
             if (err instanceof XliffMergeError) {
                 this.commandOutput.error(err.message);
+                if (!isNullOrUndefined(callbackFunction)) {
+                    callbackFunction(-1);
+                }
                 return -1;
             } else {
                 // unhandled
                 let filenameString = (this.currentFilename) ? format('file "%s", ', this.currentFilename) : '';
                 this.commandOutput.error(filenameString + 'oops ' + err);
+                if (!isNullOrUndefined(callbackFunction)) {
+                    callbackFunction(-1);
+                }
                 throw err;
             }
         }
