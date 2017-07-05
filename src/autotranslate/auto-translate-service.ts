@@ -85,7 +85,7 @@ export class AutoTranslateService {
                     throw new Error(format('Error %s: %s', body.error.code, body.error.message));
                 }
             }
-            const result = body.response;
+            const result = body.data;
             return result.translations.map((translation: TranslationsResource) => {
                 return translation.translatedText;
             });

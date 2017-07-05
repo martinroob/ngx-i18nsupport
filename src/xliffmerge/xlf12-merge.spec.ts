@@ -7,6 +7,7 @@ import {WriterToString} from '../common/writer-to-string';
 import {FileUtil} from '../common/file-util';
 import {ITranslationMessagesFile, ITransUnit} from 'ngx-i18nsupport-lib';
 import {TranslationMessagesFileReader} from './translation-messages-file-reader';
+import {format} from 'util';
 
 /**
  * Created by martin on 18.02.2017.
@@ -298,6 +299,24 @@ describe('XliffMerge XLIFF 1.2 format tests', () => {
 
         describe('autotranslate via google translate', () => {
 
+            let apikey: string;
+
+            const ID_NACHRICHTEN = '57e605bfa130afb4de4ee40e496e854a9e8a28a7';
+
+            beforeEach(() => {
+                const apikeyPath = process.env.API_KEY_FILE;
+                if (apikeyPath){
+                    if (fs.existsSync(apikeyPath)) {
+                        apikey = FileUtil.read(apikeyPath, 'utf-8');
+                    } else {
+                        throw new Error(format('api key file not found: API_KEY_FILE=%s', apikeyPath));
+                    }
+                } else {
+                    apikey = null;
+                }
+
+            });
+
             it('should detect invalid key', (done) => {
                 FileUtil.copy(MASTER1SRC, MASTER);
                 let ws: WriterToString = new WriterToString();
@@ -319,7 +338,12 @@ describe('XliffMerge XLIFF 1.2 format tests', () => {
                 });
             });
 
-/*            it('should auto translate file', (done) => {
+            it('should auto translate file', (done) => {
+                if (!apikey) {
+                    // skip test
+                    done();
+                    return;
+                }
                 FileUtil.copy(MASTER1SRC, MASTER);
                 let ws: WriterToString = new WriterToString();
                 let commandOut = new CommandOutput(ws);
@@ -330,21 +354,21 @@ describe('XliffMerge XLIFF 1.2 format tests', () => {
                         genDir: WORKDIR,
                         i18nFile: MASTERFILE,
                         autotranslate: true,
-                        apikey: 'lmaa'
+                        apikey: apikey
                     }
                 };
                 let xliffMergeCmd = XliffMerge.createFromOptions(commandOut, {languages: ['de', 'en']}, profileContent);
-                xliffMergeCmd.run();
-                expect(ws.writtenData()).not.toContain('ERROR');
-                let langFileEnglish: ITranslationMessagesFile = readXliff(xliffMergeCmd.generatedI18nFile('en'));
-                expect(langFileEnglish.sourceLanguage()).toBe('de');
-                expect(langFileEnglish.targetLanguage()).toBe('en');
-                langFileEnglish.forEachTransUnit((tu: ITransUnit) => {
-                    expect(tu.targetContent()).toBe('XXX ' + tu.sourceContent());
+                xliffMergeCmd.run(() => {
+                    expect(ws.writtenData()).not.toContain('ERROR');
+                    let langFileEnglish: ITranslationMessagesFile = readXliff(xliffMergeCmd.generatedI18nFile('en'));
+                    expect(langFileEnglish.targetLanguage()).toBe('en');
+                    let tu = langFileEnglish.transUnitWithId(ID_NACHRICHTEN);
+                    expect(tu.sourceContent()).toBe('Nachrichten');
+                    expect(tu.targetContent()).toBe('news');
                     expect(tu.targetState()).toBe('translated');
+                    done();
                 });
-                done();
-            });*/
+            });
 
         });
 
