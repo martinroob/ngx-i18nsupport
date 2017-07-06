@@ -1,5 +1,5 @@
 import {format} from 'util';
-import {Observable} from '@akanass/rx-http-request/node_modules/rxjs';
+import {Observable} from 'rxjs';
 import {RxHR} from "@akanass/rx-http-request";
 /**
  * Created by roobm on 03.07.2017.
@@ -40,6 +40,8 @@ interface TranslationsListResponse {
     translations: TranslationsResource[];
 }
 
+const MAX_SEGMENTS = 128;
+
 export class AutoTranslateService {
 
     _rootUrl: string;
@@ -51,6 +53,14 @@ export class AutoTranslateService {
     }
 
     /**
+     * Change API key (just for tests).
+     * @param apikey
+     */
+    public setApiKey(apikey: string) {
+        this._apiKey = apikey;
+    }
+
+    /**
      * Translate an array of messages at once.
      * @param messages the messages to be translated
      * @param from source language code
@@ -59,16 +69,63 @@ export class AutoTranslateService {
      */
     public translateMultipleStrings(messages: string[], from: string, to: string): Observable<string[]> {
         if (!this._apiKey) {
-            return Observable.throw('error, no api key');
+            return Observable.throw('cannot autotranslate: no api key');
+        }
+        if (!from || !to) {
+            return Observable.throw('cannot autotranslate: source and target language must be set');
         }
         from = this.stripRegioncode(from);
         to = this.stripRegioncode(to);
+        const allRequests: Observable<string[]>[] = this.splitMessagesToGoogleLimit(messages).map((partialMessages: string[]) => {
+            return this.limitedTranslateMultipleStrings(partialMessages, from, to);
+        })
+        return Observable.forkJoin(allRequests).map((allTranslations: string[][]) => {
+            let all = [];
+            for (let i = 0; i < allTranslations.length; i++) {
+                all = all.concat(allTranslations[i]);
+            }
+            return all;
+        })
+    }
+
+    private splitMessagesToGoogleLimit(messages: string[]): string[][] {
+        if (messages.length <= MAX_SEGMENTS) {
+            return [messages];
+        }
+        const result = [];
+        let currentPackage = [];
+        let packageSize = 0;
+        for (let i = 0; i < messages.length; i++) {
+            currentPackage.push(messages[i]);
+            packageSize++;
+            if (packageSize >= MAX_SEGMENTS) {
+                result.push(currentPackage);
+                currentPackage = [];
+                packageSize = 0;
+            }
+        }
+        if (currentPackage.length > 0) {
+            result.push(currentPackage);
+        }
+        return result;
+    }
+
+    /**
+     * Return translation request, but messages must be limited to google limits.
+     * Not more that 128 single messages.
+     * Size < TODO
+     * @param messages
+     * @param from
+     * @param to
+     * @return {Observable<R>}
+     */
+    private limitedTranslateMultipleStrings(messages: string[], from: string, to: string): Observable<string[]> {
+        const realUrl = this._rootUrl + 'language/translate/v2' + '?key=' + this._apiKey;
         const translateRequest: TranslateTextRequest = {
             q: messages,
             target: to,
             source: from,
         };
-        const realUrl = this._rootUrl + 'language/translate/v2' + '?key=' + this._apiKey;
         const options = {
             url: realUrl,
             body: translateRequest,
@@ -82,6 +139,9 @@ export class AutoTranslateService {
             }
             if (body.error) {
                 if (body.error.code === 400) {
+                    if (body.error.message === 'Invalid Value') {
+                        throw new Error(format('Translation from "%s" to "%s" not supported', from, to));
+                    }
                     throw new Error(format('Invalid request: %s', body.error.message));
                 } else {
                     throw new Error(format('Error %s: %s', body.error.code, body.error.message));

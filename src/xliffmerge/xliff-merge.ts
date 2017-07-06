@@ -14,7 +14,7 @@ import {INormalizedMessage, STATE_NEW} from 'ngx-i18nsupport-lib/dist';
 import {AutoTranslateResult} from '../autotranslate/auto-translate-result';
 import {AutoTranslateSummaryReport} from '../autotranslate/auto-translate-summary-report';
 import {AutoTranslateService} from '../autotranslate/auto-translate-service';
-import {Observable} from '@akanass/rx-http-request/node_modules/rxjs';
+import {Observable} from 'rxjs';
 
 /**
  * Created by martin on 17.02.2017.
@@ -397,12 +397,10 @@ export class XliffMerge {
      */
     private autoTranslate(from: string, to: string, languageSpecificMessagesFile: ITranslationMessagesFile): Observable<AutoTranslateSummaryReport> {
         return this.doAutoTranslate(from, to, languageSpecificMessagesFile).map((summary) => {
-            if (summary.error()) {
+            if (summary.error() || summary.failed() > 0) {
                 this.commandOutput.error(summary.content());
             } else {
-                if (summary.total() > 0) {
-                    this.commandOutput.warn(summary.content());
-                }
+                this.commandOutput.warn(summary.content());
             }
             return summary;
         });
@@ -431,7 +429,7 @@ export class XliffMerge {
             });
             return this.autoTranslateService.translateMultipleStrings(allMessages, from, to)
                 .map((translations: string[]) => {
-                    const summary = new AutoTranslateSummaryReport();
+                    const summary = new AutoTranslateSummaryReport(from, to);
                     summary.setIgnored(allUntranslated.length - allTranslatable.length);
                     for (let i = 0; i < translations.length; i++) {
                         const tu = allTranslatable[i];
@@ -441,12 +439,12 @@ export class XliffMerge {
                     }
                     return summary;
                 }).catch((err) => {
-                    const failSummary = new AutoTranslateSummaryReport();
+                    const failSummary = new AutoTranslateSummaryReport(from, to);
                     failSummary.setError(err.message, allMessages.length);
                     return Observable.of(failSummary);
                 });
         } else {
-            return Observable.of(new AutoTranslateSummaryReport());
+            return Observable.of(new AutoTranslateSummaryReport(from, to));
         }
     }
 

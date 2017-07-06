@@ -9,12 +9,16 @@ import {ITransUnit} from 'ngx-i18nsupport-lib/dist';
 export class AutoTranslateSummaryReport {
 
   private _error: string;
+  private _from: string;
+  private _to: string;
   private _total: number;
   private _ignored: number;
   private _success: number;
   private _failed: number;
 
-  constructor() {
+  constructor(from: string, to: string) {
+    this._from = from;
+    this._to = to;
     this._total = 0;
     this._ignored = 0;
     this._success = 0;
@@ -60,15 +64,20 @@ export class AutoTranslateSummaryReport {
     return this._total;
   }
 
+  public failed(): number {
+    return this._failed;
+  }
+
   /**
    * Human readable version of report
    */
   public content(): string {
     let result;
     if (this._error) {
-      result = format('Auto translate failed: "%s", failed units: %s', this._error, this._failed);
+      result = format('Auto translation from "%s" to "%s" failed: "%s", failed units: %s', this._from, this._to, this._error, this._failed);
     } else {
-      result = format('Total auto translated units: %s, ignored: %s, succesful: %s, failed: %s', this._total, this._ignored, this._success, this._failed);
+      result = format('Auto translation from "%s" to "%s", total auto translated units: %s, ignored: %s, succesful: %s, failed: %s',
+          this._from, this._to, this._total, this._ignored, this._success, this._failed);
     }
     return result;
   }
