@@ -32,7 +32,15 @@ describe('XliffMerge XLIFF 1.2 format tests', () => {
      * @type {string}
      */
     function readXliff(path: string): ITranslationMessagesFile {
-        return TranslationMessagesFileReader.fromFile('xlf', path, ENCODING);
+        if (!path) {
+            throw new Error('oops, no file');
+        }
+        try {
+            return TranslationMessagesFileReader.fromFile('xlf', path, ENCODING);
+        } catch (err) {
+            console.log(format('error reading %s: "%s"', path, err.message));
+            return null;
+        }
     }
 
     describe('Merge process checks for format xlf', () => {
@@ -302,6 +310,7 @@ describe('XliffMerge XLIFF 1.2 format tests', () => {
             let apikey: string;
 
             const ID_NACHRICHTEN = '57e605bfa130afb4de4ee40e496e854a9e8a28a7';
+            const ID_BESCHREIBUNG_WITH_PLACEHOLDER = 'a52ba049c16778bdb2e5a19a41acaadf87b104dc';
 
             beforeEach(() => {
                 const apikeyPath = process.env.API_KEY_FILE;
@@ -318,6 +327,11 @@ describe('XliffMerge XLIFF 1.2 format tests', () => {
             });
 
             it('should detect invalid key', (done) => {
+                if (!apikey) {
+                    // skip test
+                    done();
+                    return;
+                }
                 FileUtil.copy(MASTER1SRC, MASTER);
                 let ws: WriterToString = new WriterToString();
                 let commandOut = new CommandOutput(ws);
@@ -370,8 +384,42 @@ describe('XliffMerge XLIFF 1.2 format tests', () => {
                 });
             });
 
-        });
+            it('should auto translate file with region code (which will be ignored)', (done) => {
+                if (!apikey) {
+                    // skip test
+                    done();
+                    return;
+                }
+                FileUtil.copy(MASTER1SRC, MASTER);
+                let ws: WriterToString = new WriterToString();
+                let commandOut = new CommandOutput(ws);
+                let profileContent: IConfigFile = {
+                    xliffmergeOptions: {
+                        defaultLanguage: 'de-de',
+                        srcDir: WORKDIR,
+                        genDir: WORKDIR,
+                        i18nFile: MASTERFILE,
+                        autotranslate: true,
+                        apikey: apikey
+                    }
+                };
+                let xliffMergeCmd = XliffMerge.createFromOptions(commandOut, {languages: ['de-de', 'en-us']}, profileContent);
+                xliffMergeCmd.run((retcode) => {
+                    expect(ws.writtenData()).not.toContain('ERROR');
+                    let langFileEnglish: ITranslationMessagesFile = readXliff(xliffMergeCmd.generatedI18nFile('en-us'));
+                    expect(langFileEnglish).toBeTruthy();
+                    if (langFileEnglish) {
+                        expect(langFileEnglish.targetLanguage()).toBe('en-us');
+                        let tu = langFileEnglish.transUnitWithId(ID_BESCHREIBUNG_WITH_PLACEHOLDER);
+                        expect(tu.sourceContentNormalized().asDisplayString()).toBe('Beschreibung zu {{0}} ({{1}})');
+                        expect(tu.targetContentNormalized().asDisplayString()).toBe('Description of {{0}} ({{1}})');
+                        expect(tu.targetState()).toBe('translated');
+                    }
+                    done();
+                });
+            });
 
+        });
     });
 
     describe('ngx-translate processing for format xlf', () => {

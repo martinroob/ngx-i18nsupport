@@ -243,6 +243,7 @@ export class XliffMerge {
                     let languageSpecificMessagesFile: ITranslationMessagesFile = TranslationMessagesFileReader.fromFile(XliffMerge.translationFormat(this.parameters.i18nFormat()), languageXliffFile, this.parameters.encoding(), this.master.filename());
                     NgxTranslateExtractor.extract(languageSpecificMessagesFile, this.parameters.generatedNgxTranslateFile(lang));
                 }
+                return 0;
             })
             .catch((err) => {
                 if (err instanceof XliffMergeError) {

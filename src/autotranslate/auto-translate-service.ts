@@ -61,6 +61,8 @@ export class AutoTranslateService {
         if (!this._apiKey) {
             return Observable.throw('error, no api key');
         }
+        from = this.stripRegioncode(from);
+        to = this.stripRegioncode(to);
         const translateRequest: TranslateTextRequest = {
             q: messages,
             target: to,
@@ -92,4 +94,19 @@ export class AutoTranslateService {
         });
     }
 
+    /**
+     * Strip region code and convert to lower
+     * @param lang
+     * @return {string} lang without region code and in lower case.
+     */
+    public stripRegioncode(lang: string): string {
+        const langLower = lang.toLowerCase();
+        for(let i = 0; i < langLower.length; i++) {
+            const c = langLower.charAt(i);
+            if (c < 'a' || c > 'z') {
+                return langLower.substring(0, i);
+            }
+        }
+        return langLower;
+    }
 }
