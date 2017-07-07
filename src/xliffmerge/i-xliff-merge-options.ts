@@ -41,6 +41,7 @@ export interface IXliffMergeOptions {
         // if it is an array, list of languages to autotranslate
         // if it is true, autotranslate all languages (except source language of course)
         // if it is false (default) no autotranslate
-    apikey?: string;    // API Key for Google Translate, required if autotranlate is enabled
+    apikey?: string;    // API Key for Google Translate, required if autotranslate is enabled
+    apikeyfile?: string;    // file name where API Key for Google Translate can be read from
 }
 
