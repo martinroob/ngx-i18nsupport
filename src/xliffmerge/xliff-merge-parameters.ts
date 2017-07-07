@@ -8,7 +8,7 @@ import * as fs from "fs";
 import {XliffMergeError} from './xliff-merge-error';
 import {Stats} from 'fs';
 import {CommandOutput} from '../common/command-output';
-import {isNullOrUndefined} from 'util';
+import {isArray, isNullOrUndefined} from 'util';
 import {ProgramOptions, IConfigFile} from './i-xliff-merge-options';
 
 export class XliffMergeParameters {
@@ -25,6 +25,8 @@ export class XliffMergeParameters {
     private _removeUnusedIds: boolean;
     private _supportNgxTranslate: boolean;
     private _useSourceAsTarget: boolean;
+    private _autotranslate: boolean|string[];
+    private _apikey: string;
 
     public errorsFound: XliffMergeError[];
     public warningsFound: string[];
@@ -145,6 +147,12 @@ export class XliffMergeParameters {
             if (!isNullOrUndefined(profile.useSourceAsTarget)) {
                 this._useSourceAsTarget = profile.useSourceAsTarget;
             }
+            if (!isNullOrUndefined(profile.autotranslate)) {
+                this._autotranslate = profile.autotranslate;
+            }
+            if (profile.apikey) {
+                this._apikey = profile.apikey;
+            }
         } else {
             this.warningsFound.push('did not find "xliffmergeOptions" in profile, using defaults');
         }
@@ -192,6 +200,19 @@ export class XliffMergeParameters {
         if (!(this.i18nFormat() === 'xlf' || this.i18nFormat() === 'xlf2' || this.i18nFormat() === 'xmb')) {
             this.errorsFound.push(new XliffMergeError('i18nFormat "' + this.i18nFormat() + '" invalid, must be "xlf" or "xlf2" or "xmb"'));
         }
+        // autotranslate requires api key
+        if (this.autotranslate() && !this.apikey()) {
+            this.errorsFound.push(new XliffMergeError('autotranslate requires an API key, please set one'));
+        }
+        // autotranslated languages must be in list of all languages
+        this.autotranslatedLanguages().forEach((lang) => {
+            if (this.languages().indexOf(lang) < 0) {
+                this.errorsFound.push(new XliffMergeError('autotranslate language "' + lang + '" is not in list of languages'));
+            }
+            if (this.languages().length > 0 && lang === this.languages()[0]) {
+                this.errorsFound.push(new XliffMergeError('autotranslate language "' + lang + '" cannot be translated, because it is the source language'));
+            }
+        });
      }
 
     /**
@@ -229,6 +250,11 @@ export class XliffMergeParameters {
         commandOutput.debug('removeUnusedIds:\t%s', this.removeUnusedIds());
         commandOutput.debug('supportNgxTranslate:\t%s', this.supportNgxTranslate());
         commandOutput.debug('useSourceAsTarget:\t%s', this.useSourceAsTarget());
+        commandOutput.debug('autotranslate:\t%s', this.autotranslate());
+        if (this.autotranslate()) {
+            commandOutput.debug('autotranslated languages:\t%s', this.autotranslatedLanguages());
+        }
+        commandOutput.debug('apikey:\t%s', this.apikey());
     }
 
     /**
@@ -332,5 +358,48 @@ export class XliffMergeParameters {
      */
     public useSourceAsTarget(): boolean {
         return (isNullOrUndefined(this._useSourceAsTarget)) ? true : this._useSourceAsTarget;
+    }
+
+    /**
+     * Whether to use autotranslate for new trans-units
+     * Default is false
+     */
+    public autotranslate(): boolean {
+        if (isNullOrUndefined(this._autotranslate)) {
+            return false;
+        }
+        if (isArray(this._autotranslate)) {
+            return (<string[]>this._autotranslate).length > 0;
+        }
+        return <boolean> this._autotranslate;
+    }
+
+    /**
+     * Whether to use autotranslate for a given language.
+     * @param lang language code.
+     */
+    public autotranslateLanguage(lang: string): boolean {
+        return this.autotranslatedLanguages().indexOf(lang) >= 0;
+    }
+
+    /**
+     * Return a list of languages to be autotranslated.
+     */
+    public autotranslatedLanguages(): string[] {
+        if (isNullOrUndefined(this._autotranslate) || this._autotranslate === false) {
+            return [];
+        }
+        if (isArray(this._autotranslate)) {
+            return (<string[]>this._autotranslate);
+        }
+        return this.languages().slice(1); // first is source language
+    }
+
+    /**
+     * API key to be used for Google Translate
+     * @return {string}
+     */
+    public apikey(): string {
+        return this._apikey;
     }
 }

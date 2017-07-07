@@ -168,6 +168,68 @@ describe('XliffMerge test spec', () => {
             done();
         });
 
+        it('should output an error when autotranslate is set to true and there is no api key set', (done) => {
+            let ws: WriterToString = new WriterToString();
+            let commandOut = new CommandOutput(ws);
+            let profileContent: IConfigFile = {
+                xliffmergeOptions: {
+                    autotranslate: true,
+                }
+            };
+            let xliffMergeCmd = XliffMerge.createFromOptions(commandOut, {}, profileContent);
+            xliffMergeCmd.run();
+            expect(ws.writtenData()).toContain('ERROR');
+            expect(ws.writtenData()).toContain('autotranslate requires an API key');
+            done();
+        });
+
+        it('should output an error when autotranslate is set to a list of languages and there is no api key set', (done) => {
+            let ws: WriterToString = new WriterToString();
+            let commandOut = new CommandOutput(ws);
+            let profileContent: IConfigFile = {
+                xliffmergeOptions: {
+                    autotranslate: ['de'],
+                }
+            };
+            let xliffMergeCmd = XliffMerge.createFromOptions(commandOut, {}, profileContent);
+            xliffMergeCmd.run();
+            expect(ws.writtenData()).toContain('ERROR');
+            expect(ws.writtenData()).toContain('autotranslate requires an API key');
+            done();
+        });
+
+        it('should output an error when autotranslate language is not in list of languages', (done) => {
+            let ws: WriterToString = new WriterToString();
+            let commandOut = new CommandOutput(ws);
+            let profileContent: IConfigFile = {
+                xliffmergeOptions: {
+                    languages: ['en', 'ru'],
+                    autotranslate: ['de'],
+                }
+            };
+            let xliffMergeCmd = XliffMerge.createFromOptions(commandOut, {}, profileContent);
+            xliffMergeCmd.run();
+            expect(ws.writtenData()).toContain('ERROR');
+            expect(ws.writtenData()).toContain('autotranslate language "de" is not in list of languages');
+            done();
+        });
+
+        it('should output an error when autotranslate language is set to default language', (done) => {
+            let ws: WriterToString = new WriterToString();
+            let commandOut = new CommandOutput(ws);
+            let profileContent: IConfigFile = {
+                xliffmergeOptions: {
+                    languages: ['en', 'ru'],
+                    autotranslate: ['en', 'ru'],
+                }
+            };
+            let xliffMergeCmd = XliffMerge.createFromOptions(commandOut, {}, profileContent);
+            xliffMergeCmd.run();
+            expect(ws.writtenData()).toContain('ERROR');
+            expect(ws.writtenData()).toContain('autotranslate language "en" cannot be translated, because it is the source language');
+            done();
+        });
+
         it('should accept i18n format xlf', (done) => {
             let ws: WriterToString = new WriterToString();
             let commandOut = new CommandOutput(ws);

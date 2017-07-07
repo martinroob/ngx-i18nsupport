@@ -37,5 +37,10 @@ export interface IXliffMergeOptions {
     removeUnusedIds?: boolean;
     supportNgxTranslate?: boolean;  // Flag, wether output for ngs-translate should be generated
     useSourceAsTarget?: boolean; // Flag, whether source must be used as target for new trans-units
+    autotranslate?: boolean|string[]; // enable auto translate via Google Translate
+        // if it is an array, list of languages to autotranslate
+        // if it is true, autotranslate all languages (except source language of course)
+        // if it is false (default) no autotranslate
+    apikey?: string;    // API Key for Google Translate, required if autotranlate is enabled
 }
 

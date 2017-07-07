@@ -57,6 +57,14 @@
         <target/>
         <note priority="1" from="description">embedded html sample</note>
       </trans-unit>
+      <trans-unit id="efec69fdcf74bd6d640b2a771558b7b09e271c28" datatype="html">
+        <source>{VAR_PLURAL, plural, =0 {kein Schaf} =1 {1 Schaf} other {x Schafe} }</source>
+        <target/>
+        <context-group purpose="location">
+          <context context-type="sourcefile">S:/experimente/sampleapp41/src/app/app.component.ts</context>
+          <context context-type="linenumber">14</context>
+        </context-group>
+      </trans-unit>
     </body>
   </file>
 </xliff>

@@ -94,6 +94,8 @@ Options:
     "removeUnusedIds": true,
     "supportNgxTranslate": true,
     "useSourceAsTarget": false,
+    "autotranslate": false,
+    "apikey": "",
     "verbose": false,
     "quiet": false
   }
@@ -111,6 +113,10 @@ The options are:
 - `removeUnusedIds` (boolean, default `true`): flag, if unused IDs should be removed during merge
 - `supportNgxTranslate` (boolean, default `false`): flag to active json translation files for ngx-translate
 - `useSourceAsTarget` (boolean, default `true`): flag, if source should be copied to target for new trans-units
+- `autotranslate` (since v0.7.0) (boolean or array of strings, default `false`): flag, if new units should be automatically translated by Google Translate.
+You can also specify a string array with the languages you want to auto translate (e.g `"autotranslate": ["fr", "ru"]`).
+For details how to use it have a look at the Wiki Page [xliffmerge-autotranslate-feature](https://github.com/martinroob/ngx-i18nsupport/wiki/xliffmerge-autotranslate-feature).
+- `apikey` (since v0.7.0) (string, default ""): API key for usage of Google Translate. Must be set if you activate it by setting `autotranslate`.
 - `verbose` (boolean, default `false`): controls output
 - `quiet` (boolean, default `false`): controls output
 
