@@ -1,3 +1,18 @@
+<a name="0.7.1"></a>
+# [0.7.1](https://github.com/martinroob/ngx-i18nsupport/compare/v0.7.0...v0.7.1) (2017-07-07)
+
+### Features
+
+### Bug Fixes
+
+* **build process:** Travis CI build green again (broken due to problem with Typescript 2.4.1: [#17630 @types/request](https://github.com/DefinitelyTyped/DefinitelyTyped/issues/17630).
+Temporary fixed by pinning Typescript to 2.3.1.
+
+### Features
+
+* **autotranslate:** API Key can now be read from file instead of setting it explicitly. Key is not shown in debug output any more. ([#35](https://github.com/martinroob/ngx-i18nsupport/issues/35)).
+ For details how to use it have a look at the Wiki Page [xliffmerge-autotranslate-feature](https://github.com/martinroob/ngx-i18nsupport/wiki/xliffmerge-autotranslate-feature).
+
 <a name="0.7.0"></a>
 # [0.7.0](https://github.com/martinroob/ngx-i18nsupport/compare/v0.6.2...v0.7.0) (2017-07-07)
 
