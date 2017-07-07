@@ -174,6 +174,7 @@ describe('XliffMerge test spec', () => {
             let profileContent: IConfigFile = {
                 xliffmergeOptions: {
                     autotranslate: true,
+                    apikey: "",
                 }
             };
             let xliffMergeCmd = XliffMerge.createFromOptions(commandOut, {}, profileContent);
@@ -189,12 +190,29 @@ describe('XliffMerge test spec', () => {
             let profileContent: IConfigFile = {
                 xliffmergeOptions: {
                     autotranslate: ['de'],
+                    apikey: "",
                 }
             };
             let xliffMergeCmd = XliffMerge.createFromOptions(commandOut, {}, profileContent);
             xliffMergeCmd.run();
             expect(ws.writtenData()).toContain('ERROR');
             expect(ws.writtenData()).toContain('autotranslate requires an API key');
+            done();
+        });
+
+        it('should read api key from file if apikeyfile is set', (done) => {
+            let ws: WriterToString = new WriterToString();
+            let commandOut = new CommandOutput(ws);
+            let profileContent: IConfigFile = {
+                xliffmergeOptions: {
+                    autotranslate: ['de'],
+                    apikeyfile: "package.json",
+                }
+            };
+            let xliffMergeCmd = XliffMerge.createFromOptions(commandOut, {verbose: true}, profileContent);
+            xliffMergeCmd.run();
+            expect(ws.writtenData()).toContain('apikeyfile:\tpackage.json');
+            expect(ws.writtenData()).toContain('apikey:\t****');
             done();
         });
 

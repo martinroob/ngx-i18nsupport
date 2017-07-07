@@ -8,8 +8,9 @@ import * as fs from "fs";
 import {XliffMergeError} from './xliff-merge-error';
 import {Stats} from 'fs';
 import {CommandOutput} from '../common/command-output';
-import {isArray, isNullOrUndefined} from 'util';
+import {format, isArray, isNullOrUndefined} from 'util';
 import {ProgramOptions, IConfigFile} from './i-xliff-merge-options';
+import {FileUtil} from '../common/file-util';
 
 export class XliffMergeParameters {
 
@@ -27,6 +28,7 @@ export class XliffMergeParameters {
     private _useSourceAsTarget: boolean;
     private _autotranslate: boolean|string[];
     private _apikey: string;
+    private _apikeyfile: string;
 
     public errorsFound: XliffMergeError[];
     public warningsFound: string[];
@@ -150,8 +152,11 @@ export class XliffMergeParameters {
             if (!isNullOrUndefined(profile.autotranslate)) {
                 this._autotranslate = profile.autotranslate;
             }
-            if (profile.apikey) {
+            if (!isNullOrUndefined(profile.apikey)) {
                 this._apikey = profile.apikey;
+            }
+            if (!isNullOrUndefined(profile.apikeyfile)) {
+                this._apikeyfile = profile.apikeyfile;
             }
         } else {
             this.warningsFound.push('did not find "xliffmergeOptions" in profile, using defaults');
@@ -253,8 +258,9 @@ export class XliffMergeParameters {
         commandOutput.debug('autotranslate:\t%s', this.autotranslate());
         if (this.autotranslate()) {
             commandOutput.debug('autotranslated languages:\t%s', this.autotranslatedLanguages());
+            commandOutput.debug('apikey:\t%s', this.apikey() ? '****' : 'NOT SET');
+            commandOutput.debug('apikeyfile:\t%s', this.apikeyfile());
         }
-        commandOutput.debug('apikey:\t%s', this.apikey());
     }
 
     /**
@@ -400,6 +406,34 @@ export class XliffMergeParameters {
      * @return {string}
      */
     public apikey(): string {
-        return this._apikey;
+        if (!isNullOrUndefined(this._apikey)) {
+            return this._apikey;
+        } else {
+            const apikeyPath = this.apikeyfile();
+            if (this.apikeyfile()) {
+                if (fs.existsSync(apikeyPath)) {
+                    return FileUtil.read(apikeyPath, 'utf-8');
+                } else {
+                    throw new Error(format('api key file not found: API_KEY_FILE=%s', apikeyPath));
+                }
+            } else {
+                return null;
+            }
+        }
+    }
+
+    /**
+     * file name for API key to be used for Google Translate.
+     * Explicitly set or read from env var API_KEY_FILE.
+     * @return {string}
+     */
+    public apikeyfile(): string {
+        if (this._apikeyfile) {
+            return this._apikeyfile;
+        } else if (process.env.API_KEY_FILE) {
+            return process.env.API_KEY_FILE;
+        } else {
+            return null;
+        }
     }
 }
