@@ -1,3 +1,12 @@
+<a name="0.7.0"></a>
+# [0.7.0](https://github.com/martinroob/ngx-i18nsupport/compare/v0.6.2...v0.7.0) (2017-07-07)
+
+### Features
+
+* **autotranslate:** Added google translate support ([#35](https://github.com/martinroob/ngx-i18nsupport/issues/35)).
+You can now use the [Google Cloud Translation API](https://cloud.google.com/translate/) to automatically translate new units to different target languages.
+ For details how to use it have a look at the Wiki Page [xliffmerge-autotranslate-feature](https://github.com/martinroob/ngx-i18nsupport/wiki/xliffmerge-autotranslate-feature).
+
 <a name="0.6.2"></a>
 # [0.6.2](https://github.com/martinroob/ngx-i18nsupport/compare/v0.6.1...v0.6.2) (2017-06-02)
 
