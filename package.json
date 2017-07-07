@@ -41,6 +41,7 @@
   "devDependencies": {
     "@types/jasmine": "^2.5.43",
     "@types/node": "^7.0.5",
+    "@types/request": "^0.0.45",
     "coveralls": "^2.11.16",
     "cpx": "^1.5.0",
     "istanbul": "^0.4.5",
