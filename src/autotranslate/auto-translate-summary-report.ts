@@ -60,8 +60,30 @@ export class AutoTranslateSummaryReport {
     }
   }
 
+  /**
+   * Merge another summary into this one.
+   * @param anotherSummary
+   */
+  public merge(anotherSummary: AutoTranslateSummaryReport) {
+    if (!this._error) {
+      this._error = anotherSummary._error;
+    }
+    this._total += anotherSummary.total();
+    this._ignored += anotherSummary.ignored();
+    this._success += anotherSummary.success();
+    this._failed += anotherSummary.failed();
+  }
+
   public total(): number {
     return this._total;
+  }
+
+  public ignored(): number {
+    return this._ignored;
+  }
+
+  public success(): number {
+    return this._success;
   }
 
   public failed(): number {

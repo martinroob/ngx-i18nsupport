@@ -212,7 +212,7 @@ describe('XliffMerge XLIFF 1.2 format tests', () => {
             xliffMergeCmd.run();
             expect(ws.writtenData()).not.toContain('ERROR');
             expect(ws.writtenData()).toContain('merged 12 trans-units from master to "en"');
-            expect(ws.writtenData()).toContain('removed 2 unused trans-units in "en"');
+            expect(ws.writtenData()).toContain('removed 3 unused trans-units in "en"');
 
             // look, that the new file contains the old translation
             langFileEnglish = readXliff(xliffMergeCmd.generatedI18nFile('en'));
@@ -312,6 +312,7 @@ describe('XliffMerge XLIFF 1.2 format tests', () => {
 
             const ID_NACHRICHTEN = '57e605bfa130afb4de4ee40e496e854a9e8a28a7';
             const ID_BESCHREIBUNG_WITH_PLACEHOLDER = 'a52ba049c16778bdb2e5a19a41acaadf87b104dc';
+            const ID_ICUMESSAGE = 'efec69fdcf74bd6d640b2a771558b7b09e271c28';
 
             beforeEach(() => {
                 apikey = getApiKey();
@@ -371,6 +372,10 @@ describe('XliffMerge XLIFF 1.2 format tests', () => {
                     expect(tu.sourceContent()).toBe('Nachrichten');
                     expect(tu.targetContent()).toBe('news');
                     expect(tu.targetState()).toBe('translated');
+                    let tuICU = langFileEnglish.transUnitWithId(ID_ICUMESSAGE);
+                    expect(tuICU.sourceContent()).toContain('VAR_PLURAL');
+                    expect(tuICU.targetContent()).toBe('{VAR_PLURAL, plural, =0 {No sheep} =1 {1 sheep} other {X sheep}}');
+                    expect(tuICU.targetState()).toBe('translated');
                     done();
                 });
             });

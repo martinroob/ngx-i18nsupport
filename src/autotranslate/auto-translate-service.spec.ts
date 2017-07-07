@@ -129,7 +129,7 @@ describe('Autotranslate tests', () => {
         }
         const longString = 'abcdefghijklmnopqrstuvwabcdefghijklmnopqrstuvwabcdefghijklmnopqrstuvwabcdefghijklmnopqrstuvwabcdefghijklmnopqrstuvwabcdefghijklmnopqrstuvwabcdefghijklmnopqrstuvwabcdefghijklmnopqrstuvwabcdefghijklmnopqrstuvwabcdefghijklmnopqrstuvw';
         const longMessages: string[] = [];
-        const NUM = 120;  // 30 * 260char = 5200
+        const NUM = 30;  // 30 * 260char = 5200
         for (let i = 0; i < NUM; i++) {
             longMessages.push(longString);
         }

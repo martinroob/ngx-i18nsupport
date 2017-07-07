@@ -3,6 +3,7 @@ import {Observable} from 'rxjs';
 import {RxHR} from "@akanass/rx-http-request";
 /**
  * Created by roobm on 03.07.2017.
+ * Low Level Service to call Google Translate.
  */
 
 /**
@@ -74,11 +75,11 @@ export class AutoTranslateService {
         if (!from || !to) {
             return Observable.throw('cannot autotranslate: source and target language must be set');
         }
-        from = this.stripRegioncode(from);
-        to = this.stripRegioncode(to);
+        from = AutoTranslateService.stripRegioncode(from);
+        to = AutoTranslateService.stripRegioncode(to);
         const allRequests: Observable<string[]>[] = this.splitMessagesToGoogleLimit(messages).map((partialMessages: string[]) => {
             return this.limitedTranslateMultipleStrings(partialMessages, from, to);
-        })
+        });
         return Observable.forkJoin(allRequests).map((allTranslations: string[][]) => {
             let all = [];
             for (let i = 0; i < allTranslations.length; i++) {
@@ -113,11 +114,10 @@ export class AutoTranslateService {
     /**
      * Return translation request, but messages must be limited to google limits.
      * Not more that 128 single messages.
-     * Size < TODO
      * @param messages
      * @param from
      * @param to
-     * @return {Observable<R>}
+     * @return {Observable<string[]>} the translated strings
      */
     private limitedTranslateMultipleStrings(messages: string[], from: string, to: string): Observable<string[]> {
         const realUrl = this._rootUrl + 'language/translate/v2' + '?key=' + this._apiKey;
@@ -159,7 +159,7 @@ export class AutoTranslateService {
      * @param lang
      * @return {string} lang without region code and in lower case.
      */
-    public stripRegioncode(lang: string): string {
+    public static stripRegioncode(lang: string): string {
         const langLower = lang.toLowerCase();
         for(let i = 0; i < langLower.length; i++) {
             const c = langLower.charAt(i);
