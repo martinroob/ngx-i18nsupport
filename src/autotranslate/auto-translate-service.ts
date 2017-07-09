@@ -1,5 +1,7 @@
 import {format} from 'util';
 import {Observable} from 'rxjs';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/catch';
 import {RxHR} from "@akanass/rx-http-request";
 /**
  * Created by roobm on 03.07.2017.
