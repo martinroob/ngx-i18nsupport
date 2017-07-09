@@ -1,8 +1,9 @@
 import {format} from 'util';
+import * as request from 'request';
 import {Observable} from 'rxjs';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
-import {RxHR} from "@akanass/rx-http-request";
+
 /**
  * Created by roobm on 03.07.2017.
  * Low Level Service to call Google Translate.
@@ -43,14 +44,21 @@ interface TranslationsListResponse {
     translations: TranslationsResource[];
 }
 
+interface InternalRequestResponse {
+    response: request.RequestResponse;
+    body: any;
+}
+
 const MAX_SEGMENTS = 128;
 
 export class AutoTranslateService {
 
+    private _request: request.RequestAPI<request.Request, request.CoreOptions, request.RequiredUriUrl>;
     _rootUrl: string;
     _apiKey: string;
 
     constructor(apiKey: string) {
+        this._request = request;
         this._apiKey = apiKey;
         this._rootUrl = 'https://translation.googleapis.com/';
     }
@@ -134,7 +142,7 @@ export class AutoTranslateService {
             json: true,
 //            proxy: 'http://127.0.0.1:8888' To set a proxy use env var HTTPS_PROXY
         };
-        return RxHR.post(realUrl, options).map((data) => {
+        return this.post(realUrl, options).map((data) => {
             const body: any = data.body;
             if (!body) {
                 throw new Error('no result received');
@@ -170,5 +178,54 @@ export class AutoTranslateService {
             }
         }
         return langLower;
+    }
+
+    /**
+     * Function to do a POST HTTP request
+     *
+     * @param uri {string}
+     * @param options {CoreOptions}
+     *
+     * @return {Observable<InternalRequestResponse>}
+     */
+    post(uri: string, options?: request.CoreOptions): Observable<InternalRequestResponse> {
+        return <Observable<InternalRequestResponse>> this._call.apply(this, [].concat('post', <string> uri,
+            <request.CoreOptions> Object.assign({}, options || {})));
+    }
+
+    /**
+     * Function to do a HTTP request for given method
+     *
+     * @param method {string}
+     * @param uri {string}
+     * @param options {CoreOptions}
+     *
+     * @return {Observable<InternalRequestResponse>}
+     *
+     * @private
+     */
+    private _call(method: string, uri: string, options?: request.CoreOptions): Observable<InternalRequestResponse> {
+        return <Observable<InternalRequestResponse>> Observable.create((observer) => {
+            // build params array
+            const params = [].concat(<string> uri, <request.CoreOptions> Object.assign({}, options || {}),
+                <RequestCallback>(error: any, response: request.RequestResponse, body: any) => {
+                    if (error) {
+                        return observer.error(error);
+                    }
+
+                    observer.next(<InternalRequestResponse> Object.assign({}, {
+                        response: <request.RequestResponse> response,
+                        body: <any> body
+                    }));
+                    observer.complete();
+                });
+
+            // _call request method
+            try {
+                this._request[<string> method].apply(<request.RequestAPI<request.Request, request.CoreOptions, request.RequiredUriUrl>> this._request, params);
+            } catch (error) {
+                observer.error(error);
+            }
+        });
     }
 }
