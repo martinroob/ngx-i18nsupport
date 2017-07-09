@@ -1,7 +1,15 @@
+<a name="0.7.2"></a>
+# [0.7.2](https://github.com/martinroob/ngx-i18nsupport/compare/v0.7.1...v0.7.2) (2017-07-09)
+
+### Bug Fixes
+
+* **xliffmerge:** run with version 0.7.1 breaks with an exception:
+([#38](https://github.com/martinroob/ngx-i18nsupport/issues/38)).
+This is a serious bug.
+Do not use v0.7.1.
+
 <a name="0.7.1"></a>
 # [0.7.1](https://github.com/martinroob/ngx-i18nsupport/compare/v0.7.0...v0.7.1) (2017-07-07)
-
-### Features
 
 ### Bug Fixes
 
