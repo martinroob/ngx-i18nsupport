@@ -11,6 +11,8 @@ import {ProgramOptions, IConfigFile} from './i-xliff-merge-options';
 import {NgxTranslateExtractor} from './ngx-translate-extractor';
 import {TranslationMessagesFileReader} from './translation-messages-file-reader';
 import {Observable} from 'rxjs';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/catch';
 import {XliffMergeAutoTranslateService} from '../autotranslate/xliff-merge-auto-translate-service';
 import {AutoTranslateSummaryReport} from '../autotranslate/auto-translate-summary-report';
 

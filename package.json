@@ -49,10 +49,10 @@
     "typescript": "2.3.1"
   },
   "dependencies": {
-    "@akanass/rx-http-request": "^2.3.0",
     "chalk": "^2.0.1",
     "commander": "^2.9.0",
     "ngx-i18nsupport-lib": "^1.4.6",
+    "request": "^2.81.0",
     "rxjs": "^5.4.2"
   }
 }
