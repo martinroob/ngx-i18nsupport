@@ -347,6 +347,7 @@ export class XliffMerge {
 
         if (newCount == 0 && removeCount == 0) {
             this.commandOutput.info('file for "%s" was up to date', lang);
+            return Observable.of(null);
         } else {
             return this.autoTranslate(this.master.sourceLanguage(), lang, languageSpecificMessagesFile)
                 .map(() => {
