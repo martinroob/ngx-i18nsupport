@@ -1,3 +1,14 @@
+<a name="0.7.4"></a>
+# [0.7.4](https://github.com/martinroob/ngx-i18nsupport/compare/v0.7.3...v0.7.4) (2017-07-09)
+
+### Bug Fixes
+
+* **xliffmerge:** runtime error map is not a function when using autotranslate v0.7.2
+([#40](https://github.com/martinroob/ngx-i18nsupport/issues/40)).
+This is the next serious bug.
+Second try to fix it.
+Do not use v0.7.3 too.
+
 <a name="0.7.3"></a>
 # [0.7.3](https://github.com/martinroob/ngx-i18nsupport/compare/v0.7.2...v0.7.3) (2017-07-09)
 
