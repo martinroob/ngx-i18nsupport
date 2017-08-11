@@ -46,6 +46,9 @@ describe('XliffMerge XLIFF 2.0 format tests', () => {
         let ID_REMOVED_MYFIRST = "2047558209369508311"; // an ID that will be removed in master2
         let ID_REMOVED_APPDESCRIPTION = "7499557905529977371"; // another removed ID
         let ID_WITH_PLACEHOLDER = "9030312858648510700";
+        let ID_DESCRIPTION_CHANGE = 'DescriptionAndMeaning1';
+        let ID_DESCRIPTION_ADD = 'AddDescriptionAndMeaning';
+        let ID_DESCRIPTION_REMOVE = 'RemoveDescriptionAndMeaning';
 
         beforeEach(() => {
             if (!fs.existsSync(WORKDIR)){
@@ -216,6 +219,45 @@ describe('XliffMerge XLIFF 2.0 format tests', () => {
             // look, that the removed IDs are really removed.
             expect(langFileEnglish.transUnitWithId(ID_REMOVED_MYFIRST)).toBeFalsy();
             expect(langFileEnglish.transUnitWithId(ID_REMOVED_APPDESCRIPTION)).toBeFalsy();
+            done();
+        });
+
+        it('should merge changed descriptions and meanings to already translated files', (done) => {
+            const TRANSLATED_FILE = 'WithDescriptions.en.xlf2';
+            FileUtil.copy(SRCDIR + 'ngExtractedMasterWithDescriptions.xlf2', MASTER);
+            FileUtil.copy(SRCDIR + TRANSLATED_FILE,WORKDIR + 'messages.en.xlf');
+            let ws: WriterToString = new WriterToString();
+            let commandOut = new CommandOutput(ws);
+            let profileContent: IConfigFile = {
+                xliffmergeOptions: {
+                    defaultLanguage: 'de',
+                    srcDir: WORKDIR,
+                    genDir: WORKDIR,
+                    i18nFormat: 'xlf2',
+                    i18nFile: MASTERFILE
+                }
+            };
+            let xliffMergeCmd = XliffMerge.createFromOptions(commandOut, {languages: ['de', 'en'], verbose: true}, profileContent);
+            xliffMergeCmd.run();
+            expect(ws.writtenData()).not.toContain('ERROR');
+            expect(ws.writtenData()).toContain('WARNING: transferred 3 changed descriptions/meanings from master to "en"');
+
+            // check that description and meaning are changed
+            let langFileEnglish: ITranslationMessagesFile = readXliff2(xliffMergeCmd.generatedI18nFile('en'));
+            let tu: ITransUnit = langFileEnglish.transUnitWithId(ID_DESCRIPTION_CHANGE);
+            expect(tu).toBeTruthy();
+            expect(tu.description()).toBe('changed description');
+            expect(tu.meaning()).toBe('changed meaning');
+            // added description
+            let tuAdded: ITransUnit = langFileEnglish.transUnitWithId(ID_DESCRIPTION_ADD);
+            expect(tuAdded).toBeTruthy();
+            expect(tuAdded.description()).toBe('added description');
+            expect(tuAdded.meaning()).toBe('added meaning');
+            // removed description
+            let tuRemoved: ITransUnit = langFileEnglish.transUnitWithId(ID_DESCRIPTION_REMOVE);
+            expect(tuRemoved).toBeTruthy();
+            expect(tuRemoved.description()).toBeNull();
+            expect(tuRemoved.meaning()).toBeNull();
             done();
         });
 

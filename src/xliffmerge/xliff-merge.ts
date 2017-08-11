@@ -307,6 +307,7 @@ export class XliffMerge {
         let isDefaultLang: boolean = (lang == this.parameters.defaultLanguage());
         let newCount = 0;
         let correctSourceRefCount = 0;
+        let correctDescriptionOrMeaningCount = 0;
         this.master.forEachTransUnit((masterTransUnit) => {
             let transUnit: ITransUnit = languageSpecificMessagesFile.transUnitWithId(masterTransUnit.id);
             if (!transUnit) {
@@ -319,6 +320,21 @@ export class XliffMerge {
                     transUnit.setSourceReferences(masterTransUnit.sourceReferences());
                     correctSourceRefCount++;
                 }
+                // check for changed description or meaning
+                if (transUnit.supportsSetDescriptionAndMeaning()) {
+                    let changed = false;
+                    if (transUnit.description() !== masterTransUnit.description()) {
+                        transUnit.setDescription(masterTransUnit.description());
+                        changed = true;
+                    }
+                    if (transUnit.meaning() !== masterTransUnit.meaning()) {
+                        transUnit.setMeaning(masterTransUnit.meaning());
+                        changed = true;
+                    }
+                    if (changed) {
+                        correctDescriptionOrMeaningCount++;
+                    }
+                }
             }
         });
         if (newCount > 0) {
@@ -326,6 +342,9 @@ export class XliffMerge {
         }
         if (correctSourceRefCount > 0) {
             this.commandOutput.warn('transferred %s source references from master to "%s"', correctSourceRefCount, lang);
+        }
+        if (correctDescriptionOrMeaningCount > 0) {
+            this.commandOutput.warn('transferred %s changed descriptions/meanings from master to "%s"', correctDescriptionOrMeaningCount, lang);
         }
 
         // remove all elements that are no longer used
@@ -347,7 +366,7 @@ export class XliffMerge {
             }
         }
 
-        if (newCount == 0 && removeCount == 0) {
+        if (newCount == 0 && removeCount == 0 && correctSourceRefCount == 0 && correctDescriptionOrMeaningCount == 0) {
             this.commandOutput.info('file for "%s" was up to date', lang);
             return Observable.of(null);
         } else {
