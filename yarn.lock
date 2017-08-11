@@ -985,9 +985,9 @@ nan@^2.3.0:
   version "2.6.1"
   resolved "https://registry.yarnpkg.com/nan/-/nan-2.6.1.tgz#8c84f7b14c96b89f57fbc838012180ec8ca39a01"
 
-ngx-i18nsupport-lib@^1.4.6:
-  version "1.4.6"
-  resolved "https://registry.yarnpkg.com/ngx-i18nsupport-lib/-/ngx-i18nsupport-lib-1.4.6.tgz#4a276946a126173862eb2a9537d28701197a3424"
+ngx-i18nsupport-lib@^1.5.0:
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/ngx-i18nsupport-lib/-/ngx-i18nsupport-lib-1.5.0.tgz#113460f2e037e1b6f26f6ffb9c6c5baaa15acab9"
   dependencies:
     "@types/xmldom" "^0.1.29"
     tokenizr "^1.1.4"

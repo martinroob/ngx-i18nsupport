@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file source-language="de" target-language="en" datatype="plaintext" original="ng2.template">
+      <body>
+          <trans-unit id="DescriptionAndMeaning1" datatype="html">
+            <source>Test Änderung Description und Meaning</source>
+            <target>Test change of description and meaning</target>
+            <note priority="1" from="description">old description</note>
+            <note priority="1" from="meaning">old meaning</note>
+          </trans-unit>
+          <trans-unit id="AddDescriptionAndMeaning" datatype="html">
+              <source>Test Hinzufügen Description und Meaning</source>
+              <target>Test addition of description and meaning</target>
+          </trans-unit>
+          <trans-unit id="RemoveDescriptionAndMeaning" datatype="html">
+              <source>Test Löschen Description und Meaning</source>
+              <target>Test remove of description and meaning</target>
+              <note priority="1" from="description">description to be removed</note>
+              <note priority="1" from="meaning">meaning to be removed</note>
+          </trans-unit>
+    </body>
+  </file>
+</xliff>

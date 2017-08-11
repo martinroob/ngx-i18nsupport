@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xliff version="2.0" xmlns="urn:oasis:names:tc:xliff:document:2.0" srcLang="de" trgLang="en">
+    <file original="ng.template" id="ngi18n">
+        <unit id="DescriptionAndMeaning1">
+            <notes>
+                <note category="description">old description</note>
+                <note category="meaning">old meaning</note>
+            </notes>
+            <segment>
+                <source>Test Änderung Description und Meaning</source>
+                <target>Test change of description and meaning</target>
+            </segment>
+        </unit>
+        <unit id="AddDescriptionAndMeaning">
+            <segment>
+                <source>Test Hinzufügen Description und Meaning</source>
+                <target>Test addition of description and meaning</target>
+            </segment>
+        </unit>
+        <unit id="RemoveDescriptionAndMeaning">
+            <notes>
+                <note category="description">description to be removed</note>
+                <note category="meaning">meaning to be removed</note>
+            </notes>
+            <segment>
+                <source>Test Löschen Description und Meaning</source>
+                <target>Test remove of description and meaning</target>
+            </segment>
+        </unit>
+    </file>
+</xliff>

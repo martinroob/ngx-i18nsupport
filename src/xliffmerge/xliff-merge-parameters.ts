@@ -251,7 +251,6 @@ export class XliffMergeParameters {
         commandOutput.debug('genDir:\t"%s"', this.genDir());
         commandOutput.debug('i18nFile:\t"%s"', this.i18nFile());
         commandOutput.debug('languages:\t%s', this.languages());
-        commandOutput.debug('languages:\t%s', this.languages());
         commandOutput.debug('removeUnusedIds:\t%s', this.removeUnusedIds());
         commandOutput.debug('supportNgxTranslate:\t%s', this.supportNgxTranslate());
         commandOutput.debug('useSourceAsTarget:\t%s', this.useSourceAsTarget());
