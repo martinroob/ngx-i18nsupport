@@ -1,3 +1,11 @@
+<a name="0.8.0"></a>
+# [0.8.0](https://github.com/martinroob/ngx-i18nsupport/compare/v0.7.4...v0.8.0) (2017-08-11)
+
+### Features
+
+* **xliffmerge:** merging updated description and meaning
+([#44](https://github.com/martinroob/ngx-i18nsupport/issues/44)).
+
 <a name="0.7.4"></a>
 # [0.7.4](https://github.com/martinroob/ngx-i18nsupport/compare/v0.7.3...v0.7.4) (2017-07-09)
 
