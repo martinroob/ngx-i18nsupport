@@ -1,3 +1,15 @@
+<a name="0.8.3"></a>
+# [0.8.3](https://github.com/martinroob/ngx-i18nsupport/compare/v0.8.0...v0.8.3) (2017-08-18)
+
+### Features
+
+* **xliffmerge:** Merge source content if id is explicitly set and source is changed. 
+([#46](https://github.com/martinroob/ngx-i18nsupport/issues/46)).
+
+### Bug Fixes
+
+* **xliffmerge:** handle ICU equiv in XLIFF 2.0 ([#47](https://github.com/martinroob/ngx-i18nsupport/issues/47)).
+
 <a name="0.8.0"></a>
 # [0.8.0](https://github.com/martinroob/ngx-i18nsupport/compare/v0.7.4...v0.8.0) (2017-08-11)
 
