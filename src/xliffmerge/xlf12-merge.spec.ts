@@ -9,6 +9,7 @@ import {ITranslationMessagesFile, ITransUnit} from 'ngx-i18nsupport-lib';
 import {TranslationMessagesFileReader} from './translation-messages-file-reader';
 import {format} from 'util';
 import {getApiKey} from '../autotranslate/auto-translate-service.spec';
+import {STATE_NEW, STATE_TRANSLATED} from 'ngx-i18nsupport-lib/dist';
 
 /**
  * Created by martin on 18.02.2017.
@@ -225,6 +226,40 @@ describe('XliffMerge XLIFF 1.2 format tests', () => {
 
             expect(langFileEnglish.transUnitWithId(ID_REMOVED_STARTSEITE)).toBeFalsy();
             expect(langFileEnglish.transUnitWithId(ID_REMOVED_SUCHEN)).toBeFalsy();
+            done();
+        });
+
+        it('should merge changed source content to already translated files', (done) => {
+            const ID_SOURCE_CHANGE = 'sourcechanged';
+            const ID_SOURCE_CHANGE_STATE_FINAL = 'sourcechanged_state_final';
+            const TRANSLATED_FILE = 'WithSourceContentChange.en.xlf';
+            FileUtil.copy(SRCDIR + 'ngExtractedMasterWithSourceContentChange.xlf', MASTER);
+            FileUtil.copy(SRCDIR + TRANSLATED_FILE,WORKDIR + 'messages.en.xlf');
+            let ws: WriterToString = new WriterToString();
+            let commandOut = new CommandOutput(ws);
+            let profileContent: IConfigFile = {
+                xliffmergeOptions: {
+                    defaultLanguage: 'de',
+                    srcDir: WORKDIR,
+                    genDir: WORKDIR,
+                    i18nFile: MASTERFILE
+                }
+            };
+            let xliffMergeCmd = XliffMerge.createFromOptions(commandOut, {languages: ['de', 'en'], verbose: true}, profileContent);
+            xliffMergeCmd.run();
+            expect(ws.writtenData()).not.toContain('ERROR');
+            expect(ws.writtenData()).toContain('WARNING: transferred 2 changed source content from master to "en"');
+
+            // check that source is changed
+            let langFileEnglish: ITranslationMessagesFile = readXliff(xliffMergeCmd.generatedI18nFile('en'));
+            let tu: ITransUnit = langFileEnglish.transUnitWithId(ID_SOURCE_CHANGE);
+            expect(tu).toBeTruthy();
+            expect(tu.sourceContent()).toBe('Test Änderung Source (geändert!)');
+            expect(tu.targetState()).toBe(STATE_NEW);
+            let tuFinal: ITransUnit = langFileEnglish.transUnitWithId(ID_SOURCE_CHANGE_STATE_FINAL);
+            expect(tuFinal).toBeTruthy();
+            expect(tuFinal.sourceContent()).toBe('Test Änderung Source (state final, geändert!)');
+            expect(tuFinal.targetState()).toBe(STATE_TRANSLATED);
             done();
         });
 

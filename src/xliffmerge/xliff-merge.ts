@@ -15,6 +15,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import {XliffMergeAutoTranslateService} from '../autotranslate/xliff-merge-auto-translate-service';
 import {AutoTranslateSummaryReport} from '../autotranslate/auto-translate-summary-report';
+import {STATE_FINAL, STATE_TRANSLATED} from 'ngx-i18nsupport-lib/dist';
 
 /**
  * Created by martin on 17.02.2017.
@@ -306,6 +307,7 @@ export class XliffMerge {
 
         let isDefaultLang: boolean = (lang == this.parameters.defaultLanguage());
         let newCount = 0;
+        let correctSourceContentCount = 0;
         let correctSourceRefCount = 0;
         let correctDescriptionOrMeaningCount = 0;
         this.master.forEachTransUnit((masterTransUnit) => {
@@ -315,6 +317,16 @@ export class XliffMerge {
                 languageSpecificMessagesFile.importNewTransUnit(masterTransUnit, isDefaultLang, this.parameters.useSourceAsTarget());
                 newCount++;
             } else {
+                // check for changed source content and change it if needed
+                // (can only happen if ID is explicitely set, otherwise ID would change if source content is changed.
+                if (transUnit.supportsSetSourceContent() && masterTransUnit.sourceContent() !== transUnit.sourceContent()) {
+                    transUnit.setSourceContent(masterTransUnit.sourceContent());
+                    if (transUnit.targetState() == STATE_FINAL) {
+                        // source is changed, so translation has to be checked again
+                        transUnit.setTargetState(STATE_TRANSLATED);
+                    }
+                    correctSourceContentCount++;
+                }
                 // check for missing or changed source ref and add it if needed
                 if (transUnit.supportsSetSourceReferences() && !this.areSourceReferencesEqual(masterTransUnit.sourceReferences(), transUnit.sourceReferences())) {
                     transUnit.setSourceReferences(masterTransUnit.sourceReferences());
@@ -339,6 +351,9 @@ export class XliffMerge {
         });
         if (newCount > 0) {
             this.commandOutput.warn('merged %s trans-units from master to "%s"', newCount, lang);
+        }
+        if (correctSourceContentCount > 0) {
+            this.commandOutput.warn('transferred %s changed source content from master to "%s"', correctSourceContentCount, lang);
         }
         if (correctSourceRefCount > 0) {
             this.commandOutput.warn('transferred %s source references from master to "%s"', correctSourceRefCount, lang);
@@ -366,7 +381,7 @@ export class XliffMerge {
             }
         }
 
-        if (newCount == 0 && removeCount == 0 && correctSourceRefCount == 0 && correctDescriptionOrMeaningCount == 0) {
+        if (newCount == 0 && removeCount == 0 && correctSourceContentCount == 0 && correctSourceRefCount == 0 && correctDescriptionOrMeaningCount == 0) {
             this.commandOutput.info('file for "%s" was up to date', lang);
             return Observable.of(null);
         } else {
