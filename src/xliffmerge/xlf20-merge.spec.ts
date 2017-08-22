@@ -8,6 +8,7 @@ import {FileUtil} from '../common/file-util';
 import {ITranslationMessagesFile, ITransUnit} from 'ngx-i18nsupport-lib';
 import {TranslationMessagesFileReader} from './translation-messages-file-reader';
 import {STATE_NEW, STATE_TRANSLATED} from 'ngx-i18nsupport-lib/dist';
+import {getApiKey} from '../autotranslate/auto-translate-service.spec';
 
 /**
  * Created by martin on 18.02.2017.
@@ -327,6 +328,37 @@ describe('XliffMerge XLIFF 2.0 format tests', () => {
             expect(langFileEnglish.transUnitWithId(ID_WITH_PLACEHOLDER).targetContentNormalized().asDisplayString()).toBe('Item {{0}} of {{1}} added.');
 
             done();
+        });
+
+        it('should not output a warning when autotranslate is not enabled for a language (issue #49)', (done) => {
+            FileUtil.copy(MASTER2SRC, MASTER);
+            let ws: WriterToString = new WriterToString();
+            let commandOut = new CommandOutput(ws);
+            const apiKey = getApiKey();
+            let profileContent: IConfigFile = {
+                xliffmergeOptions: {
+                    defaultLanguage: 'de',
+                    languages: ['de', 'ru', 'en'],
+                    autotranslate: ['ru'],
+                    apikey: apiKey,
+                    srcDir: WORKDIR,
+                    genDir: WORKDIR,
+                    i18nFormat: 'xlf2',
+                    i18nFile: MASTERFILE
+                }
+            };
+            let xliffMergeCmd = XliffMerge.createFromOptions(commandOut, {}, profileContent);
+            xliffMergeCmd.run(() => {
+                if (apiKey) {
+                    expect(ws.writtenData()).not.toContain('ERROR');
+                    expect(ws.writtenData()).not.toContain('Auto translation from "de" to "en"');
+                    expect(ws.writtenData()).toContain('Auto translation from "de" to "ru"');
+                } else {
+                    expect(ws.writtenData()).toContain('ERROR: autotranslate requires an API key');
+                }
+
+                done();
+            });
         });
 
     });

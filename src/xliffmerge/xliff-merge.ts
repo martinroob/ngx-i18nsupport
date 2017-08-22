@@ -271,7 +271,6 @@ export class XliffMerge {
         // and copy source to target if necessary
         let isDefaultLang: boolean = (lang == this.parameters.defaultLanguage());
         let languageSpecificMessagesFile: ITranslationMessagesFile = this.master.createTranslationFileForLang(lang, languageXliffFilePath, isDefaultLang, this.parameters.useSourceAsTarget());
-
         return this.autoTranslate(this.master.sourceLanguage(), lang, languageSpecificMessagesFile).map((summary) => {
             // write it to file
             TranslationMessagesFileReader.save(languageSpecificMessagesFile);
