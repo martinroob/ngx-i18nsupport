@@ -1,3 +1,10 @@
+<a name="0.8.4"></a>
+# [0.8.4](https://github.com/martinroob/ngx-i18nsupport/compare/v0.8.3...v0.8.4) (2017-08-22)
+
+### Bug Fixes
+
+* **xliffmerge:** When autotranslate is disabled, there should be no warning "Auto translation from..." ([#49](https://github.com/martinroob/ngx-i18nsupport/issues/49)).
+
 <a name="0.8.3"></a>
 # [0.8.3](https://github.com/martinroob/ngx-i18nsupport/compare/v0.8.0...v0.8.3) (2017-08-18)
 

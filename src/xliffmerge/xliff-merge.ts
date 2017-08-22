@@ -271,7 +271,6 @@ export class XliffMerge {
         // and copy source to target if necessary
         let isDefaultLang: boolean = (lang == this.parameters.defaultLanguage());
         let languageSpecificMessagesFile: ITranslationMessagesFile = this.master.createTranslationFileForLang(lang, languageXliffFilePath, isDefaultLang, this.parameters.useSourceAsTarget());
-
         return this.autoTranslate(this.master.sourceLanguage(), lang, languageSpecificMessagesFile).map((summary) => {
             // write it to file
             TranslationMessagesFileReader.save(languageSpecificMessagesFile);
@@ -432,16 +431,19 @@ export class XliffMerge {
      */
     private autoTranslate(from: string, to: string, languageSpecificMessagesFile: ITranslationMessagesFile): Observable<AutoTranslateSummaryReport> {
         let serviceCall: Observable<AutoTranslateSummaryReport>;
-        if (this.parameters.autotranslateLanguage(to)) {
+        let autotranslateEnabled: boolean = this.parameters.autotranslateLanguage(to);
+        if (autotranslateEnabled) {
             serviceCall = this.autoTranslateService.autoTranslate(from, to, languageSpecificMessagesFile);
         } else {
             serviceCall = Observable.of(new AutoTranslateSummaryReport(from, to));
         }
         return serviceCall.map((summary) => {
-            if (summary.error() || summary.failed() > 0) {
-                this.commandOutput.error(summary.content());
-            } else {
-                this.commandOutput.warn(summary.content());
+            if (autotranslateEnabled) {
+                if (summary.error() || summary.failed() > 0) {
+                    this.commandOutput.error(summary.content());
+                } else {
+                    this.commandOutput.warn(summary.content());
+                }
             }
             return summary;
         })
