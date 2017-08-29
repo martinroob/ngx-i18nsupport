@@ -1,3 +1,10 @@
+<a name="0.8.5"></a>
+# [0.8.5](https://github.com/martinroob/ngx-i18nsupport/compare/v0.8.4...v0.8.5) (2017-08-29)
+
+### Bug Fixes
+
+* **autotranslate:** Autotranslate parameter is checked against first given language instead of default language ([#52](https://github.com/martinroob/ngx-i18nsupport/issues/52)).
+
 <a name="0.8.4"></a>
 # [0.8.4](https://github.com/martinroob/ngx-i18nsupport/compare/v0.8.3...v0.8.4) (2017-08-22)
 
