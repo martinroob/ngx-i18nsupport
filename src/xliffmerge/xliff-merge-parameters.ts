@@ -214,7 +214,7 @@ export class XliffMergeParameters {
             if (this.languages().indexOf(lang) < 0) {
                 this.errorsFound.push(new XliffMergeError('autotranslate language "' + lang + '" is not in list of languages'));
             }
-            if (this.languages().length > 0 && lang === this.languages()[0]) {
+            if (lang === this.defaultLanguage()) {
                 this.errorsFound.push(new XliffMergeError('autotranslate language "' + lang + '" cannot be translated, because it is the source language'));
             }
         });

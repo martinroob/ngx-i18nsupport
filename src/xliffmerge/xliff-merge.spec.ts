@@ -248,6 +248,23 @@ describe('XliffMerge test spec', () => {
             done();
         });
 
+        it('should not output error ".. because it is the source language" when autotranslate language is not set to default language (issue #52)', (done) => {
+            let ws: WriterToString = new WriterToString();
+            let commandOut = new CommandOutput(ws);
+            let profileContent: IConfigFile = {
+                xliffmergeOptions: {
+                    defaultLanguage: 'zh-CN',
+                    languages: ['en', 'ja'],
+                    autotranslate: ['en', 'ja'],
+                }
+            };
+            let xliffMergeCmd = XliffMerge.createFromOptions(commandOut, {}, profileContent);
+            xliffMergeCmd.run();
+            expect(ws.writtenData()).toContain('ERROR');
+            expect(ws.writtenData()).not.toContain('autotranslate language "en" cannot be translated, because it is the source language');
+            done();
+        });
+
         it('should accept i18n format xlf', (done) => {
             let ws: WriterToString = new WriterToString();
             let commandOut = new CommandOutput(ws);
