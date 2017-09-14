@@ -92,8 +92,8 @@ Options:
     "defaultLanguage": "en",
     "languages": ["en", "de"],
     "removeUnusedIds": true,
-    "supportNgxTranslate": true,
-    "useSourceAsTarget": false,
+    "supportNgxTranslate": false,
+    "useSourceAsTarget": true,
     "autotranslate": false,
     "apikey": "",
     "apikeyfile": "",
@@ -138,7 +138,6 @@ If the master contains
 ```xml
   <trans-unit id="xy...">
     <source>Hello, world</source>
-    <target/>
   </trans-unit>
 ```
 then the generated file for English (messages.en.xlf) will contain
@@ -151,7 +150,7 @@ then the generated file for English (messages.en.xlf) will contain
 and the generated file for German (messages.de.xlf) will contain
 ```xml
   <translation-unit>
-    <source id="kfmlkfml">Hello, world</source>
+    <source id="xy..">Hello, world</source>
     <target state="new">Hello, world</target>
   </translation-unit>
 ```
