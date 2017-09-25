@@ -1,3 +1,11 @@
+<a name="0.8.6"></a>
+# [0.8.6](https://github.com/martinroob/ngx-i18nsupport/compare/v0.8.5...v0.8.6) (2017-09-25)
+
+### Bug Fixes
+
+* **xliffmerge:** correction for setting boolean parameters (removeUnusedIds, supportNgxTranslate)([#55](https://github.com/martinroob/ngx-i18nsupport/pull/55)).
+This was a contribution of [vhdirk](https://github.com/vhdirk).
+
 <a name="0.8.5"></a>
 # [0.8.5](https://github.com/martinroob/ngx-i18nsupport/compare/v0.8.4...v0.8.5) (2017-08-29)
 
