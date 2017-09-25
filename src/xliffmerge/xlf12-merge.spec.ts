@@ -451,7 +451,7 @@ describe('XliffMerge XLIFF 1.2 format tests', () => {
                     expect(tu.targetState()).toBe('translated');
                     let tuICU = langFileEnglish.transUnitWithId(ID_ICUMESSAGE);
                     expect(tuICU.sourceContent()).toContain('VAR_PLURAL');
-                    expect(tuICU.targetContent()).toBe('{VAR_PLURAL, plural, =0 {No sheep} =1 {1 sheep} other {X sheep}}');
+                    expect(tuICU.targetContent()).toBe('{VAR_PLURAL, plural, =0 {no sheep} =1 {1 sheep} other {x sheep}}');
                     expect(tuICU.targetState()).toBe('translated');
                     done();
                 });

@@ -140,10 +140,10 @@ export class XliffMergeParameters {
             if (profile.encoding) {
                 this._encoding = profile.encoding;
             }
-            if (profile.removeUnusedIds) {
+            if (!isNullOrUndefined(profile.removeUnusedIds)) {
                 this._removeUnusedIds = profile.removeUnusedIds;
             }
-            if (profile.supportNgxTranslate) {
+            if (!isNullOrUndefined(profile.supportNgxTranslate)) {
                 this._supportNgxTranslate = profile.supportNgxTranslate;
             }
             if (!isNullOrUndefined(profile.useSourceAsTarget)) {
