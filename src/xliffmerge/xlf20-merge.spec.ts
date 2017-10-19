@@ -179,6 +179,36 @@ describe('XliffMerge XLIFF 2.0 format tests', () => {
             done();
         });
 
+        it('should generate translated file with natove trans unit status "initial", testcase for issue #57', (done) => {
+            FileUtil.copy(MASTER1SRC, MASTER);
+            let ws: WriterToString = new WriterToString();
+            let commandOut = new CommandOutput(ws);
+            let profileContent: IConfigFile = {
+                xliffmergeOptions: {
+                    defaultLanguage: 'de',
+                    srcDir: WORKDIR,
+                    genDir: WORKDIR,
+                    i18nFormat: 'xlf2',
+                    i18nFile: MASTERFILE,
+                    useSourceAsTarget: false
+                }
+            };
+            let xliffMergeCmd = XliffMerge.createFromOptions(commandOut, {languages: ['de', 'en']}, profileContent);
+            xliffMergeCmd.run();
+            expect(ws.writtenData()).not.toContain('ERROR');
+            let langFileGerman: ITranslationMessagesFile = readXliff2(xliffMergeCmd.generatedI18nFile('de'));
+            langFileGerman.forEachTransUnit((tu: ITransUnit) => {
+                // need a cast to <any> to call nativeTargetState, which is not part of the official API
+                expect((<any>tu).nativeTargetState()).toBe('final');
+            });
+            let langFileEnglish: ITranslationMessagesFile = readXliff2(xliffMergeCmd.generatedI18nFile('en'));
+            langFileEnglish.forEachTransUnit((tu: ITransUnit) => {
+                // need a cast to <any> to call nativeTargetState, which is not part of the official API
+                expect((<any>tu).nativeTargetState()).toBe('initial'); // #56, state should be new, but in file we expect initial
+            });
+            done();
+        });
+
         it('should merge translated file for all languages', (done) => {
             FileUtil.copy(MASTER1SRC, MASTER);
             let ws: WriterToString = new WriterToString();
