@@ -1,3 +1,10 @@
+<a name="0.8.8"></a>
+# [0.8.8](https://github.com/martinroob/ngx-i18nsupport/compare/v0.8.8...v0.8.6) (2017-10-19)
+
+### Bug Fixes
+
+* **xliffmerge:** xliffmerge uses wrong state values for new XLIFF 2.0 segments ([#57](https://github.com/martinroob/ngx-i18nsupport/issues/57)).
+
 <a name="0.8.6"></a>
 # [0.8.6](https://github.com/martinroob/ngx-i18nsupport/compare/v0.8.5...v0.8.6) (2017-09-25)
 
