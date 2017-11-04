@@ -223,11 +223,11 @@ export class XliffMergeParameters {
     /**
      * Check syntax of language.
      * Must be compatible with XML Schema type xsd:language.
-     * Pattern: [a-zA-Z]{1,8}(-[a-zA-Z0-9]{1,8})*
+     * Pattern: [a-zA-Z]{1,8}((-|_)[a-zA-Z0-9]{1,8})*
      * @param lang
      */
     private checkLanguageSyntax(lang: string) {
-        let pattern = /^[a-zA-Z]{1,8}(-[a-zA-Z0-9]{1,8})*$/;
+        let pattern = /^[a-zA-Z]{1,8}((-|_)[a-zA-Z0-9]{1,8})*$/;
         if (!pattern.test(lang)) {
             this.errorsFound.push(new XliffMergeError('language "' + lang + '" is not valid'));
         }
