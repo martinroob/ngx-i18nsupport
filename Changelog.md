@@ -1,3 +1,15 @@
+<a name="0.9.0"></a>
+# [0.9.0](https://github.com/martinroob/ngx-i18nsupport/compare/v0.9.0...v0.8.8) (2017-11-06)
+
+### Features
+
+* **xliffmerge:** support for 'en_US' language format (_ is now allowed in language codes) ([#59](https://github.com/martinroob/ngx-i18nsupport/issues/59)).
+This was a contribution of [kennanseno](https://github.com/kennanseno).
+
+### Bug Fixes
+
+* **xliffmerge:** fixed travis build failure due to changed definition files of chalk library (upgraded chalk to 2.3)
+
 <a name="0.8.8"></a>
 # [0.8.8](https://github.com/martinroob/ngx-i18nsupport/compare/v0.8.8...v0.8.6) (2017-10-19)
 
