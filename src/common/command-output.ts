@@ -9,7 +9,7 @@
  * If not are enabled (strange), we assumed the default.
  */
 
-import * as chalk from "chalk";
+import chalk from "chalk";
 import WritableStream = NodeJS.WritableStream;
 import * as util from "util";
 
