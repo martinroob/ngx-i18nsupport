@@ -153,6 +153,20 @@ describe('XliffMerge test spec', () => {
             done();
         });
 
+        it('should accept en_US (with underscore) as a valid language code (#59)', (done) => {
+            let ws: WriterToString = new WriterToString();
+            let commandOut = new CommandOutput(ws);
+            let profileContent: IConfigFile = {
+                xliffmergeOptions: {
+                    defaultLanguage: 'en_US',
+                }
+            };
+            let xliffMergeCmd = XliffMerge.createFromOptions(commandOut, {}, profileContent);
+            xliffMergeCmd.run();
+            expect(ws.writtenData()).not.toContain('language "en_US" is not valid');
+            done();
+        });
+
         it('should output an errror (i18nFormat invalid) when called with an invalid i18n format', (done) => {
             let ws: WriterToString = new WriterToString();
             let commandOut = new CommandOutput(ws);
