@@ -1,3 +1,13 @@
+<a name="0.10.0"></a>
+# [0.10.0](https://github.com/martinroob/ngx-i18nsupport/compare/v0.10.0...v0.9.0) (2018-01-12)
+
+### Features
+
+* **ngx-translate:** You can now specify in detail what entries are exported to ngx-translate, you can supress exporting all entries with explicitely set IDs ([#62](https://github.com/martinroob/ngx-i18nsupport/issues/62)).
+For details how to use it have a look at the Wiki Page [ngx translate usage](https://github.com/martinroob/ngx-i18nsupport/wiki/ngx-translate-usage).
+
+* **xliffmerge:** Technology update to typescript 2.6 and latest versions of all used dependencies.
+
 <a name="0.9.0"></a>
 # [0.9.0](https://github.com/martinroob/ngx-i18nsupport/compare/v0.9.0...v0.8.8) (2017-11-06)
 
