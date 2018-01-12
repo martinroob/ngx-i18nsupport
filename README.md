@@ -93,6 +93,7 @@ Options:
     "languages": ["en", "de"],
     "removeUnusedIds": true,
     "supportNgxTranslate": false,
+    "ngxTranslateExtractionPattern": "@@|ngx-translate",
     "useSourceAsTarget": true,
     "autotranslate": false,
     "apikey": "",
@@ -113,6 +114,9 @@ The options are:
 - `languages` (array of strings): list of languages (if not spefified at command line)
 - `removeUnusedIds` (boolean, default `true`): flag, if unused IDs should be removed during merge
 - `supportNgxTranslate` (boolean, default `false`): flag to active json translation files for ngx-translate
+- `ngxTranslateExtractionPattern` (string, default `@@|ngx-translate`): 
+defines what messages are exported to json translation files for ngx-translate.
+For details how to use it have a look at the Wiki Page [ngx translate usage](https://github.com/martinroob/ngx-i18nsupport/wiki/ngx-translate-usage).
 - `useSourceAsTarget` (boolean, default `true`): flag, if source should be copied to target for new trans-units
 - `autotranslate` (since v0.7.0) (boolean or array of strings, default `false`):
 flag, if new units should be automatically translated by Google Translate.

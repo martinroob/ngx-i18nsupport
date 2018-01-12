@@ -38,4 +38,5 @@
     <msg id="7609655310648429098" desc="ngx-translate" meaning="embeddedhtml.boldstrong">Diese Nachricht ist <ph name="START_BOLD_TEXT"><ex>&lt;b&gt;</ex></ph><ph name="START_TAG_STRONG"><ex>&lt;strong&gt;</ex></ph>SEHR WICHTIG<ph name="CLOSE_TAG_STRONG"><ex>&lt;/strong&gt;</ex></ph><ph name="CLOSE_BOLD_TEXT"><ex>&lt;/b&gt;</ex></ph></msg>
     <msg id="7610784844464920497" desc="ngx-translate" meaning="embeddedhtml.strange">Diese Nachricht ist <ph name="START_TAG_STRANGE"><ex>&lt;strange&gt;</ex></ph><ph name="INTERPOLATION"><ex>INTERPOLATION</ex></ph><ph name="CLOSE_TAG_STRANGE"><ex>&lt;/strange&gt;</ex></ph></msg>
     <msg id="explicitlysetids.test1"><source>S:/experimente/sampleapp41/src/app/ngx-translate-test-data/ngx-translate-test-data.component.ts:18</source>Explizit gesetzte ID</msg>
+    <msg id="1650190705028986164" desc="alt-ngx-translate" meaning="alt-ngx-translate.example1">Alternate description for ngx-translate export</msg>
 </messagebundle>

@@ -1,6 +1,7 @@
 import {ITranslationMessagesFile, ITransUnit, NORMALIZATION_FORMAT_NGXTRANSLATE} from 'ngx-i18nsupport-lib';
 import {FileUtil} from '../common/file-util';
 import {isNullOrUndefined} from 'util';
+import {NgxTranslateExtractionPattern} from './ngx-translate-extraction-pattern';
 /**
  * Created by roobm on 15.03.2017.
  * A tool for extracting messages in ngx-translate format.
@@ -26,11 +27,29 @@ interface NgxMessage {
 
 export class NgxTranslateExtractor {
 
-    public static extract(messagesFile: ITranslationMessagesFile, outputFile: string) {
-        new NgxTranslateExtractor(messagesFile).extractTo(outputFile);
+    public static DefaultExtractionPattern = '@@|ngx-translate';
+    private extractionPattern: NgxTranslateExtractionPattern;
+
+    /**
+     * Check, wether extractionPattern has valid syntax.
+     * @param {string} extractionPatternString
+     * @return {string} null, if pattern is ok, string describing the error, if it is not ok.
+     */
+    public static checkPattern(extractionPatternString: string): string {
+        try {
+          new NgxTranslateExtractionPattern(extractionPatternString);
+        } catch (error) {
+            return error.message;
+        }
+        return null;
     }
 
-    constructor(private messagesFile: ITranslationMessagesFile) {
+    public static extract(messagesFile: ITranslationMessagesFile, extractionPattern: string, outputFile: string) {
+        new NgxTranslateExtractor(messagesFile, extractionPattern).extractTo(outputFile);
+    }
+
+    constructor(private messagesFile: ITranslationMessagesFile, extractionPatternString: string) {
+        this.extractionPattern = new NgxTranslateExtractionPattern(extractionPatternString);
     }
 
     /**
@@ -70,21 +89,25 @@ export class NgxTranslateExtractor {
      * 1. description is set to "ngx-translate" and meaning contains the id.
      * 2. id is explicitly set to a string.
      * @param tu
-     * @return an id or null, if this tu should not be extracted.
+     * @return an ngx id or null, if this tu should not be extracted.
      */
     private ngxTranslateIdFromTU(tu: ITransUnit): string {
         if (this.isExplicitlySetId(tu.id)) {
-            return tu.id;
+            if (this.extractionPattern.isExplicitIdMatched(tu.id)) {
+                return tu.id;
+            } else {
+                return null;
+            }
         }
         let description = tu.description();
-        if (description && description === 'ngx-translate') {
+        if (description && this.extractionPattern.isDescriptionMatched(description)) {
             return tu.meaning();
         }
     }
 
     /**
      * Test, wether ID was explicitly set (via i18n="@myid).
-     * Just heuristic, an ID is explicitly that, if it does not look like a generated one.
+     * Just heuristic, an ID is explicitly, if it does not look like a generated one.
      * @param id
      * @return {boolean}
      */

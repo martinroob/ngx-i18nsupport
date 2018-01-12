@@ -335,6 +335,72 @@ describe('XliffMerge test spec', () => {
             done();
         });
 
+        it('should find syntax error "duplicate @@" in ngxTranslateExtractionPattern', (done) => {
+            let ws: WriterToString = new WriterToString();
+            let commandOut = new CommandOutput(ws);
+            let profileContent: IConfigFile = {
+                xliffmergeOptions: {
+                    languages: ['de', 'en', 'fr'],
+                    supportNgxTranslate: true,
+                    ngxTranslateExtractionPattern: '@@|@@',
+                }
+            };
+            let xliffMergeCmd = XliffMerge.createFromOptions(commandOut, {verbose: true}, profileContent);
+            xliffMergeCmd.run();
+            expect(ws.writtenData()).toContain('ERROR: ngxTranslateExtractionPattern');
+            expect(ws.writtenData()).toContain('extraction pattern must not contain @@ twice');
+            done();
+        });
+
+        it('should find syntax error "invalid description pattern" in ngxTranslateExtractionPattern', (done) => {
+            let ws: WriterToString = new WriterToString();
+            let commandOut = new CommandOutput(ws);
+            let profileContent: IConfigFile = {
+                xliffmergeOptions: {
+                    languages: ['de', 'en', 'fr'],
+                    supportNgxTranslate: true,
+                    ngxTranslateExtractionPattern: '@@|ng;',
+                }
+            };
+            let xliffMergeCmd = XliffMerge.createFromOptions(commandOut, {verbose: true}, profileContent);
+            xliffMergeCmd.run();
+            expect(ws.writtenData()).toContain('ERROR: ngxTranslateExtractionPattern');
+            expect(ws.writtenData()).toContain('description pattern must be an identifier containing only letters, digits, _ or -');
+            done();
+        });
+
+        it('should accept valid ngxTranslateExtractionPattern', (done) => {
+            let ws: WriterToString = new WriterToString();
+            let commandOut = new CommandOutput(ws);
+            let profileContent: IConfigFile = {
+                xliffmergeOptions: {
+                    languages: ['de', 'en', 'fr'],
+                    supportNgxTranslate: true,
+                    ngxTranslateExtractionPattern: '@@|ngx-translate|x',
+                }
+            };
+            let xliffMergeCmd = XliffMerge.createFromOptions(commandOut, {verbose: true}, profileContent);
+            xliffMergeCmd.run();
+            expect(ws.writtenData()).not.toContain('ERROR: ngxTranslateExtractionPattern');
+            done();
+        });
+
+        it('should output default pattern when verbose and ngxTranslateSupport activated', (done) => {
+            let ws: WriterToString = new WriterToString();
+            let commandOut = new CommandOutput(ws);
+            let profileContent: IConfigFile = {
+                xliffmergeOptions: {
+                    languages: ['de', 'en', 'fr'],
+                    supportNgxTranslate: true
+                }
+            };
+            let xliffMergeCmd = XliffMerge.createFromOptions(commandOut, {verbose: true}, profileContent);
+            xliffMergeCmd.run();
+            expect(ws.writtenData()).not.toContain('ERROR: ngxTranslateExtractionPattern');
+            expect(ws.writtenData()).toContain('* ngxTranslateExtractionPattern:\t@@|ngx-translate');
+            done();
+        });
+
     });
 
 });

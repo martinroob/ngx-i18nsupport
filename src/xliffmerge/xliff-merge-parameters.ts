@@ -11,6 +11,7 @@ import {CommandOutput} from '../common/command-output';
 import {format, isArray, isNullOrUndefined} from 'util';
 import {ProgramOptions, IConfigFile} from './i-xliff-merge-options';
 import {FileUtil} from '../common/file-util';
+import {NgxTranslateExtractor} from './ngx-translate-extractor';
 
 export class XliffMergeParameters {
 
@@ -25,6 +26,7 @@ export class XliffMergeParameters {
     private _languages: string[];
     private _removeUnusedIds: boolean;
     private _supportNgxTranslate: boolean;
+    private _ngxTranslateExtractionPattern: string;
     private _useSourceAsTarget: boolean;
     private _autotranslate: boolean|string[];
     private _apikey: string;
@@ -146,6 +148,9 @@ export class XliffMergeParameters {
             if (!isNullOrUndefined(profile.supportNgxTranslate)) {
                 this._supportNgxTranslate = profile.supportNgxTranslate;
             }
+            if (!isNullOrUndefined(profile.ngxTranslateExtractionPattern)) {
+                this._ngxTranslateExtractionPattern = profile.ngxTranslateExtractionPattern;
+            }
             if (!isNullOrUndefined(profile.useSourceAsTarget)) {
                 this._useSourceAsTarget = profile.useSourceAsTarget;
             }
@@ -218,6 +223,13 @@ export class XliffMergeParameters {
                 this.errorsFound.push(new XliffMergeError('autotranslate language "' + lang + '" cannot be translated, because it is the source language'));
             }
         });
+        // ngx translate pattern check
+        if (this.supportNgxTranslate()) {
+            const checkResult = NgxTranslateExtractor.checkPattern(this.ngxTranslateExtractionPattern());
+            if (!isNullOrUndefined(checkResult)) {
+                this.errorsFound.push(new XliffMergeError('ngxTranslateExtractionPattern "' + this.ngxTranslateExtractionPattern() + '": ' + checkResult));
+            }
+        }
      }
 
     /**
@@ -253,6 +265,9 @@ export class XliffMergeParameters {
         commandOutput.debug('languages:\t%s', this.languages());
         commandOutput.debug('removeUnusedIds:\t%s', this.removeUnusedIds());
         commandOutput.debug('supportNgxTranslate:\t%s', this.supportNgxTranslate());
+        if (this.supportNgxTranslate()) {
+            commandOutput.debug('ngxTranslateExtractionPattern:\t%s', this.ngxTranslateExtractionPattern());
+        }
         commandOutput.debug('useSourceAsTarget:\t%s', this.useSourceAsTarget());
         commandOutput.debug('autotranslate:\t%s', this.autotranslate());
         if (this.autotranslate()) {
@@ -355,6 +370,10 @@ export class XliffMergeParameters {
 
     public supportNgxTranslate(): boolean {
         return (isNullOrUndefined(this._supportNgxTranslate)) ? false : this._supportNgxTranslate;
+    }
+
+    public ngxTranslateExtractionPattern(): string {
+        return (isNullOrUndefined(this._ngxTranslateExtractionPattern)) ? NgxTranslateExtractor.DefaultExtractionPattern : this._ngxTranslateExtractionPattern;
     }
 
     /**
