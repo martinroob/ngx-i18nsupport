@@ -233,5 +233,15 @@
         <target>Explicitly set ID</target>
       </segment>
     </unit>
+    <unit id="6830980354990918031">
+      <notes>
+        <note category="description">alt-ngx-translate</note>
+        <note category="meaning">alt-ngx-translate.example1</note>
+      </notes>
+      <segment state="final">
+        <source>Alternate description for ngx-translate export</source>
+        <target>Alternate description for ngx-translate export</target>
+      </segment>
+    </unit>
   </file>
 </xliff>

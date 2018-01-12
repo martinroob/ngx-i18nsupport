@@ -702,6 +702,62 @@ describe('XliffMerge XLIFF 1.2 format tests', () => {
             done();
         });
 
+        it('should not export @@ids to translation json file, when this is supressed in pattern (issue #62)', (done) => {
+            FileUtil.copy(MASTER1SRC, MASTER);
+            let ws: WriterToString = new WriterToString();
+            let commandOut = new CommandOutput(ws);
+            let profileContent: IConfigFile = {
+                xliffmergeOptions: {
+                    defaultLanguage: 'de',
+                    srcDir: WORKDIR,
+                    genDir: WORKDIR,
+                    i18nFile: MASTERFILE,
+                    supportNgxTranslate: true,
+                    ngxTranslateExtractionPattern: 'ngx-translate'
+                }
+            };
+            let xliffMergeCmd = XliffMerge.createFromOptions(commandOut, {languages: ['de']}, profileContent);
+            xliffMergeCmd.run();
+            expect(ws.writtenData()).not.toContain('ERROR');
+            let translationJsonFilename = xliffMergeCmd.generatedNgxTranslateFile('de');
+            expect(FileUtil.exists(translationJsonFilename)).toBeTruthy();
+            let fileContent = FileUtil.read(translationJsonFilename, 'UTF-8');
+            let translation: any = JSON.parse(fileContent);
+            expect(translation).toBeTruthy();
+            expect(translation.dateservice.monday).toBe("Montag");
+            expect(translation.explicitlysetids).toBeFalsy();
+            expect(translation["alt-ngx-translate"]).toBeFalsy();
+            done();
+        });
+
+        it('should export other then ngx-translate description marked entries to translation json file, when this is specified in pattern (issue #62)', (done) => {
+            FileUtil.copy(MASTER1SRC, MASTER);
+            let ws: WriterToString = new WriterToString();
+            let commandOut = new CommandOutput(ws);
+            let profileContent: IConfigFile = {
+                xliffmergeOptions: {
+                    defaultLanguage: 'de',
+                    srcDir: WORKDIR,
+                    genDir: WORKDIR,
+                    i18nFile: MASTERFILE,
+                    supportNgxTranslate: true,
+                    ngxTranslateExtractionPattern: 'ngx-translate|alt-ngx-translate'
+                }
+            };
+            let xliffMergeCmd = XliffMerge.createFromOptions(commandOut, {languages: ['de']}, profileContent);
+            xliffMergeCmd.run();
+            expect(ws.writtenData()).not.toContain('ERROR');
+            let translationJsonFilename = xliffMergeCmd.generatedNgxTranslateFile('de');
+            expect(FileUtil.exists(translationJsonFilename)).toBeTruthy();
+            let fileContent = FileUtil.read(translationJsonFilename, 'UTF-8');
+            let translation: any = JSON.parse(fileContent);
+            expect(translation).toBeTruthy();
+            expect(translation.dateservice.monday).toBe("Montag");
+            expect(translation.explicitlysetids).toBeFalsy();
+            expect(translation["alt-ngx-translate"].example1).toBe('Alternate description for ngx-translate export');
+            done();
+        });
+
     });
 
 });

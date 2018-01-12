@@ -35,7 +35,9 @@ export interface IXliffMergeOptions {
         genDir?: string;    // same as genDir, just to be compatible with ng-xi18n
     };
     removeUnusedIds?: boolean;
-    supportNgxTranslate?: boolean;  // Flag, wether output for ngs-translate should be generated
+    supportNgxTranslate?: boolean;  // Flag, wether output for ngx-translate should be generated
+    ngxTranslateExtractionPattern?: string; // Criteria, what messages should be used for ngx-translate output
+      // see details on the documentation page https://github.com/martinroob/ngx-i18nsupport/wiki/ngx-translate-usage
     useSourceAsTarget?: boolean; // Flag, whether source must be used as target for new trans-units
     autotranslate?: boolean|string[]; // enable auto translate via Google Translate
         // if it is an array, list of languages to autotranslate
