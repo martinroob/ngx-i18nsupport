@@ -24,6 +24,7 @@ export interface IConfigFile {
 export interface IXliffMergeOptions {
     quiet?: boolean;   // Flag to only output error messages
     verbose?: boolean;   // Flag to generate debug output messages
+    allowIdChange?: boolean; // Try to find translation even when id is missing
     defaultLanguage?: string;    // the default language (the language, which is used in the original templates)
     languages?: string[];   // all languages, if not specified via commandline
     srcDir?: string;    // Directory, where the master file is

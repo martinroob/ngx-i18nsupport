@@ -15,7 +15,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import {XliffMergeAutoTranslateService} from '../autotranslate/xliff-merge-auto-translate-service';
 import {AutoTranslateSummaryReport} from '../autotranslate/auto-translate-summary-report';
-import {STATE_FINAL, STATE_TRANSLATED} from 'ngx-i18nsupport-lib/dist';
+import {NORMALIZATION_FORMAT_DEFAULT, STATE_FINAL, STATE_NEW, STATE_TRANSLATED} from 'ngx-i18nsupport-lib/dist';
 
 /**
  * Created by martin on 17.02.2017.
@@ -309,8 +309,20 @@ export class XliffMerge {
         let correctSourceContentCount = 0;
         let correctSourceRefCount = 0;
         let correctDescriptionOrMeaningCount = 0;
+        let idChangedCount = 0;
         this.master.forEachTransUnit((masterTransUnit) => {
             let transUnit: ITransUnit = languageSpecificMessagesFile.transUnitWithId(masterTransUnit.id);
+            if(!transUnit && this.parameters.allowIdChange()) {
+                const masterSourceString = masterTransUnit.sourceContentNormalized().asDisplayString(NORMALIZATION_FORMAT_DEFAULT).trim();
+                languageSpecificMessagesFile.forEachTransUnit((languageTransUnit) => {
+                    if(languageTransUnit.sourceContentNormalized().asDisplayString(NORMALIZATION_FORMAT_DEFAULT).trim() === masterSourceString) {
+                        transUnit = languageTransUnit;
+                        languageTransUnit.setTargetState(STATE_TRANSLATED);
+                        idChangedCount++;
+                    }
+                })
+            }
+
             if (!transUnit) {
                 // oops, no translation, must be a new key, so add it
                 languageSpecificMessagesFile.importNewTransUnit(masterTransUnit, isDefaultLang, this.parameters.useSourceAsTarget());
@@ -356,6 +368,9 @@ export class XliffMerge {
         }
         if (correctSourceRefCount > 0) {
             this.commandOutput.warn('transferred %s source references from master to "%s"', correctSourceRefCount, lang);
+        }
+        if(idChangedCount > 0) {
+            this.commandOutput.warn('found %s changed id\'s in "%s"', idChangedCount, lang);
         }
         if (correctDescriptionOrMeaningCount > 0) {
             this.commandOutput.warn('transferred %s changed descriptions/meanings from master to "%s"', correctDescriptionOrMeaningCount, lang);

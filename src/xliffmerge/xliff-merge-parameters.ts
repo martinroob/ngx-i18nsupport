@@ -17,6 +17,7 @@ export class XliffMergeParameters {
 
     private _quiet: boolean;
     private _verbose: boolean;
+    private _allowIdChange: boolean;
     private _defaultLanguage: string;
     private _srcDir: string;
     private _i18nFile: string;
@@ -115,6 +116,9 @@ export class XliffMergeParameters {
             }
             if (!isNullOrUndefined(profile.verbose)) {
                 this._verbose = profile.verbose;
+            }
+            if(!isNullOrUndefined(profile.allowIdChange)) {
+                this._allowIdChange = profile.allowIdChange;
             }
             if (profile.defaultLanguage) {
                 this._defaultLanguage = profile.defaultLanguage;
@@ -243,6 +247,10 @@ export class XliffMergeParameters {
         if (!pattern.test(lang)) {
             this.errorsFound.push(new XliffMergeError('language "' + lang + '" is not valid'));
         }
+    }
+
+    public allowIdChange(): boolean {
+        return (isNullOrUndefined(this._allowIdChange)) ? false : this._allowIdChange;
     }
 
     public verbose(): boolean {
