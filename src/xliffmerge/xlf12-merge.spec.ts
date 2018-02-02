@@ -10,6 +10,7 @@ import {TranslationMessagesFileReader} from './translation-messages-file-reader'
 import {format} from 'util';
 import {getApiKey} from '../autotranslate/auto-translate-service.spec';
 import {STATE_NEW, STATE_TRANSLATED} from 'ngx-i18nsupport-lib/dist';
+import {XmlReader} from './xml-reader';
 
 /**
  * Created by martin on 18.02.2017.
@@ -326,6 +327,28 @@ describe('XliffMerge XLIFF 1.2 format tests', () => {
             expect(tuRemoved).toBeTruthy();
             expect(tuRemoved.description()).toBeNull();
             expect(tuRemoved.meaning()).toBeNull();
+            done();
+        });
+
+        it('should not remove trailing line break when merging', (done) => {
+            FileUtil.copy(MASTER1SRC, MASTER);
+            const masterContent = FileUtil.read(MASTER, XmlReader.DEFAULT_ENCODING);
+            expect(masterContent.endsWith('\n')).toBeTruthy('master file should end with EOL');
+            let ws: WriterToString = new WriterToString();
+            let commandOut = new CommandOutput(ws);
+            let profileContent: IConfigFile = {
+                xliffmergeOptions: {
+                    defaultLanguage: 'de',
+                    srcDir: WORKDIR,
+                    genDir: WORKDIR,
+                    i18nFile: MASTERFILE
+                }
+            };
+            let xliffMergeCmd = XliffMerge.createFromOptions(commandOut, {languages: ['de', 'en']}, profileContent);
+            xliffMergeCmd.run();
+            expect(ws.writtenData()).not.toContain('ERROR');
+            const newContent = FileUtil.read(xliffMergeCmd.generatedI18nFile('de'), XmlReader.DEFAULT_ENCODING);
+            expect(newContent.endsWith('\n')).toBeTruthy('file should end with EOL');
             done();
         });
 
