@@ -3,12 +3,16 @@
 
 ### Features
 
-* **xliffmerge:** Added new option "allowIdChange" ([#65](https://github.com/martinroob/ngx-i18nsupport/issues/65)).
+* **xliffmerge:** Added new option "`allowIdChange`" ([#65](https://github.com/martinroob/ngx-i18nsupport/issues/65)).
+When there is only a small change in the original message text, e.g. a trailing white space, 
+the Angular extraction tool will change the ID of the unit.
+This means that the translations of the unit are lost.
+When you activate this flag, `xliffmerge` will check for units with only white space changes and merge them correctly.
 This was a contribution of [Szpadel](https://github.com/Szpadel).
 
 ### Bug Fixes
 
-* **xliffmerge:** xliffmerge removes trailing line break when there is an update ([#66](https://github.com/martinroob/ngx-i18nsupport/issues/66)).
+* **xliffmerge:** fixed xliffmerge removes trailing line break when there is an update ([#66](https://github.com/martinroob/ngx-i18nsupport/issues/66)).
 
 <a name="0.10.0"></a>
 # [0.10.0](https://github.com/martinroob/ngx-i18nsupport/compare/v0.10.0...v0.9.0) (2018-01-12)
