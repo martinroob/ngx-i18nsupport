@@ -1,3 +1,15 @@
+<a name="0.11.0"></a>
+# [0.11.0](https://github.com/martinroob/ngx-i18nsupport/compare/v0.11.0...v0.10.0) (2018-02-02)
+
+### Features
+
+* **xliffmerge:** Added new option "allowIdChange" ([#65](https://github.com/martinroob/ngx-i18nsupport/issues/65)).
+This was a contribution of [Szpadel](https://github.com/Szpadel).
+
+### Bug Fixes
+
+* **xliffmerge:** xliffmerge removes trailing line break when there is an update ([#66](https://github.com/martinroob/ngx-i18nsupport/issues/66)).
+
 <a name="0.10.0"></a>
 # [0.10.0](https://github.com/martinroob/ngx-i18nsupport/compare/v0.10.0...v0.9.0) (2018-01-12)
 
