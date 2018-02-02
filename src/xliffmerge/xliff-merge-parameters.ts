@@ -17,6 +17,7 @@ export class XliffMergeParameters {
 
     private _quiet: boolean;
     private _verbose: boolean;
+    private _allowIdChange: boolean;
     private _defaultLanguage: string;
     private _srcDir: string;
     private _i18nFile: string;
@@ -115,6 +116,9 @@ export class XliffMergeParameters {
             }
             if (!isNullOrUndefined(profile.verbose)) {
                 this._verbose = profile.verbose;
+            }
+            if(!isNullOrUndefined(profile.allowIdChange)) {
+                this._allowIdChange = profile.allowIdChange;
             }
             if (profile.defaultLanguage) {
                 this._defaultLanguage = profile.defaultLanguage;
@@ -245,6 +249,10 @@ export class XliffMergeParameters {
         }
     }
 
+    public allowIdChange(): boolean {
+        return (isNullOrUndefined(this._allowIdChange)) ? false : this._allowIdChange;
+    }
+
     public verbose(): boolean {
         return (isNullOrUndefined(this._verbose)) ? false : this._verbose;
     }
@@ -269,6 +277,7 @@ export class XliffMergeParameters {
             commandOutput.debug('ngxTranslateExtractionPattern:\t%s', this.ngxTranslateExtractionPattern());
         }
         commandOutput.debug('useSourceAsTarget:\t%s', this.useSourceAsTarget());
+        commandOutput.debug('allowIdChange:\t%s', this.allowIdChange());
         commandOutput.debug('autotranslate:\t%s', this.autotranslate());
         if (this.autotranslate()) {
             commandOutput.debug('autotranslated languages:\t%s', this.autotranslatedLanguages());

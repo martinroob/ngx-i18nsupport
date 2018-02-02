@@ -7,6 +7,7 @@ import {WriterToString} from '../common/writer-to-string';
 import {FileUtil} from '../common/file-util';
 import {ITranslationMessagesFile, ITransUnit, STATE_NEW} from 'ngx-i18nsupport-lib';
 import {TranslationMessagesFileReader} from './translation-messages-file-reader';
+import {XmlReader} from './xml-reader';
 
 /**
  * Created by martin on 18.02.2017.
@@ -163,6 +164,29 @@ describe('XliffMerge XMB format tests', () => {
             // look, that the removed IDs are really removed.
             expect(langFileEnglish.transUnitWithId(ID_REMOVED_DESCRIPTION)).toBeFalsy();
             expect(langFileEnglish.transUnitWithId(ID_REMOVED_DESCRIPTION2)).toBeFalsy();
+            done();
+        });
+
+        it('should not remove trailing line break when merging', (done) => {
+            FileUtil.copy(MASTER1SRC, MASTER);
+            const masterContent = FileUtil.read(MASTER, XmlReader.DEFAULT_ENCODING);
+            expect(masterContent.endsWith('\n')).toBeTruthy('master file should end with EOL');
+            let ws: WriterToString = new WriterToString();
+            let commandOut = new CommandOutput(ws);
+            let profileContent: IConfigFile = {
+                xliffmergeOptions: {
+                    defaultLanguage: 'de',
+                    srcDir: WORKDIR,
+                    genDir: WORKDIR,
+                    i18nFormat: 'xmb',
+                    i18nFile: MASTERFILE
+                }
+            };
+            let xliffMergeCmd = XliffMerge.createFromOptions(commandOut, {languages: ['de', 'en']}, profileContent);
+            xliffMergeCmd.run();
+            expect(ws.writtenData()).not.toContain('ERROR');
+            const newContent = FileUtil.read(xliffMergeCmd.generatedI18nFile('de'), XmlReader.DEFAULT_ENCODING);
+            expect(newContent.endsWith('\n')).toBeTruthy('file should end with EOL');
             done();
         });
 
