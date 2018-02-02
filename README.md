@@ -95,6 +95,7 @@ Options:
     "supportNgxTranslate": false,
     "ngxTranslateExtractionPattern": "@@|ngx-translate",
     "useSourceAsTarget": true,
+    "allowIdChange": false,
     "autotranslate": false,
     "apikey": "",
     "apikeyfile": "",
@@ -118,6 +119,11 @@ The options are:
 defines what messages are exported to json translation files for ngx-translate.
 For details how to use it have a look at the Wiki Page [ngx translate usage](https://github.com/martinroob/ngx-i18nsupport/wiki/ngx-translate-usage).
 - `useSourceAsTarget` (boolean, default `true`): flag, if source should be copied to target for new trans-units
+- `allowIdChange` (boolean, default `false`):
+flag, wether xliffmerge should merge transunits with changed IDs.
+When there is only a small change in the original message text, e.g. a trailing white space, the Angular extraction tool will change the ID of the unit.
+This means that the translations of the unit are lost.
+When you activate this flag, `xliffmerge` will check for units with only white space changes and merge them correctly.
 - `autotranslate` (since v0.7.0) (boolean or array of strings, default `false`):
 flag, if new units should be automatically translated by Google Translate.
 You can also specify a string array with the languages you want to auto translate (e.g `"autotranslate": ["fr", "ru"]`).

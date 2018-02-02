@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file source-language="de" target-language="en" datatype="plaintext" original="ng2.template">
+      <body>
+          <trans-unit id="originalId" datatype="html">
+            <source>Test kleine Änderung, nur white spaces!</source>
+            <target>Test for a small white space change</target>
+          </trans-unit>
+          <trans-unit id="78eab955529ba0f1817c84991d9175f55bfdf937" datatype="html">
+              <source>Bearbeiten Beschreibung</source>
+              <target>Edit description</target>
+              <note priority="1" from="description">data.edit.titles.description</note>
+              <context-group purpose="location">
+                  <context context-type="sourcefile">/src/app/test-data.component.ts</context>
+                  <context context-type="linenumber">20</context>
+              </context-group>
+          </trans-unit>
+    </body>
+  </file>
+</xliff>

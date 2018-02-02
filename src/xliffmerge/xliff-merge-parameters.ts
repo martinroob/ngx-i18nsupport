@@ -277,6 +277,7 @@ export class XliffMergeParameters {
             commandOutput.debug('ngxTranslateExtractionPattern:\t%s', this.ngxTranslateExtractionPattern());
         }
         commandOutput.debug('useSourceAsTarget:\t%s', this.useSourceAsTarget());
+        commandOutput.debug('allowIdChange:\t%s', this.allowIdChange());
         commandOutput.debug('autotranslate:\t%s', this.autotranslate());
         if (this.autotranslate()) {
             commandOutput.debug('autotranslated languages:\t%s', this.autotranslatedLanguages());

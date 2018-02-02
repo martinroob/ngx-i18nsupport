@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xliff version="2.0" xmlns="urn:oasis:names:tc:xliff:document:2.0" srcLang="de">
+  <file original="ng.template" id="ngi18n">
+    <unit id="changedId">
+      <segment>
+        <source>
+          Test kleine Änderung, nur white spaces!</source>
+      </segment>
+    </unit>
+  </file>
+</xliff>

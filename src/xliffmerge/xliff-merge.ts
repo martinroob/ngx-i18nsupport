@@ -312,21 +312,15 @@ export class XliffMerge {
         let idChangedCount = 0;
         this.master.forEachTransUnit((masterTransUnit) => {
             let transUnit: ITransUnit = languageSpecificMessagesFile.transUnitWithId(masterTransUnit.id);
-            if(!transUnit && this.parameters.allowIdChange()) {
-                const masterSourceString = masterTransUnit.sourceContentNormalized().asDisplayString(NORMALIZATION_FORMAT_DEFAULT).trim();
-                languageSpecificMessagesFile.forEachTransUnit((languageTransUnit) => {
-                    if(languageTransUnit.sourceContentNormalized().asDisplayString(NORMALIZATION_FORMAT_DEFAULT).trim() === masterSourceString) {
-                        transUnit = languageTransUnit;
-                        languageTransUnit.setTargetState(STATE_TRANSLATED);
-                        idChangedCount++;
-                    }
-                })
-            }
 
             if (!transUnit) {
                 // oops, no translation, must be a new key, so add it
-                languageSpecificMessagesFile.importNewTransUnit(masterTransUnit, isDefaultLang, this.parameters.useSourceAsTarget());
-                newCount++;
+                if (this.parameters.allowIdChange() && this.processChangedIdUnit(masterTransUnit, languageSpecificMessagesFile)) {
+                    idChangedCount++;
+                } else {
+                    languageSpecificMessagesFile.importNewTransUnit(masterTransUnit, isDefaultLang, this.parameters.useSourceAsTarget());
+                    newCount++;
+                }
             } else {
                 // check for changed source content and change it if needed
                 // (can only happen if ID is explicitely set, otherwise ID would change if source content is changed.
@@ -410,6 +404,29 @@ export class XliffMerge {
                     return null;
                 });
         }
+    }
+
+    /**
+     * Handle the case of changed id due to small white space changes.
+     * @param {ITransUnit} masterTransUnit unit in master file
+     * @param {ITranslationMessagesFile} languageSpecificMessagesFile translation file
+     * @return {boolean} true, if done, false if no changed unit found
+     */
+    private processChangedIdUnit(masterTransUnit: ITransUnit, languageSpecificMessagesFile: ITranslationMessagesFile): boolean {
+        const masterSourceString = masterTransUnit.sourceContentNormalized().asDisplayString(NORMALIZATION_FORMAT_DEFAULT).trim();
+        let changedTransUnit: ITransUnit = null;
+        languageSpecificMessagesFile.forEachTransUnit((languageTransUnit) => {
+                if(languageTransUnit.sourceContentNormalized().asDisplayString(NORMALIZATION_FORMAT_DEFAULT).trim() === masterSourceString) {
+                    changedTransUnit = languageTransUnit;
+                }
+        });
+        if (!changedTransUnit) {
+            return false;
+        }
+        const mergedTransUnit = languageSpecificMessagesFile.importNewTransUnit(masterTransUnit, false, false);
+        mergedTransUnit.translate(changedTransUnit.targetContent());
+        mergedTransUnit.setTargetState(STATE_TRANSLATED);
+        return true;
     }
 
     private areSourceReferencesEqual(ref1: {sourcefile: string; linenumber: number;}[], ref2: {sourcefile: string; linenumber: number;}[]): boolean {
