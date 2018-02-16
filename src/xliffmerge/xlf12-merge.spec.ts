@@ -383,7 +383,7 @@ describe('XliffMerge XLIFF 1.2 format tests', () => {
             done();
         });
 
-        it('should merge only white space changed content with changed ID to already translated files (#65)', (done) => {
+        it('allowIdChange feature, should merge only white space changed content with changed ID to already translated files (#65)', (done) => {
             const ID_ORIGINAL = 'originalId';
             const ID_CHANGED = 'changedId';
             const TRANSLATED_FILE = 'WithIdChange.en.xlf';
@@ -403,7 +403,7 @@ describe('XliffMerge XLIFF 1.2 format tests', () => {
             let xliffMergeCmd = XliffMerge.createFromOptions(commandOut, {languages: ['de', 'en'], verbose: true}, profileContent);
             xliffMergeCmd.run();
             expect(ws.writtenData()).not.toContain('ERROR');
-            expect(ws.writtenData()).toContain('WARNING: found 1 changed id\'s in "en"');
+            expect(ws.writtenData()).toContain('WARNING: found 2 changed id\'s in "en"');
 
             // check that changed id is merged
             let langFileEnglish: ITranslationMessagesFile = readXliff(xliffMergeCmd.generatedI18nFile('en'));
@@ -412,6 +412,40 @@ describe('XliffMerge XLIFF 1.2 format tests', () => {
             expect(tuChanged.sourceContent().trim()).toBe('Test kleine Änderung, nur white spaces!');
             expect(tuChanged.targetState()).toBe(STATE_TRANSLATED);
             expect(tuChanged.targetContent()).toBe('Test for a small white space change');
+            let tuOriginal: ITransUnit = langFileEnglish.transUnitWithId(ID_ORIGINAL);
+            expect(tuOriginal).toBeFalsy();
+            done();
+        });
+
+        it('allowIdChange feature, should merge untranslated only white space changed content with changed ID, but should set preserve state "new" (#68)', (done) => {
+            const ID_ORIGINAL = 'originalIdUntranslated';
+            const ID_CHANGED = 'changedIdUntranslated';
+            const TRANSLATED_FILE = 'WithIdChange.en.xlf';
+            FileUtil.copy(SRCDIR + 'ngExtractedMasterWithIdChange.xlf', MASTER);
+            FileUtil.copy(SRCDIR + TRANSLATED_FILE,WORKDIR + 'messages.en.xlf');
+            let ws: WriterToString = new WriterToString();
+            let commandOut = new CommandOutput(ws);
+            let profileContent: IConfigFile = {
+                xliffmergeOptions: {
+                    defaultLanguage: 'de',
+                    srcDir: WORKDIR,
+                    genDir: WORKDIR,
+                    i18nFile: MASTERFILE,
+                    allowIdChange: true
+                }
+            };
+            let xliffMergeCmd = XliffMerge.createFromOptions(commandOut, {languages: ['de', 'en'], verbose: true}, profileContent);
+            xliffMergeCmd.run();
+            expect(ws.writtenData()).not.toContain('ERROR');
+            expect(ws.writtenData()).toContain('WARNING: found 2 changed id\'s in "en"');
+
+            // check that changed id is merged
+            let langFileEnglish: ITranslationMessagesFile = readXliff(xliffMergeCmd.generatedI18nFile('en'));
+            let tuChanged: ITransUnit = langFileEnglish.transUnitWithId(ID_CHANGED);
+            expect(tuChanged).toBeTruthy();
+            expect(tuChanged.sourceContent().trim()).toBe('Unübersetzt');
+            expect(tuChanged.targetState()).toBe(STATE_NEW);
+            expect(tuChanged.targetContent()).toBe(''); // not translated
             let tuOriginal: ITransUnit = langFileEnglish.transUnitWithId(ID_ORIGINAL);
             expect(tuOriginal).toBeFalsy();
             done();

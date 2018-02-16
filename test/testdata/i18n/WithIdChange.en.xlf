@@ -6,6 +6,10 @@
             <source>Test kleine Änderung, nur white spaces!</source>
             <target>Test for a small white space change</target>
           </trans-unit>
+          <trans-unit id="originalIdUntranslated" datatype="html">
+              <source>Unübersetzt</source>
+              <target/>
+          </trans-unit>
           <trans-unit id="78eab955529ba0f1817c84991d9175f55bfdf937" datatype="html">
               <source>Bearbeiten Beschreibung</source>
               <target>Edit description</target>

@@ -7,5 +7,10 @@
           Test kleine Änderung, nur white spaces!</source>
       </segment>
     </unit>
+    <unit id="changedIdUntranslated">
+      <segment>
+        <source>Unübersetzt</source>
+      </segment>
+    </unit>
   </file>
 </xliff>

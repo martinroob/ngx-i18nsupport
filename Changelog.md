@@ -1,3 +1,10 @@
+<a name="0.11.1"></a>
+# [0.11.1](https://github.com/martinroob/ngx-i18nsupport/compare/v0.11.1...v0.11.0) (2018-02-16)
+
+### Bug Fixes
+
+* **xliffmerge:** fixed bug with "`allowIdChange: true`", it changes "new" to "translated" ([#68](https://github.com/martinroob/ngx-i18nsupport/issues/68)).
+
 <a name="0.11.0"></a>
 # [0.11.0](https://github.com/martinroob/ngx-i18nsupport/compare/v0.11.0...v0.10.0) (2018-02-02)
 
