@@ -424,8 +424,11 @@ export class XliffMerge {
             return false;
         }
         const mergedTransUnit = languageSpecificMessagesFile.importNewTransUnit(masterTransUnit, false, false);
-        mergedTransUnit.translate(changedTransUnit.targetContent());
-        mergedTransUnit.setTargetState(STATE_TRANSLATED);
+        const translatedContent = changedTransUnit.targetContent();
+        if (translatedContent) { // issue #68 set translated only, if it is really translated
+            mergedTransUnit.translate(translatedContent);
+            mergedTransUnit.setTargetState(STATE_TRANSLATED);
+        }
         return true;
     }
 
