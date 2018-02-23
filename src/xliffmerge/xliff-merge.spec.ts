@@ -401,6 +401,42 @@ describe('XliffMerge test spec', () => {
             done();
         });
 
+        it('should accept targetPraefix and targetSuffix parameter', (done) => {
+            let ws: WriterToString = new WriterToString();
+            let commandOut = new CommandOutput(ws);
+            let profileContent: IConfigFile = {
+                xliffmergeOptions: {
+                    languages: ['de', 'en', 'fr'],
+                    targetPraefix: '%%',
+                    targetSuffix: '!!',
+                }
+            };
+            let xliffMergeCmd = XliffMerge.createFromOptions(commandOut, {verbose: true}, profileContent);
+            xliffMergeCmd.run();
+            expect(ws.writtenData()).toContain('* targetPraefix:\t"%%"');
+            expect(ws.writtenData()).toContain('* targetSuffix:\t"!!"');
+            done();
+        });
+
+        it('should output a warning when targetPraefix or targetSuffix are set, but useSourceAsTarget is disabled', (done) => {
+            let ws: WriterToString = new WriterToString();
+            let commandOut = new CommandOutput(ws);
+            let profileContent: IConfigFile = {
+                xliffmergeOptions: {
+                    languages: ["de"],
+                    useSourceAsTarget: false,
+                    targetPraefix: '%%',
+                    targetSuffix: '!!',
+                }
+            };
+            let xliffMergeCmd = XliffMerge.createFromOptions(commandOut, {verbose: true}, profileContent);
+            xliffMergeCmd.run();
+            const allWarnings = xliffMergeCmd.warnings().join('\n');
+            expect(allWarnings).toContain('configured targetPraefix "%%" will not be used because "useSourceAsTarget" is disabled');
+            expect(allWarnings).toContain('configured targetSuffix "!!" will not be used because "useSourceAsTarget" is disabled');
+            done();
+        });
+
     });
 
 });

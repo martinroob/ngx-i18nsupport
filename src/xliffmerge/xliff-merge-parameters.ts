@@ -29,6 +29,8 @@ export class XliffMergeParameters {
     private _supportNgxTranslate: boolean;
     private _ngxTranslateExtractionPattern: string;
     private _useSourceAsTarget: boolean;
+    private _targetPraefix: string;
+    private _targetSuffix: string;
     private _autotranslate: boolean|string[];
     private _apikey: string;
     private _apikeyfile: string;
@@ -158,6 +160,12 @@ export class XliffMergeParameters {
             if (!isNullOrUndefined(profile.useSourceAsTarget)) {
                 this._useSourceAsTarget = profile.useSourceAsTarget;
             }
+            if (!isNullOrUndefined(profile.targetPraefix)) {
+                this._targetPraefix = profile.targetPraefix;
+            }
+            if (!isNullOrUndefined(profile.targetSuffix)) {
+                this._targetSuffix = profile.targetSuffix;
+            }
             if (!isNullOrUndefined(profile.autotranslate)) {
                 this._autotranslate = profile.autotranslate;
             }
@@ -234,6 +242,15 @@ export class XliffMergeParameters {
                 this.errorsFound.push(new XliffMergeError('ngxTranslateExtractionPattern "' + this.ngxTranslateExtractionPattern() + '": ' + checkResult));
             }
         }
+        // targetPraefix and targetSuffix check
+        if (!this.useSourceAsTarget()) {
+            if (this.targetPraefix().length > 0) {
+                this.warningsFound.push('configured targetPraefix "' + this.targetPraefix() + '" will not be used because "useSourceAsTarget" is disabled"');
+            }
+            if (this.targetSuffix().length > 0) {
+                this.warningsFound.push('configured targetSuffix "' + this.targetSuffix() + '" will not be used because "useSourceAsTarget" is disabled"');
+            }
+        }
      }
 
     /**
@@ -277,6 +294,10 @@ export class XliffMergeParameters {
             commandOutput.debug('ngxTranslateExtractionPattern:\t%s', this.ngxTranslateExtractionPattern());
         }
         commandOutput.debug('useSourceAsTarget:\t%s', this.useSourceAsTarget());
+        if (this.useSourceAsTarget()) {
+            commandOutput.debug('targetPraefix:\t"%s"', this.targetPraefix());
+            commandOutput.debug('targetSuffix:\t"%s"', this.targetSuffix());
+        }
         commandOutput.debug('allowIdChange:\t%s', this.allowIdChange());
         commandOutput.debug('autotranslate:\t%s', this.autotranslate());
         if (this.autotranslate()) {
@@ -391,6 +412,22 @@ export class XliffMergeParameters {
      */
     public useSourceAsTarget(): boolean {
         return (isNullOrUndefined(this._useSourceAsTarget)) ? true : this._useSourceAsTarget;
+    }
+
+    /**
+     * Praefix used for target when copying new trans-units
+     * Default is ""
+     */
+    public targetPraefix(): string {
+        return (isNullOrUndefined(this._targetPraefix)) ? "" : this._targetPraefix;
+    }
+
+    /**
+     * Suffix used for target when copying new trans-units
+     * Default is ""
+     */
+    public targetSuffix(): string {
+        return (isNullOrUndefined(this._targetSuffix)) ? "" : this._targetSuffix;
     }
 
     /**

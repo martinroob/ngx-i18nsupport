@@ -180,7 +180,50 @@ describe('XliffMerge XLIFF 2.0 format tests', () => {
             done();
         });
 
-        it('should generate translated file with natove trans unit status "initial", testcase for issue #57', (done) => {
+        it('should generate translated file for all languages with set praefix and suffix (#70)', (done) => {
+            FileUtil.copy(MASTER1SRC, MASTER);
+            let ws: WriterToString = new WriterToString();
+            let commandOut = new CommandOutput(ws);
+            let profileContent: IConfigFile = {
+                xliffmergeOptions: {
+                    defaultLanguage: 'de',
+                    srcDir: WORKDIR,
+                    genDir: WORKDIR,
+                    i18nFormat: 'xlf2',
+                    i18nFile: MASTERFILE,
+                    targetPraefix: '%%',
+                    targetSuffix: '!!',
+                }
+            };
+            let xliffMergeCmd = XliffMerge.createFromOptions(commandOut, {languages: ['de', 'en']}, profileContent);
+            xliffMergeCmd.run();
+            expect(ws.writtenData()).not.toContain('ERROR');
+            let langFileGerman: ITranslationMessagesFile = readXliff2(xliffMergeCmd.generatedI18nFile('de'));
+            expect(langFileGerman.sourceLanguage()).toBe('de');
+            expect(langFileGerman.targetLanguage()).toBe('de');
+            langFileGerman.forEachTransUnit((tu: ITransUnit) => {
+                if (!tu.targetContent().startsWith('{VAR')) {
+                    expect(tu.targetContent()).toBe('%%' + tu.sourceContent() + '!!');
+                } else {
+                    expect(tu.targetContent()).toBe(tu.sourceContent());
+                }
+                expect(tu.targetState()).toBe('final');
+            });
+            let langFileEnglish: ITranslationMessagesFile = readXliff2(xliffMergeCmd.generatedI18nFile('en'));
+            expect(langFileEnglish.sourceLanguage()).toBe('de');
+            expect(langFileEnglish.targetLanguage()).toBe('en');
+            langFileEnglish.forEachTransUnit((tu: ITransUnit) => {
+                if (!tu.targetContent().startsWith('{VAR')) {
+                    expect(tu.targetContent()).toBe('%%' + tu.sourceContent() + '!!');
+                } else {
+                    expect(tu.targetContent()).toBe(tu.sourceContent());
+                }
+                expect(tu.targetState()).toBe('new');
+            });
+            done();
+        });
+
+        it('should generate translated file with native trans unit status "initial", testcase for issue #57', (done) => {
             FileUtil.copy(MASTER1SRC, MASTER);
             let ws: WriterToString = new WriterToString();
             let commandOut = new CommandOutput(ws);

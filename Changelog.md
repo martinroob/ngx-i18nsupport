@@ -1,3 +1,11 @@
+<a name="0.12.0"></a>
+# [0.12.0](https://github.com/martinroob/ngx-i18nsupport/compare/v0.12.0...v0.11.1) (2018-02-23)
+
+### Features
+
+* **xliffmerge:** Added support to add a prefix to translated target languages.
+<br>There are 2 new options `targetPraefix` and `targetSuffix` used for copied untranslated units ([#70](https://github.com/martinroob/ngx-i18nsupport/issues/70)).
+
 <a name="0.11.1"></a>
 # [0.11.1](https://github.com/martinroob/ngx-i18nsupport/compare/v0.11.1...v0.11.0) (2018-02-16)
 

@@ -189,6 +189,14 @@ export class XliffMerge {
         return this.parameters.generatedNgxTranslateFile(lang);
     }
 
+    /**
+     * Warnings found during the run.
+     * @return {string[]}
+     */
+    public warnings(): string[] {
+        return this.parameters.warningsFound;
+    }
+
     private readMaster() {
         try {
             this.master = TranslationMessagesFileReader.fromFile(this.parameters.i18nFormat(), this.parameters.i18nFile(), this.parameters.encoding());
@@ -270,6 +278,8 @@ export class XliffMerge {
         // and set target-language
         // and copy source to target if necessary
         let isDefaultLang: boolean = (lang == this.parameters.defaultLanguage());
+        this.master.setNewTransUnitTargetPraefix(this.parameters.targetPraefix());
+        this.master.setNewTransUnitTargetSuffix(this.parameters.targetSuffix());
         let languageSpecificMessagesFile: ITranslationMessagesFile = this.master.createTranslationFileForLang(lang, languageXliffFilePath, isDefaultLang, this.parameters.useSourceAsTarget());
         return this.autoTranslate(this.master.sourceLanguage(), lang, languageSpecificMessagesFile).map((summary) => {
             // write it to file
@@ -303,13 +313,14 @@ export class XliffMerge {
     private mergeMasterTo(lang: string, languageXliffFilePath: string): Observable<void> {
         // read lang specific file
         let languageSpecificMessagesFile: ITranslationMessagesFile = TranslationMessagesFileReader.fromFile(XliffMerge.translationFormat(this.parameters.i18nFormat()), languageXliffFilePath, this.parameters.encoding());
-
         let isDefaultLang: boolean = (lang == this.parameters.defaultLanguage());
         let newCount = 0;
         let correctSourceContentCount = 0;
         let correctSourceRefCount = 0;
         let correctDescriptionOrMeaningCount = 0;
         let idChangedCount = 0;
+        languageSpecificMessagesFile.setNewTransUnitTargetPraefix(this.parameters.targetPraefix());
+        languageSpecificMessagesFile.setNewTransUnitTargetSuffix(this.parameters.targetSuffix());
         this.master.forEachTransUnit((masterTransUnit) => {
             let transUnit: ITransUnit = languageSpecificMessagesFile.transUnitWithId(masterTransUnit.id);
 
