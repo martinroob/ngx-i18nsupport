@@ -95,6 +95,8 @@ Options:
     "supportNgxTranslate": false,
     "ngxTranslateExtractionPattern": "@@|ngx-translate",
     "useSourceAsTarget": true,
+    "targetPraefix": "",
+    "targetSuffix": "",
     "allowIdChange": false,
     "autotranslate": false,
     "apikey": "",
@@ -119,7 +121,15 @@ The options are:
 defines what messages are exported to json translation files for ngx-translate.
 For details how to use it have a look at the Wiki Page [ngx translate usage](https://github.com/martinroob/ngx-i18nsupport/wiki/ngx-translate-usage).
 - `useSourceAsTarget` (boolean, default `true`): flag, if source should be copied to target for new trans-units
-- `allowIdChange` (boolean, default `false`):
+- `targetPraefix` (since 0.12.0) (string, default """): 
+when the flag `useSourceAsTarget` is set and a source is copied to target,
+then the target string will be praefixed by this value.
+E.g. `targetPraefix: "%%"` and source contains the string "menu", target will contain "%%menu" at the end.
+- `targetSuffix` (since 0.12.0) (string, default """): 
+when the flag `useSourceAsTarget` is set and a source is copied to target,
+then the target string will be suffixed by this value.
+E.g. `targetSuffix: "%%"` and source contains the string "menu", target will contain "menu%%" at the end.
+- `allowIdChange` (since 0.11.0) (boolean, default `false`):
 flag, wether xliffmerge should merge transunits with changed IDs.
 When there is only a small change in the original message text, e.g. a trailing white space, the Angular extraction tool will change the ID of the unit.
 This means that the translations of the unit are lost.

@@ -40,6 +40,8 @@ export interface IXliffMergeOptions {
     ngxTranslateExtractionPattern?: string; // Criteria, what messages should be used for ngx-translate output
       // see details on the documentation page https://github.com/martinroob/ngx-i18nsupport/wiki/ngx-translate-usage
     useSourceAsTarget?: boolean; // Flag, whether source must be used as target for new trans-units
+    targetPraefix?: string; // Praefix for target copied from sourced
+    targetSuffix?: string; // Suffix for target copied from sourced
     autotranslate?: boolean|string[]; // enable auto translate via Google Translate
         // if it is an array, list of languages to autotranslate
         // if it is true, autotranslate all languages (except source language of course)
