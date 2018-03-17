@@ -28,6 +28,7 @@ export interface IXliffMergeOptions {
     defaultLanguage?: string;    // the default language (the language, which is used in the original templates)
     languages?: string[];   // all languages, if not specified via commandline
     srcDir?: string;    // Directory, where the master file is
+    i18nBaseFile?: string; // Basename for i18n input and output, default is 'messages'
     i18nFile?: string;  // master file, if not absolute, it is relative to srcDir
     i18nFormat?: string; // xlf or xmb
     encoding?: string;  // encoding to write xml
