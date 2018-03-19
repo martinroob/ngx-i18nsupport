@@ -87,6 +87,7 @@ Options:
     "srcDir": "i18n",
     "genDir": "i18n",
     "i18nFile": "messages.xlf",
+    "i18nBaseFile": "messages",
     "i18nFormat": "xlf",
     "encoding": "UTF-8",
     "defaultLanguage": "en",
@@ -111,6 +112,10 @@ The options are:
 - `srcDir` (string, default "."): directory, where the master file is expected
 - `genDir` (string, default "."): directory, where files are written to (normally identical with srcDir)
 - `i18nFile` (string, default "messages.xlf"): master file (relativ to srcDir)
+- `i18nBaseFile` (since 0.13) (string, default "messages"): base name of master file
+(without suffix) (relativ to srcDir). Only used if `i18nFile` is not set.
+Useful to generate different filename for different projects.
+E.g. `i18bBaseFile: project1messages` produces language files `project1messages.de.xlf` ...
 - `i18nFormat` (string, default "xlf"): `xlf` for XLIFF 1.2 or `xlf2` for XLIFF 2.0 or `xmb` for XML Message Bundles
 - `encoding` (string, default "UTF-8"): expected encoding of xlf, xlf2 or xmb files
 - `defaultLanguage` (string, default "en"): the native language used in your templates
