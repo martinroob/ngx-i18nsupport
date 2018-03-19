@@ -1,3 +1,12 @@
+<a name="0.13.0"></a>
+# [0.13.0](https://github.com/martinroob/ngx-i18nsupport/compare/v0.13.0...v0.12.0) (2018-03-19)
+
+### Features
+
+* **xliffmerge:** Added ability to change i18n basename to something other then 'messages' ([#74](https://github.com/martinroob/ngx-i18nsupport/issues/74)).
+There is a new option `i18nBaseFile`.
+This was a contribution of [rwlogel](https://github.com/rwlogel).
+
 <a name="0.12.0"></a>
 # [0.12.0](https://github.com/martinroob/ngx-i18nsupport/compare/v0.12.0...v0.11.1) (2018-02-23)
 

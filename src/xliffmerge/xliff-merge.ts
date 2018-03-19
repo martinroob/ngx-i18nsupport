@@ -48,7 +48,7 @@ export class XliffMerge {
                 console.log('  <language> has to be a valid language short string, e,g. "en", "de", "de-ch"');
                 console.log('');
                 console.log('  configfile can contain the following values:');
-                console.log('\tquiet verbose defaultLanguage languages srcDir i18nFile i18nFormat encoding genDir removeUnusedIds');
+                console.log('\tquiet verbose defaultLanguage languages srcDir i18nBaseFile i18nFile i18nFormat encoding genDir removeUnusedIds');
                 console.log('\tfor details please consult the home page https://github.com/martinroob/ngx-i18nsupport');
             })
             .action((languageArray) => {
