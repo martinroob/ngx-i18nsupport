@@ -1,7 +1,6 @@
 import {XliffMerge} from './xliff-merge';
 import {ProgramOptions, IConfigFile} from './i-xliff-merge-options';
 import {CommandOutput} from '../common/command-output';
-import WritableStream = NodeJS.WritableStream;
 import {WriterToString} from '../common/writer-to-string';
 
 /**
