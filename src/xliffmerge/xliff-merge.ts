@@ -107,11 +107,15 @@ export class XliffMerge {
      * This runs async.
      * @param callbackFunction when command is executed, called with the return code (0 for ok), if given.
      */
-    public run(callbackFunction?: ((retcode: number) => any)) {
+    public run(callbackFunction?: ((retcode: number) => any), errorFunction?: ((error: any) => any)) {
         this.doRun()
             .subscribe((retcode: number) => {
                 if (!isNullOrUndefined(callbackFunction)) {
                     callbackFunction(retcode);
+                }
+            }, (error) => {
+                if (!isNullOrUndefined(errorFunction)) {
+                    errorFunction(error);
                 }
             });
     }
