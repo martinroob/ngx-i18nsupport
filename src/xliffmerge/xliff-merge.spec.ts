@@ -91,6 +91,15 @@ describe('XliffMerge test spec', () => {
             done();
         });
 
+        it('should use package.json if no other config file given', (done) => {
+            let ws: WriterToString = new WriterToString();
+            let commandOut = new CommandOutput(ws);
+            let xliffMergeCmd = XliffMerge.createFromOptions(commandOut, {verbose: true}, null);
+            xliffMergeCmd.run();
+            expect(ws.writtenData()).toContain('usedProfilePath:\t"package.json"');
+            done();
+        });
+
         it('should output an errror (srcDir not readable) when called with a non existing srcDir', (done) => {
             let ws: WriterToString = new WriterToString();
             let commandOut = new CommandOutput(ws);

@@ -1,6 +1,6 @@
 {
   "name": "ngx-i18nsupport",
-  "version": "0.13.0",
+  "version": "0.14.0",
   "description": "Some tooling to be used with the Angular 2 i18n workflow",
   "main": "index.js",
   "module": "./src",
@@ -12,7 +12,7 @@
     "node": ">=6.9"
   },
   "scripts": {
-    "build": "tsc -p ./tsconfig.json && cpx ./src/xliffmerge/xliffmerge ./dist/xliffmerge",
+    "build": "tsc -p ./tsconfig.json && cpx ./src/xliffmerge/xliffmerge ./dist/xliffmerge && cpx ./src/xliffmerge/configuration-schema.json ./dist/xliffmerge",
     "xliffmerge": "npm link && xliffmerge",
     "pretest": "npm run build",
     "test": "./node_modules/.bin/jasmine-node dist",
@@ -54,5 +54,8 @@
     "ngx-i18nsupport-lib": "^1.8.1",
     "request": "^2.81.0",
     "rxjs": "^5.5.6"
+  },
+  "xliffmergeOptions": {
+    "description": "just for some tests here"
   }
 }

@@ -79,6 +79,10 @@ export class AutoTranslateService {
      * @return Observable with translated messages or error
      */
     public translateMultipleStrings(messages: string[], from: string, to: string): Observable<string[]> {
+        // empty array needs no translation and always works ... (#78)
+        if (messages.length == 0) {
+            return Observable.of([]);
+        }
         if (!this._apiKey) {
             return Observable.throw('cannot autotranslate: no api key');
         }

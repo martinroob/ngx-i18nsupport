@@ -671,6 +671,46 @@ describe('XliffMerge XLIFF 1.2 format tests', () => {
                 });
             });
 
+            it('should auto translate text containing linefeeds (originated by #78)', (done) => {
+                if (!apikey) {
+                    // skip test
+                    done();
+                    return;
+                }
+                FileUtil.copy(SRCDIR + 'autotranslateMaster1.xlf', MASTER);
+                let ws: WriterToString = new WriterToString();
+                let commandOut = new CommandOutput(ws);
+                let profileContent: IConfigFile = {
+                    xliffmergeOptions: {
+                        defaultLanguage: 'de',
+                        srcDir: WORKDIR,
+                        genDir: WORKDIR,
+                        i18nFile: MASTERFILE,
+                        autotranslate: true,
+                        apikey: apikey
+                    }
+                };
+                let xliffMergeCmd = XliffMerge.createFromOptions(commandOut, {languages: ['de', 'en']}, profileContent);
+                xliffMergeCmd.run(() => {
+                    expect(ws.writtenData()).not.toContain('ERROR');
+                    let langFileEnglish: ITranslationMessagesFile = readXliff(xliffMergeCmd.generatedI18nFile('en'));
+                    let tu1 = langFileEnglish.transUnitWithId('totallyEmptyline1');
+                    expect(tu1.sourceContent().trim()).toBe('');
+                    expect(tu1.targetContent()).toBe('');
+                    expect(tu1.targetState()).toBe('translated');
+                    let tu2 = langFileEnglish.transUnitWithId('nearlytotallyEmptyline');
+                    expect(tu2.sourceContent()).toContain('START_BOLD_TEXT');
+                    // translation is nearly equal to source, because there is no translatable text
+                    expect(tu2.targetContent().trim()).toEqual(tu2.sourceContent().trim());
+                    expect(tu2.targetState()).toBe('translated');
+                    let tu3 = langFileEnglish.transUnitWithId('emptylineText');
+                    expect(tu3.sourceContent()).toContain('Text mit Zeilenumbruch');
+                    expect(tu3.targetContent()).toBe('Text with line break');
+                    expect(tu3.targetState()).toBe('translated');
+                    done();
+                });
+            });
+
         });
     });
 

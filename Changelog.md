@@ -1,3 +1,18 @@
+<a name="0.14.0"></a>
+# [0.14.0](https://github.com/martinroob/ngx-i18nsupport/compare/v0.14.0...v0.13.0) (2018-04-16)
+
+### Features
+
+* **xliffmerge:** Allow configuration to be part of package.json ([#72](https://github.com/martinroob/ngx-i18nsupport/issues/72)).
+You can now put your configuration to the `package.json` instead of having it in a separate file.
+There is also a JSON schema file available to check the configuration values 
+(`node_modules/ngx-i18nsupport/dist/xliffmerge/configuration-schema.json`,
+actual version available under [configuration-schema.json](https://github.com/martinroob/ngx-i18nsupport/src/xliffmerge/configuration-schema.json)).
+
+### Bug fixes
+* **autotranslate** Error `Auto translation from "en" to "de" failed: "Invalid request: Required Text"` is fixed ([#78](https://github.com/martinroob/ngx-i18nsupport/issues/78)).
+This error occured when autotranslation was enable and there were no units to translate (because they are already translated).
+
 <a name="0.13.0"></a>
 # [0.13.0](https://github.com/martinroob/ngx-i18nsupport/compare/v0.13.0...v0.12.0) (2018-03-19)
 

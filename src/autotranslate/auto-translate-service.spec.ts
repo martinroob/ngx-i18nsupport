@@ -68,7 +68,7 @@ describe('Autotranslate tests', () => {
         });
     });
 
-    it('should translate simple words form en to de', (done) => {
+    it('should translate simple words from en to de', (done) => {
         if (!service) {
             done();
             return;
@@ -78,6 +78,38 @@ describe('Autotranslate tests', () => {
             expect(translations.length).toBe(2);
             expect(translations[0]).toBe('Hallo');
             expect(translations[1]).toBe('Welt');
+            done();
+        }, (err) => {
+            expect(err.message).toBe(''); // should not be invoked
+            done();
+        });
+    });
+
+    it('should translate empty string from en to de', (done) => {
+        if (!service) {
+            done();
+            return;
+        }
+        service.translateMultipleStrings(['', 'world'], 'en', 'de').subscribe((translations: string[]) => {
+            expect(translations).toBeTruthy();
+            expect(translations.length).toBe(2);
+            expect(translations[0]).toBe('');
+            expect(translations[1]).toBe('Welt');
+            done();
+        }, (err) => {
+            expect(err.message).toBe(''); // should not be invoked
+            done();
+        });
+    });
+
+    it('should accept empty array of translations', (done) => {
+        if (!service) {
+            done();
+            return;
+        }
+        service.translateMultipleStrings([], 'en', 'de').subscribe((translations: string[]) => {
+            expect(translations).toBeTruthy();
+            expect(translations.length).toBe(0);
             done();
         }, (err) => {
             expect(err.message).toBe(''); // should not be invoked
