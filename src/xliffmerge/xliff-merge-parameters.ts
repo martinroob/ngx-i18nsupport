@@ -13,8 +13,11 @@ import {ProgramOptions, IConfigFile} from './i-xliff-merge-options';
 import {FileUtil} from '../common/file-util';
 import {NgxTranslateExtractor} from './ngx-translate-extractor';
 
+const PROFILE_CANDIDATES = ['package.json', '.angular-cli.json'];
+
 export class XliffMergeParameters {
 
+    private usedProfilePath: string;
     private _quiet: boolean;
     private _verbose: boolean;
     private _allowIdChange: boolean;
@@ -96,6 +99,13 @@ export class XliffMergeParameters {
     private readProfile(options: ProgramOptions): IConfigFile {
         let profilePath: string = options.profilePath;
         if (!profilePath) {
+            for (let configfilename of PROFILE_CANDIDATES) {
+                const profile = this.readProfileCandidate(configfilename);
+                if (profile) {
+                    this.usedProfilePath = configfilename;
+                    return profile;
+                }
+            }
             return {};
         }
         let content:string;
@@ -105,7 +115,29 @@ export class XliffMergeParameters {
             this.errorsFound.push(new XliffMergeError('could not read profile "' + profilePath + '"'));
             return null;
         }
+        this.usedProfilePath = profilePath;
         return JSON.parse(content);
+    }
+
+    /**
+     * Read potential profile.
+     * To be a candidate, file must exist and contain property "xliffmergeOptions".
+     * @param {string} profilePath
+     * @return {IConfigFile} parsed content of file or null, if file does not exist or is not a profile candidate.
+     */
+    private readProfileCandidate(profilePath: string): IConfigFile {
+        let content:string;
+        try {
+            content = fs.readFileSync(profilePath, 'UTF-8');
+        } catch (err) {
+            return null;
+        }
+        const parsedContent: IConfigFile = JSON.parse(content);
+        if (parsedContent && parsedContent.xliffmergeOptions) {
+            return parsedContent;
+        } else {
+            return null;
+        }
     }
 
     private initializeFromConfig(profileContent: IConfigFile) {
@@ -287,6 +319,7 @@ export class XliffMergeParameters {
      */
     public showAllParameters(commandOutput: CommandOutput): void {
         commandOutput.debug('xliffmerge Used Parameters:');
+        commandOutput.debug('usedProfilePath:\t"%s")', this.usedProfilePath);
         commandOutput.debug('defaultLanguage:\t"%s"', this.defaultLanguage());
         commandOutput.debug('srcDir:\t"%s"', this.srcDir());
         commandOutput.debug('genDir:\t"%s"', this.genDir());

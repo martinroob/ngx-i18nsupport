@@ -80,7 +80,12 @@ Options:
 	
 `language` is an ISO shortcut for the language(s) you use, e.g. "en", "de", "de-ch", ...
 
-`json-configurationfile` is a json file with the following allowed content (every value is optional):
+`json-configurationfile` is a json file containing some configuration values used by `xliffmerge`.
+Most times you simply mention it in your npm script using the `--profile`-option.
+Instead of having a separate file you can also put the configuration in your `package.json`.
+If no profile is given, `xliffmerge` looks for configuration values in `package.json` (starting with version 0.14).
+
+The following list shows all allowed content (every value is optional, there is a json schema available too):
 <pre>
 {
   "xliffmergeOptions": {
