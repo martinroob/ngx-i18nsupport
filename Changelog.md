@@ -7,7 +7,7 @@
 You can now put your configuration to the `package.json` instead of having it in a separate file.
 There is also a JSON schema file available to check the configuration values 
 (`node_modules/ngx-i18nsupport/dist/xliffmerge/configuration-schema.json`,
-actual version available under [configuration-schema.json](https://github.com/martinroob/ngx-i18nsupport/src/xliffmerge/configuration-schema.json)).
+actual version available under [configuration-schema.json](https://github.com/martinroob/ngx-i18nsupport/blob/master/src/xliffmerge/configuration-schema.json)).
 
 ### Bug fixes
 * **autotranslate** Error `Auto translation from "en" to "de" failed: "Invalid request: Required Text"` is fixed ([#78](https://github.com/martinroob/ngx-i18nsupport/issues/78)).
