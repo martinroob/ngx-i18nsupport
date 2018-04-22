@@ -345,9 +345,15 @@ export class XliffMerge {
                 // (can only happen if ID is explicitely set, otherwise ID would change if source content is changed.
                 if (transUnit.supportsSetSourceContent() && masterTransUnit.sourceContent() !== transUnit.sourceContent()) {
                     transUnit.setSourceContent(masterTransUnit.sourceContent());
-                    if (transUnit.targetState() == STATE_FINAL) {
-                        // source is changed, so translation has to be checked again
-                        transUnit.setTargetState(STATE_TRANSLATED);
+                    if (isDefaultLang) {
+                        // #81 changed source must be copied to target for default lang
+                        transUnit.translate(masterTransUnit.sourceContent());
+                        transUnit.setTargetState(STATE_FINAL);
+                    } else {
+                        if (transUnit.targetState() == STATE_FINAL) {
+                            // source is changed, so translation has to be checked again
+                            transUnit.setTargetState(STATE_TRANSLATED);
+                        }
                     }
                     correctSourceContentCount++;
                 }

@@ -7,7 +7,7 @@ import {WriterToString} from '../common/writer-to-string';
 import {FileUtil} from '../common/file-util';
 import {ITranslationMessagesFile, ITransUnit} from 'ngx-i18nsupport-lib';
 import {TranslationMessagesFileReader} from './translation-messages-file-reader';
-import {STATE_NEW, STATE_TRANSLATED} from 'ngx-i18nsupport-lib/dist';
+import {STATE_FINAL, STATE_NEW, STATE_TRANSLATED} from 'ngx-i18nsupport-lib/dist';
 import {getApiKey} from '../autotranslate/auto-translate-service.spec';
 import {XmlReader} from './xml-reader';
 
@@ -295,6 +295,38 @@ describe('XliffMerge XLIFF 2.0 format tests', () => {
             // look, that the removed IDs are really removed.
             expect(langFileEnglish.transUnitWithId(ID_REMOVED_MYFIRST)).toBeFalsy();
             expect(langFileEnglish.transUnitWithId(ID_REMOVED_APPDESCRIPTION)).toBeFalsy();
+            done();
+        });
+
+        it('should merge changed source content with explicit ID to default language file (#81)', (done) => {
+            const ID_SOURCE_CHANGE = 'sourcechanged';
+            const ID_SOURCE_CHANGE_STATE_FINAL = 'sourcechanged_state_final';
+            const TRANSLATED_FILE = 'WithSourceContentChange.de.xlf2';
+            FileUtil.copy(SRCDIR + 'ngExtractedMasterWithSourceContentChange.xlf2', MASTER);
+            FileUtil.copy(SRCDIR + TRANSLATED_FILE,WORKDIR + 'messages.de.xlf');
+            let ws: WriterToString = new WriterToString();
+            let commandOut = new CommandOutput(ws);
+            let profileContent: IConfigFile = {
+                xliffmergeOptions: {
+                    defaultLanguage: 'de',
+                    srcDir: WORKDIR,
+                    genDir: WORKDIR,
+                    i18nFormat: 'xlf2',
+                    i18nFile: MASTERFILE
+                }
+            };
+            let xliffMergeCmd = XliffMerge.createFromOptions(commandOut, {languages: ['de', 'en'], verbose: true}, profileContent);
+            xliffMergeCmd.run();
+            expect(ws.writtenData()).not.toContain('ERROR');
+            expect(ws.writtenData()).toContain('WARNING: transferred 2 changed source content from master to "de"');
+
+            // check that source is changed
+            let langFileGerman: ITranslationMessagesFile = readXliff2(xliffMergeCmd.generatedI18nFile('de'));
+            let tu: ITransUnit = langFileGerman.transUnitWithId(ID_SOURCE_CHANGE);
+            expect(tu).toBeTruthy();
+            expect(tu.sourceContent()).toBe('Test Änderung Source (geändert!)');
+            expect(tu.targetContent()).toBe('Test Änderung Source (geändert!)');
+            expect(tu.targetState()).toBe(STATE_FINAL);
             done();
         });
 
