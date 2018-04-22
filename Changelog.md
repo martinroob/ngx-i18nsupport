@@ -1,3 +1,10 @@
+<a name="0.15.0"></a>
+# [0.15.0](https://github.com/martinroob/ngx-i18nsupport/compare/v0.15.0...v0.14.0) (2018-04-22)
+
+### Bug fixes
+* **xliffmerge** Merge for source language isn't updating ([#81](https://github.com/martinroob/ngx-i18nsupport/issues/81)).
+This happened when there was an explicitly set ID and the original text was changed.
+
 <a name="0.14.0"></a>
 # [0.14.0](https://github.com/martinroob/ngx-i18nsupport/compare/v0.14.0...v0.13.0) (2018-04-16)
 
