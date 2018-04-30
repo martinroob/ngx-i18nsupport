@@ -73,6 +73,14 @@
         </context-group>
         <target/>
       </trans-unit>
+      <trans-unit id="8856d298b6fa89a339475c5d5cd20f2d2afcfbf8" datatype="html">
+        <source>{VAR_PLURAL, plural, =1 {Absturz <x id="INTERPOLATION" equiv-text="{{ a }}"/> war} other {Abstürze <x id="INTERPOLATION" equiv-text="{{ a}}"/> waren} }</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/elements/dashboard/activity-stream/elements-shared-activity-stream.component.ts</context>
+          <context context-type="linenumber">127</context>
+        </context-group>
+        <target/>
+      </trans-unit>
     </body>
   </file>
 </xliff>
