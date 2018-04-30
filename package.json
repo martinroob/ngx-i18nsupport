@@ -39,21 +39,21 @@
   },
   "homepage": "https://github.com/martinroob/ngx-i18nsupport#readme",
   "devDependencies": {
-    "@types/jasmine": "^2.8.3",
-    "@types/node": "^9.3.0",
-    "@types/request": "^2.0.9",
+    "@types/jasmine": "^2.8.6",
+    "@types/node": "9.3.0",
+    "@types/request": "^2.47.0",
     "coveralls": "^3.0.0",
     "cpx": "^1.5.0",
     "istanbul": "^0.4.5",
     "jasmine-node": "^1.14.5",
-    "typescript": "^2.6.2"
+    "typescript": "^2.8.3"
   },
   "dependencies": {
-    "chalk": "^2.2.0",
-    "commander": "^2.9.0",
+    "chalk": "^2.4.1",
+    "commander": "^2.15.1",
     "ngx-i18nsupport-lib": "^1.8.1",
-    "request": "^2.81.0",
-    "rxjs": "^5.5.6"
+    "request": "^2.85.0",
+    "rxjs": "^6.0.0"
   },
   "xliffmergeOptions": {
     "description": "just for some tests here"

@@ -1,5 +1,6 @@
 import {isNullOrUndefined} from 'util';
-import {Observable} from 'rxjs/Observable';
+import {Observable, forkJoin, of} from 'rxjs';
+import {map, catchError} from 'rxjs/operators';
 import {
     IICUMessage, IICUMessageTranslation, INormalizedMessage, ITranslationMessagesFile, ITransUnit,
     STATE_NEW
@@ -29,16 +30,17 @@ export class XliffMergeAutoTranslateService {
      * @return a promise with the execution result as a summary report.
      */
     public autoTranslate(from: string, to: string, languageSpecificMessagesFile: ITranslationMessagesFile): Observable<AutoTranslateSummaryReport> {
-        return Observable.forkJoin([
+        return forkJoin([
             this.doAutoTranslateNonICUMessages(from, to, languageSpecificMessagesFile),
             ...this.doAutoTranslateICUMessages(from, to, languageSpecificMessagesFile)])
-            .map((summaries: AutoTranslateSummaryReport[]) => {
-                const summary = summaries[0];
-                for (let i = 1; i < summaries.length; i++) {
-                    summary.merge(summaries[i]);
-                }
-                return summary;
-        });
+            .pipe(
+                map((summaries: AutoTranslateSummaryReport[]) => {
+                    const summary = summaries[0];
+                    for (let i = 1; i < summaries.length; i++) {
+                        summary.merge(summaries[i]);
+                    }
+                    return summary;
+        }));
     }
 
     /**
@@ -64,7 +66,8 @@ export class XliffMergeAutoTranslateService {
             return tu.sourceContentNormalized().asDisplayString();
         });
         return this.autoTranslateService.translateMultipleStrings(allMessages, from, to)
-            .map((translations: string[]) => {
+            .pipe(
+                map((translations: string[]) => {
                 const summary = new AutoTranslateSummaryReport(from, to);
                 summary.setIgnored(allUntranslated.length - allTranslatable.length);
                 for (let i = 0; i < translations.length; i++) {
@@ -74,11 +77,12 @@ export class XliffMergeAutoTranslateService {
                     summary.addSingleResult(tu, result);
                 }
                 return summary;
-            }).catch((err) => {
-                const failSummary = new AutoTranslateSummaryReport(from, to);
-                failSummary.setError(err.message, allMessages.length);
-                return Observable.of(failSummary);
-            });
+                }),
+                catchError((err) => {
+                    const failSummary = new AutoTranslateSummaryReport(from, to);
+                    failSummary.setError(err.message, allMessages.length);
+                    return of(failSummary);
+            }));
     }
 
     private doAutoTranslateICUMessages(from: string, to: string, languageSpecificMessagesFile: ITranslationMessagesFile): Observable<AutoTranslateSummaryReport>[] {
@@ -103,25 +107,26 @@ export class XliffMergeAutoTranslateService {
         if (categories.find((category) => !isNullOrUndefined(category.getMessageNormalized().getICUMessage()))) {
             const summary = new AutoTranslateSummaryReport(from, to);
             summary.setIgnored(1);
-            return Observable.of(summary);
+            return of(summary);
         }
         const allMessages: string[] = categories.map((category) => category.getMessageNormalized().asDisplayString());
         return this.autoTranslateService.translateMultipleStrings(allMessages, from, to)
-            .map((translations: string[]) => {
-                const summary = new AutoTranslateSummaryReport(from, to);
-                const icuTranslation: IICUMessageTranslation = {};
-                for (let i = 0; i < translations.length; i++) {
-                    const translationText = translations[i];
-                    icuTranslation[categories[i].getCategory()] = translationText;
-                }
-                const result = this.autoTranslateICUUnit(tu, icuTranslation);
-                summary.addSingleResult(tu, result);
-                return summary;
-            }).catch((err) => {
-                const failSummary = new AutoTranslateSummaryReport(from, to);
-                failSummary.setError(err.message, allMessages.length);
-                return Observable.of(failSummary);
-            });
+            .pipe(
+                map((translations: string[]) => {
+                    const summary = new AutoTranslateSummaryReport(from, to);
+                    const icuTranslation: IICUMessageTranslation = {};
+                    for (let i = 0; i < translations.length; i++) {
+                        const translationText = translations[i];
+                        icuTranslation[categories[i].getCategory()] = translationText;
+                    }
+                    const result = this.autoTranslateICUUnit(tu, icuTranslation);
+                    summary.addSingleResult(tu, result);
+                    return summary;
+                }), catchError((err) => {
+                    const failSummary = new AutoTranslateSummaryReport(from, to);
+                    failSummary.setError(err.message, allMessages.length);
+                    return of(failSummary);
+            }));
     }
 
     private autoTranslateNonICUUnit(tu: ITransUnit, translatedMessage: string): AutoTranslateResult {
