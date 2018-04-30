@@ -259,7 +259,7 @@ describe('XliffMerge XLIFF 1.2 format tests', () => {
             xliffMergeCmd.run();
             expect(ws.writtenData()).not.toContain('ERROR');
             expect(ws.writtenData()).toContain('merged 12 trans-units from master to "en"');
-            expect(ws.writtenData()).toContain('removed 3 unused trans-units in "en"');
+            expect(ws.writtenData()).toContain('removed 4 unused trans-units in "en"');
 
             // look, that the new file contains the old translation
             langFileEnglish = readXliff(xliffMergeCmd.generatedI18nFile('en'));
@@ -452,6 +452,40 @@ describe('XliffMerge XLIFF 1.2 format tests', () => {
             langFileEnglish = readXliff(xliffMergeCmd.generatedI18nFile('en'));
             expect(langFileEnglish.transUnitWithId(ID_WITH_PLACEHOLDER).targetContent()).toBe('Item <x id="INTERPOLATION"/> of <x id="INTERPOLATION_1"/> added.');
             expect(langFileEnglish.transUnitWithId(ID_WITH_PLACEHOLDER).targetContentNormalized().asDisplayString()).toBe('Item {{0}} of {{1}} added.');
+
+            done();
+        });
+
+        it('should translate messages with 2 custom tags with different ids (#84)', (done) => {
+            const ID_2_CUSTOM_TAGS = '8856d298b6fa89a339475c5d5cd20f2d2afcfbf7';
+            FileUtil.copy(MASTER1SRC, MASTER);
+            let ws: WriterToString = new WriterToString();
+            let commandOut = new CommandOutput(ws);
+            let profileContent: IConfigFile = {
+                xliffmergeOptions: {
+                    defaultLanguage: 'de',
+                    srcDir: WORKDIR,
+                    genDir: WORKDIR,
+                    i18nFile: MASTERFILE
+                }
+            };
+            let xliffMergeCmd = XliffMerge.createFromOptions(commandOut, {languages: ['de', 'en']}, profileContent);
+            xliffMergeCmd.run();
+            expect(ws.writtenData()).not.toContain('ERROR');
+
+            // now translate some texts in the English version
+            let langFileEnglish: ITranslationMessagesFile = readXliff(xliffMergeCmd.generatedI18nFile('en'));
+            let tu: ITransUnit = langFileEnglish.transUnitWithId(ID_2_CUSTOM_TAGS);
+            expect(tu).toBeTruthy();
+            expect(tu.sourceContentNormalized().asDisplayString()).toBe('Neues <bs-activity-stream-element></bs-activity-stream-element> wurde gemeldet durch <bs-activity-stream-element id="1"></bs-activity-stream-element>');
+            const translation = tu.sourceContentNormalized().translate('New <bs-activity-stream-element></bs-activity-stream-element> was reported by <bs-activity-stream-element id="1"></bs-activity-stream-element>');
+            tu.translate(translation);
+            TranslationMessagesFileReader.save(langFileEnglish);
+
+            // look, that the new file contains the translation
+            langFileEnglish = readXliff(xliffMergeCmd.generatedI18nFile('en'));
+            expect(langFileEnglish.transUnitWithId(ID_2_CUSTOM_TAGS).targetContent()).toBe('New <x id="START_TAG_BS-ACTIVITY-STREAM-ELEMENT" ctype="x-bs-activity-stream-element" equiv-text="&lt;bs-activity-stream-element>"/><x id="CLOSE_TAG_BS-ACTIVITY-STREAM-ELEMENT" ctype="x-bs-activity-stream-element"/> was reported by <x id="START_TAG_BS-ACTIVITY-STREAM-ELEMENT_1" ctype="x-bs-activity-stream-element" equiv-text="&lt;bs-activity-stream-element>"/><x id="CLOSE_TAG_BS-ACTIVITY-STREAM-ELEMENT" ctype="x-bs-activity-stream-element"/>');
+            expect(langFileEnglish.transUnitWithId(ID_2_CUSTOM_TAGS).targetContentNormalized().asDisplayString()).toBe('New <bs-activity-stream-element></bs-activity-stream-element> was reported by <bs-activity-stream-element id="1"></bs-activity-stream-element>');
 
             done();
         });
