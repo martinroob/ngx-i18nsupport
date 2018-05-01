@@ -19,7 +19,7 @@
       </trans-unit>
       <trans-unit id="nearlytotallyEmptyline" datatype="html">
         <source>
-          <x id="START_BOLD_TEXT" ctype="x-b"/><x id="CLOSE_BOLD_TEXT" ctype="x-b"/>
+          <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b>"/><x id="CLOSE_BOLD_TEXT" ctype="x-b"/>
         </source>
         <target/>
       </trans-unit>

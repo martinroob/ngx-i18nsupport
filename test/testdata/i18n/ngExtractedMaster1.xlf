@@ -65,6 +65,22 @@
           <context context-type="linenumber">14</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="8856d298b6fa89a339475c5d5cd20f2d2afcfbf7" datatype="html">
+        <source>Neues <x id="START_TAG_BS-ACTIVITY-STREAM-ELEMENT" ctype="x-bs-activity-stream-element" equiv-text="&lt;bs-activity-stream-element>"/><x id="CLOSE_TAG_BS-ACTIVITY-STREAM-ELEMENT" ctype="x-bs-activity-stream-element" equiv-text="&lt;/bs-activity-stream-element>"/> wurde gemeldet durch <x id="START_TAG_BS-ACTIVITY-STREAM-ELEMENT_1" ctype="x-bs-activity-stream-element" equiv-text="&lt;bs-activity-stream-element>"/><x id="CLOSE_TAG_BS-ACTIVITY-STREAM-ELEMENT" ctype="x-bs-activity-stream-element" equiv-text="&lt;/bs-activity-stream-element>"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/elements/dashboard/activity-stream/elements-shared-activity-stream.component.ts</context>
+          <context context-type="linenumber">127</context>
+        </context-group>
+        <target/>
+      </trans-unit>
+      <trans-unit id="8856d298b6fa89a339475c5d5cd20f2d2afcfbf8" datatype="html">
+        <source>{VAR_PLURAL, plural, =1 {Absturz <x id="INTERPOLATION" equiv-text="{{ a }}"/> war} other {Abstürze <x id="INTERPOLATION" equiv-text="{{ a}}"/> waren} }</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/elements/dashboard/activity-stream/elements-shared-activity-stream.component.ts</context>
+          <context context-type="linenumber">127</context>
+        </context-group>
+        <target/>
+      </trans-unit>
     </body>
   </file>
 </xliff>

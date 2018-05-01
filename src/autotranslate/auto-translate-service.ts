@@ -1,8 +1,8 @@
 import {format} from 'util';
 import * as request from 'request';
 import {Observable} from 'rxjs';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/catch';
+import {of, forkJoin, throwError} from 'rxjs';
+import {map} from 'rxjs/operators';
 
 /**
  * Created by roobm on 03.07.2017.
@@ -81,26 +81,27 @@ export class AutoTranslateService {
     public translateMultipleStrings(messages: string[], from: string, to: string): Observable<string[]> {
         // empty array needs no translation and always works ... (#78)
         if (messages.length == 0) {
-            return Observable.of([]);
+            return of([]);
         }
         if (!this._apiKey) {
-            return Observable.throw('cannot autotranslate: no api key');
+            return throwError('cannot autotranslate: no api key');
         }
         if (!from || !to) {
-            return Observable.throw('cannot autotranslate: source and target language must be set');
+            return throwError('cannot autotranslate: source and target language must be set');
         }
         from = AutoTranslateService.stripRegioncode(from);
         to = AutoTranslateService.stripRegioncode(to);
         const allRequests: Observable<string[]>[] = this.splitMessagesToGoogleLimit(messages).map((partialMessages: string[]) => {
             return this.limitedTranslateMultipleStrings(partialMessages, from, to);
         });
-        return Observable.forkJoin(allRequests).map((allTranslations: string[][]) => {
-            let all = [];
-            for (let i = 0; i < allTranslations.length; i++) {
-                all = all.concat(allTranslations[i]);
-            }
-            return all;
-        })
+        return forkJoin(allRequests).pipe(
+            map((allTranslations: string[][]) => {
+                let all = [];
+                for (let i = 0; i < allTranslations.length; i++) {
+                    all = all.concat(allTranslations[i]);
+                }
+                return all;
+        }));
     }
 
     private splitMessagesToGoogleLimit(messages: string[]): string[][] {
@@ -146,7 +147,8 @@ export class AutoTranslateService {
             json: true,
 //            proxy: 'http://127.0.0.1:8888' To set a proxy use env var HTTPS_PROXY
         };
-        return this.post(realUrl, options).map((data) => {
+        return this.post(realUrl, options).pipe(
+            map((data) => {
             const body: any = data.body;
             if (!body) {
                 throw new Error('no result received');
@@ -165,7 +167,7 @@ export class AutoTranslateService {
             return result.translations.map((translation: TranslationsResource) => {
                 return translation.translatedText;
             });
-        });
+        }));
     }
 
     /**

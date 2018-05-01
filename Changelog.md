@@ -1,3 +1,14 @@
+<a name="0.16.0"></a>
+# [0.16.0](https://github.com/martinroob/ngx-i18nsupport/compare/v0.16.0...v0.15.0) (2018-05-01)
+
+### Bug fixes
+* **xliffmerge** xliffmerge fails when ICU message contains interpolation and/or tags ([#83](https://github.com/martinroob/ngx-i18nsupport/issues/83)).
+
+* **xliffmerge** Placeholder index is invalid ([#84](https://github.com/martinroob/ngx-i18nsupport/issues/84)).
+
+### Features
+* **xliffmerge:** There is a new configuration flag `beautifyOutput`. When set to `true`  now [pretty-data](https://github.com/vkiryukhin/pretty-data) (the library beyond pretty-xml) will be used to format the output. ([#64](https://github.com/martinroob/ngx-i18nsupport/issues/64))
+
 <a name="0.15.0"></a>
 # [0.15.0](https://github.com/martinroob/ngx-i18nsupport/compare/v0.15.0...v0.14.0) (2018-04-22)
 

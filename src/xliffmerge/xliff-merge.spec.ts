@@ -468,6 +468,50 @@ describe('XliffMerge test spec', () => {
             done();
         });
 
+        it('should accept beautifyOutput flag set to true', (done) => {
+            let ws: WriterToString = new WriterToString();
+            let commandOut = new CommandOutput(ws);
+            let profileContent: IConfigFile = {
+                xliffmergeOptions: {
+                    languages: ['de', 'en', 'fr'],
+                    beautifyOutput: true,
+                }
+            };
+            let xliffMergeCmd = XliffMerge.createFromOptions(commandOut, {verbose: true}, profileContent);
+            xliffMergeCmd.run();
+            expect(ws.writtenData()).toContain('* beautifyOutput:\ttrue');
+            done();
+        });
+
+        it('should accept beautifyOutput flag set to false', (done) => {
+            let ws: WriterToString = new WriterToString();
+            let commandOut = new CommandOutput(ws);
+            let profileContent: IConfigFile = {
+                xliffmergeOptions: {
+                    languages: ['de', 'en', 'fr'],
+                    beautifyOutput: false,
+                }
+            };
+            let xliffMergeCmd = XliffMerge.createFromOptions(commandOut, {verbose: true}, profileContent);
+            xliffMergeCmd.run();
+            expect(ws.writtenData()).toContain('* beautifyOutput:\tfalse');
+            done();
+        });
+
+        it('should use default false for beautifyOutput flag', (done) => {
+            let ws: WriterToString = new WriterToString();
+            let commandOut = new CommandOutput(ws);
+            let profileContent: IConfigFile = {
+                xliffmergeOptions: {
+                    languages: ['de', 'en', 'fr'],
+                }
+            };
+            let xliffMergeCmd = XliffMerge.createFromOptions(commandOut, {verbose: true}, profileContent);
+            xliffMergeCmd.run();
+            expect(ws.writtenData()).toContain('* beautifyOutput:\tfalse');
+            done();
+        });
+
     });
 
 });

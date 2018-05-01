@@ -64,6 +64,10 @@
           "description": "when the flag `useSourceAsTarget` is set and a source is copied to target, then the target string will be praefixed by this value.",
           "type": "string"
         },
+        "beautifyOutput": {
+          "description": "when set to true, the generated xml output will be send through a beautifier to get consistent output.(default \"false\")",
+          "type": "boolean"
+        },
         "targetSuffix": {
           "description": "when the flag `useSourceAsTarget` is set and a source is copied to target, then the target string will be suffixed by this value.",
           "type": "string"
