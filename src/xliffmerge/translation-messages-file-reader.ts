@@ -63,8 +63,12 @@ export class TranslationMessagesFileReader {
     /**
      * Save edited file.
      * @param messagesFile
+     * @param beautifyOutput Flag whether to use pretty-data to format the output.
+     * XMLSerializer produces some correct but strangely formatted output, which pretty-data can correct.
+     * See issue #64 for details.
+     * Default is false.
      */
-    public static save(messagesFile: ITranslationMessagesFile) {
+    public static save(messagesFile: ITranslationMessagesFile, beautifyOutput?: boolean) {
         FileUtil.replaceContent(messagesFile.filename(), messagesFile.editedContent(), messagesFile.encoding());
     }
 }

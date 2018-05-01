@@ -221,7 +221,7 @@ export class XliffMerge {
             if (sourceLang && sourceLang !== this.parameters.defaultLanguage()) {
                 this.commandOutput.warn('master says to have source-language="%s", should be "%s" (your defaultLanguage)', sourceLang, this.parameters.defaultLanguage());
                 this.master.setSourceLanguage(this.parameters.defaultLanguage());
-                TranslationMessagesFileReader.save(this.master);
+                TranslationMessagesFileReader.save(this.master, this.parameters.beautifyOutput());
                 this.commandOutput.warn('changed master source-language="%s" to "%s"', sourceLang, this.parameters.defaultLanguage());
             }
         } catch (err) {
@@ -291,7 +291,7 @@ export class XliffMerge {
         return this.autoTranslate(this.master.sourceLanguage(), lang, languageSpecificMessagesFile).pipe(
             map((summary) => {
             // write it to file
-            TranslationMessagesFileReader.save(languageSpecificMessagesFile);
+            TranslationMessagesFileReader.save(languageSpecificMessagesFile, this.parameters.beautifyOutput());
             this.commandOutput.info('created new file "%s" for target-language="%s"', languageXliffFilePath, lang);
             if (!isDefaultLang) {
                 this.commandOutput.warn('please translate file "%s" to target-language="%s"', languageXliffFilePath, lang);
@@ -421,7 +421,7 @@ export class XliffMerge {
             return this.autoTranslate(this.master.sourceLanguage(), lang, languageSpecificMessagesFile)
                 .pipe(map(() => {
                     // write it to file
-                    TranslationMessagesFileReader.save(languageSpecificMessagesFile);
+                    TranslationMessagesFileReader.save(languageSpecificMessagesFile, this.parameters.beautifyOutput());
                     this.commandOutput.info('updated file "%s" for target-language="%s"', languageXliffFilePath, lang);
                     if (newCount > 0 && !isDefaultLang) {
                         this.commandOutput.warn('please translate file "%s" to target-language="%s"', languageXliffFilePath, lang);

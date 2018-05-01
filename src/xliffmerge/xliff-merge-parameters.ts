@@ -35,6 +35,7 @@ export class XliffMergeParameters {
     private _useSourceAsTarget: boolean;
     private _targetPraefix: string;
     private _targetSuffix: string;
+    private _beautifyOutput: boolean;
     private _autotranslate: boolean|string[];
     private _apikey: string;
     private _apikeyfile: string;
@@ -100,7 +101,7 @@ export class XliffMergeParameters {
         let profilePath: string = options.profilePath;
         if (!profilePath) {
             for (let configfilename of PROFILE_CANDIDATES) {
-                const profile = this.readProfileCandidate(configfilename);
+                const profile = XliffMergeParameters.readProfileCandidate(configfilename);
                 if (profile) {
                     this.usedProfilePath = configfilename;
                     return profile;
@@ -125,7 +126,7 @@ export class XliffMergeParameters {
      * @param {string} profilePath
      * @return {IConfigFile} parsed content of file or null, if file does not exist or is not a profile candidate.
      */
-    private readProfileCandidate(profilePath: string): IConfigFile {
+    private static readProfileCandidate(profilePath: string): IConfigFile {
         let content:string;
         try {
             content = fs.readFileSync(profilePath, 'UTF-8');
@@ -204,6 +205,9 @@ export class XliffMergeParameters {
             }
             if (!isNullOrUndefined(profile.autotranslate)) {
                 this._autotranslate = profile.autotranslate;
+            }
+            if (!isNullOrUndefined(profile.beautifyOutput)) {
+                this._beautifyOutput = profile.beautifyOutput;
             }
             if (!isNullOrUndefined(profile.apikey)) {
                 this._apikey = profile.apikey;
@@ -296,7 +300,7 @@ export class XliffMergeParameters {
      * @param lang
      */
     private checkLanguageSyntax(lang: string) {
-        let pattern = /^[a-zA-Z]{1,8}((-|_)[a-zA-Z0-9]{1,8})*$/;
+        let pattern = /^[a-zA-Z]{1,8}([-_][a-zA-Z0-9]{1,8})*$/;
         if (!pattern.test(lang)) {
             this.errorsFound.push(new XliffMergeError('language "' + lang + '" is not valid'));
         }
@@ -340,6 +344,7 @@ export class XliffMergeParameters {
             commandOutput.debug('targetSuffix:\t"%s"', this.targetSuffix());
         }
         commandOutput.debug('allowIdChange:\t%s', this.allowIdChange());
+        commandOutput.debug('beautifyOutput:\t%s', this.beautifyOutput());
         commandOutput.debug('autotranslate:\t%s', this.autotranslate());
         if (this.autotranslate()) {
             commandOutput.debug('autotranslated languages:\t%s', this.autotranslatedLanguages());
@@ -480,6 +485,14 @@ export class XliffMergeParameters {
      */
     public targetSuffix(): string {
         return (isNullOrUndefined(this._targetSuffix)) ? "" : this._targetSuffix;
+    }
+
+    /**
+     * If set, run xml result through beautifier (pretty-data).
+     * @return {boolean}
+     */
+    public beautifyOutput(): boolean {
+        return (isNullOrUndefined(this._beautifyOutput)) ? false : this._beautifyOutput;
     }
 
     /**
