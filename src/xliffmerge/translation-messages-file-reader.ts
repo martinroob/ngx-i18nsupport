@@ -69,7 +69,7 @@ export class TranslationMessagesFileReader {
      * Default is false.
      */
     public static save(messagesFile: ITranslationMessagesFile, beautifyOutput?: boolean) {
-        FileUtil.replaceContent(messagesFile.filename(), messagesFile.editedContent(), messagesFile.encoding());
+        FileUtil.replaceContent(messagesFile.filename(), messagesFile.editedContent(beautifyOutput), messagesFile.encoding());
     }
 }
 

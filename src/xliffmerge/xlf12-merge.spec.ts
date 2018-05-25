@@ -616,6 +616,48 @@ describe('XliffMerge XLIFF 1.2 format tests', () => {
             done();
         });
 
+        it('should use beautify when requested (#64, #88)', (done) => {
+            FileUtil.copy(MASTER1SRC, MASTER);
+            let ws: WriterToString = new WriterToString();
+            let commandOut = new CommandOutput(ws);
+            let profileContent: IConfigFile = {
+                xliffmergeOptions: {
+                    defaultLanguage: 'de',
+                    srcDir: WORKDIR,
+                    genDir: WORKDIR,
+                    i18nFile: MASTERFILE
+                }
+            };
+            let xliffMergeCmd = XliffMerge.createFromOptions(commandOut, {languages: ['de', 'en']}, profileContent);
+            xliffMergeCmd.run();
+            expect(ws.writtenData()).not.toContain('ERROR');
+
+            const unformattedContent = XmlReader.readXmlFileContent(xliffMergeCmd.generatedI18nFile('en'));
+            expect(unformattedContent.content).toContain('<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">');
+// to debug formatting:                        FileUtil.copy(xliffMergeCmd.generatedI18nFile('en'), SRCDIR + 'nobeautify');
+
+            // next step, same with beautify
+            FileUtil.deleteFile(xliffMergeCmd.generatedI18nFile('en'));
+            ws = new WriterToString();
+            commandOut = new CommandOutput(ws);
+            profileContent = {
+                xliffmergeOptions: {
+                    defaultLanguage: 'de',
+                    srcDir: WORKDIR,
+                    genDir: WORKDIR,
+                    i18nFile: MASTERFILE,
+                    beautifyOutput: true
+                }
+            };
+            xliffMergeCmd = XliffMerge.createFromOptions(commandOut, {languages: ['de', 'en']}, profileContent);
+            xliffMergeCmd.run();
+            expect(ws.writtenData()).not.toContain('ERROR');
+            const formattedContent = XmlReader.readXmlFileContent(xliffMergeCmd.generatedI18nFile('en'));
+            expect(formattedContent.content).toContain('<xliff version="1.2" \n  xmlns="urn:oasis:names:tc:xliff:document:1.2">');
+// to debug formatting:            FileUtil.copy(xliffMergeCmd.generatedI18nFile('en'), SRCDIR + 'beautify');
+            done();
+        });
+
         describe('autotranslate via google translate', () => {
 
             let apikey: string;
