@@ -1,3 +1,11 @@
+<a name="0.16.1"></a>
+# [0.16.1](https://github.com/martinroob/ngx-i18nsupport/compare/v0.16.1...v0.16.0) (2018-05-25)
+
+### Bug fixes
+* **xliffmerge:** New configuration flag `beautifyOutput` now working. When set to `true`  now [pretty-data](https://github.com/vkiryukhin/pretty-data) (the library beyond pretty-xml) will be used to format the output.
+([#64](https://github.com/martinroob/ngx-i18nsupport/issues/64))
+([#88](https://github.com/martinroob/ngx-i18nsupport/issues/88))
+
 <a name="0.16.0"></a>
 # [0.16.0](https://github.com/martinroob/ngx-i18nsupport/compare/v0.16.0...v0.15.0) (2018-05-01)
 
