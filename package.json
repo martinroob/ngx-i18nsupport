@@ -1,6 +1,6 @@
 {
   "name": "ngx-i18nsupport",
-  "version": "0.16.1",
+  "version": "0.16.2",
   "description": "Some tooling to be used with the Angular 2 i18n workflow",
   "main": "index.js",
   "module": "./src",
@@ -51,7 +51,7 @@
   "dependencies": {
     "chalk": "^2.4.1",
     "commander": "^2.15.1",
-    "ngx-i18nsupport-lib": "^1.9.1",
+    "ngx-i18nsupport-lib": "^1.9.2",
     "request": "^2.85.0",
     "rxjs": "^6.0.0"
   },

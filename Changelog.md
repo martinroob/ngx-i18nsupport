@@ -1,3 +1,10 @@
+<a name="0.16.2"></a>
+# [0.16.2](https://github.com/martinroob/ngx-i18nsupport/compare/v0.16.2...v0.16.1) (2018-06-01)
+
+### Bug fixes
+* **xliff 1.2 format:** Invalid order of target element in xlf12.
+([#90](https://github.com/martinroob/ngx-i18nsupport/issues/90))
+
 <a name="0.16.1"></a>
 # [0.16.1](https://github.com/martinroob/ngx-i18nsupport/compare/v0.16.1...v0.16.0) (2018-05-25)
 
