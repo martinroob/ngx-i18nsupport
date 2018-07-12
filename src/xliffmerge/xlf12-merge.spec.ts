@@ -853,6 +853,39 @@ describe('XliffMerge XLIFF 1.2 format tests', () => {
                 });
             });
 
+            it('should auto translate english text to french containing apostrophes (originated by #94)', (done) => {
+                if (!apikey) {
+                    // skip test
+                    done();
+                    return;
+                }
+                FileUtil.copy(SRCDIR + 'englishToFrench.xlf', MASTER);
+                let ws: WriterToString = new WriterToString();
+                let commandOut = new CommandOutput(ws);
+                let profileContent: IConfigFile = {
+                    xliffmergeOptions: {
+                        defaultLanguage: 'en',
+                        srcDir: WORKDIR,
+                        genDir: WORKDIR,
+                        i18nFile: MASTERFILE,
+                        autotranslate: true,
+                        apikey: apikey
+                    }
+                };
+                const ID_OPERATOR_LOG = "50614ab096d22b3796a4891f21ab7e38b527b72b";
+                let xliffMergeCmd = XliffMerge.createFromOptions(commandOut, {languages: ['en', 'fr']}, profileContent);
+                    xliffMergeCmd.run((retcode) => {
+                        expect(ws.writtenData()).not.toContain('ERROR');
+                        let langFileFrench: ITranslationMessagesFile = readXliff(xliffMergeCmd.generatedI18nFile('fr'));
+                        let tu1 = langFileFrench.transUnitWithId(ID_OPERATOR_LOG);
+                        expect(tu1).toBeTruthy();
+                        expect(tu1.sourceContent().trim()).toBe('Operator Logs');
+                        expect(tu1.targetContent()).toBe('Journaux de l\'opérateur');
+                        expect(tu1.targetState()).toBe('translated');
+                        done();
+                    });
+            });
+
         });
     });
 

@@ -10,7 +10,7 @@ ngx-i18nsupport
 Some tooling to be used for Angular i18n workflows.
 
 >This page contains just a very short description about the installation process and usage.
-For details have a look at the [Tutorial for using xliffmerge](https://github.com/martinroob/ngx-i18nsupport/wiki/Tutorial-for-using-xliffmerge-with-angular-cli) contained in the Wiki pages.
+For details have a look at the [Tutorial for using xliffmerge](https://github.com/martinroob/ngx-i18nsupport/wiki/Tutorial-for-using-xliffmerge-with-angular-cli) contained in the Wiki pages (recently updated to Angular 6).
 
 >There is also some support to use dynamic translations based on `ngx-translate` in parallel. 
 See details at the Wiki page [ngx translate usage](https://github.com/martinroob/ngx-i18nsupport/wiki/ngx-translate-usage)
