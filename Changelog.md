@@ -1,3 +1,13 @@
+<a name="0.16.3"></a>
+# [0.16.3](https://github.com/martinroob/ngx-i18nsupport/compare/v0.16.3...v0.16.2) (2018-07-12)
+
+### Bug fixes
+* **autotranslate** HTML encoding is re-encoded - results in HTML encoding being output as text.
+([#94](https://github.com/martinroob/ngx-i18nsupport/issues/94)).
+Issue is caused due to the fact that google translate returns `&#36;` instead of apostrophe.
+The lib expects "normal utf8 strings" as translation.
+Now the returned translation will be decoded using library [he](https://github.com/mathiasbynens/he).
+
 <a name="0.16.2"></a>
 # [0.16.2](https://github.com/martinroob/ngx-i18nsupport/compare/v0.16.2...v0.16.1) (2018-06-01)
 
