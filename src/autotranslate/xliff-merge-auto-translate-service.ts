@@ -1,6 +1,7 @@
 import {isNullOrUndefined} from 'util';
 import {Observable, forkJoin, of} from 'rxjs';
 import {map, catchError} from 'rxjs/operators';
+import * as entityDecoderLib from 'he';
 import {
     IICUMessage, IICUMessageTranslation, INormalizedMessage, ITranslationMessagesFile, ITransUnit,
     STATE_NEW
@@ -67,6 +68,8 @@ export class XliffMergeAutoTranslateService {
         });
         return this.autoTranslateService.translateMultipleStrings(allMessages, from, to)
             .pipe(
+                // #94 google translate might return &#.. entity refs, that must be decoded
+                map((translations: string[]) => translations.map(encodedTranslation => entityDecoderLib.decode(encodedTranslation))),
                 map((translations: string[]) => {
                 const summary = new AutoTranslateSummaryReport(from, to);
                 summary.setIgnored(allUntranslated.length - allTranslatable.length);
@@ -112,6 +115,8 @@ export class XliffMergeAutoTranslateService {
         const allMessages: string[] = categories.map((category) => category.getMessageNormalized().asDisplayString());
         return this.autoTranslateService.translateMultipleStrings(allMessages, from, to)
             .pipe(
+                // #94 google translate might return &#.. entity refs, that must be decoded
+                map((translations: string[]) => translations.map(encodedTranslation => entityDecoderLib.decode(encodedTranslation))),
                 map((translations: string[]) => {
                     const summary = new AutoTranslateSummaryReport(from, to);
                     const icuTranslation: IICUMessageTranslation = {};

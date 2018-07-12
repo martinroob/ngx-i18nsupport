@@ -176,4 +176,37 @@ describe('Autotranslate tests', () => {
         });
     });
 
+    it('should translate to french apostrophes (#94)', (done) => {
+        if (!service) {
+            done();
+            return;
+        }
+        service.translateMultipleStrings(['Operator Logs'], 'en', 'fr').subscribe((translations: string[]) => {
+            expect(translations).toBeTruthy();
+            expect(translations.length).toBe(1);
+            expect(translations[0]).toBe('Journaux de l&#39;opérateur');
+            done();
+        }, (err) => {
+            expect(err.message).toBe(''); // should not be invoked
+            done();
+        });
+    });
+
+    it('should translate to german umlaut (#94)', (done) => {
+        if (!service) {
+            done();
+            return;
+        }
+        service.translateMultipleStrings(['green doors'], 'en', 'de').subscribe((translations: string[]) => {
+            expect(translations).toBeTruthy();
+            expect(translations.length).toBe(1);
+            expect(translations[0]).toBe('grüne Türen');
+            done();
+        }, (err) => {
+            expect(err.message).toBe(''); // should not be invoked
+            done();
+        });
+    });
+
+
 });
