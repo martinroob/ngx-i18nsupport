@@ -52,7 +52,7 @@
     "chalk": "^2.4.1",
     "commander": "^2.15.1",
     "he": "^1.1.1",
-    "ngx-i18nsupport-lib": "^1.9.2",
+    "ngx-i18nsupport-lib": "^1.10.0",
     "request": "^2.85.0",
     "rxjs": "^6.0.0"
   },

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file source-language="en" datatype="plaintext" original="ng2.template">
+    <body>
+      <trans-unit id="singup-page.form.agreement" datatype="html">
+        <source>I accept the
+          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a>"/>terms and conditions.
+          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/>
+        </source>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
