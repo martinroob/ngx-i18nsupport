@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file source-language="en" datatype="plaintext" original="ng2.template">
+    <body>
+      <!-- new unit that should be added first (#96) -->
+      <trans-unit id="addedunit1" datatype="html">
+        <source>added unit 1</source>
+        <target/>
+        <context-group purpose="location">
+          <context context-type="sourcefile">/src/app/test-data.component.ts</context>
+          <context context-type="linenumber">21</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="firstunit" datatype="html">
+        <source>Nachrichten</source>
+        <target/>
+        <note priority="1" from="description">data.edit.newstitle</note>
+        <context-group purpose="location">
+          <context context-type="sourcefile">/src/app/test-data.component.ts</context>
+          <context context-type="linenumber">20</context>
+        </context-group>
+      </trans-unit>
+      <!-- new unit that should be added between first and second (#96) -->
+      <trans-unit id="addedunit2" datatype="html">
+        <source>added unit 2</source>
+        <target/>
+        <context-group purpose="location">
+          <context context-type="sourcefile">/src/app/test-data.component.ts</context>
+          <context context-type="linenumber">21</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="lastunit" datatype="html">
+        <source>Bearbeiten Beschreibung</source>
+        <target/>
+        <note priority="1" from="description">data.edit.titles.description</note>
+        <context-group purpose="location">
+          <context context-type="sourcefile">/src/app/test-data.component.ts</context>
+          <context context-type="linenumber">20</context>
+        </context-group>
+      </trans-unit>
+      <!-- new unit that should be added add end (#96) -->
+      <trans-unit id="addedunit3" datatype="html">
+        <source>added unit 3</source>
+        <target/>
+        <context-group purpose="location">
+          <context context-type="sourcefile">/src/app/test-data.component.ts</context>
+          <context context-type="linenumber">21</context>
+        </context-group>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

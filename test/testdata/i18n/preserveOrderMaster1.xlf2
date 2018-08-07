@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xliff version="2.0" xmlns="urn:oasis:names:tc:xliff:document:2.0" srcLang="en">
+  <file original="ng.template" id="ngi18n">
+    <unit id="firstunit">
+      <segment>
+        <source>Meine erste I18N-Anwendung</source>
+      </segment>
+    </unit>
+    <unit id="lastunit">
+      <segment>
+        <source>Anwendung läuft!</source>
+      </segment>
+    </unit>
+  </file>
+</xliff>

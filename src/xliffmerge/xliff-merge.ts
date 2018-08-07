@@ -329,15 +329,18 @@ export class XliffMerge {
         let idChangedCount = 0;
         languageSpecificMessagesFile.setNewTransUnitTargetPraefix(this.parameters.targetPraefix());
         languageSpecificMessagesFile.setNewTransUnitTargetSuffix(this.parameters.targetSuffix());
+        let lastProcessedUnit: ITransUnit = null;
         this.master.forEachTransUnit((masterTransUnit) => {
             let transUnit: ITransUnit = languageSpecificMessagesFile.transUnitWithId(masterTransUnit.id);
 
             if (!transUnit) {
                 // oops, no translation, must be a new key, so add it
-                if (this.parameters.allowIdChange() && this.processChangedIdUnit(masterTransUnit, languageSpecificMessagesFile)) {
+                let newUnit;
+                if (this.parameters.allowIdChange() && (newUnit = this.processChangedIdUnit(masterTransUnit, languageSpecificMessagesFile, lastProcessedUnit))) {
+                    lastProcessedUnit = newUnit;
                     idChangedCount++;
                 } else {
-                    languageSpecificMessagesFile.importNewTransUnit(masterTransUnit, isDefaultLang, this.parameters.useSourceAsTarget());
+                    lastProcessedUnit = languageSpecificMessagesFile.importNewTransUnit(masterTransUnit, isDefaultLang, this.parameters.useSourceAsTarget(), lastProcessedUnit);
                     newCount++;
                 }
             } else {
@@ -377,6 +380,7 @@ export class XliffMerge {
                         correctDescriptionOrMeaningCount++;
                     }
                 }
+                lastProcessedUnit = transUnit;
             }
         });
         if (newCount > 0) {
@@ -435,9 +439,10 @@ export class XliffMerge {
      * Handle the case of changed id due to small white space changes.
      * @param {ITransUnit} masterTransUnit unit in master file
      * @param {ITranslationMessagesFile} languageSpecificMessagesFile translation file
-     * @return {boolean} true, if done, false if no changed unit found
+     * @param lastProcessedUnit Unit before the one processed here. New unit will be inserted after this one.
+     * @return {ITransUnit} processed unit, if done, null if no changed unit found
      */
-    private processChangedIdUnit(masterTransUnit: ITransUnit, languageSpecificMessagesFile: ITranslationMessagesFile): boolean {
+    private processChangedIdUnit(masterTransUnit: ITransUnit, languageSpecificMessagesFile: ITranslationMessagesFile, lastProcessedUnit: ITransUnit): ITransUnit {
         const masterSourceString = masterTransUnit.sourceContentNormalized().asDisplayString(NORMALIZATION_FORMAT_DEFAULT).trim();
         let changedTransUnit: ITransUnit = null;
         languageSpecificMessagesFile.forEachTransUnit((languageTransUnit) => {
@@ -446,15 +451,15 @@ export class XliffMerge {
                 }
         });
         if (!changedTransUnit) {
-            return false;
+            return null;
         }
-        const mergedTransUnit = languageSpecificMessagesFile.importNewTransUnit(masterTransUnit, false, false);
+        const mergedTransUnit = languageSpecificMessagesFile.importNewTransUnit(masterTransUnit, false, false, lastProcessedUnit);
         const translatedContent = changedTransUnit.targetContent();
         if (translatedContent) { // issue #68 set translated only, if it is really translated
             mergedTransUnit.translate(translatedContent);
             mergedTransUnit.setTargetState(STATE_TRANSLATED);
         }
-        return true;
+        return mergedTransUnit;
     }
 
     private areSourceReferencesEqual(ref1: {sourcefile: string; linenumber: number;}[], ref2: {sourcefile: string; linenumber: number;}[]): boolean {
