@@ -1,3 +1,18 @@
+<a name="0.17.0"></a>
+# [0.17.0](https://github.com/martinroob/ngx-i18nsupport/compare/v0.16.4...v0.17.0) (2018-08-07)
+
+### Bug fixes
+* **xliffmerge** wrong empty lines were added when using beautifier.
+([#96](https://github.com/martinroob/ngx-i18nsupport/issues/96)).
+The beautifier is totally changed, so this might result in slightly changed outputs.
+
+
+### Features
+* **xliffmerge** Preserve order for newly added units.
+([#96](https://github.com/martinroob/ngx-i18nsupport/issues/96)).
+When merging new units from master to translation file the new units are now inserted at the same position as they were in the master.
+
+
 <a name="0.16.3"></a>
 # [0.16.3](https://github.com/martinroob/ngx-i18nsupport/compare/v0.16.3...v0.16.2) (2018-07-12)
 

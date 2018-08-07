@@ -949,12 +949,11 @@ nan@^2.3.0:
   version "2.6.1"
   resolved "https://registry.yarnpkg.com/nan/-/nan-2.6.1.tgz#8c84f7b14c96b89f57fbc838012180ec8ca39a01"
 
-ngx-i18nsupport-lib@^1.9.2:
-  version "1.9.2"
-  resolved "https://registry.yarnpkg.com/ngx-i18nsupport-lib/-/ngx-i18nsupport-lib-1.9.2.tgz#4057029b56c33cbe78b882225c5d63b773d13cc5"
+ngx-i18nsupport-lib@^1.10.0:
+  version "1.10.0"
+  resolved "https://registry.yarnpkg.com/ngx-i18nsupport-lib/-/ngx-i18nsupport-lib-1.10.0.tgz#db26c660a6dd0e51cfb9d665e144e01764ff8296"
   dependencies:
     "@types/xmldom" "^0.1.29"
-    pretty-data "^0.40.0"
     tokenizr "^1.3.4"
     xmldom "^0.1.27"
 
@@ -1086,10 +1085,6 @@ prelude-ls@~1.1.2:
 preserve@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/preserve/-/preserve-0.2.0.tgz#815ed1f6ebc65926f865b310c0713bcb3315ce4b"
-
-pretty-data@^0.40.0:
-  version "0.40.0"
-  resolved "https://registry.yarnpkg.com/pretty-data/-/pretty-data-0.40.0.tgz#572aa8ea23467467ab94b6b5266a6fd9c8fddd72"
 
 process-nextick-args@~1.0.6:
   version "1.0.7"

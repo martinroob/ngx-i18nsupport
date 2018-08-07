@@ -403,6 +403,41 @@ describe('XliffMerge XLIFF 1.2 format tests', () => {
             done();
         });
 
+        it('should preserve order when merging new units (#96)', (done) => {
+            FileUtil.copy(SRCDIR + 'preserveOrderMaster1.xlf', MASTER);
+            let ws: WriterToString = new WriterToString();
+            let commandOut = new CommandOutput(ws);
+            let profileContent: IConfigFile = {
+                xliffmergeOptions: {
+                    defaultLanguage: 'en',
+                    srcDir: WORKDIR,
+                    genDir: WORKDIR,
+                    i18nFile: MASTERFILE
+                }
+            };
+            let xliffMergeCmd = XliffMerge.createFromOptions(commandOut, {languages: ['en', 'de']}, profileContent);
+            xliffMergeCmd.run();
+            expect(ws.writtenData()).not.toContain('ERROR');
+
+            // next step, use new master that has added 3 units
+            FileUtil.copy(SRCDIR + 'preserveOrderMaster2.xlf', MASTER);
+            ws = new WriterToString();
+            commandOut = new CommandOutput(ws);
+            xliffMergeCmd = XliffMerge.createFromOptions(commandOut, {languages: ['en', 'de']}, profileContent);
+            xliffMergeCmd.run();
+            expect(ws.writtenData()).not.toContain('ERROR');
+            expect(ws.writtenData()).toContain('merged 3 trans-units from master to "de"');
+
+            // look, that the new file contains the new units at the correct position
+            const langFileGerman = readXliff(xliffMergeCmd.generatedI18nFile('de'));
+            const addedTu = langFileGerman.transUnitWithId('addedunit1');
+            expect(addedTu).toBeTruthy();
+            expect(addedTu.sourceContent()).toBe('added unit 1');
+            // check position
+            expect(langFileGerman.editedContent().replace(/(\r\n|\n|\r)/gm,"")).toMatch(/addedunit1.*firstunit.*addedunit2.*lastunit.*addedunit3/);
+            done();
+        });
+
         it('should not remove trailing line break when merging', (done) => {
             FileUtil.copy(MASTER1SRC, MASTER);
             const masterContent = FileUtil.read(MASTER, XmlReader.DEFAULT_ENCODING);
@@ -653,8 +688,50 @@ describe('XliffMerge XLIFF 1.2 format tests', () => {
             xliffMergeCmd.run();
             expect(ws.writtenData()).not.toContain('ERROR');
             const formattedContent = XmlReader.readXmlFileContent(xliffMergeCmd.generatedI18nFile('en'));
-            expect(formattedContent.content).toContain('<xliff version="1.2" \n  xmlns="urn:oasis:names:tc:xliff:document:1.2">');
+            expect(formattedContent.content).toContain('\n        <source>Nachrichten</source>');
 // to debug formatting:            FileUtil.copy(xliffMergeCmd.generatedI18nFile('en'), SRCDIR + 'beautify');
+            done();
+        });
+
+        it('should not add empty lines when using beautify whith complex content (#97)', (done) => {
+            FileUtil.copy(SRCDIR + 'issue97emptylines.xlf', MASTER);
+            let ws: WriterToString = new WriterToString();
+            let commandOut = new CommandOutput(ws);
+            let profileContent: IConfigFile = {
+                xliffmergeOptions: {
+                    defaultLanguage: 'en',
+                    srcDir: WORKDIR,
+                    genDir: WORKDIR,
+                    i18nFile: MASTERFILE,
+                    beautifyOutput: true
+                }
+            };
+            let xliffMergeCmd = XliffMerge.createFromOptions(commandOut, {languages: ['en', 'ru']}, profileContent);
+            xliffMergeCmd.run();
+            expect(ws.writtenData()).not.toContain('ERROR');
+
+            const formattedContent1 = XmlReader.readXmlFileContent(xliffMergeCmd.generatedI18nFile('ru'));
+// to debug formatting: FileUtil.copy(xliffMergeCmd.generatedI18nFile('ru'), SRCDIR + 'beautify1');
+
+            // next step, once again with beautify
+            ws = new WriterToString();
+            commandOut = new CommandOutput(ws);
+            profileContent = {
+                xliffmergeOptions: {
+                    defaultLanguage: 'en',
+                    srcDir: WORKDIR,
+                    genDir: WORKDIR,
+                    i18nFile: MASTERFILE,
+                    beautifyOutput: true
+                }
+            };
+            xliffMergeCmd = XliffMerge.createFromOptions(commandOut, {languages: ['en', 'ru']}, profileContent);
+            xliffMergeCmd.run();
+            expect(ws.writtenData()).not.toContain('ERROR');
+            const formattedContent2 = XmlReader.readXmlFileContent(xliffMergeCmd.generatedI18nFile('ru'));
+            expect(formattedContent2.content).toMatch(/I accept the\r?\n[ \t]*<x/);
+            expect(formattedContent2.content).not.toMatch(/I accept the\r?\n[ \t]*\r?\n[ \t]*<x/);
+// to debug formatting: FileUtil.copy(xliffMergeCmd.generatedI18nFile('ru'), SRCDIR + 'beautify2');
             done();
         });
 
