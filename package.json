@@ -1,0 +1,27 @@
+{
+  "name": "ngx-i18nsupport",
+  "version": "0.0.0",
+  "scripts": {
+    "ng": "ng",
+    "start": "ng serve",
+    "build": "ng build",
+    "test": "ng test",
+    "lint": "ng lint",
+    "e2e": "ng e2e"
+  },
+  "private": true,
+  "workspaces": [
+	"projects/xliffmerge"
+  ],
+  "dependencies": {
+  },
+  "devDependencies": {
+    "@angular-devkit/build-angular": "~0.8.0",
+    "@angular-devkit/build-ng-packagr": "~0.8.0",
+    "@angular/compiler-cli": "^6.1.0",
+    "ng-packagr": "^4.1.0",
+    "tsickle": ">=0.29.0",
+    "tslib": "^1.9.0",
+    "typescript": "~2.9.2"
+  }
+}
