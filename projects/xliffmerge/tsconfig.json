@@ -5,21 +5,16 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "lib": ["es6", "dom"],
-    "mapRoot": "./",
     "module": "CommonJS",
     "moduleResolution": "node",
-    "outDir": "./dist",
-    "sourceMap": true,
+    "outDir": "../../dist/xliffmerge/dist",
+    "sourceMap": false,
     "target": "es5",
     "typeRoots": [
-      "./node_modules/@types"
+      "../../node_modules/@types"
     ]
   },
   "include": [
     "./src/**/*"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist"
   ]
 }

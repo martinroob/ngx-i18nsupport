@@ -1,2 +1,2 @@
 #!/usr/bin/env node
-require('../../dist/xliffmerge/main.js')
+require('./xliffmerge/main.js');

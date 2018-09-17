@@ -1,24 +1,24 @@
 {
-  "name": "ngx-i18nsupport",
+  "name": "@ngx-i18nsupport/ngx-i18nsupport",
   "version": "0.17.0",
   "description": "Some tooling to be used with the Angular 2 i18n workflow",
   "main": "index.js",
   "module": "./src",
   "es2015": "./src",
   "bin": {
-    "xliffmerge": "./dist/xliffmerge/xliffmerge"
+    "xliffmerge": "../../dist/xliffmerge/dist/xliffmerge/xliffmerge"
   },
   "engines": {
     "node": ">=6.9"
   },
   "scripts": {
-    "build": "tsc -p ./tsconfig.json && cpx ./src/xliffmerge/xliffmerge ./dist/xliffmerge && cpx ./src/xliffmerge/configuration-schema.json ./dist/xliffmerge",
+    "build": "tsc -p ./tsconfig.json && cpx ../../README.md ../../dist/xliffmerge && cpx ./dist.package.json ../../dist/xliffmerge && move-cli ../../dist/xliffmerge/dist.package.json ../../dist/xliffmerge/package.json && cpx ./src/xliffmerge/xliffmerge ../../dist/xliffmerge/dist/xliffmerge && cpx ./src/xliffmerge/configuration-schema.json ../../dist/xliffmerge/dist/xliffmerge",
     "xliffmerge": "npm link && xliffmerge",
     "pretest": "npm run build",
-    "test": "./node_modules/.bin/jasmine-node dist",
+    "test": "../../node_modules/.bin/jasmine-node ../../dist/xliffmerge/dist",
     "testintern": "set API_KEY_FILE=s:\\experimente\\ngx-i18nsupport\\googleTranslateApiKey.txt&& npm run test",
     "precover": "npm run build",
-    "cover": "./node_modules/.bin/istanbul cover --root dist --include-all-sources ./node_modules/jasmine-node/bin/jasmine-node -- dist",
+    "cover": "../../node_modules/.bin/istanbul cover --root ../../dist/xliffmerge/dist --include-all-sources ../../node_modules/jasmine-node/bin/jasmine-node -- ../..dist/xliffmerge/dist",
     "prepublish": "npm run build"
   },
   "repository": {
@@ -44,6 +44,7 @@
     "@types/request": "^2.47.0",
     "coveralls": "^3.0.0",
     "cpx": "^1.5.0",
+    "move-cli": "^1.2.0",
     "istanbul": "^0.4.5",
     "jasmine-node": "^1.14.5",
     "typescript": "^2.8.3"

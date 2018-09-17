@@ -1,0 +1,39 @@
+{
+  "name": "@ngx-i18nsupport/ngx-i18nsupport",
+  "version": "0.17.0",
+  "description": "Some tooling to be used with the Angular 2 i18n workflow",
+  "main": "index.js",
+  "module": "./src",
+  "es2015": "./src",
+  "bin": {
+    "xliffmerge": "./dist/xliffmerge/xliffmerge"
+  },
+  "engines": {
+    "node": ">=6.9"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/martinroob/ngx-i18nsupport.git"
+  },
+  "keywords": [
+    "i18n",
+    "tooling",
+    "angular",
+    "xliff",
+    "xmb"
+  ],
+  "author": "Martin Roob <martinroob65@gmail.com> (www.roobsoft.de)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/martinroob/ngx-i18nsupport/issues"
+  },
+  "homepage": "https://github.com/martinroob/ngx-i18nsupport#readme",
+  "dependencies": {
+    "chalk": "^2.4.1",
+    "commander": "^2.15.1",
+    "he": "^1.1.1",
+    "ngx-i18nsupport-lib": "^1.10.0",
+    "request": "^2.85.0",
+    "rxjs": "^6.0.0"
+  }
+}
