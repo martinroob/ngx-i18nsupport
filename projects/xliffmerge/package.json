@@ -18,7 +18,7 @@
     "test": "../../node_modules/.bin/jasmine-node ../../dist/xliffmerge/dist",
     "testintern": "set API_KEY_FILE=s:\\experimente\\ngx-i18nsupport\\googleTranslateApiKey.txt&& npm run test",
     "precover": "npm run build",
-    "cover": "../../node_modules/.bin/istanbul cover --root ../../dist/xliffmerge/dist --include-all-sources ../../node_modules/jasmine-node/bin/jasmine-node -- ../..dist/xliffmerge/dist",
+    "cover": "istanbul cover --dir ../../coverage/xliffmerge --root ../../dist/xliffmerge/dist --include-all-sources ../../node_modules/jasmine-node/bin/jasmine-node -- ../../dist/xliffmerge/dist",
     "prepublish": "npm run build"
   },
   "repository": {
