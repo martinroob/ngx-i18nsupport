@@ -16,6 +16,14 @@
     "lib": [
       "es2017",
       "dom"
-    ]
+    ],
+    "paths": {
+      "tooling": [
+        "dist/tooling"
+      ],
+      "tooling/*": [
+        "dist/tooling/*"
+      ]
+    }
   }
 }
