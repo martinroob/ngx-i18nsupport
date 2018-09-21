@@ -1,3 +1,11 @@
+<a name="0.17.1"></a>
+# [0.17.1](https://github.com/martinroob/ngx-i18nsupport/compare/v0.17.0...v0.17.1) (2018-09-21)
+
+### Bug fixes
+* **xmb/xtb format** Optionally do not merge source value into new translation unit value (leave blank).
+([#103](https://github.com/martinroob/ngx-i18nsupport/issues/103)).
+Flag `useSourceAsTarget` now works correct for xmb/xtb format.
+
 <a name="0.17.0"></a>
 # [0.17.0](https://github.com/martinroob/ngx-i18nsupport/compare/v0.16.4...v0.17.0) (2018-08-07)
 
