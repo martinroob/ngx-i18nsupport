@@ -119,6 +119,37 @@ describe('XliffMerge XMB format tests', () => {
             done();
         });
 
+        it('should generate translated file for all languages with empty targets for non default languages', (done) => {
+            FileUtil.copy(MASTER1SRC, MASTER);
+            let ws: WriterToString = new WriterToString();
+            let commandOut = new CommandOutput(ws);
+            let profileContent: IConfigFile = {
+                xliffmergeOptions: {
+                    defaultLanguage: 'de',
+                    srcDir: WORKDIR,
+                    genDir: WORKDIR,
+                    i18nFile: MASTERFILE,
+                    i18nFormat: 'xmb',
+                    useSourceAsTarget: false
+                }
+            };
+            let xliffMergeCmd = XliffMerge.createFromOptions(commandOut, {languages: ['de', 'en']}, profileContent);
+            xliffMergeCmd.run();
+            expect(ws.writtenData()).not.toContain('ERROR');
+            let langFileGerman: ITranslationMessagesFile = readXtbWithMaster(xliffMergeCmd.generatedI18nFile('de'), MASTER);
+            langFileGerman.forEachTransUnit((tu: ITransUnit) => {
+                // useSourceAsTarget = false, but this is the default language which will always contain translation!
+                expect(tu.targetContent()).toBe(tu.sourceContent());
+            });
+            let langFileEnglish: ITranslationMessagesFile = readXtbWithMaster(xliffMergeCmd.generatedI18nFile('en'), MASTER);
+            langFileEnglish.forEachTransUnit((tu: ITransUnit) => {
+                // since useSourceAsTarget = false, there should be no translation!
+                expect(tu.targetContent()).toBe('');
+                expect(tu.targetState()).toBe('new');
+            });
+            done();
+        });
+
         it('should generate translated file for all languages with set praefix and suffix (#70)', (done) => {
             FileUtil.copy(MASTER1SRC, MASTER);
             let ws: WriterToString = new WriterToString();
