@@ -1,9 +1,9 @@
 {
   "$schema": "../node_modules/@angular-devkit/schematics/collection-schema.json",
   "schematics": {
-    "schematics": {
+    "ng-add": {
       "description": "Add support for xliffmerge",
-      "factory": "./schematics/index#ngAdd"
+      "factory": "./ng-add/index#ngAdd"
     }
   }
 }

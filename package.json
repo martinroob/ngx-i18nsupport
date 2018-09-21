@@ -11,7 +11,8 @@
   },
   "private": true,
   "workspaces": [
-	"projects/xliffmerge"
+	"projects/xliffmerge",
+    "projects/tooling"
   ],
   "dependencies": {
     "@angular/animations": "^6.1.0",
@@ -50,6 +51,7 @@
     "ng-packagr": "^4.1.0",
     "tsickle": ">=0.29.0",
     "tslib": "^1.9.0",
-    "typescript": "~2.9.2"
+    "typescript": "~2.9.2",
+    "cpx": "^1.5.0"
   }
 }
