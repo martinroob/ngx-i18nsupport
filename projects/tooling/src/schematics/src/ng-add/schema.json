@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "id": "SchematicsForNgAdd",
+  "title": "NgAdd Schema",
+  "type": "object",
+  "properties": {
+    "defaultLanguage": {
+      "type": "string",
+      "$default": "en",
+      "description": "The default language used in your ng template files"
+    },
+    "languages": {
+      "type": "string",
+      "$default": "en",
+      "description": "Target languages that you want to support"
+    }
+  }
+}
