@@ -2,8 +2,8 @@
  * Options that can be used with ng add @ngx-i18nsupport.
  */
 export interface NgAddOptions {
-    path: string; // project path, normally $projectRoot, xliffmerge-config.json will be created here
-    project?: string; // project name
+    path: string;
+    project?: string;
     localePath: string;
     srcDir: string;
     genDir: string;

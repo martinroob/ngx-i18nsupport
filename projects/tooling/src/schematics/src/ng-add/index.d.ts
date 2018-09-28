@@ -1,2 +1,3 @@
 import { Rule } from '@angular-devkit/schematics';
-export declare function ngAdd(_options: any): Rule;
+import { NgAddOptions } from './schema';
+export declare function ngAdd(options: NgAddOptions): Rule;
