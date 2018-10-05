@@ -8,6 +8,8 @@ export { parseName } from './utility/parse-name';
 export { getProjectPath, getProject, isLib } from './utility/project';
 export { AppConfig, getWorkspace, getWorkspacePath } from './utility/config';
 export { addPackageToPackageJson } from './utility/package';
+export { addScriptToPackageJson } from './utility/special-package';
+export { addArchitectBuildConfigurationToProject, addArchitectServeConfigurationToProject } from './utility/special-project';
 export declare const stringUtils: {
     dasherize: typeof dasherize;
     decamelize: typeof decamelize;

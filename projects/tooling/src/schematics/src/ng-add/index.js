@@ -3,43 +3,24 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const schematics_1 = require("@angular-devkit/schematics");
 const tasks_1 = require("@angular-devkit/schematics/tasks");
 const schematics_core_1 = require("../../schematics-core");
+const special_package_1 = require("../../schematics-core/utility/special-package");
+const special_project_1 = require("../../schematics-core/utility/special-project");
 /**
  * Current version of @ngx-i18nsupport/xliffmerge
  * This value will be written into package.json of the project that uses ng add.
  * TODO must be changed for every new release.
  */
-const xliffmergeVersion = '^0.19.0';
-/**
- * Adds a script to the package.json
- */
-function addScriptToPackageJson(host, scriptName, content) {
-    if (host.exists('package.json')) {
-        const scriptsSection = 'scripts';
-        const packageJsonContent = host.read('package.json');
-        if (packageJsonContent) {
-            const sourceText = packageJsonContent.toString('utf-8');
-            const json = JSON.parse(sourceText);
-            if (!json[scriptsSection]) {
-                json[scriptsSection] = {};
-            }
-            if (!json[scriptsSection][scriptName]) {
-                json[scriptsSection][scriptName] = content;
-            }
-            host.overwrite('package.json', JSON.stringify(json, null, 2));
-        }
-    }
-    return host;
-}
+exports.xliffmergeVersion = '^0.19.0';
 function addXliffmergeDependencyToPackageJson() {
     return (host, context) => {
-        schematics_core_1.addPackageToPackageJson(host, 'devDependencies', '@ngx-i18nsupport/xliffmerge', xliffmergeVersion);
+        schematics_core_1.addPackageToPackageJson(host, 'devDependencies', '@ngx-i18nsupport/xliffmerge', exports.xliffmergeVersion);
         context.addTask(new tasks_1.NodePackageInstallTask());
         return host;
     };
 }
 function addExtractScriptToPackageJson(options) {
     return (host, context) => {
-        addScriptToPackageJson(host, 'extract-i18n', fullExtractScript(options));
+        special_package_1.addScriptToPackageJson(host, 'extract-i18n', fullExtractScript(options));
         context.logger.info('added npm script to extract i18n message, run "npm run extract-i18n" for extraction');
         return host;
     };
@@ -50,7 +31,31 @@ function fullExtractScript(options) {
     const languagesBlankSeparated = options.languages ? options.languages.replace(/,/g, ' ') : '';
     const localeDir = options.localePath;
     const configFilePath = 'xliffmerge.json';
-    return `ng xi18n --i18n-format ${i18nFormat} --output-path ${localeDir} --i18n-locale ${defaultLanguage} && xliffmerge --profile ${configFilePath} ${languagesBlankSeparated}`;
+    return `ng xi18n --i18n-format ${i18nFormat} --output-path ${localeDir} --i18n-locale ${defaultLanguage}\
+ && xliffmerge --profile ${configFilePath} ${languagesBlankSeparated}`;
+}
+function addLanguageConfigurationToProject(options, language) {
+    return (host, context) => {
+        special_project_1.addArchitectBuildConfigurationToProject(host, context, options.project, language, buildConfigurationForLanguage(options, language));
+        context.logger.info('added build configuration for language ' + language);
+        special_project_1.addArchitectServeConfigurationToProject(host, context, options.project, language, serveConfigurationForLanguage(options, language));
+        context.logger.info('added build configuration for language ' + language);
+        return host;
+    };
+}
+function buildConfigurationForLanguage(options, language) {
+    return {
+        aot: true,
+        outputPath: `dist/${options.project}-${language}`,
+        i18nFile: `${options.genDir}/messages.${language}.xlf`,
+        i18nFormat: options['i18n-format'],
+        i18nLocale: language
+    };
+}
+function serveConfigurationForLanguage(options, language) {
+    return {
+        browserTarget: `${options.project}:build:${language}`
+    };
 }
 function setupOptions(options, host, context) {
     let workspace;
@@ -78,6 +83,12 @@ function setupOptions(options, host, context) {
     }
     const parsedPath = schematics_core_1.parseName(options.path, '');
     options.path = parsedPath.path;
+    if (!options.languages) {
+        options.parsedLanguages = [];
+    }
+    else {
+        options.parsedLanguages = options.languages.split(',');
+    }
     options.srcDir = 'src' + '/' + options.localePath;
     options.genDir = 'src' + '/' + options.localePath;
     context.logger.info('Path is set to ' + options.path);
@@ -92,13 +103,13 @@ function ngAdd(options) {
             schematics_1.template(Object.assign({}, schematics_core_1.stringUtils, options, { 'i18nLocale': options['i18n-locale'], 'i18nFormat': options['i18n-format'] })),
             schematics_1.move(options.path ? options.path : ''),
         ]);
+        const configurationAdditions = options.parsedLanguages
+            .filter(lang => lang !== options['i18n-locale'])
+            .map(lang => addLanguageConfigurationToProject(options, lang));
         return schematics_1.chain([
-            schematics_1.branchAndMerge(schematics_1.chain([addExtractScriptToPackageJson(options), schematics_1.mergeWith(templateSource)])),
+            schematics_1.branchAndMerge(schematics_1.chain([addExtractScriptToPackageJson(options), ...configurationAdditions, schematics_1.mergeWith(templateSource)])),
             addXliffmergeDependencyToPackageJson(),
         ])(host, context);
-        /*    host.create('hello.txt', 'Hello World!, Default lang is ' + options.defaultLanguage);
-              host.create('xliffmerge.json', 'Hello World!, Default lang is ' + options.defaultLanguage);
-            return host;*/
     };
 }
 exports.ngAdd = ngAdd;

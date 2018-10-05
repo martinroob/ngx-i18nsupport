@@ -5,7 +5,8 @@
   "scripts": {
     "build": "ng build tooling && npm run build:schematics && npm run copy:schematics",
     "build:schematics": "tsc -p src/schematics/tsconfig.json",
-    "copy:schematics": "cpx ./src/schematics/** ../../dist/tooling/schematics"
+    "copy:schematics": "cpx ./src/schematics/** ../../dist/tooling/schematics",
+    "test": "npm run build && jasmine src/**/*_spec.js"
   },
   "devDependencies": {
     "cpx": "^1.5.0"

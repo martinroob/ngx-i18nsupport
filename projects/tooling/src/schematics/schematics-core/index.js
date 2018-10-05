@@ -17,6 +17,11 @@ exports.getWorkspace = config_1.getWorkspace;
 exports.getWorkspacePath = config_1.getWorkspacePath;
 var package_1 = require("./utility/package");
 exports.addPackageToPackageJson = package_1.addPackageToPackageJson;
+var special_package_1 = require("./utility/special-package");
+exports.addScriptToPackageJson = special_package_1.addScriptToPackageJson;
+var special_project_1 = require("./utility/special-project");
+exports.addArchitectBuildConfigurationToProject = special_project_1.addArchitectBuildConfigurationToProject;
+exports.addArchitectServeConfigurationToProject = special_project_1.addArchitectServeConfigurationToProject;
 exports.stringUtils = {
     dasherize: strings_1.dasherize,
     decamelize: strings_1.decamelize,
