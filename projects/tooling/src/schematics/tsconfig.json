@@ -1,11 +1,11 @@
 {
+  "extends": "../../tsconfig.lib.json",
   "compilerOptions": {
     "baseUrl": "tsconfig",
     "lib": [
       "es2017",
       "dom"
     ],
-    "declaration": true,
     "module": "commonjs",
     "moduleResolution": "node",
     "noEmitOnError": true,
@@ -14,10 +14,8 @@
     "noImplicitThis": true,
     "noUnusedParameters": true,
     "noUnusedLocals": true,
-    "rootDir": "src/",
     "skipDefaultLibCheck": true,
     "skipLibCheck": true,
-    "sourceMap": true,
     "strictNullChecks": true,
     "target": "es6",
     "types": [
