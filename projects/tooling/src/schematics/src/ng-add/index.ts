@@ -1,38 +1,29 @@
-import { Rule,
-    SchematicContext,
-    Tree,
-    SchematicsException,
-    apply,
-    branchAndMerge,
-    chain,
-    mergeWith,
-    template,
-    url,
-    move } from '@angular-devkit/schematics';
-import { NodePackageInstallTask } from '@angular-devkit/schematics/tasks';
-import {NgAddOptions} from './schema';
-import {addPackageToPackageJson, getWorkspace, parseName, stringUtils} from '../../schematics-core';
-import {Location} from '../../schematics-core/utility/parse-name';
-import {WorkspaceSchema} from '../../schematics-core/utility/config';
-import {addScriptToPackageJson} from '../../schematics-core/utility/special-package';
-import {
-    addArchitectBuildConfigurationToProject,
-    addArchitectServeConfigurationToProject
-} from '../../schematics-core/utility/special-project';
-
 /**
- * Current version of @ngx-i18nsupport/xliffmerge
- * This value will be written into package.json of the project that uses ng add.
- * TODO must be changed for every new release.
+ * Schematic to automatically add support for using @ngx-i18nsupport.
+ * Will be called when you call 'ng add @ngx-i18nsupport/tooling'.
  */
-export const xliffmergeVersion = '^0.19.0';
+
+import {apply, branchAndMerge, chain, mergeWith, move,
+    Rule, SchematicContext, SchematicsException,
+    template, Tree, url} from '@angular-devkit/schematics';
+import {NodePackageInstallTask} from '@angular-devkit/schematics/tasks';
+import {NgAddOptions} from './schema';
+import {addPackageToPackageJson, addScriptToPackageJson, stringUtils} from '../../schematics-core';
+import {
+    addLanguageConfigurationToProject,
+    isValidLanguageSyntax,
+    addStartScriptToPackageJson,
+    fullExtractScript,
+    OptionsAfterSetup, setupCommonOptions,
+    xliffmergeVersion, extractScriptName, defaultI18nLocale, xliffmergePackage
+} from '../common';
 
 function addXliffmergeDependencyToPackageJson() {
     return (host: Tree, context: SchematicContext) => {
         addPackageToPackageJson(
             host,
             'devDependencies',
-            '@ngx-i18nsupport/xliffmerge',
+            xliffmergePackage,
             xliffmergeVersion
         );
         context.addTask(new NodePackageInstallTask());
@@ -40,108 +31,61 @@ function addXliffmergeDependencyToPackageJson() {
     };
 }
 
-function addExtractScriptToPackageJson(options: NgAddOptions) {
+function addExtractScriptToPackageJson(options: OptionsAfterSetup) {
     return (host: Tree, context: SchematicContext) => {
         addScriptToPackageJson(
             host,
-            'extract-i18n',
+            extractScriptName,
             fullExtractScript(options)
         );
-        context.logger.info('added npm script to extract i18n message, run "npm run extract-i18n" for extraction');
+        context.logger.info(`added npm script to extract i18n message, run "npm run ${extractScriptName}" for extraction`);
         return host;
     };
 }
 
-function fullExtractScript(options: NgAddOptions): string {
-    const defaultLanguage = options['i18n-locale'];
-    const i18nFormat = options['i18n-format'];
-    const languagesBlankSeparated = options.languages ? options.languages.replace(/,/g, ' ') : '';
-    const localeDir = options.localePath;
-    const configFilePath = 'xliffmerge.json';
-    return `ng xi18n --i18n-format ${i18nFormat} --output-path ${localeDir} --i18n-locale ${defaultLanguage}\
- && xliffmerge --profile ${configFilePath} ${languagesBlankSeparated}`;
-}
-
-function addLanguageConfigurationToProject(options: NgAddOptions, language: string) {
-    return (host: Tree, context: SchematicContext) => {
-        addArchitectBuildConfigurationToProject(
-            host,
-            context,
-            options.project,
-            language,
-            buildConfigurationForLanguage(options, language)
-        );
-        context.logger.info('added build configuration for language ' + language);
-        addArchitectServeConfigurationToProject(
-            host,
-            context,
-            options.project,
-            language,
-            serveConfigurationForLanguage(options, language)
-        );
-        context.logger.info('added build configuration for language ' + language);
-        return host;
-    };
-}
-
-function buildConfigurationForLanguage(options: NgAddOptions, language: string): any {
-    return {
-        aot: true,
-        outputPath: `dist/${options.project}-${language}`,
-        i18nFile: `${options.genDir}/messages.${language}.xlf`,
-        i18nFormat: options['i18n-format'],
-        i18nLocale: language
-    };
-}
-
-function serveConfigurationForLanguage(options: NgAddOptions, language: string): any {
-    return {
-        browserTarget: `${options.project}:build:${language}`
-    };
-}
-
-function setupOptions(options: NgAddOptions, host: Tree, context: SchematicContext): void {
-    let workspace: WorkspaceSchema;
-    try {
-        workspace = getWorkspace(host);
-    } catch (e) {
-        const msg = 'Could not find a workspace (must contain angular.json or .angular.json)';
-        context.logger.fatal(msg);
-        throw new SchematicsException(msg + ', exception ' + e);
+/**
+ * Sets all options given by commandline or defaults.
+ * It also checks values for correctness.
+ * @param optionsFromCommandline command line options.
+ * @param context use for error logging.
+ * @param host the tree to lookup some workspace settings.
+ * @return an object where all relevant values are set.
+ */
+function setupOptions(optionsFromCommandline: NgAddOptions, host: Tree, context: SchematicContext): OptionsAfterSetup {
+    const options: OptionsAfterSetup = setupCommonOptions(optionsFromCommandline, host, context);
+    options.useComandlineForLanguages = optionsFromCommandline.useComandlineForLanguages ?
+        optionsFromCommandline.useComandlineForLanguages
+        : false;
+    const languagesFromCommandline = (optionsFromCommandline.languages) ? optionsFromCommandline.languages.split(',') : [];
+    if (!optionsFromCommandline['i18n-locale']) {
+        if (languagesFromCommandline.length > 0) {
+            options['i18n-locale'] = languagesFromCommandline[0];
+        } else {
+            options['i18n-locale'] = defaultI18nLocale;
+        }
     }
-    if (!workspace.projects) {
-        const msg = 'returned workspace contains no projects, workspace (content of angular.json) was: ' + JSON.stringify(workspace);
-        context.logger.fatal(msg);
-        throw new SchematicsException(msg);
+    options.parsedLanguages = [options['i18n-locale']];
+    if (optionsFromCommandline.languages) {
+        options.parsedLanguages.push(...languagesFromCommandline);
     }
-    if (!options.project) {
-        options.project = Object.keys(workspace.projects)[0];
+    // remove duplicates
+    options.parsedLanguages = options.parsedLanguages.filter((v, i, a) => a.indexOf(v) === i);
+    for (const lang of options.parsedLanguages) {
+        if (!isValidLanguageSyntax(lang)) {
+            const msg = `"${lang}" is not a valid language code.`;
+            context.logger.fatal(msg);
+            throw new SchematicsException(msg);
+        }
     }
-    const project = workspace.projects[options.project];
-
-    if (options.path === undefined) {
-        options.path = `/${project.root}`;
-//        const projectDirName = project.projectType === 'application' ? 'app' : 'lib';
-//        options.path = `/${project.root}/src/${projectDirName}`;
-    }
-    const parsedPath: Location = parseName(options.path, '');
-    options.path = parsedPath.path;
-    if (!options.languages) {
-        options.parsedLanguages = [];
-    } else {
-        options.parsedLanguages = options.languages.split(',');
-    }
-    options.srcDir = 'src' + '/' + options.localePath;
-    options.genDir = 'src' + '/' + options.localePath;
-    context.logger.info('Path is set to ' + options.path);
-    context.logger.info('srcDir, genDir ' + options.srcDir + ', ' + options.genDir);
+    return options;
 }
 
 // You don't have to export the function as default. You can also have more than one rule factory
 // per file.
-export function ngAdd(options: NgAddOptions): Rule {
+// noinspection JSUnusedGlobalSymbols
+export function ngAdd(optionsFromCommandline: NgAddOptions): Rule {
   return (host: Tree, context: SchematicContext) => {
-      setupOptions(options, host, context);
+      const options: OptionsAfterSetup = setupOptions(optionsFromCommandline, host, context);
       const templateSource = apply(url('./files'), [
           template({
               ...stringUtils,
@@ -155,9 +99,17 @@ export function ngAdd(options: NgAddOptions): Rule {
       const configurationAdditions = options.parsedLanguages
           .filter(lang => lang !== options['i18n-locale'])
           .map(lang => addLanguageConfigurationToProject(options, lang));
+      const startScriptAdditions = options.parsedLanguages
+          .filter(lang => lang !== options['i18n-locale'])
+          .map(lang => addStartScriptToPackageJson(options, lang));
       return chain([
           branchAndMerge(
-              chain([addExtractScriptToPackageJson(options), ...configurationAdditions, mergeWith(templateSource)])
+              chain([
+                  addExtractScriptToPackageJson(options),
+                  ...configurationAdditions,
+                  ...startScriptAdditions,
+                  mergeWith(templateSource)]
+              )
           ),
           addXliffmergeDependencyToPackageJson(),
       ])(host, context);

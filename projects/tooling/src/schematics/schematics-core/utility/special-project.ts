@@ -1,8 +1,56 @@
-import {Tree, SchematicContext, SchematicsException} from '@angular-devkit/schematics';
+/**
+ * Additional angular.json spefific tool functions that are not part of normal project.ts
+ */
+
+import {SchematicContext, SchematicsException, Tree} from '@angular-devkit/schematics';
+import {WorkspaceSchema} from './config';
+import {WorkspaceProject} from './project';
+
+/*
+private helper function
+ */
+function readAngularJson(
+    host: Tree
+): WorkspaceSchema  {
+    const noAngularJsonMsg = 'file angular.json not found';
+    if (host.exists('angular.json')) {
+        const content = host.read('angular.json');
+        if (!content) {
+            throw new SchematicsException(noAngularJsonMsg);
+        }
+        const sourceText = content.toString('utf-8');
+        return JSON.parse(sourceText);
+    } else {
+        throw new SchematicsException(noAngularJsonMsg);
+    }
+}
 
 /**
- * Add a configuration to anguar.json.
- * Configuration is stored under architect.build.configurations
+ * Get project from angular.json.
+ * @param host Host (Tree)
+ * @param _context Context
+ * @param projectName Name of project
+ */
+export function getProjectByName(
+    host: Tree,
+    _context: SchematicContext,
+    projectName: string,
+): WorkspaceProject {
+        const json = readAngularJson(host);
+        const projects = json['projects'];
+        if (!projects) {
+            throw new SchematicsException('angular.json does not contain projects');
+        }
+        const project = projects[projectName];
+        if (!project) {
+            throw new SchematicsException('angular.json does not contain project ' + projectName);
+        }
+        return project;
+}
+
+/**
+ * (private) Add a configuration to angular.json.
+ * Configuration is stored under path given as parameter.
  * @param host Host (Tree)
  * @param context Context
  * @param projectName Name of project
@@ -18,35 +66,25 @@ function addConfigurationToProjectPath(
     configurationName: string,
     configuration: any): Tree {
 
-    const noAngularJsonMsg = 'file angular.json not found';
-    if (host.exists('angular.json')) {
-        const content = host.read('angular.json');
-        if (!content) {
-            throw new SchematicsException(noAngularJsonMsg);
-        }
-        const sourceText = content.toString('utf-8');
-        const json = JSON.parse(sourceText);
-        const projects = json['projects'];
-        if (!projects) {
-            throw new SchematicsException('angular.json does not contain projects');
-        }
-        const project = projects[projectName];
-        if (!project) {
-            throw new SchematicsException('angular.json does not contain project ' + projectName);
-        }
-        const configurations = getPathFromProject(projectName, project, path);
-        configurations[configurationName] = configuration;
-        context.logger.info('added configuration ' + configurationName + ' to project ' + projectName);
-        host.overwrite('angular.json', JSON.stringify(json, null, 2));
-    } else {
-        throw new SchematicsException(noAngularJsonMsg);
+    const json = readAngularJson(host);
+    const projects = json['projects'];
+    if (!projects) {
+        throw new SchematicsException('angular.json does not contain projects');
     }
+    const project = projects[projectName];
+    if (!project) {
+        throw new SchematicsException('angular.json does not contain project ' + projectName);
+    }
+    const configurations = getObjectFromProjectUsingPath(projectName, project, path);
+    configurations[configurationName] = configuration;
+    context.logger.info('added configuration ' + configurationName + ' to project ' + projectName);
+    host.overwrite('angular.json', JSON.stringify(json, null, 2));
 
     return host;
 }
 
 /**
- * Add a configuration to anguar.json.
+ * Add a build configuration to angular.json.
  * Configuration is stored under architect.build.configurations
  * @param host Host (Tree)
  * @param context Context
@@ -67,7 +105,7 @@ export function addArchitectBuildConfigurationToProject(
 }
 
 /**
- * Add a configuration to anguar.json.
+ * Add a serve configuration to angular.json.
  * Configuration is stored under architect.serve.configurations
  * @param host Host (Tree)
  * @param context Context
@@ -87,8 +125,16 @@ export function addArchitectServeConfigurationToProject(
         configurationName, configuration);
 }
 
-function getPathFromProject(projectName: string, project: any, path: string[]): any {
-    let object = project;
+/**
+ * (private) get a special object from project by navigating a path
+ * Throws an exception if path does not exist.
+ * @param projectName Name of project.
+ * @param project the project read from angular.json
+ * @param path path like ['architect', 'build', 'configurations']
+ * @return the object at the path position
+ */
+function getObjectFromProjectUsingPath(projectName: string, project: WorkspaceProject, path: string[]): any {
+    let object: any = project;
     let currentPath = '';
     for (let i = 0; i < path.length; i++) {
         currentPath = currentPath + '.' + path[i];
@@ -98,4 +144,18 @@ function getPathFromProject(projectName: string, project: any, path: string[]): 
         }
     }
     return object;
+}
+
+/**
+ * Read angular.json
+ * @return content or null, if file does not exist.
+ */
+export function getAngularJson(host: Tree): WorkspaceSchema | null {
+    const path = `/angular.json`;
+    const content = host.read(path);
+    if (!content) {
+        return null;
+    }
+    const contentString = content.toString('UTF-8');
+    return JSON.parse(contentString) as WorkspaceSchema;
 }

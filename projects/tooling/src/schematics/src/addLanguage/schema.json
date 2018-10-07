@@ -11,6 +11,10 @@
         "index": 0
       },
       "description": "The language to be added"
+    },
+    "languages": {
+      "type": "string",
+      "description": "Languages to be added (comma separated list like 'en,de,fr')."
     }
   }
 }

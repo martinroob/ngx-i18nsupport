@@ -4,6 +4,6 @@
     "srcDir": "<%= srcDir %>",
     "genDir": "<%= genDir %>",
     "defaultLanguage": "<%= i18nLocale %>",
-    "languages": <%= commaseparatedToArrayString(languages) %>
+    "languages": <%= toArrayString(parsedLanguages) %>
   }
 }

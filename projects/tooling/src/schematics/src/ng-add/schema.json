@@ -20,7 +20,7 @@
     "localePath": {
       "type": "string",
       "format": "path",
-      "description": "The (optional) path where to create the translation files (relativ to src), default i18n.",
+      "description": "The (optional) path where to create the translation files (relativ to src), default 'i18n'.",
       "default": "i18n"
     },
     "i18n-format": {
@@ -30,17 +30,20 @@
         "xmb"
       ],
       "default": "xlf",
-      "description": "The translation file format, XLIFF 1.2, XLIFF 2 or XMB/XTB."
+      "description": "The translation file format, 'xlf' for XLIFF 1.2, 'xlf2' for XLIFF 2 or 'xmb' for XMB/XTB."
     },
     "i18n-locale": {
       "type": "string",
-      "default": "en",
-      "description": "The default language used in your ng template files (local name like 'en' or 'de')."
+      "description": "The default language used in your ng template files (local name like 'en' or 'de'). If not given, first language in list of languages is assumed, if even that is not given, 'en' is assumed"
     },
     "languages": {
       "type": "string",
-      "default": "en",
       "description": "Target languages that you want to support (comma separated list like 'en,de,fr')."
+    },
+    "useComandlineForLanguages": {
+      "type": "boolean",
+      "default": false,
+      "description": "If set, all languages are given as command line argument to xliffmerge, otherwise they are configured in 'xliffmerge.json'"
     }
   }
 }

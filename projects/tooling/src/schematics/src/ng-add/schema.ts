@@ -1,14 +1,13 @@
 /**
  * Options that can be used with ng add @ngx-i18nsupport.
  */
-export interface NgAddOptions {
-    path: string; // project path, normally $projectRoot, xliffmerge-config.json will be created here
-    project: string; // project name
-    localePath: string;
-    srcDir: string;
-    genDir: string;
-    'i18n-format': string;
-    'i18n-locale': string;
-    languages?: string;
-    parsedLanguages: string[];
+import {CommonOptions} from '../common';
+
+export interface NgAddOptions extends CommonOptions {
+    localePath?: string;
+    'i18n-format'?: string; // the used format
+    'i18n-locale'?: string; // the default language
+    languages?: string; // comma separared list of languages
+    useComandlineForLanguages?: boolean; // if set, all languages are given as command line argument to xliffmerge
+                                        // if not, they are configured in xliffmerge.json (preferred variant)
 }
