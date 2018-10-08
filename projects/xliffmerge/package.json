@@ -14,7 +14,7 @@
   "scripts": {
     "build": "tsc -p ./tsconfig.json && npm run build:copy && npm run build:move",
     "build:copy": "cpx ../../README.md ../../dist/xliffmerge && cpx ./dist.package.json ../../dist/xliffmerge && cpx ./src/xliffmerge/xliffmerge ../../dist/xliffmerge/dist/xliffmerge && cpx ./src/xliffmerge/configuration-schema.json ../../dist/xliffmerge/dist/xliffmerge",
-    "build:move": "move ../../dist/xliffmerge/dist.package.json ../../dist/xliffmerge/package.json",
+    "build:move": "mv ../../dist/xliffmerge/dist.package.json ../../dist/xliffmerge/package.json",
     "xliffmerge": "npm link && xliffmerge",
     "pretest": "npm run build",
     "test": "../../node_modules/.bin/jasmine-node ../../dist/xliffmerge/dist",
