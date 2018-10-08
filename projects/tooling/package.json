@@ -8,7 +8,7 @@
     "copy:schematics": "cpx \"./src/schematics/**\" ../../dist/tooling/schematics",
     "pretest": "npm run build && cpx \"./src/schematics/**/*.json\" ../../out-tsc/lib",
     "test": "jasmine ../../out-tsc/lib/**/*_spec.js",
-    "precover": "npm run build && cpx ./src/schematics/**/*.json ../../out-tsc/lib",
+    "precover": "npm run build && cpx \"./src/schematics/**/*.json\" ../../out-tsc/lib",
     "cover": "istanbul cover --dir ../../coverage/tooling --root ../../out-tsc --include-all-sources ../../node_modules/jasmine-node/bin/jasmine-node -- ../../out-tsc"
   },
   "devDependencies": {
