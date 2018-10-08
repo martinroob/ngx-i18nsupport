@@ -1,6 +1,6 @@
 {
   "name": "@ngx-i18nsupport/tooling",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "schematics": "./schematics/src/collection.json",
   "scripts": {
     "build": "ng build tooling && npm run build:schematics && npm run copy:schematics",
@@ -17,8 +17,7 @@
   "peerDependencies": {
     "@angular-devkit/core": "^0.8.1",
     "@angular-devkit/schematics": "^0.8.1",
-    "@angular/common": "^6.0.0-rc.0 || ^6.0.0",
-    "@angular/core": "^6.0.0-rc.0 || ^6.0.0",
-    "@ngx-i18nsupport/xliffmerge": "^0.18"
+    "@angular/common": "^6.0.0",
+    "@angular/core": "^6.0.0"
   }
 }

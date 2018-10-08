@@ -5,7 +5,7 @@
 /**
  * xliffmerge package that will be added to package.json
  */
-export const xliffmergePackage = '@ngx-i18nsupport/xliffmerge';
+export const xliffmergePackage = '@ngx-i18nsupport/ngx-i18nsupport';
 
 /**
  * Current version of @ngx-i18nsupport/xliffmerge
