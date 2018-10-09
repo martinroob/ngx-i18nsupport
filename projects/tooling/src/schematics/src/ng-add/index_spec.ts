@@ -3,7 +3,7 @@ import {Schema as ApplicationOptions} from '@schematics/angular/application/sche
 import { SchematicTestRunner, UnitTestTree } from '@angular-devkit/schematics/testing';
 import {IXliffMergeOptions} from '@ngx-i18nsupport/ngx-i18nsupport/src/xliffmerge/i-xliff-merge-options';
 import * as pathUtils from 'path';
-import {extractScriptName, xliffmergeVersion} from '../common';
+import {extractScriptName, xliffmergePackage, xliffmergeVersion} from '../common';
 import {NgAddOptions} from './schema';
 import {readAngularJson, readAsJson, readPackageJson, workspaceOptions} from '../common/common-testing_spec';
 import {WorkspaceSchema} from '../../schematics-core/utility/config';
@@ -117,7 +117,7 @@ describe('ng-add', () => {
       it('should add xliffmerge dev dependency to package.json', () => {
           const tree = runSchematic( {}, appTree);
           const packageJson = readPackageJson(tree);
-          expect(packageJson.devDependencies['@ngx-i18nsupport/xliffmerge']).toBe(xliffmergeVersion);
+          expect(packageJson.devDependencies[xliffmergePackage]).toBe(xliffmergeVersion);
       });
 
       it('should add configurations for non default languages to angular.json', () => {
