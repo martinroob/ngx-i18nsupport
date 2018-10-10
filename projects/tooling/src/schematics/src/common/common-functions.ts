@@ -100,7 +100,7 @@ export function addLanguageConfigurationToProject(options: OptionsAfterSetup, la
             language,
             buildConfigurationForLanguage(options, language)
         );
-        context.logger.info('added build configuration for language ' + language);
+        context.logger.info(`added build configuration for language "${language}" to project "${options.project}"`);
         addArchitectServeConfigurationToProject(
             host,
             context,
@@ -108,7 +108,7 @@ export function addLanguageConfigurationToProject(options: OptionsAfterSetup, la
             language,
             serveConfigurationForLanguage(options, language)
         );
-        context.logger.info('added build configuration for language ' + language);
+        context.logger.info(`added serve configuration for language "${language}" to project "${options.project}"`);
         return host;
     };
 }

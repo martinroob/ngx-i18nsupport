@@ -77,7 +77,7 @@ function addConfigurationToProjectPath(
     }
     const configurations = getObjectFromProjectUsingPath(projectName, project, path);
     configurations[configurationName] = configuration;
-    context.logger.info('added configuration ' + configurationName + ' to project ' + projectName);
+    context.logger.debug('added configuration ' + configurationName + ' to project ' + projectName);
     host.overwrite('angular.json', JSON.stringify(json, null, 2));
 
     return host;

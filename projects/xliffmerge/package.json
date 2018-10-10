@@ -1,6 +1,7 @@
 {
   "name": "@ngx-i18nsupport/ngx-i18nsupport",
   "version": "0.17.0",
+  "private": false,
   "description": "Some tooling to be used with the Angular 2 i18n workflow",
   "main": "index.js",
   "module": "./src",
@@ -13,7 +14,7 @@
   },
   "scripts": {
     "build": "tsc -p ./tsconfig.json && npm run build:copy && npm run build:move",
-    "build:copy": "cpx ../../README.md ../../dist/xliffmerge && cpx ./dist.package.json ../../dist/xliffmerge && cpx ./src/xliffmerge/xliffmerge ../../dist/xliffmerge/dist/xliffmerge && cpx ./src/xliffmerge/configuration-schema.json ../../dist/xliffmerge/dist/xliffmerge",
+    "build:copy": "cpx ./README.md ../../dist/xliffmerge && cpx ./dist.package.json ../../dist/xliffmerge && cpx ./src/xliffmerge/xliffmerge ../../dist/xliffmerge/dist/xliffmerge && cpx ./src/xliffmerge/configuration-schema.json ../../dist/xliffmerge/dist/xliffmerge",
     "build:move": "mv ../../dist/xliffmerge/dist.package.json ../../dist/xliffmerge/package.json",
     "xliffmerge": "npm link && xliffmerge",
     "pretest": "npm run build",

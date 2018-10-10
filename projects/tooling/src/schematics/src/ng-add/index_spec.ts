@@ -114,6 +114,14 @@ describe('ng-add', () => {
           expect(configFile.xliffmergeOptions.languages).toEqual(['en', 'de', 'fr', 'ru']);
       });
 
+      it('should create xliffmerge configuration with specified xlf format', () => {
+          const tree = runSchematic({'i18n-locale': 'en', 'i18n-format': 'xlf2'}, appTree);
+          expect(tree.files).toContain('/projects/bar/xliffmerge.json');
+          const configFile = readAsJson<{xliffmergeOptions: IXliffMergeOptions}>(tree, '/projects/bar/xliffmerge.json');
+          expect(configFile.xliffmergeOptions).toBeTruthy();
+          expect(configFile.xliffmergeOptions.i18nFormat).toBe('xlf2');
+      });
+
       it('should add xliffmerge dev dependency to package.json', () => {
           const tree = runSchematic( {}, appTree);
           const packageJson = readPackageJson(tree);

@@ -1,22 +1,41 @@
 {
   "name": "@ngx-i18nsupport/tooling",
   "version": "0.1.1",
+  "private": false,
+  "description": "Schematics to add the tooling to be used with the Angular 2 i18n workflow",
   "schematics": "./schematics/src/collection.json",
   "scripts": {
     "build": "ng build tooling && npm run build:schematics && npm run copy:schematics",
     "build:schematics": "tsc -p src/schematics/tsconfig.json",
     "copy:schematics": "cpx \"./src/schematics/**\" ../../dist/tooling/schematics",
     "pretest": "npm run build",
-    "test": "jasmine ../../../../dist/tooling/**/*_spec.js",
+    "test": "jasmine ../../dist/tooling/**/*_spec.js",
     "precover": "npm run build",
     "cover": "istanbul cover --dir ../../coverage/tooling --root ../../dist/tooling/schematics --include-all-sources ../../node_modules/jasmine-node/bin/jasmine-node -- ../../dist/tooling/schematics"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/martinroob/ngx-i18nsupport.git"
+  },
+  "keywords": [
+    "i18n",
+    "tooling",
+    "angular",
+    "xliff",
+    "xmb"
+  ],
+  "author": "Martin Roob <martinroob65@gmail.com> (www.roobsoft.de)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/martinroob/ngx-i18nsupport/issues"
+  },
+  "homepage": "https://github.com/martinroob/ngx-i18nsupport#readme",
   "devDependencies": {
     "cpx": "^1.5.0"
   },
   "peerDependencies": {
-    "@angular-devkit/core": "^0.8.1",
-    "@angular-devkit/schematics": "^0.8.1",
+    "@angular-devkit/core": "^0.8.4",
+    "@angular-devkit/schematics": "^0.8.4",
     "@angular/common": "^6.0.0",
     "@angular/core": "^6.0.0"
   }
