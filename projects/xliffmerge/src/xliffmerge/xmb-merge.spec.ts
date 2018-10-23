@@ -271,6 +271,44 @@ describe('XliffMerge XMB format tests', () => {
             done();
         });
 
+        it('should not preserve order when merging new units when disabled via config (#108)', (done) => {
+            FileUtil.copy(SRCDIR + 'preserveOrderMaster1.xmb', MASTER);
+            let ws: WriterToString = new WriterToString();
+            let commandOut = new CommandOutput(ws);
+            const profileContent: IConfigFile = {
+                xliffmergeOptions: {
+                    defaultLanguage: 'en',
+                    srcDir: WORKDIR,
+                    genDir: WORKDIR,
+                    i18nFormat: 'xmb',
+                    i18nFile: MASTERFILE,
+                    preserveOrder: false
+                }
+            };
+            let xliffMergeCmd = XliffMerge.createFromOptions(commandOut, {languages: ['en', 'de']}, profileContent);
+            xliffMergeCmd.run();
+            expect(ws.writtenData()).not.toContain('ERROR');
+
+            // next step, use new master that has added 3 units
+            FileUtil.copy(SRCDIR + 'preserveOrderMaster2.xmb', MASTER);
+            ws = new WriterToString();
+            commandOut = new CommandOutput(ws);
+            xliffMergeCmd = XliffMerge.createFromOptions(commandOut, {languages: ['en', 'de']}, profileContent);
+            xliffMergeCmd.run();
+            expect(ws.writtenData()).not.toContain('ERROR');
+            expect(ws.writtenData()).toContain('merged 3 trans-units from master to "de"');
+
+            // look, that the new file contains the new units at the correct position
+            const langFileGerman = readXtbWithMaster(xliffMergeCmd.generatedI18nFile('de'));
+            const addedTu = langFileGerman.transUnitWithId('addedunit1');
+            expect(addedTu).toBeTruthy();
+            expect(addedTu.targetContent()).toBe('added unit 1');
+            // check position, new units should be at end!
+            expect(langFileGerman.editedContent().replace(/(\r\n|\n|\r)/gm, ''))
+                .toMatch(/firstunit.*lastunit.*addedunit1.*addedunit2.*addedunit3/);
+            done();
+        });
+
         it('should not remove trailing line break when merging', (done) => {
             FileUtil.copy(MASTER1SRC, MASTER);
             const masterContent = FileUtil.read(MASTER, XmlReader.DEFAULT_ENCODING);

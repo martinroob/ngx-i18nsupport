@@ -4,7 +4,7 @@
  * The parameters are read form the profile or defaults are used.
  */
 
-import * as fs from "fs";
+import * as fs from 'fs';
 import {XliffMergeError} from './xliff-merge-error';
 import {Stats} from 'fs';
 import {CommandOutput} from '../common/command-output';
@@ -36,6 +36,7 @@ export class XliffMergeParameters {
     private _targetPraefix: string;
     private _targetSuffix: string;
     private _beautifyOutput: boolean;
+    private _preserveOrder: boolean;
     private _autotranslate: boolean|string[];
     private _apikey: string;
     private _apikeyfile: string;
@@ -47,10 +48,9 @@ export class XliffMergeParameters {
      * Create Parameters.
      * @param options command options
      * @param profileContent given profile (if not, it is read from the profile path from options).
-     * @return {XliffMergeParameters}
      */
     public static createFromOptions(options: ProgramOptions, profileContent?: IConfigFile) {
-        let parameters = new XliffMergeParameters();
+        const parameters = new XliffMergeParameters();
         parameters.configure(options, profileContent);
         return parameters;
     }
@@ -61,9 +61,30 @@ export class XliffMergeParameters {
     }
 
     /**
+     * Read potential profile.
+     * To be a candidate, file must exist and contain property "xliffmergeOptions".
+     * @param profilePath path of profile
+     * @return parsed content of file or null, if file does not exist or is not a profile candidate.
+     */
+    private static readProfileCandidate(profilePath: string): IConfigFile {
+        let content: string;
+        try {
+            content = fs.readFileSync(profilePath, 'UTF-8');
+        } catch (err) {
+            return null;
+        }
+        const parsedContent: IConfigFile = JSON.parse(content);
+        if (parsedContent && parsedContent.xliffmergeOptions) {
+            return parsedContent;
+        } else {
+            return null;
+        }
+    }
+
+    /**
      * Initialize me from the profile content.
      * (public only for test usage).
-     * @param options
+     * @param options options given at runtime via command line
      * @param profileContent if null, read it from profile.
      */
     private configure(options: ProgramOptions, profileContent?: IConfigFile) {
@@ -72,7 +93,7 @@ export class XliffMergeParameters {
         if (!profileContent) {
             profileContent = this.readProfile(options);
         }
-        let validProfile: boolean = (!!profileContent);
+        const validProfile: boolean = (!!profileContent);
         if (options.quiet) {
             this._quiet = options.quiet;
         }
@@ -98,9 +119,9 @@ export class XliffMergeParameters {
      * @return the read profile (empty, if none, null if errors)
      */
     private readProfile(options: ProgramOptions): IConfigFile {
-        let profilePath: string = options.profilePath;
+        const profilePath: string = options.profilePath;
         if (!profilePath) {
-            for (let configfilename of PROFILE_CANDIDATES) {
+            for (const configfilename of PROFILE_CANDIDATES) {
                 const profile = XliffMergeParameters.readProfileCandidate(configfilename);
                 if (profile) {
                     this.usedProfilePath = configfilename;
@@ -109,7 +130,7 @@ export class XliffMergeParameters {
             }
             return {};
         }
-        let content:string;
+        let content: string;
         try {
             content = fs.readFileSync(profilePath, 'UTF-8');
         } catch (err) {
@@ -120,32 +141,11 @@ export class XliffMergeParameters {
         return JSON.parse(content);
     }
 
-    /**
-     * Read potential profile.
-     * To be a candidate, file must exist and contain property "xliffmergeOptions".
-     * @param {string} profilePath
-     * @return {IConfigFile} parsed content of file or null, if file does not exist or is not a profile candidate.
-     */
-    private static readProfileCandidate(profilePath: string): IConfigFile {
-        let content:string;
-        try {
-            content = fs.readFileSync(profilePath, 'UTF-8');
-        } catch (err) {
-            return null;
-        }
-        const parsedContent: IConfigFile = JSON.parse(content);
-        if (parsedContent && parsedContent.xliffmergeOptions) {
-            return parsedContent;
-        } else {
-            return null;
-        }
-    }
-
     private initializeFromConfig(profileContent: IConfigFile) {
         if (!profileContent) {
             return;
         }
-        let profile = profileContent.xliffmergeOptions;
+        const profile = profileContent.xliffmergeOptions;
         if (profile) {
             if (!isNullOrUndefined(profile.quiet)) {
                 this._quiet = profile.quiet;
@@ -153,7 +153,7 @@ export class XliffMergeParameters {
             if (!isNullOrUndefined(profile.verbose)) {
                 this._verbose = profile.verbose;
             }
-            if(!isNullOrUndefined(profile.allowIdChange)) {
+            if (!isNullOrUndefined(profile.allowIdChange)) {
                 this._allowIdChange = profile.allowIdChange;
             }
             if (profile.defaultLanguage) {
@@ -166,8 +166,9 @@ export class XliffMergeParameters {
                 this._srcDir = profile.srcDir;
             }
             if (profile.angularCompilerOptions) {
-                if (profile.angularCompilerOptions.genDir)
+                if (profile.angularCompilerOptions.genDir) {
                     this._genDir = profile.angularCompilerOptions.genDir;
+                }
             }
             if (profile.genDir) {
                 // this must be after angularCompilerOptions to be preferred
@@ -209,6 +210,9 @@ export class XliffMergeParameters {
             if (!isNullOrUndefined(profile.beautifyOutput)) {
                 this._beautifyOutput = profile.beautifyOutput;
             }
+            if (!isNullOrUndefined(profile.preserveOrder)) {
+                this._preserveOrder = profile.preserveOrder;
+            }
             if (!isNullOrUndefined(profile.apikey)) {
                 this._apikey = profile.apikey;
             }
@@ -226,7 +230,7 @@ export class XliffMergeParameters {
      */
     private checkParameters(): void {
         this.checkLanguageSyntax(this.defaultLanguage());
-        if (this.languages().length == 0) {
+        if (this.languages().length === 0) {
             this.errorsFound.push(new XliffMergeError('no languages specified'));
         }
         this.languages().forEach((lang) => {
@@ -272,23 +276,27 @@ export class XliffMergeParameters {
                 this.errorsFound.push(new XliffMergeError('autotranslate language "' + lang + '" is not in list of languages'));
             }
             if (lang === this.defaultLanguage()) {
-                this.errorsFound.push(new XliffMergeError('autotranslate language "' + lang + '" cannot be translated, because it is the source language'));
+                this.errorsFound.push(
+                    new XliffMergeError('autotranslate language "' + lang + '" cannot be translated, because it is the source language'));
             }
         });
         // ngx translate pattern check
         if (this.supportNgxTranslate()) {
             const checkResult = NgxTranslateExtractor.checkPattern(this.ngxTranslateExtractionPattern());
             if (!isNullOrUndefined(checkResult)) {
-                this.errorsFound.push(new XliffMergeError('ngxTranslateExtractionPattern "' + this.ngxTranslateExtractionPattern() + '": ' + checkResult));
+                this.errorsFound.push(
+                    new XliffMergeError('ngxTranslateExtractionPattern "' + this.ngxTranslateExtractionPattern() + '": ' + checkResult));
             }
         }
         // targetPraefix and targetSuffix check
         if (!this.useSourceAsTarget()) {
             if (this.targetPraefix().length > 0) {
-                this.warningsFound.push('configured targetPraefix "' + this.targetPraefix() + '" will not be used because "useSourceAsTarget" is disabled"');
+                this.warningsFound.push(
+                    'configured targetPraefix "' + this.targetPraefix() + '" will not be used because "useSourceAsTarget" is disabled"');
             }
             if (this.targetSuffix().length > 0) {
-                this.warningsFound.push('configured targetSuffix "' + this.targetSuffix() + '" will not be used because "useSourceAsTarget" is disabled"');
+                this.warningsFound.push(
+                    'configured targetSuffix "' + this.targetSuffix() + '" will not be used because "useSourceAsTarget" is disabled"');
             }
         }
      }
@@ -297,10 +305,10 @@ export class XliffMergeParameters {
      * Check syntax of language.
      * Must be compatible with XML Schema type xsd:language.
      * Pattern: [a-zA-Z]{1,8}((-|_)[a-zA-Z0-9]{1,8})*
-     * @param lang
+     * @param lang language to check
      */
     private checkLanguageSyntax(lang: string) {
-        let pattern = /^[a-zA-Z]{1,8}([-_][a-zA-Z0-9]{1,8})*$/;
+        const pattern = /^[a-zA-Z]{1,8}([-_][a-zA-Z0-9]{1,8})*$/;
         if (!pattern.test(lang)) {
             this.errorsFound.push(new XliffMergeError('language "' + lang + '" is not valid'));
         }
@@ -330,7 +338,7 @@ export class XliffMergeParameters {
         commandOutput.debug('i18nBaseFile:\t"%s"', this.i18nBaseFile());
         commandOutput.debug('i18nFile:\t"%s"', this.i18nFile());
         commandOutput.debug('languages:\t%s', this.languages());
-        for (let language of this.languages()) {
+        for (const language of this.languages()) {
             commandOutput.debug('outputFile[%s]:\t%s', language, this.generatedI18nFile(language));
         }
         commandOutput.debug('removeUnusedIds:\t%s', this.removeUnusedIds());
@@ -345,6 +353,7 @@ export class XliffMergeParameters {
         }
         commandOutput.debug('allowIdChange:\t%s', this.allowIdChange());
         commandOutput.debug('beautifyOutput:\t%s', this.beautifyOutput());
+        commandOutput.debug('preserveOrder:\t%s', this.preserveOrder());
         commandOutput.debug('autotranslate:\t%s', this.autotranslate());
         if (this.autotranslate()) {
             commandOutput.debug('autotranslated languages:\t%s', this.autotranslatedLanguages());
@@ -355,7 +364,7 @@ export class XliffMergeParameters {
 
     /**
      * Default-Language, default en.
-     * @return {string}
+     * @return default language
      */
     public defaultLanguage(): string {
         return this._defaultLanguage ? this._defaultLanguage : 'en';
@@ -363,7 +372,7 @@ export class XliffMergeParameters {
 
     /**
      * Liste der zu bearbeitenden Sprachen.
-     * @return {string[]}
+     * @return languages
      */
     public languages(): string[] {
         return this._languages ? this._languages : [];
@@ -371,7 +380,7 @@ export class XliffMergeParameters {
 
     /**
      * src directory, where the master xlif is located.
-     * @return {string}
+     * @return srcDir
      */
     public srcDir(): string {
         return this._srcDir ? this._srcDir : '.';
@@ -380,7 +389,7 @@ export class XliffMergeParameters {
     /**
      * The base file name of the xlif file for input and output.
      * Default is messages
-     * @return {string}
+     * @return base file
      */
     public i18nBaseFile(): string {
         return this._i18nBaseFile ? this._i18nBaseFile : 'messages';
@@ -389,7 +398,7 @@ export class XliffMergeParameters {
     /**
      * The master xlif file (the one generated by ng-xi18n).
      * Default is <srcDir>/<i18nBaseFile>.xlf.
-     * @return {string}
+     * @return master file
      */
     public i18nFile(): string {
         return this.srcDir() + '/' + (
@@ -400,7 +409,7 @@ export class XliffMergeParameters {
     /**
      * Format of the master xlif file.
      * Default is "xlf", possible are "xlf" or "xlf2" or "xmb".
-     * @return {string}
+     * @return format
      */
     public i18nFormat(): string {
         return (this._i18nFormat ? this._i18nFormat : 'xlf');
@@ -409,7 +418,7 @@ export class XliffMergeParameters {
     /**
      * potentially to be generated I18n-File with the translations for one language.
      * @param lang language shortcut
-     * @return {string} Path of file
+     * @return Path of file
      */
     public generatedI18nFile(lang: string): string {
         return this.genDir() + '/' + this.i18nBaseFile() + '.' + lang + '.' + this.suffixForGeneratedI18nFile();
@@ -429,7 +438,7 @@ export class XliffMergeParameters {
     /**
      * potentially to be generated translate-File for ngx-translate with the translations for one language.
      * @param lang language shortcut
-     * @return {string} Path of file
+     * @return Path of file
      */
     public generatedNgxTranslateFile(lang: string): string {
         return this.genDir() + '/' + this.i18nBaseFile() + '.' + lang + '.' + 'json';
@@ -437,7 +446,7 @@ export class XliffMergeParameters {
 
     /**
      * The encoding used to write new XLIFF-files.
-     * @return {string}
+     * @return encoding
      */
     public encoding(): string {
         return this._encoding ? this._encoding : 'UTF-8';
@@ -460,7 +469,8 @@ export class XliffMergeParameters {
     }
 
     public ngxTranslateExtractionPattern(): string {
-        return (isNullOrUndefined(this._ngxTranslateExtractionPattern)) ? NgxTranslateExtractor.DefaultExtractionPattern : this._ngxTranslateExtractionPattern;
+        return (isNullOrUndefined(this._ngxTranslateExtractionPattern)) ?
+            NgxTranslateExtractor.DefaultExtractionPattern : this._ngxTranslateExtractionPattern;
     }
 
     /**
@@ -476,7 +486,7 @@ export class XliffMergeParameters {
      * Default is ""
      */
     public targetPraefix(): string {
-        return (isNullOrUndefined(this._targetPraefix)) ? "" : this._targetPraefix;
+        return (isNullOrUndefined(this._targetPraefix)) ? '' : this._targetPraefix;
     }
 
     /**
@@ -484,15 +494,22 @@ export class XliffMergeParameters {
      * Default is ""
      */
     public targetSuffix(): string {
-        return (isNullOrUndefined(this._targetSuffix)) ? "" : this._targetSuffix;
+        return (isNullOrUndefined(this._targetSuffix)) ? '' : this._targetSuffix;
     }
 
     /**
      * If set, run xml result through beautifier (pretty-data).
-     * @return {boolean}
      */
     public beautifyOutput(): boolean {
         return (isNullOrUndefined(this._beautifyOutput)) ? false : this._beautifyOutput;
+    }
+
+    /**
+     * If set, order of new trans units will be as in master.
+     * Otherwise they are added at the end.
+     */
+    public preserveOrder(): boolean {
+        return (isNullOrUndefined(this._preserveOrder)) ? true : this._preserveOrder;
     }
 
     /**
@@ -532,7 +549,7 @@ export class XliffMergeParameters {
 
     /**
      * API key to be used for Google Translate
-     * @return {string}
+     * @return api key
      */
     public apikey(): string {
         if (!isNullOrUndefined(this._apikey)) {
@@ -554,7 +571,7 @@ export class XliffMergeParameters {
     /**
      * file name for API key to be used for Google Translate.
      * Explicitly set or read from env var API_KEY_FILE.
-     * @return {string}
+     * @return file of api key
      */
     public apikeyfile(): string {
         if (this._apikeyfile) {

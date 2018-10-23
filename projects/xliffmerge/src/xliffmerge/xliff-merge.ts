@@ -1,6 +1,6 @@
 import * as program from 'commander';
 import {CommandOutput} from '../common/command-output';
-import {XliffMergeParameters} from "./xliff-merge-parameters";
+import {XliffMergeParameters} from './xliff-merge-parameters';
 import {XliffMergeError} from './xliff-merge-error';
 import {FileUtil} from '../common/file-util';
 import {VERSION} from './version';
@@ -23,8 +23,21 @@ import {NORMALIZATION_FORMAT_DEFAULT, STATE_FINAL, STATE_TRANSLATED} from 'ngx-i
 
 export class XliffMerge {
 
+    private commandOutput: CommandOutput;
+
+    private options: ProgramOptions;
+
+    private parameters: XliffMergeParameters;
+
+    /**
+     * The read master xlf file.
+     */
+    private master: ITranslationMessagesFile; // XliffFile or Xliff2File or XmbFile
+
+    private autoTranslateService: XliffMergeAutoTranslateService;
+
     static main(argv: string[]) {
-        let options = XliffMerge.parseArgs(argv);
+        const options = XliffMerge.parseArgs(argv);
         new XliffMerge(new CommandOutput(process.stdout), options).run((result) => {
             process.exit(result);
         });
@@ -58,7 +71,7 @@ export class XliffMerge {
             })
             .parse(argv);
 
-        let options: ProgramOptions = {
+        const options: ProgramOptions = {
             languages: languages
         };
         if (program.profile) {
@@ -73,27 +86,14 @@ export class XliffMerge {
         return options;
     }
 
-    private commandOutput: CommandOutput;
-
-    private options: ProgramOptions;
-
-    private parameters: XliffMergeParameters;
-
-    /**
-     * The read master xlf file.
-     */
-    private master: ITranslationMessagesFile; // XliffFile or Xliff2File or XmbFile
-
-    private autoTranslateService: XliffMergeAutoTranslateService;
-
     /**
      * For Tests, create instance with given profile
-     * @param commandOutput
-     * @param options
-     * @param profileContent
+     * @param commandOutput commandOutput
+     * @param options options
+     * @param profileContent profileContent
      */
     public static createFromOptions(commandOutput: CommandOutput, options: ProgramOptions, profileContent?: IConfigFile) {
-        let instance = new XliffMerge(commandOutput, options);
+        const instance = new XliffMerge(commandOutput, options);
         instance.parameters = XliffMergeParameters.createFromOptions(options, profileContent);
         return instance;
     }
@@ -142,13 +142,13 @@ export class XliffMerge {
             this.parameters.showAllParameters(this.commandOutput);
         }
         if (this.parameters.errorsFound.length > 0) {
-            for (let err of this.parameters.errorsFound) {
+            for (const err of this.parameters.errorsFound) {
                 this.commandOutput.error(err.message);
             }
             return of(-1);
         }
         if (this.parameters.warningsFound.length > 0) {
-            for (let warn of this.parameters.warningsFound) {
+            for (const warn of this.parameters.warningsFound) {
                 this.commandOutput.warn(warn);
             }
         }
@@ -161,14 +161,14 @@ export class XliffMerge {
             executionForAllLanguages.push(this.processLanguage(lang));
         });
         return forkJoin(executionForAllLanguages).pipe(
-            map((retcodes: number[]) => {return this.totalRetcode(retcodes)}));
+            map((retcodes: number[]) => this.totalRetcode(retcodes)));
     }
 
     /**
      * Give an array of retcodes for the different languages, return the total retcode.
      * If all are 0, it is 0, otherwise the first non zero.
-     * @param retcodes
-     * @return {number}
+     * @param retcodes retcodes
+     * @return number
      */
     private totalRetcode(retcodes: number[]): number {
         for (let i = 0; i < retcodes.length; i++) {
@@ -181,8 +181,8 @@ export class XliffMerge {
 
     /**
      * Return the name of the generated file for given lang.
-     * @param lang
-     * @return {string}
+     * @param lang language
+     * @return name of generated file
      */
     public generatedI18nFile(lang: string): string {
         return this.parameters.generatedI18nFile(lang);
@@ -190,8 +190,8 @@ export class XliffMerge {
 
     /**
      * Return the name of the generated ngx-translation file for given lang.
-     * @param lang
-     * @return {string}
+     * @param lang language
+     * @return name of translate file
      */
     public generatedNgxTranslateFile(lang: string): string {
         return this.parameters.generatedNgxTranslateFile(lang);
@@ -199,7 +199,7 @@ export class XliffMerge {
 
     /**
      * Warnings found during the run.
-     * @return {string[]}
+     * @return warnings
      */
     public warnings(): string[] {
         return this.parameters.warningsFound;
@@ -207,19 +207,25 @@ export class XliffMerge {
 
     private readMaster() {
         try {
-            this.master = TranslationMessagesFileReader.fromFile(this.parameters.i18nFormat(), this.parameters.i18nFile(), this.parameters.encoding());
-            this.master.warnings().forEach((warning: string) =>{
+            this.master = TranslationMessagesFileReader.fromFile(
+                this.parameters.i18nFormat(),
+                this.parameters.i18nFile(),
+                this.parameters.encoding());
+            this.master.warnings().forEach((warning: string) => {
                 this.commandOutput.warn(warning);
             });
-            let count = this.master.numberOfTransUnits();
-            let missingIdCount = this.master.numberOfTransUnitsWithMissingId();
+            const count = this.master.numberOfTransUnits();
+            const missingIdCount = this.master.numberOfTransUnitsWithMissingId();
             this.commandOutput.info('master contains %s trans-units', count);
             if (missingIdCount > 0) {
                 this.commandOutput.warn('master contains %s trans-units, but there are %s without id', count, missingIdCount);
             }
-            let sourceLang: string = this.master.sourceLanguage();
+            const sourceLang: string = this.master.sourceLanguage();
             if (sourceLang && sourceLang !== this.parameters.defaultLanguage()) {
-                this.commandOutput.warn('master says to have source-language="%s", should be "%s" (your defaultLanguage)', sourceLang, this.parameters.defaultLanguage());
+                this.commandOutput.warn(
+                    'master says to have source-language="%s", should be "%s" (your defaultLanguage)',
+                    sourceLang,
+                    this.parameters.defaultLanguage());
                 this.master.setSourceLanguage(this.parameters.defaultLanguage());
                 TranslationMessagesFileReader.save(this.master, this.parameters.beautifyOutput());
                 this.commandOutput.warn('changed master source-language="%s" to "%s"', sourceLang, this.parameters.defaultLanguage());
@@ -231,7 +237,7 @@ export class XliffMerge {
             } else {
                 // unhandled
                 const currentFilename = this.parameters.i18nFile();
-                let filenameString = (currentFilename) ? format('file "%s", ', currentFilename) : '';
+                const filenameString = (currentFilename) ? format('file "%s", ', currentFilename) : '';
                 this.commandOutput.error(filenameString + 'oops ' + err);
                 throw err;
             }
@@ -241,13 +247,13 @@ export class XliffMerge {
     /**
      * Process the given language.
      * Async operation.
-     * @param lang
-     * @return {Observable<number>} on completion 0 for ok, other for error
+     * @param lang language
+     * @return on completion 0 for ok, other for error
      */
     private processLanguage(lang: string): Observable<number> {
         this.commandOutput.debug('processing language %s', lang);
-        let languageXliffFile = this.parameters.generatedI18nFile(lang);
-        let currentFilename = languageXliffFile;
+        const languageXliffFile = this.parameters.generatedI18nFile(lang);
+        const currentFilename = languageXliffFile;
         let result: Observable<void>;
         if (!FileUtil.exists(languageXliffFile)) {
             result = this.createUntranslatedXliff(lang, languageXliffFile);
@@ -257,8 +263,16 @@ export class XliffMerge {
         return result
             .pipe(map(() => {
                 if (this.parameters.supportNgxTranslate()) {
-                    let languageSpecificMessagesFile: ITranslationMessagesFile = TranslationMessagesFileReader.fromFile(XliffMerge.translationFormat(this.parameters.i18nFormat()), languageXliffFile, this.parameters.encoding(), this.master.filename());
-                    NgxTranslateExtractor.extract(languageSpecificMessagesFile, this.parameters.ngxTranslateExtractionPattern(), this.parameters.generatedNgxTranslateFile(lang));
+                    const languageSpecificMessagesFile: ITranslationMessagesFile =
+                        TranslationMessagesFileReader.fromFile(
+                            this.translationFormat(this.parameters.i18nFormat()),
+                            languageXliffFile,
+                            this.parameters.encoding(),
+                            this.master.filename());
+                    NgxTranslateExtractor.extract(
+                        languageSpecificMessagesFile,
+                        this.parameters.ngxTranslateExtractionPattern(),
+                        this.parameters.generatedNgxTranslateFile(lang));
                 }
                 return 0;
             }), catchError((err) => {
@@ -267,7 +281,7 @@ export class XliffMerge {
                     return of(-1);
                 } else {
                     // unhandled
-                    let filenameString = (currentFilename) ? format('file "%s", ', currentFilename) : '';
+                    const filenameString = (currentFilename) ? format('file "%s", ', currentFilename) : '';
                     this.commandOutput.error(filenameString + 'oops ' + err);
                     throw err;
                 }
@@ -277,17 +291,18 @@ export class XliffMerge {
     /**
      * create a new file for the language, which contains no translations, but all keys.
      * in principle, this is just a copy of the master with target-language set.
-     * @param lang
-     * @param languageXliffFilePath
+     * @param lang language
+     * @param languageXliffFilePath name of file
      */
     private createUntranslatedXliff(lang: string, languageXliffFilePath: string): Observable<void> {
         // copy master ...
         // and set target-language
         // and copy source to target if necessary
-        let isDefaultLang: boolean = (lang == this.parameters.defaultLanguage());
+        const isDefaultLang: boolean = (lang === this.parameters.defaultLanguage());
         this.master.setNewTransUnitTargetPraefix(this.parameters.targetPraefix());
         this.master.setNewTransUnitTargetSuffix(this.parameters.targetSuffix());
-        let languageSpecificMessagesFile: ITranslationMessagesFile = this.master.createTranslationFileForLang(lang, languageXliffFilePath, isDefaultLang, this.parameters.useSourceAsTarget());
+        const languageSpecificMessagesFile: ITranslationMessagesFile =
+            this.master.createTranslationFileForLang(lang, languageXliffFilePath, isDefaultLang, this.parameters.useSourceAsTarget());
         return this.autoTranslate(this.master.sourceLanguage(), lang, languageSpecificMessagesFile).pipe(
             map((summary) => {
             // write it to file
@@ -303,9 +318,9 @@ export class XliffMerge {
     /**
      * Map the input format to the format of the translation.
      * Normally they are the same but for xmb the translation format is xtb.
-     * @param i18nFormat
+     * @param i18nFormat format
      */
-    private static translationFormat(i18nFormat: string): string {
+    private translationFormat(i18nFormat: string): string {
         if (i18nFormat === FORMAT_XMB) {
             return FORMAT_XTB;
         } else {
@@ -315,13 +330,17 @@ export class XliffMerge {
 
     /**
      * Merge all
-     * @param lang
-     * @param languageXliffFilePath
+     * @param lang language
+     * @param languageXliffFilePath filename
      */
     private mergeMasterTo(lang: string, languageXliffFilePath: string): Observable<void> {
         // read lang specific file
-        let languageSpecificMessagesFile: ITranslationMessagesFile = TranslationMessagesFileReader.fromFile(XliffMerge.translationFormat(this.parameters.i18nFormat()), languageXliffFilePath, this.parameters.encoding());
-        let isDefaultLang: boolean = (lang == this.parameters.defaultLanguage());
+        const languageSpecificMessagesFile: ITranslationMessagesFile =
+            TranslationMessagesFileReader.fromFile(
+                this.translationFormat(this.parameters.i18nFormat()),
+                languageXliffFilePath,
+                this.parameters.encoding());
+        const isDefaultLang: boolean = (lang === this.parameters.defaultLanguage());
         let newCount = 0;
         let correctSourceContentCount = 0;
         let correctSourceRefCount = 0;
@@ -331,16 +350,21 @@ export class XliffMerge {
         languageSpecificMessagesFile.setNewTransUnitTargetSuffix(this.parameters.targetSuffix());
         let lastProcessedUnit: ITransUnit = null;
         this.master.forEachTransUnit((masterTransUnit) => {
-            let transUnit: ITransUnit = languageSpecificMessagesFile.transUnitWithId(masterTransUnit.id);
+            const transUnit: ITransUnit = languageSpecificMessagesFile.transUnitWithId(masterTransUnit.id);
 
             if (!transUnit) {
                 // oops, no translation, must be a new key, so add it
                 let newUnit;
-                if (this.parameters.allowIdChange() && (newUnit = this.processChangedIdUnit(masterTransUnit, languageSpecificMessagesFile, lastProcessedUnit))) {
+                if (this.parameters.allowIdChange()
+                    && (newUnit = this.processChangedIdUnit(masterTransUnit, languageSpecificMessagesFile, lastProcessedUnit))) {
                     lastProcessedUnit = newUnit;
                     idChangedCount++;
                 } else {
-                    lastProcessedUnit = languageSpecificMessagesFile.importNewTransUnit(masterTransUnit, isDefaultLang, this.parameters.useSourceAsTarget(), lastProcessedUnit);
+                    lastProcessedUnit = languageSpecificMessagesFile.importNewTransUnit(
+                        masterTransUnit,
+                        isDefaultLang,
+                        this.parameters.useSourceAsTarget(),
+                        (this.parameters.preserveOrder()) ? lastProcessedUnit : undefined);
                     newCount++;
                 }
             } else {
@@ -353,7 +377,7 @@ export class XliffMerge {
                         transUnit.translate(masterTransUnit.sourceContent());
                         transUnit.setTargetState(STATE_FINAL);
                     } else {
-                        if (transUnit.targetState() == STATE_FINAL) {
+                        if (transUnit.targetState() === STATE_FINAL) {
                             // source is changed, so translation has to be checked again
                             transUnit.setTargetState(STATE_TRANSLATED);
                         }
@@ -361,7 +385,8 @@ export class XliffMerge {
                     correctSourceContentCount++;
                 }
                 // check for missing or changed source ref and add it if needed
-                if (transUnit.supportsSetSourceReferences() && !this.areSourceReferencesEqual(masterTransUnit.sourceReferences(), transUnit.sourceReferences())) {
+                if (transUnit.supportsSetSourceReferences()
+                    && !this.areSourceReferencesEqual(masterTransUnit.sourceReferences(), transUnit.sourceReferences())) {
                     transUnit.setSourceReferences(masterTransUnit.sourceReferences());
                     correctSourceRefCount++;
                 }
@@ -392,17 +417,18 @@ export class XliffMerge {
         if (correctSourceRefCount > 0) {
             this.commandOutput.warn('transferred %s source references from master to "%s"', correctSourceRefCount, lang);
         }
-        if(idChangedCount > 0) {
+        if (idChangedCount > 0) {
             this.commandOutput.warn('found %s changed id\'s in "%s"', idChangedCount, lang);
         }
         if (correctDescriptionOrMeaningCount > 0) {
-            this.commandOutput.warn('transferred %s changed descriptions/meanings from master to "%s"', correctDescriptionOrMeaningCount, lang);
+            this.commandOutput.warn(
+                'transferred %s changed descriptions/meanings from master to "%s"', correctDescriptionOrMeaningCount, lang);
         }
 
         // remove all elements that are no longer used
         let removeCount = 0;
         languageSpecificMessagesFile.forEachTransUnit((transUnit: ITransUnit) => {
-            let existsInMaster = !isNullOrUndefined(this.master.transUnitWithId(transUnit.id));
+            const existsInMaster = !isNullOrUndefined(this.master.transUnitWithId(transUnit.id));
             if (!existsInMaster) {
                 if (this.parameters.removeUnusedIds()) {
                     languageSpecificMessagesFile.removeTransUnitWithId(transUnit.id);
@@ -418,7 +444,8 @@ export class XliffMerge {
             }
         }
 
-        if (newCount == 0 && removeCount == 0 && correctSourceContentCount == 0 && correctSourceRefCount == 0 && correctDescriptionOrMeaningCount == 0) {
+        if (newCount === 0 && removeCount === 0 && correctSourceContentCount === 0
+            && correctSourceRefCount === 0 && correctDescriptionOrMeaningCount === 0) {
             this.commandOutput.info('file for "%s" was up to date', lang);
             return of(null);
         } else {
@@ -437,23 +464,31 @@ export class XliffMerge {
 
     /**
      * Handle the case of changed id due to small white space changes.
-     * @param {ITransUnit} masterTransUnit unit in master file
-     * @param {ITranslationMessagesFile} languageSpecificMessagesFile translation file
+     * @param masterTransUnit unit in master file
+     * @param languageSpecificMessagesFile translation file
      * @param lastProcessedUnit Unit before the one processed here. New unit will be inserted after this one.
-     * @return {ITransUnit} processed unit, if done, null if no changed unit found
+     * @return processed unit, if done, null if no changed unit found
      */
-    private processChangedIdUnit(masterTransUnit: ITransUnit, languageSpecificMessagesFile: ITranslationMessagesFile, lastProcessedUnit: ITransUnit): ITransUnit {
+    private processChangedIdUnit(
+        masterTransUnit: ITransUnit,
+        languageSpecificMessagesFile: ITranslationMessagesFile,
+        lastProcessedUnit: ITransUnit): ITransUnit {
+
         const masterSourceString = masterTransUnit.sourceContentNormalized().asDisplayString(NORMALIZATION_FORMAT_DEFAULT).trim();
         let changedTransUnit: ITransUnit = null;
         languageSpecificMessagesFile.forEachTransUnit((languageTransUnit) => {
-                if(languageTransUnit.sourceContentNormalized().asDisplayString(NORMALIZATION_FORMAT_DEFAULT).trim() === masterSourceString) {
-                    changedTransUnit = languageTransUnit;
-                }
+             if (languageTransUnit.sourceContentNormalized().asDisplayString(NORMALIZATION_FORMAT_DEFAULT).trim() === masterSourceString) {
+                 changedTransUnit = languageTransUnit;
+             }
         });
         if (!changedTransUnit) {
             return null;
         }
-        const mergedTransUnit = languageSpecificMessagesFile.importNewTransUnit(masterTransUnit, false, false, lastProcessedUnit);
+        const mergedTransUnit = languageSpecificMessagesFile.importNewTransUnit(
+            masterTransUnit,
+            false,
+            false,
+            (this.parameters.preserveOrder()) ? lastProcessedUnit : undefined);
         const translatedContent = changedTransUnit.targetContent();
         if (translatedContent) { // issue #68 set translated only, if it is really translated
             mergedTransUnit.translate(translatedContent);
@@ -462,7 +497,10 @@ export class XliffMerge {
         return mergedTransUnit;
     }
 
-    private areSourceReferencesEqual(ref1: {sourcefile: string; linenumber: number;}[], ref2: {sourcefile: string; linenumber: number;}[]): boolean {
+    private areSourceReferencesEqual(
+        ref1: {sourcefile: string; linenumber: number; }[],
+        ref2: {sourcefile: string; linenumber: number; }[]): boolean {
+
         if ((isNullOrUndefined(ref1) && !isNullOrUndefined(ref2)) || (isNullOrUndefined(ref2) && !isNullOrUndefined(ref1))) {
             return false;
         }
@@ -470,10 +508,10 @@ export class XliffMerge {
             return true;
         }
         // bot refs are set now, convert to set to compare them
-        let set1: Set<string> = new Set<string>();
-        ref1.forEach((ref) => {set1.add(ref.sourcefile + ':' + ref.linenumber)});
-        let set2: Set<string> = new Set<string>();
-        ref2.forEach((ref) => {set2.add(ref.sourcefile + ':' + ref.linenumber)});
+        const set1: Set<string> = new Set<string>();
+        ref1.forEach((ref) => {set1.add(ref.sourcefile + ':' + ref.linenumber); });
+        const set2: Set<string> = new Set<string>();
+        ref2.forEach((ref) => {set2.add(ref.sourcefile + ':' + ref.linenumber); });
         if (set1.size !== set2.size) {
             return false;
         }
@@ -489,14 +527,18 @@ export class XliffMerge {
     /**
      * Auto translate file via Google Translate.
      * Will translate all new units in file.
-     * @param from
-     * @param to
-     * @param languageSpecificMessagesFile
+     * @param from from
+     * @param to to
+     * @param languageSpecificMessagesFile languageSpecificMessagesFile
      * @return a promise with the execution result as a summary report.
      */
-    private autoTranslate(from: string, to: string, languageSpecificMessagesFile: ITranslationMessagesFile): Observable<AutoTranslateSummaryReport> {
+    private autoTranslate(
+        from: string,
+        to: string,
+        languageSpecificMessagesFile: ITranslationMessagesFile): Observable<AutoTranslateSummaryReport> {
+
         let serviceCall: Observable<AutoTranslateSummaryReport>;
-        let autotranslateEnabled: boolean = this.parameters.autotranslateLanguage(to);
+        const autotranslateEnabled: boolean = this.parameters.autotranslateLanguage(to);
         if (autotranslateEnabled) {
             serviceCall = this.autoTranslateService.autoTranslate(from, to, languageSpecificMessagesFile);
         } else {

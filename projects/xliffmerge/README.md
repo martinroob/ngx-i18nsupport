@@ -104,6 +104,7 @@ The following list shows all allowed content (every value is optional, there is 
     "targetPraefix": "",
     "targetSuffix": "",
     "beautifyOutput": false,
+    "preserveOrder": true,
     "allowIdChange": false,
     "autotranslate": false,
     "apikey": "",
@@ -144,6 +145,8 @@ E.g. `targetSuffix: "%%"` and source contains the string "menu", target will con
 when set to true, the generated xml output will be send through a beautifier
 ([pretty-data](https://github.com/vkiryukhin/pretty-data))
 to get consistent output. See ([xliffmerge #64 Could xlf output be better formatted](https://github.com/martinroob/ngx-i18nsupport/issues/64)) for details.
+- `preserveOrder` (since 0.19.0) (boolean, default `true`):
+when set to true, order of new trans units will be as in master, otherwise they are added at the end.
 - `allowIdChange` (since 0.11.0) (boolean, default `false`):
 flag, wether xliffmerge should merge transunits with changed IDs.
 When there is only a small change in the original message text, e.g. a trailing white space, the Angular extraction tool will change the ID of the unit.

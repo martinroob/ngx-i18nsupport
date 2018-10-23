@@ -44,6 +44,7 @@ export interface IXliffMergeOptions {
     targetPraefix?: string; // Praefix for target copied from sourced
     targetSuffix?: string; // Suffix for target copied from sourced
     beautifyOutput?: boolean; // beautify output
+    preserveOrder?: boolean; // preserve order of new trans units
     autotranslate?: boolean|string[]; // enable auto translate via Google Translate
         // if it is an array, list of languages to autotranslate
         // if it is true, autotranslate all languages (except source language of course)
