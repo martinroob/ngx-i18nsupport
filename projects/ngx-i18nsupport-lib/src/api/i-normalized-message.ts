@@ -67,7 +67,7 @@ export interface INormalizedMessage {
      * @throws an error if normalized string is not well formed.
      * Throws an error too, if this is not an ICU message.
      */
-    translateICUMessage(icuTranslation: IICUMessageTranslation): INormalizedMessage
+    translateICUMessage(icuTranslation: IICUMessageTranslation): INormalizedMessage;
 
     /**
      * Create a new normalized message from a native xml string as a translation of this one.

@@ -1,5 +1,6 @@
-import {TranslationMessagesFileFactory, ITranslationMessagesFile, ITransUnit, INormalizedMessage, STATE_NEW, STATE_TRANSLATED, STATE_FINAL, FILETYPE_XTB} from '../api';
-import * as fs from "fs";
+import {TranslationMessagesFileFactory, ITranslationMessagesFile, ITransUnit, INormalizedMessage,
+    STATE_NEW, STATE_TRANSLATED, STATE_FINAL, FILETYPE_XTB} from '../api/index';
+import * as fs from 'fs';
 
 /**
  * Created by martin on 28.04.2017.
@@ -8,13 +9,12 @@ import * as fs from "fs";
 
 describe('ngx-i18nsupport-lib xmb test spec', () => {
 
-    let SRCDIR = 'test/testdata/i18n/';
+    const SRCDIR = 'test/testdata/i18n/';
 
-    let ENCODING = 'UTF-8';
+    const ENCODING = 'UTF-8';
 
     /**
      * Helper function to read Xmb from File
-     * @type {string}
      */
     function readFile(path: string): ITranslationMessagesFile {
         const content = fs.readFileSync(path, ENCODING);
@@ -22,24 +22,24 @@ describe('ngx-i18nsupport-lib xmb test spec', () => {
     }
 
     describe('xmb format tests', () => {
-        let MASTER1SRC = SRCDIR + 'ngExtractedMaster1.xmb';
-        let MASTER_DE_XMB = SRCDIR + 'ngExtractedMaster1.de.xmb';
-        let TRANSLATED_FILE_SRC = SRCDIR + 'ngExtractedMaster1.en.xtb';
+        const MASTER1SRC = SRCDIR + 'ngExtractedMaster1.xmb';
+        const MASTER_DE_XMB = SRCDIR + 'ngExtractedMaster1.de.xmb';
+        const TRANSLATED_FILE_SRC = SRCDIR + 'ngExtractedMaster1.en.xtb';
 
-        let ID_MY_FIRST = '2047558209369508311'; // an ID from ngExtractedMaster1.xmb
-        let ID_WITH_PLACEHOLDER = '9030312858648510700';
-        let ID_WITH_MEANING_AND_DESCRIPTION = '3274258156935474372'; // ID with placeholders and source element
-        let ID_WITH_NO_SOURCEREFS = 'no_sourceref_test'; // an ID with no source elements
-        let ID_WITH_TWO_SOURCEREFS = '4371668001355139802'; // an ID with 2 source elements
-        let ID_WITH_LINEBREAK = '7149517499881679376';
-        let ID_WITH_TAGS = '7609655310648429098';
-        let ID_WITH_TAG_STRANGE = '7610784844464920497';
-        let ID_TO_MERGE = 'unittomerge';
-        let ID_ICU_PLURAL = '157616252019374389';
-        let ID_ICU_SELECT = '4002068837191765530';
-        let ID_ICU_EMBEDDED_TAGS = '6710804210857077393';
-        let ID_CONTAINS_ICU = '2747218257718409559';
-        let ID_CONTAINS_TWO_ICU = 'complextags.icuTwoICU';
+        const ID_MY_FIRST = '2047558209369508311'; // an ID from ngExtractedMaster1.xmb
+        const ID_WITH_PLACEHOLDER = '9030312858648510700';
+        const ID_WITH_MEANING_AND_DESCRIPTION = '3274258156935474372'; // ID with placeholders and source element
+        const ID_WITH_NO_SOURCEREFS = 'no_sourceref_test'; // an ID with no source elements
+        const ID_WITH_TWO_SOURCEREFS = '4371668001355139802'; // an ID with 2 source elements
+        const ID_WITH_LINEBREAK = '7149517499881679376';
+        const ID_WITH_TAGS = '7609655310648429098';
+        const ID_WITH_TAG_STRANGE = '7610784844464920497';
+        const ID_TO_MERGE = 'unittomerge';
+        const ID_ICU_PLURAL = '157616252019374389';
+        const ID_ICU_SELECT = '4002068837191765530';
+        const ID_ICU_EMBEDDED_TAGS = '6710804210857077393';
+        const ID_CONTAINS_ICU = '2747218257718409559';
+        const ID_CONTAINS_TWO_ICU = 'complextags.icuTwoICU';
 
         it('should read xmb file', () => {
             const file: ITranslationMessagesFile = readFile(MASTER1SRC);
@@ -134,7 +134,9 @@ describe('ngx-i18nsupport-lib xmb test spec', () => {
             const file: ITranslationMessagesFile = readFile(MASTER1SRC);
             const tu: ITransUnit = file.transUnitWithId(ID_WITH_PLACEHOLDER);
             expect(tu).toBeTruthy();
-            expect(tu.sourceContent()).toBe('Eintrag <ph name="INTERPOLATION"><ex>INTERPOLATION</ex></ph> von <ph name="INTERPOLATION_1"><ex>INTERPOLATION_1</ex></ph> hinzugefügt.');
+            expect(tu.sourceContent())
+                .toBe('Eintrag <ph name="INTERPOLATION"><ex>INTERPOLATION</ex></ph>' +
+                    ' von <ph name="INTERPOLATION_1"><ex>INTERPOLATION_1</ex></ph> hinzugefügt.');
         });
 
         it('should return empty source references array if source not set', () => {
@@ -181,7 +183,8 @@ describe('ngx-i18nsupport-lib xmb test spec', () => {
             expect(tu).toBeTruthy();
             expect(tu.sourceReferences().length).toBe(0);
             tu.setSourceReferences([{sourcefile: 'x', linenumber: 10}, {sourcefile: 'y', linenumber: 20}]);
-            const file2: ITranslationMessagesFile = TranslationMessagesFileFactory.fromUnknownFormatFileContent(file.editedContent(), null, null);
+            const file2: ITranslationMessagesFile =
+                TranslationMessagesFileFactory.fromUnknownFormatFileContent(file.editedContent(), null, null);
             const tu2: ITransUnit = file2.transUnitWithId(ID_TO_MERGE);
             expect(tu2.sourceReferences().length).toBe(2);
             expect(tu2.sourceReferences()[0].sourcefile).toBe('x');
@@ -197,7 +200,8 @@ describe('ngx-i18nsupport-lib xmb test spec', () => {
             expect(tu.supportsSetSourceReferences()).toBeTruthy();
             expect(tu.sourceReferences().length).toBe(2);
             tu.setSourceReferences([{sourcefile: 'x:komisch', linenumber: 10}]);
-            const file2: ITranslationMessagesFile = TranslationMessagesFileFactory.fromUnknownFormatFileContent(file.editedContent(), null, null);
+            const file2: ITranslationMessagesFile =
+                TranslationMessagesFileFactory.fromUnknownFormatFileContent(file.editedContent(), null, null);
             const tu2: ITransUnit = file2.transUnitWithId(ID_WITH_TWO_SOURCEREFS);
             expect(tu2.sourceReferences().length).toBe(1);
             expect(tu2.sourceReferences()[0].sourcefile).toBe('x:komisch');
@@ -227,7 +231,8 @@ describe('ngx-i18nsupport-lib xmb test spec', () => {
             const tu: ITransUnit = file.transUnitWithId(ID_WITH_TWO_SOURCEREFS);
             expect(tu).toBeTruthy();
             file.removeTransUnitWithId(ID_WITH_TWO_SOURCEREFS);
-            const file2: ITranslationMessagesFile = TranslationMessagesFileFactory.fromUnknownFormatFileContent(file.editedContent(), null, null);
+            const file2: ITranslationMessagesFile =
+                TranslationMessagesFileFactory.fromUnknownFormatFileContent(file.editedContent(), null, null);
             const tu2: ITransUnit = file2.transUnitWithId(ID_WITH_TWO_SOURCEREFS);
             expect(tu2).toBeFalsy(); // should not exist any more
         });
@@ -243,8 +248,8 @@ describe('ngx-i18nsupport-lib xmb test spec', () => {
             const newTu = targetFile.importNewTransUnit(tu, false, true);
             expect(targetFile.transUnitWithId(ID_TO_MERGE)).toBeTruthy();
             expect(targetFile.transUnitWithId(ID_TO_MERGE)).toEqual(newTu);
-            let changedTargetFile = TranslationMessagesFileFactory.fromUnknownFormatFileContent(targetFile.editedContent(), null, null);
-            let targetTu = changedTargetFile.transUnitWithId(ID_TO_MERGE);
+            const changedTargetFile = TranslationMessagesFileFactory.fromUnknownFormatFileContent(targetFile.editedContent(), null, null);
+            const targetTu = changedTargetFile.transUnitWithId(ID_TO_MERGE);
             expect(targetTu.targetContent()).toBe('Test for merging units');
         });
 
@@ -252,8 +257,8 @@ describe('ngx-i18nsupport-lib xmb test spec', () => {
             const file: ITranslationMessagesFile = readFile(MASTER1SRC);
             file.setNewTransUnitTargetPraefix('%%');
             file.setNewTransUnitTargetSuffix('!!');
-            let isDefaultLang: boolean = false;
-            let copyContent: boolean = true;
+            const isDefaultLang = false;
+            const copyContent = true;
             const file2: ITranslationMessagesFile = file.createTranslationFileForLang('xy', null, isDefaultLang, copyContent);
             const tu2: ITransUnit = file2.transUnitWithId(ID_TO_MERGE);
             expect(tu2.targetState()).toBe(STATE_FINAL); // FINAL because source is different than target
@@ -264,8 +269,8 @@ describe('ngx-i18nsupport-lib xmb test spec', () => {
             const file: ITranslationMessagesFile = readFile(MASTER1SRC);
             file.setNewTransUnitTargetPraefix('%%');
             file.setNewTransUnitTargetSuffix('!!');
-            let isDefaultLang: boolean = false;
-            let copyContent: boolean = true;
+            const isDefaultLang = false;
+            const copyContent = true;
             const file2: ITranslationMessagesFile = file.createTranslationFileForLang('xy', null, isDefaultLang, copyContent);
             const tuICU: ITransUnit = file2.transUnitWithId(ID_ICU_PLURAL);
             expect(tuICU.targetState()).toBe(STATE_NEW);
@@ -293,7 +298,7 @@ describe('ngx-i18nsupport-lib xmb test spec', () => {
             const translationString = 'Anwendung läuft';
             // try to translate
             try {
-                let translation: INormalizedMessage = tu.sourceContentNormalized().translate(translationString);
+                const translation: INormalizedMessage = tu.sourceContentNormalized().translate(translationString);
                 tu.translate(translation);
                 fail('expected error not thrown');
             } catch (error) {
@@ -305,7 +310,8 @@ describe('ngx-i18nsupport-lib xmb test spec', () => {
             const file: ITranslationMessagesFile = readFile(MASTER1SRC);
             const tu: ITransUnit = file.transUnitWithId(ID_CONTAINS_ICU);
             expect(tu).toBeTruthy();
-            expect(tu.sourceContent()).toBe('Zum Wert <ph name="INTERPOLATION"><ex>INTERPOLATION</ex></ph> gehört der Text <ph name="ICU"><ex>ICU</ex></ph>');
+            expect(tu.sourceContent())
+                .toBe('Zum Wert <ph name="INTERPOLATION"><ex>INTERPOLATION</ex></ph> gehört der Text <ph name="ICU"><ex>ICU</ex></ph>');
             expect(tu.sourceContentNormalized().asDisplayString()).toBe('Zum Wert {{0}} gehört der Text <ICU-Message-Ref_0/>');
         });
 
@@ -367,9 +373,11 @@ describe('ngx-i18nsupport-lib xmb test spec', () => {
             expect(icuMessage.getCategories()[0].getCategory()).toBe('wert0');
             expect(icuMessage.getCategories()[0].getMessageNormalized().asDisplayString()).toBe('wert0 ausgewählt');
             expect(icuMessage.getCategories()[1].getCategory()).toBe('wert1');
-            expect(icuMessage.getCategories()[1].getMessageNormalized().asDisplayString()).toBe('ein <b>anderer</b> Wert (wert1) ausgewählt');
+            expect(icuMessage.getCategories()[1].getMessageNormalized().asDisplayString())
+                .toBe('ein <b>anderer</b> Wert (wert1) ausgewählt');
             expect(icuMessage.getCategories()[2].getCategory()).toBe('wert2');
-            expect(icuMessage.getCategories()[2].getMessageNormalized().asDisplayString()).toBe('was <em>ganz anderes</em> wurde ausgewählt');
+            expect(icuMessage.getCategories()[2].getMessageNormalized().asDisplayString())
+                .toBe('was <em>ganz anderes</em> wurde ausgewählt');
         });
 
     });

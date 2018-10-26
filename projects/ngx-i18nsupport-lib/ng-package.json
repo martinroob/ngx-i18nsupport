@@ -2,6 +2,11 @@
   "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
   "dest": "../../dist/ngx-i18nsupport-lib",
   "lib": {
-    "entryFile": "src/public_api.ts"
+    "entryFile": "src/public_api.ts",
+    "umdModuleIds": {
+      "xmldom": "xmldom",
+      "util": "util",
+      "tokenizr": "tokenizr"
+    }
   }
 }

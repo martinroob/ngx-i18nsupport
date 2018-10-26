@@ -41,7 +41,6 @@ const TAG_TO_PLACEHOLDER_NAMES: {[k: string]: string} = {
 
 /**
  * HTML Tags (in uppercase) that are empty, they have no content, but do not need a close tag, e.g. <br>, <img>, <hr>.
- * @type {Array}
  */
 const VOID_TAGS = ['BR', 'HR', 'IMG', 'AREA', 'LINK', 'WBR'];
 
@@ -81,7 +80,7 @@ export class TagMapping {
             return this.stripCounter(placeholderName.substring('START_TAG_'.length)).toLowerCase();
         } else if (placeholderName.startsWith('START_')) {
             const ph = this.stripCounter(placeholderName.substring('START_'.length));
-            let matchKey = Object.keys(TAG_TO_PLACEHOLDER_NAMES).find((key) => TAG_TO_PLACEHOLDER_NAMES[key] === ph);
+            const matchKey = Object.keys(TAG_TO_PLACEHOLDER_NAMES).find((key) => TAG_TO_PLACEHOLDER_NAMES[key] === ph);
             return matchKey ? matchKey.toLowerCase() : null;
         }
         return null;
@@ -92,7 +91,7 @@ export class TagMapping {
             return this.stripCounter(placeholderName.substring('CLOSE_TAG_'.length)).toLowerCase();
         } else if (placeholderName.startsWith('CLOSE_')) {
             const ph = this.stripCounter(placeholderName.substring('CLOSE_'.length));
-            let matchKey = Object.keys(TAG_TO_PLACEHOLDER_NAMES).find((key) => TAG_TO_PLACEHOLDER_NAMES[key] === ph);
+            const matchKey = Object.keys(TAG_TO_PLACEHOLDER_NAMES).find((key) => TAG_TO_PLACEHOLDER_NAMES[key] === ph);
             return matchKey ? matchKey.toLowerCase() : null;
         }
         return null;
@@ -103,7 +102,7 @@ export class TagMapping {
      * @param placeholderName can be TAG_<name> or just <name>
      */
     public isEmptyTagPlaceholderName(placeholderName: string): boolean {
-        let ph = this.stripCounter(placeholderName);
+        const ph = this.stripCounter(placeholderName);
         let matchKey;
         if (ph.startsWith('TAG_')) {
             matchKey = ph.substring(4).toUpperCase();
@@ -123,7 +122,7 @@ export class TagMapping {
      * @param placeholderName can be TAG_<name> or just <name>
      */
     public getTagnameFromEmptyTagPlaceholderName(placeholderName: string): string {
-        let ph = this.stripCounter(placeholderName);
+        const ph = this.stripCounter(placeholderName);
         let matchKey;
         if (ph.startsWith('TAG_')) {
             matchKey = ph.substring(4).toUpperCase();
@@ -142,7 +141,7 @@ export class TagMapping {
 
     /**
      * If placeholder ends with _[0-9]+, strip that number.
-     * @param placeholderName
+     * @param placeholderName placeholderName
      * @return placeholderName without counter at end.
      */
     private stripCounter(placeholderName: string): string {
@@ -158,8 +157,8 @@ export class TagMapping {
     /**
      * String suffix for counter.
      * If counter is 0, it is empty, otherwise _<id>.
-     * @param {number} id
-     * @return {string}
+     * @param id id
+     * @return suffix for counter.
      */
     private counterString(id: number) {
         if (id === 0) {

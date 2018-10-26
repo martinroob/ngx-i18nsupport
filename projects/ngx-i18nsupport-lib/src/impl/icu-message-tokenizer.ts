@@ -42,7 +42,7 @@ export class ICUMessageTokenizer {
         });
         lexer.finish((ctx) => {
             if (this.containsNonWhiteSpace(plaintext)) {
-                ctx.accept(TEXT, plaintext)
+                ctx.accept(TEXT, plaintext);
             }
          });
         // curly brace

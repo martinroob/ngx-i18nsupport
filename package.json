@@ -8,13 +8,14 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-	"buildall": "cd projects/tooling && npm run build && cd ../../projects/xliffmerge && npm run build && cd ../..",
-    "coverall": "cd projects/tooling && npm run cover && cd ../../projects/xliffmerge && npm run cover && cd ../.."
+	"buildall": "cd projects/tooling && npm run build && cd ../../projects/xliffmerge && npm run build && cd ../../projects/ngx-i18nsupport-lib && npm run build && cd ../..",
+    "coverall": "cd projects/tooling && npm run cover && cd ../../projects/xliffmerge && npm run cover && cd ../../projects/ngx-i18nsupport-lib && npm run cover && cd ../.."
   },
   "private": true,
   "workspaces": [
 	"projects/xliffmerge",
-    "projects/tooling"
+    "projects/tooling",
+    "projects/ngx-i18nsupport-lib"
   ],
   "dependencies": {
     "@angular/animations": "^6.1.0",

@@ -13,7 +13,7 @@ describe('XmlSerializer test spec', () => {
 
     /**
      * Helper. Parse an XML string.
-     * @param xmlstring
+     * @param xmlstring xmlstring
      */
     function parseXmlString(xmlstring: string): Document {
         return new DOMParser().parseFromString(xmlstring);
@@ -23,15 +23,15 @@ describe('XmlSerializer test spec', () => {
         serializer = new XmlSerializer();
     });
 
-    it("should serialize a simple document without any changes in output", () => {
-        let doc1string = `<test><elem>a test</elem></test>`;
+    it('should serialize a simple document without any changes in output', () => {
+        const doc1string = `<test><elem>a test</elem></test>`;
         const doc1: Document = parseXmlString(doc1string);
         const serializedDoc = serializer.serializeToString(doc1);
         expect(serializedDoc).toEqual(doc1string);
     });
 
-    it("should serialize a complex document with attributes etc. without any changes in output", () => {
-        let doc1string = `<?xml version="1.0" encoding="UTF-8"?>
+    it('should serialize a complex document with attributes etc. without any changes in output', () => {
+        const doc1string = `<?xml version="1.0" encoding="UTF-8"?>
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
   <file source-language="en" datatype="plaintext" original="ng2.template">
   </file>
@@ -41,8 +41,8 @@ describe('XmlSerializer test spec', () => {
         expect(serializedDoc).toEqual(doc1string);
     });
 
-    it("should beautify output using 2 spaces for indentation", () => {
-        let doc1string = `<?xml version="1.0" encoding="UTF-8"?>
+    it('should beautify output using 2 spaces for indentation', () => {
+        const doc1string = `<?xml version="1.0" encoding="UTF-8"?>
 <x a="1" b="&amp;"><y>a simple pcdata element</y></x>`;
         const doc1: Document = parseXmlString(doc1string);
         const beautifyOptions: XmlSerializerOptions = {
@@ -56,8 +56,8 @@ describe('XmlSerializer test spec', () => {
         expect(serializedDoc).toEqual(expectedResult);
     });
 
-    it("should beautify output using e.g. tab for indentation", () => {
-        let doc1string = `<?xml version="1.0" encoding="UTF-8"?>
+    it('should beautify output using e.g. tab for indentation', () => {
+        const doc1string = `<?xml version="1.0" encoding="UTF-8"?>
 <x a="1" b="&amp;"><y>a simple pcdata element</y></x>`;
         const doc1: Document = parseXmlString(doc1string);
         const beautifyOptions: XmlSerializerOptions = {
@@ -72,8 +72,8 @@ describe('XmlSerializer test spec', () => {
         expect(serializedDoc).toEqual(expectedResult);
     });
 
-    it("should throw an error if a non whitespace char is used for indentation", () => {
-        let doc1string = `<?xml version="1.0" encoding="UTF-8"?>
+    it('should throw an error if a non whitespace char is used for indentation', () => {
+        const doc1string = `<?xml version="1.0" encoding="UTF-8"?>
 <x a="1" b="&amp;"><y>a simple pcdata element</y></x>`;
         const doc1: Document = parseXmlString(doc1string);
         const beautifyOptions: XmlSerializerOptions = {
@@ -88,8 +88,8 @@ describe('XmlSerializer test spec', () => {
         }
     });
 
-    it("should beautify output with mixed content", () => {
-        let doc1string = `<?xml version="1.0" encoding="UTF-8"?>
+    it('should beautify output with mixed content', () => {
+        const doc1string = `<?xml version="1.0" encoding="UTF-8"?>
 <x a="1" b="&amp;"><y>a <b><it>mixed</it> content</b> element</y></x>`;
         const doc1: Document = parseXmlString(doc1string);
         const beautifyOptions: XmlSerializerOptions = {

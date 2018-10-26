@@ -1,6 +1,3 @@
-import {XliffFile} from '../impl/xliff-file';
-import {XmbFile} from '../impl/xmb-file';
-import {format} from 'util';
 import {ITransUnit} from './i-trans-unit';
 
 /**
@@ -52,26 +49,26 @@ export interface ITranslationMessagesFile {
 
     /**
      * Get source language.
-     * @return {string}
+     * @return source language.
      */
     sourceLanguage(): string;
 
     /**
      * Get target language.
-     * @return {string}
+     * @return target language.
      */
     targetLanguage(): string;
 
     /**
      * Loop over all Translation Units.
-     * @param callback
+     * @param callback callback
      */
     forEachTransUnit(callback: ((transunit: ITransUnit) => void));
 
     /**
      * Get trans-unit with given id.
-     * @param id
-     * @return {ITransUnit}
+     * @param id id
+     * @return trans-unit with given id.
      */
     transUnitWithId(id: string): ITransUnit;
 
@@ -81,13 +78,13 @@ export interface ITranslationMessagesFile {
 
     /**
      * Edit the source language.
-     * @param language
+     * @param language language
      */
     setSourceLanguage(language: string);
 
     /**
      * Edit the target language.
-     * @param language
+     * @param language language
      */
     setTargetLanguage(language: string);
 
@@ -95,14 +92,14 @@ export interface ITranslationMessagesFile {
      * Set the praefix used when copying source to target.
      * This is used by importNewTransUnit and createTranslationFileForLang methods.
      * (since 1.8.0)
-     * @param {string} targetPraefix
+     * @param targetPraefix targetPraefix
      */
     setNewTransUnitTargetPraefix(targetPraefix: string);
 
     /**
      * Get the praefix used when copying source to target.
      * (since 1.8.0)
-     * @return {string}
+     * @return praefix used when copying source to target.
      */
     getNewTransUnitTargetPraefix(): string;
 
@@ -110,14 +107,14 @@ export interface ITranslationMessagesFile {
      * Set the suffix used when copying source to target.
      * This is used by importNewTransUnit and createTranslationFileForLang methods.
      * (since 1.8.0)
-     * @param {string} targetSuffix
+     * @param targetSuffix targetSuffix
      */
     setNewTransUnitTargetSuffix(targetSuffix: string);
 
     /**
      * Get the suffix used when copying source to target.
      * (since 1.8.0)
-     * @return {string}
+     * @return suffix used when copying source to target.
      */
     getNewTransUnitTargetSuffix(): string;
 
@@ -143,11 +140,12 @@ export interface ITranslationMessagesFile {
      * @return the newly imported trans unit (since version 1.7.0)
      * @throws an error if trans-unit with same id already is in the file.
      */
-    importNewTransUnit(foreignTransUnit: ITransUnit, isDefaultLang: boolean, copyContent: boolean, importAfterElement?: ITransUnit): ITransUnit;
+    importNewTransUnit(foreignTransUnit: ITransUnit, isDefaultLang: boolean, copyContent: boolean, importAfterElement?: ITransUnit)
+        : ITransUnit;
 
     /**
      * Remove the trans-unit with the given id.
-     * @param id
+     * @param id id
      */
     removeTransUnitWithId(id: string);
 

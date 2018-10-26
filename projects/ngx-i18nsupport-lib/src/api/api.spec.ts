@@ -1,5 +1,5 @@
-import {TranslationMessagesFileFactory, ITranslationMessagesFile, ITransUnit} from '.';
-import * as fs from "fs";
+import {TranslationMessagesFileFactory, ITranslationMessagesFile} from './index';
+import * as fs from 'fs';
 
 /**
  * Created by martin on 10.04.2017.
@@ -10,13 +10,12 @@ import * as fs from "fs";
 
 describe('ngx-i18nsupport-lib API test spec', () => {
 
-    let SRCDIR = 'test/testdata/i18n/';
+    const SRCDIR = 'test/testdata/i18n/';
 
-    let ENCODING = 'UTF-8';
+    const ENCODING = 'UTF-8';
 
     /**
      * Helper function to read Xliff from File
-     * @type {string}
      */
     function readXliff(path: string): ITranslationMessagesFile {
         const content = fs.readFileSync(path, ENCODING);
@@ -25,7 +24,6 @@ describe('ngx-i18nsupport-lib API test spec', () => {
 
     /**
      * Helper function to read XLIFF 2.0 from File
-     * @type {string}
      */
     function readXliff2(path: string): ITranslationMessagesFile {
         const content = fs.readFileSync(path, ENCODING);
@@ -34,7 +32,6 @@ describe('ngx-i18nsupport-lib API test spec', () => {
 
     /**
      * Helper function to read Xmb from File
-     * @type {string}
      */
     function readXmb(path: string): ITranslationMessagesFile {
         const content = fs.readFileSync(path, ENCODING);
@@ -43,13 +40,12 @@ describe('ngx-i18nsupport-lib API test spec', () => {
 
     /**
      * Helper function to read Xmb from 2 Files, the xmb and the master
-     * @type {string}
      */
     function readXtbWithMaster(path: string, masterPath: string): ITranslationMessagesFile {
         const content = fs.readFileSync(path, ENCODING);
         if (masterPath) {
             const masterContent = fs.readFileSync(masterPath, ENCODING);
-            let optionalMaster = {xmlContent: masterContent, path: masterPath, encoding: ENCODING};
+            const optionalMaster = {xmlContent: masterContent, path: masterPath, encoding: ENCODING};
             return TranslationMessagesFileFactory.fromFileContent('xtb', content, path, ENCODING, optionalMaster);
         } else {
             return TranslationMessagesFileFactory.fromFileContent('xtb', content, path, ENCODING);
@@ -58,7 +54,6 @@ describe('ngx-i18nsupport-lib API test spec', () => {
 
     /**
      * Helper function to read translation file of any format
-     * @type {string}
      */
     function readFile(path: string, masterPath?: string): ITranslationMessagesFile {
         const content = fs.readFileSync(path, ENCODING);
@@ -72,12 +67,11 @@ describe('ngx-i18nsupport-lib API test spec', () => {
     }
 
     describe('api tests', () => {
-        let MASTER1SRC_XLIFF = SRCDIR + 'ngExtractedMaster1.xlf';
-        let MASTER1SRC_XLIFF2 = SRCDIR + 'ngExtractedMaster1.xlf2';
-        let TRANSLATED_FILE_SRC_XLIFF = SRCDIR + 'translatedFile.xlf';
-        let MASTER1SRC_XMB = SRCDIR + 'ngExtractedMaster1.xmb';
-        let MASTER_DE_XMB = SRCDIR + 'ngExtractedMaster1.de.xmb';
-        let MASTER_EN_XTB = SRCDIR + 'ngExtractedMaster1.en.xtb';
+        const MASTER1SRC_XLIFF = SRCDIR + 'ngExtractedMaster1.xlf';
+        const MASTER1SRC_XLIFF2 = SRCDIR + 'ngExtractedMaster1.xlf2';
+        const MASTER1SRC_XMB = SRCDIR + 'ngExtractedMaster1.xmb';
+        const MASTER_DE_XMB = SRCDIR + 'ngExtractedMaster1.de.xmb';
+        const MASTER_EN_XTB = SRCDIR + 'ngExtractedMaster1.en.xtb';
 
         it('should read xlf file', () => {
             const file: ITranslationMessagesFile = readXliff(MASTER1SRC_XLIFF);
@@ -142,7 +136,7 @@ describe('ngx-i18nsupport-lib API test spec', () => {
 
         it('should detect error when reading xtb file with no xmb master', () => {
             try {
-                const file: ITranslationMessagesFile = readXtbWithMaster(MASTER_EN_XTB, MASTER1SRC_XLIFF);
+                readXtbWithMaster(MASTER_EN_XTB, MASTER1SRC_XLIFF);
                 fail('expected error not received');
             } catch (error) {
                 expect(error.toString()).toContain('An xtb file needs xmb as master file.');

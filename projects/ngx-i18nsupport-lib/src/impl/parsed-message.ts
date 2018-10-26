@@ -49,7 +49,7 @@ export class ParsedMessage implements INormalizedMessage {
 
     /**
      * Get the parser (for tests only, not part of API)
-     * @return {IMessageParser}
+     * @return parser
      */
     getParser(): IMessageParser {
         return this._parser;
@@ -66,7 +66,8 @@ export class ParsedMessage implements INormalizedMessage {
         if (isNullOrUndefined(this.getICUMessage())) {
             return this._parser.parseNormalizedString(<string> normalizedString, this);
         } else {
-            throw new Error(format('cannot translate ICU message with simple string, use translateICUMessage() instead ("%s", "%s")', normalizedString, this.asNativeString()));
+            throw new Error(format('cannot translate ICU message with simple string, use translateICUMessage() instead ("%s", "%s")',
+                normalizedString, this.asNativeString()));
         }
     }
 
@@ -81,7 +82,8 @@ export class ParsedMessage implements INormalizedMessage {
     translateICUMessage(icuTranslation: IICUMessageTranslation): INormalizedMessage {
         const icuMessage: IICUMessage = this.getICUMessage();
         if (isNullOrUndefined(icuMessage)) {
-            throw new Error(format('this is not an ICU message, use translate() instead ("%s", "%s")', icuTranslation,  this.asNativeString()));
+            throw new Error(format('this is not an ICU message, use translate() instead ("%s", "%s")',
+                icuTranslation,  this.asNativeString()));
         } else {
             const translatedICUMessage: IICUMessage = icuMessage.translate(icuTranslation);
             return this._parser.parseICUMessage(translatedICUMessage.asNativeString(), this);
@@ -99,11 +101,11 @@ export class ParsedMessage implements INormalizedMessage {
 
     /**
      * normalized message as string.
-     * @param format optional way to determine the exact syntax.
+     * @param displayFormat optional way to determine the exact syntax.
      * Allowed formats are defined as constants NORMALIZATION_FORMAT...
      */
-    public asDisplayString(format?: string) {
-        return this._parts.map((part) => part.asDisplayString(format)).join('');
+    public asDisplayString(displayFormat?: string) {
+        return this._parts.map((part) => part.asDisplayString(displayFormat)).join('');
     }
 
     /**
@@ -124,7 +126,7 @@ export class ParsedMessage implements INormalizedMessage {
      */
     public validate(): ValidationErrors | null {
         let hasErrors = false;
-        let errors: ValidationErrors = {};
+        const errors: ValidationErrors = {};
         let e;
         e = this.checkPlaceholderAdded();
         if (!isNullOrUndefined(e)) {
@@ -152,7 +154,7 @@ export class ParsedMessage implements INormalizedMessage {
      */
     validateWarnings(): ValidationErrors | null {
         let hasWarnings = false;
-        let warnings: ValidationErrors = {};
+        const warnings: ValidationErrors = {};
         let w;
         w = this.checkPlaceholderRemoved();
         if (!isNullOrUndefined(w)) {
@@ -193,10 +195,10 @@ export class ParsedMessage implements INormalizedMessage {
      */
     private checkPlaceholderAdded(): any {
         let e = null;
-        let suspiciousIndexes = [];
+        const suspiciousIndexes = [];
         if (this.sourceMessage) {
-            let sourcePlaceholders = this.sourceMessage.allPlaceholders();
-            let myPlaceholders = this.allPlaceholders();
+            const sourcePlaceholders = this.sourceMessage.allPlaceholders();
+            const myPlaceholders = this.allPlaceholders();
             myPlaceholders.forEach((index) => {
                 if (!sourcePlaceholders.has(index)) {
                     suspiciousIndexes.push(index);
@@ -226,10 +228,10 @@ export class ParsedMessage implements INormalizedMessage {
      */
     private checkPlaceholderRemoved(): any {
         let w = null;
-        let suspiciousIndexes = [];
+        const suspiciousIndexes = [];
         if (this.sourceMessage) {
-            let sourcePlaceholders = this.sourceMessage.allPlaceholders();
-            let myPlaceholders = this.allPlaceholders();
+            const sourcePlaceholders = this.sourceMessage.allPlaceholders();
+            const myPlaceholders = this.allPlaceholders();
             sourcePlaceholders.forEach((index) => {
                 if (!myPlaceholders.has(index)) {
                     suspiciousIndexes.push(index);
@@ -259,10 +261,10 @@ export class ParsedMessage implements INormalizedMessage {
      */
     private checkICUMessageRefAdded(): any {
         let e = null;
-        let suspiciousIndexes = [];
+        const suspiciousIndexes = [];
         if (this.sourceMessage) {
-            let sourceICURefs = this.sourceMessage.allICUMessageRefs();
-            let myICURefs = this.allICUMessageRefs();
+            const sourceICURefs = this.sourceMessage.allICUMessageRefs();
+            const myICURefs = this.allICUMessageRefs();
             myICURefs.forEach((index) => {
                 if (!sourceICURefs.has(index)) {
                     suspiciousIndexes.push(index);
@@ -292,10 +294,10 @@ export class ParsedMessage implements INormalizedMessage {
      */
     private checkICUMessageRefRemoved(): any {
         let e = null;
-        let suspiciousIndexes = [];
+        const suspiciousIndexes = [];
         if (this.sourceMessage) {
-            let sourceICURefs = this.sourceMessage.allICUMessageRefs();
-            let myICURefs = this.allICUMessageRefs();
+            const sourceICURefs = this.sourceMessage.allICUMessageRefs();
+            const myICURefs = this.allICUMessageRefs();
             sourceICURefs.forEach((index) => {
                 if (!myICURefs.has(index)) {
                     suspiciousIndexes.push(index);
@@ -323,10 +325,10 @@ export class ParsedMessage implements INormalizedMessage {
      * Get all indexes of placeholders used in the message.
      */
     private allPlaceholders(): Set<number> {
-        let result = new Set<number>();
+        const result = new Set<number>();
         this.parts().forEach((part) => {
             if (part.type === ParsedMessagePartType.PLACEHOLDER) {
-                let index = (<ParsedMessagePartPlaceholder> part).index();
+                const index = (<ParsedMessagePartPlaceholder> part).index();
                 result.add(index);
             }
         });
@@ -335,8 +337,8 @@ export class ParsedMessage implements INormalizedMessage {
 
     /**
      * Return the disp-Attribute of placeholder
-     * @param {number} index of placeholder
-     * @return {string} disp or null
+     * @param index index of placeholder
+     * @return disp or null
      */
     public getPlaceholderDisp(index: number): string {
         let placeHolder: ParsedMessagePartPlaceholder = null;
@@ -355,10 +357,10 @@ export class ParsedMessage implements INormalizedMessage {
      * Get all indexes of ICU message refs used in the message.
      */
     private allICUMessageRefs(): Set<number> {
-        let result = new Set<number>();
+        const result = new Set<number>();
         this.parts().forEach((part) => {
             if (part.type === ParsedMessagePartType.ICU_MESSAGE_REF) {
-                let index = (<ParsedMessagePartICUMessageRef> part).index();
+                const index = (<ParsedMessagePartICUMessageRef> part).index();
                 result.add(index);
             }
         });
@@ -367,8 +369,8 @@ export class ParsedMessage implements INormalizedMessage {
 
     /**
      * Return the disp-Attribute of icu message ref
-     * @param {number} index of ref
-     * @return {string} disp or null
+     * @param index of ref
+     * @return disp or null
      */
     public getICUMessageRefDisp(index: number): string {
         let icuMessageRefPart: ParsedMessagePartICUMessageRef = null;
@@ -389,10 +391,10 @@ export class ParsedMessage implements INormalizedMessage {
      */
     private checkTagAdded(): any {
         let e = null;
-        let suspiciousTags = [];
+        const suspiciousTags = [];
         if (this.sourceMessage) {
-            let sourceTags = this.sourceMessage.allTags();
-            let myTags = this.allTags();
+            const sourceTags = this.sourceMessage.allTags();
+            const myTags = this.allTags();
             myTags.forEach((tagName) => {
                 if (!sourceTags.has(tagName)) {
                     suspiciousTags.push(tagName);
@@ -422,10 +424,10 @@ export class ParsedMessage implements INormalizedMessage {
      */
     private checkTagRemoved(): any {
         let w = null;
-        let suspiciousTags = [];
+        const suspiciousTags = [];
         if (this.sourceMessage) {
-            let sourceTags = this.sourceMessage.allTags();
-            let myTags = this.allTags();
+            const sourceTags = this.sourceMessage.allTags();
+            const myTags = this.allTags();
             sourceTags.forEach((tagName) => {
                 if (!myTags.has(tagName)) {
                     suspiciousTags.push(tagName);
@@ -453,10 +455,10 @@ export class ParsedMessage implements INormalizedMessage {
      * Get all tag names used in the message.
      */
     private allTags(): Set<string> {
-        let result = new Set<string>();
+        const result = new Set<string>();
         this.parts().forEach((part) => {
             if (part.type === ParsedMessagePartType.START_TAG || part.type === ParsedMessagePartType.EMPTY_TAG) {
-                let tagName = (<ParsedMessagePartStartTag> part).tagName();
+                const tagName = (<ParsedMessagePartStartTag> part).tagName();
                 result.add(tagName);
             }
         });
@@ -488,7 +490,8 @@ export class ParsedMessage implements INormalizedMessage {
         const openTag = this.calculateOpenTagName();
         if (!openTag || openTag !== tagname) {
             // oops, not well formed
-            throw new Error(format('unexpected close tag %s (currently open is %s, native xml is "%s")', tagname, openTag, this.asNativeString()));
+            throw new Error(format('unexpected close tag %s (currently open is %s, native xml is "%s")',
+                tagname, openTag, this.asNativeString()));
         }
         this._parts.push(new ParsedMessagePartEndTag(tagname));
     }
@@ -510,7 +513,7 @@ export class ParsedMessage implements INormalizedMessage {
      * Returns the latest one or null, if there is no open tag.
      */
     private calculateOpenTagName(): string {
-        let openTags = [];
+        const openTags = [];
         this._parts.forEach((part) => {
             switch (part.type) {
                 case ParsedMessagePartType.START_TAG:
@@ -521,7 +524,8 @@ export class ParsedMessage implements INormalizedMessage {
                     if (openTags.length === 0 || openTags[openTags.length - 1] !== tagName) {
                         // oops, not well formed
                         const openTag = (openTags.length === 0) ? 'nothing' : openTags[openTags.length - 1];
-                        throw new Error(format('unexpected close tag %s (currently open is %s, native xml is "%s")', tagName, openTag, this.asNativeString()));
+                        throw new Error(format('unexpected close tag %s (currently open is %s, native xml is "%s")',
+                            tagName, openTag, this.asNativeString()));
                     }
                     openTags.pop();
             }

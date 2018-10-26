@@ -1,4 +1,7 @@
-import {ITranslationMessagesFile, ITransUnit, INormalizedMessage, STATE_TRANSLATED} from '../api';
+import {STATE_TRANSLATED} from '../api/constants';
+import {ITranslationMessagesFile} from '../api/i-translation-messages-file';
+import {INormalizedMessage} from '../api/i-normalized-message';
+import {ITransUnit} from '../api/i-trans-unit';
 import {AbstractTranslationMessagesFile} from './abstract-translation-messages-file';
 import {isNullOrUndefined, isString} from 'util';
 import {ParsedMessage} from './parsed-message';
@@ -12,8 +15,9 @@ export abstract class AbstractTransUnit implements ITransUnit {
 
     private _sourceContentNormalized: ParsedMessage;
 
-    constructor(protected _element: Element, protected _id: string, protected _translationMessagesFile: ITranslationMessagesFile) {
-
+    protected constructor(protected _element: Element,
+                          protected _id: string,
+                          protected _translationMessagesFile: ITranslationMessagesFile) {
     }
 
     public get id(): string {
@@ -105,13 +109,13 @@ export abstract class AbstractTransUnit implements ITransUnit {
     /**
      * Map a native state (found in the document) to an abstract state (new, translated, final).
      * Returns the abstract state.
-     * @param nativeState
+     * @param nativeState nativeState
      */
     protected abstract mapNativeStateToState(nativeState: string): string;
 
     /**
      * set state in xml.
-     * @param nativeState
+     * @param nativeState nativeState
      */
     protected abstract setNativeTargetState(nativeState: string);
 
@@ -179,20 +183,20 @@ export abstract class AbstractTransUnit implements ITransUnit {
 
     /**
      * Change description property of trans-unit.
-     * @param {string} description
+     * @param description description
      */
     abstract setDescription(description: string);
 
     /**
      * Change meaning property of trans-unit.
-     * @param {string} meaning
+     * @param meaning meaning
      */
     abstract setMeaning(meaning: string);
 
     /**
      * The real xml element used for the trans unit.
      * (internal usage only, a client should never need this)
-     * @return {Element}
+     * @return real xml element used for the trans unit.
      */
     public asXmlElement(): Element {
         return this._element;
@@ -237,8 +241,8 @@ export abstract class AbstractTransUnit implements ITransUnit {
 
     /**
      * Test, wether message looks like ICU message.
-     * @param {string} message
-     * @return {boolean}
+     * @param message message
+     * @return wether message looks like ICU message.
      */
     public isICUMessage(message: string): boolean {
         return this.messageParser().isICUMessageStart(message);
@@ -246,7 +250,7 @@ export abstract class AbstractTransUnit implements ITransUnit {
 
     /**
      * Set the translation to a given string (including markup).
-     * @param translation
+     * @param translation translation
      */
     protected abstract translateNative(translation: string);
 }

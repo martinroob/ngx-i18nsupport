@@ -1,5 +1,4 @@
-import {IICUMessage, IICUMessageCategory, IICUMessageTranslation} from '../api/i-icu-message';
-import {INormalizedMessage} from '../api/i-normalized-message';
+import {IICUMessage, IICUMessageCategory, IICUMessageTranslation, INormalizedMessage} from '../api/index';
 import {format, isNullOrUndefined, isString} from 'util';
 import {IMessageParser} from './i-message-parser';
 
@@ -38,7 +37,7 @@ export class ICUMessage implements IICUMessage {
     /**
      * ICU message as native string.
      * This is, how it is stored, something like '{x, plural, =0 {..}'
-     * @return {string}
+     * @return ICU message as native string.
      */
     public asNativeString(): string {
         const varname = (this.isPluralMessage()) ? 'VAR_PLURAL' : 'VAR_SELECT';
@@ -82,7 +81,7 @@ export class ICUMessage implements IICUMessage {
      */
     translate(translation: IICUMessageTranslation): IICUMessage {
         const message = new ICUMessage(this._parser, this.isPluralMessage());
-        let translatedCategories: Set<string> = new Set<string>();
+        const translatedCategories: Set<string> = new Set<string>();
         this._categories.forEach((category) => {
             let translatedMessage: INormalizedMessage;
             const translationForCategory: string|IICUMessageTranslation = translation[category.getCategory()];
@@ -101,7 +100,8 @@ export class ICUMessage implements IICUMessage {
         Object.keys(translation).forEach((categoryName) => {
             if (!translatedCategories.has(categoryName)) {
                 if (this.isSelectMessage()) {
-                    throw new Error(format('adding a new category not allowed for select messages ("%s" is not part of message)', categoryName));
+                    throw new Error(format('adding a new category not allowed for select messages ("%s" is not part of message)',
+                        categoryName));
                 } else {
                     this.checkValidPluralCategory(categoryName);
                     // TODO embedded ICU Message

@@ -1,7 +1,8 @@
 import {isNullOrUndefined} from 'util';
-import {ITranslationMessagesFile, ITransUnit} from '../api';
-import {DOMUtilities} from './dom-utilities';
+import {ITranslationMessagesFile} from '../api/i-translation-messages-file';
 import {INormalizedMessage} from '../api/i-normalized-message';
+import {ITransUnit} from '../api/i-trans-unit';
+import {DOMUtilities} from './dom-utilities';
 import {AbstractTransUnit} from './abstract-trans-unit';
 import {XmbMessageParser} from './xmb-message-parser';
 import {ParsedMessage} from './parsed-message';
@@ -15,7 +16,8 @@ export class XtbTransUnit extends AbstractTransUnit implements ITransUnit {
 
     private _sourceTransUnitFromMaster: AbstractTransUnit;
 
-    constructor(_element: Element, _id: string, _translationMessagesFile: ITranslationMessagesFile, _sourceTransUnitFromMaster: AbstractTransUnit) {
+    constructor(_element: Element, _id: string, _translationMessagesFile: ITranslationMessagesFile,
+                _sourceTransUnitFromMaster: AbstractTransUnit) {
         super(_element, _id, _translationMessagesFile);
         this._sourceTransUnitFromMaster = _sourceTransUnitFromMaster;
     }
@@ -23,7 +25,7 @@ export class XtbTransUnit extends AbstractTransUnit implements ITransUnit {
     /**
      * Get content to translate.
      * Source parts are excluded here.
-     * @return {string}
+     * @return content to translate.
      */
     public sourceContent(): string {
         if (this._sourceTransUnitFromMaster) {
@@ -92,7 +94,7 @@ export class XtbTransUnit extends AbstractTransUnit implements ITransUnit {
      */
     public nativeTargetState(): string {
         if (this._sourceTransUnitFromMaster) {
-            let sourceContent = this._sourceTransUnitFromMaster.sourceContent();
+            const sourceContent = this._sourceTransUnitFromMaster.sourceContent();
             if (!sourceContent || sourceContent === this.targetContent() || !this.targetContent()) {
                 return 'new';
             } else {
@@ -116,7 +118,7 @@ export class XtbTransUnit extends AbstractTransUnit implements ITransUnit {
     /**
      * Map a native state (found in the document) to an abstract state (new, translated, final).
      * Returns the abstract state.
-     * @param nativeState
+     * @param nativeState nativeState
      */
     protected mapNativeStateToState(nativeState: string): string {
         return nativeState;
@@ -125,7 +127,7 @@ export class XtbTransUnit extends AbstractTransUnit implements ITransUnit {
     /**
      * set state in xml.
      * (not supported in xmb)
-     * @param nativeState
+     * @param nativeState nativeState
      */
     protected setNativeTargetState(nativeState: string) {
         // TODO some logic to store it anywhere
@@ -204,7 +206,7 @@ export class XtbTransUnit extends AbstractTransUnit implements ITransUnit {
 
     /**
      * Change description property of trans-unit.
-     * @param {string} description
+     * @param description description
      */
     public setDescription(description: string) {
         // not supported, do nothing
@@ -212,7 +214,7 @@ export class XtbTransUnit extends AbstractTransUnit implements ITransUnit {
 
     /**
      * Change meaning property of trans-unit.
-     * @param {string} meaning
+     * @param meaning meaning
      */
     public setMeaning(meaning: string) {
         // not supported, do nothing
@@ -239,10 +241,10 @@ export class XtbTransUnit extends AbstractTransUnit implements ITransUnit {
 
     /**
      * Set the translation to a given string (including markup).
-     * @param translation
+     * @param translation translation
      */
     protected translateNative(translation: string) {
-        let target = this._element;
+        const target = this._element;
         if (isNullOrUndefined(translation)) {
             translation = '';
         }

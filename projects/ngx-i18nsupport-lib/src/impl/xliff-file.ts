@@ -1,5 +1,7 @@
 import {format} from 'util';
-import {ITranslationMessagesFile, ITransUnit, FORMAT_XLIFF12, FILETYPE_XLIFF12} from '../api';
+import {ITranslationMessagesFile} from '../api/i-translation-messages-file';
+import {ITransUnit} from '../api/i-trans-unit';
+import {FORMAT_XLIFF12, FILETYPE_XLIFF12} from '../api/constants';
 import {DOMUtilities} from './dom-utilities';
 import {XliffTransUnit} from './xliff-trans-unit';
 import {AbstractTranslationMessagesFile} from './abstract-translation-messages-file';
@@ -18,7 +20,7 @@ export class XliffFile extends AbstractTranslationMessagesFile implements ITrans
      * @param path Path to file
      * @param encoding optional encoding of the xml.
      * This is read from the file, but if you know it before, you can avoid reading the file twice.
-     * @return {XliffFile}
+     * @return XliffFile
      */
     constructor(xmlString: string, path: string, encoding: string) {
         super();
@@ -36,7 +38,8 @@ export class XliffFile extends AbstractTranslationMessagesFile implements ITrans
             const version = xliffList.item(0).getAttribute('version');
             const expectedVersion = '1.2';
             if (version !== expectedVersion) {
-                throw new Error(format('File "%s" seems to be no xliff 1.2 file, version should be %s, found %s', path, expectedVersion, version));
+                throw new Error(format('File "%s" seems to be no xliff 1.2 file, version should be %s, found %s',
+                    path, expectedVersion, version));
             }
         }
         return this;
@@ -70,10 +73,10 @@ export class XliffFile extends AbstractTranslationMessagesFile implements ITrans
 
     protected initializeTransUnits() {
         this.transUnits = [];
-        let transUnitsInFile = this._parsedDocument.getElementsByTagName('trans-unit');
+        const transUnitsInFile = this._parsedDocument.getElementsByTagName('trans-unit');
         for (let i = 0; i < transUnitsInFile.length; i++) {
-            let transunit = transUnitsInFile.item(i);
-            let id = transunit.getAttribute('id');
+            const transunit = transUnitsInFile.item(i);
+            const id = transunit.getAttribute('id');
             if (!id) {
                 this._warnings.push(format('oops, trans-unit without "id" found in master, please check file %s', this._filename));
             }
@@ -83,7 +86,7 @@ export class XliffFile extends AbstractTranslationMessagesFile implements ITrans
 
     /**
      * Get source language.
-     * @return {string}
+     * @return source language.
      */
     public sourceLanguage(): string {
         const fileElem = DOMUtilities.getFirstElementByTagName(this._parsedDocument, 'file');
@@ -96,7 +99,7 @@ export class XliffFile extends AbstractTranslationMessagesFile implements ITrans
 
     /**
      * Edit the source language.
-     * @param language
+     * @param language language
      */
     public setSourceLanguage(language: string) {
         const fileElem = DOMUtilities.getFirstElementByTagName(this._parsedDocument, 'file');
@@ -107,7 +110,7 @@ export class XliffFile extends AbstractTranslationMessagesFile implements ITrans
 
     /**
      * Get target language.
-     * @return {string}
+     * @return target language.
      */
     public targetLanguage(): string {
         const fileElem = DOMUtilities.getFirstElementByTagName(this._parsedDocument, 'file');
@@ -120,7 +123,7 @@ export class XliffFile extends AbstractTranslationMessagesFile implements ITrans
 
     /**
      * Edit the target language.
-     * @param language
+     * @param language language
      */
     public setTargetLanguage(language: string) {
         const fileElem = DOMUtilities.getFirstElementByTagName(this._parsedDocument, 'file');
@@ -151,19 +154,20 @@ export class XliffFile extends AbstractTranslationMessagesFile implements ITrans
      * @return the newly imported trans unit (since version 1.7.0)
      * @throws an error if trans-unit with same id already is in the file.
      */
-    importNewTransUnit(foreignTransUnit: ITransUnit, isDefaultLang: boolean, copyContent: boolean, importAfterElement?: ITransUnit): ITransUnit {
+    importNewTransUnit(foreignTransUnit: ITransUnit, isDefaultLang: boolean, copyContent: boolean, importAfterElement?: ITransUnit)
+        : ITransUnit {
         if (this.transUnitWithId(foreignTransUnit.id)) {
             throw new Error(format('tu with id %s already exists in file, cannot import it', foreignTransUnit.id));
         }
-        let newTu = (<AbstractTransUnit> foreignTransUnit).cloneWithSourceAsTarget(isDefaultLang, copyContent, this);
-        let bodyElement = DOMUtilities.getFirstElementByTagName(this._parsedDocument, 'body');
+        const newTu = (<AbstractTransUnit> foreignTransUnit).cloneWithSourceAsTarget(isDefaultLang, copyContent, this);
+        const bodyElement = DOMUtilities.getFirstElementByTagName(this._parsedDocument, 'body');
         if (!bodyElement) {
             throw new Error(format('File "%s" seems to be no xliff 1.2 file (should contain a body element)', this._filename));
         }
         let inserted = false;
         let isAfterElementPartOfFile = false;
         if (!!importAfterElement) {
-            let insertionPoint = this.transUnitWithId(importAfterElement.id);
+            const insertionPoint = this.transUnitWithId(importAfterElement.id);
             if (!!insertionPoint) {
                 isAfterElementPartOfFile = true;
             }
@@ -172,7 +176,7 @@ export class XliffFile extends AbstractTranslationMessagesFile implements ITrans
             bodyElement.appendChild(newTu.asXmlElement());
             inserted = true;
         } else if (importAfterElement === null) {
-            let firstUnitElement = DOMUtilities.getFirstElementByTagName(this._parsedDocument, 'trans-unit');
+            const firstUnitElement = DOMUtilities.getFirstElementByTagName(this._parsedDocument, 'trans-unit');
             if (firstUnitElement) {
                 DOMUtilities.insertBefore(newTu.asXmlElement(), firstUnitElement);
                 inserted = true;
@@ -182,7 +186,7 @@ export class XliffFile extends AbstractTranslationMessagesFile implements ITrans
                 inserted = true;
             }
         } else {
-            let refUnitElement = DOMUtilities.getElementByTagNameAndId(this._parsedDocument, 'trans-unit', importAfterElement.id);
+            const refUnitElement = DOMUtilities.getElementByTagNameAndId(this._parsedDocument, 'trans-unit', importAfterElement.id);
             if (refUnitElement) {
                 DOMUtilities.insertAfter(newTu.asXmlElement(), refUnitElement);
                 inserted = true;
@@ -212,8 +216,9 @@ export class XliffFile extends AbstractTranslationMessagesFile implements ITrans
      * Wben true, content will be copied from source.
      * When false, content will be left empty (if it is not the default language).
      */
-    public createTranslationFileForLang(lang: string, filename: string, isDefaultLang: boolean, copyContent: boolean): ITranslationMessagesFile {
-        let translationFile = new XliffFile(this.editedContent(), filename, this.encoding());
+    public createTranslationFileForLang(lang: string, filename: string, isDefaultLang: boolean, copyContent: boolean)
+        : ITranslationMessagesFile {
+        const translationFile = new XliffFile(this.editedContent(), filename, this.encoding());
         translationFile.setNewTransUnitTargetPraefix(this.targetPraefix);
         translationFile.setNewTransUnitTargetSuffix(this.targetSuffix);
         translationFile.setTargetLanguage(lang);

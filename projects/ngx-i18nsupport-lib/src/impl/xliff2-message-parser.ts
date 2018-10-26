@@ -17,7 +17,7 @@ export class Xliff2MessageParser extends AbstractMessageParser {
     /**
      * Handle this element node.
      * This is called before the children are done.
-     * @param elementNode
+     * @param elementNode elementNode
      * @param message message to be altered
      * @return true, if children should be processed too, false otherwise (children ignored then)
      */
@@ -38,8 +38,8 @@ export class Xliff2MessageParser extends AbstractMessageParser {
             let isInterpolation = false;
             let isICU = false;
             let isEmptyTag = false;
-            let equiv = elementNode.getAttribute('equiv');
-            let disp = elementNode.getAttribute('disp');
+            const equiv = elementNode.getAttribute('equiv');
+            const disp = elementNode.getAttribute('disp');
             let indexString = null;
             let index = 0;
             let emptyTagName = null;
@@ -47,7 +47,7 @@ export class Xliff2MessageParser extends AbstractMessageParser {
                 // old ICU syntax, fixed with #17344
                 isICU = true;
                 indexString = elementNode.getAttribute('id');
-                index = Number.parseInt(indexString);
+                index = Number.parseInt(indexString, 10);
             } else if (equiv.startsWith('ICU')) {
                 // new ICU syntax, fixed with #17344
                 isICU = true;
@@ -56,7 +56,7 @@ export class Xliff2MessageParser extends AbstractMessageParser {
                 } else {
                     indexString = equiv.substring('ICU_'.length);
                 }
-                index = Number.parseInt(indexString);
+                index = Number.parseInt(indexString, 10);
             } else if (equiv.startsWith('INTERPOLATION')) {
                 isInterpolation = true;
                 if (equiv === 'INTERPOLATION') {
@@ -64,7 +64,7 @@ export class Xliff2MessageParser extends AbstractMessageParser {
                 } else {
                     indexString = equiv.substring('INTERPOLATION_'.length);
                 }
-                index = Number.parseInt(indexString);
+                index = Number.parseInt(indexString, 10);
             } else if (new TagMapping().isEmptyTagPlaceholderName(equiv)) {
                 isEmptyTag = true;
                 emptyTagName = new TagMapping().getTagnameFromEmptyTagPlaceholderName(equiv);
@@ -79,8 +79,9 @@ export class Xliff2MessageParser extends AbstractMessageParser {
                 message.addEmptyTag(emptyTagName, this.parseIdCountFromName(equiv));
             }
         } else if (tagName === 'pc') {
-            // pc example: <pc id="0" equivStart="START_BOLD_TEXT" equivEnd="CLOSE_BOLD_TEXT" type="fmt" dispStart="&lt;b&gt;" dispEnd="&lt;/b&gt;">IMPORTANT</pc>
-            let embeddedTagName = this.tagNameFromPCElement(elementNode);
+            // pc example: <pc id="0" equivStart="START_BOLD_TEXT" equivEnd="CLOSE_BOLD_TEXT" type="fmt"
+            // dispStart="&lt;b&gt;" dispEnd="&lt;/b&gt;">IMPORTANT</pc>
+            const embeddedTagName = this.tagNameFromPCElement(elementNode);
             if (embeddedTagName) {
                 message.addStartTag(embeddedTagName, this.parseIdCountFromName(elementNode.getAttribute('equivStart')));
             }
@@ -91,14 +92,15 @@ export class Xliff2MessageParser extends AbstractMessageParser {
     /**
      * Handle end of this element node.
      * This is called after all children are processed.
-     * @param elementNode
+     * @param elementNode elementNode
      * @param message message to be altered
      */
     protected processEndElement(elementNode: Element, message: ParsedMessage) {
         const tagName = elementNode.tagName;
         if (tagName === 'pc') {
-            // pc example: <pc id="0" equivStart="START_BOLD_TEXT" equivEnd="CLOSE_BOLD_TEXT" type="fmt" dispStart="&lt;b&gt;" dispEnd="&lt;/b&gt;">IMPORTANT</pc>
-            let embeddedTagName = this.tagNameFromPCElement(elementNode);
+            // pc example: <pc id="0" equivStart="START_BOLD_TEXT" equivEnd="CLOSE_BOLD_TEXT" type="fmt"
+            // dispStart="&lt;b&gt;" dispEnd="&lt;/b&gt;">IMPORTANT</pc>
+            const embeddedTagName = this.tagNameFromPCElement(elementNode);
             if (embeddedTagName) {
                 message.addEndTag(embeddedTagName);
             }
@@ -120,30 +122,33 @@ export class Xliff2MessageParser extends AbstractMessageParser {
     /**
      * reimplemented here, because XLIFF 2.0 uses a deeper xml model.
      * So we cannot simply replace the message parts by xml parts.
-     * @param message
-     * @param rootElem
+     * @param message message
+     * @param rootElem rootElem
      */
     protected addXmlRepresentationToRoot(message: ParsedMessage, rootElem: Element) {
-        let stack = [{element: rootElem, tagName: 'root'}];
-        let id: number = 0;
+        const stack = [{element: rootElem, tagName: 'root'}];
+        let id = 0;
         message.parts().forEach((part) => {
             switch (part.type) {
                 case ParsedMessagePartType.TEXT:
-                    stack[stack.length - 1].element.appendChild(this.createXmlRepresentationOfTextPart(<ParsedMessagePartText> part, rootElem));
+                    stack[stack.length - 1].element.appendChild(
+                        this.createXmlRepresentationOfTextPart(<ParsedMessagePartText> part, rootElem));
                     break;
                 case ParsedMessagePartType.PLACEHOLDER:
-                    stack[stack.length - 1].element.appendChild(this.createXmlRepresentationOfPlaceholderPart(<ParsedMessagePartPlaceholder> part, rootElem,id++));
+                    stack[stack.length - 1].element.appendChild(
+                        this.createXmlRepresentationOfPlaceholderPart(<ParsedMessagePartPlaceholder> part, rootElem, id++));
                     break;
                 case ParsedMessagePartType.ICU_MESSAGE_REF:
-                    stack[stack.length - 1].element.appendChild(this.createXmlRepresentationOfICUMessageRefPart(<ParsedMessagePartICUMessageRef> part, rootElem));
+                    stack[stack.length - 1].element.appendChild(
+                        this.createXmlRepresentationOfICUMessageRefPart(<ParsedMessagePartICUMessageRef> part, rootElem));
                     break;
                 case ParsedMessagePartType.START_TAG:
-                    let newTagElem = this.createXmlRepresentationOfStartTagPart(<ParsedMessagePartStartTag> part, rootElem, id++);
+                    const newTagElem = this.createXmlRepresentationOfStartTagPart(<ParsedMessagePartStartTag> part, rootElem, id++);
                     stack[stack.length - 1].element.appendChild(newTagElem);
                     stack.push({element: <Element> newTagElem, tagName: (<ParsedMessagePartStartTag> part).tagName()});
                     break;
                 case ParsedMessagePartType.END_TAG:
-                    let closeTagName = (<ParsedMessagePartEndTag> part).tagName();
+                    const closeTagName = (<ParsedMessagePartEndTag> part).tagName();
                     if (stack.length <= 1 || stack[stack.length - 1].tagName !== closeTagName) {
                         // oops, not well formed
                         throw new Error('unexpected close tag ' + closeTagName);
@@ -151,7 +156,7 @@ export class Xliff2MessageParser extends AbstractMessageParser {
                     stack.pop();
                     break;
                 case ParsedMessagePartType.EMPTY_TAG:
-                    let emptyTagElem = this.createXmlRepresentationOfEmptyTagPart(<ParsedMessagePartEmptyTag> part, rootElem, id++);
+                    const emptyTagElem = this.createXmlRepresentationOfEmptyTagPart(<ParsedMessagePartEmptyTag> part, rootElem, id++);
                     stack[stack.length - 1].element.appendChild(emptyTagElem);
                     break;
             }
@@ -167,8 +172,8 @@ export class Xliff2MessageParser extends AbstractMessageParser {
      * Returns an empty pc-Element.
      * e.g. <pc id="0" equivStart="START_BOLD_TEXT" equivEnd="CLOSE_BOLD_TEXT" type="fmt" dispStart="&lt;b&gt;" dispEnd="&lt;/b&gt;">
      * Text content will be added later.
-     * @param part
-     * @param rootElem
+     * @param part part
+     * @param rootElem rootElem
      * @param id id number in xliff2
      */
     protected createXmlRepresentationOfStartTagPart(part: ParsedMessagePartStartTag, rootElem: Element, id: number): Node {
@@ -191,8 +196,8 @@ export class Xliff2MessageParser extends AbstractMessageParser {
     /**
      * the xml used for end tag in the message.
      * Not used here, because content is child of start tag.
-     * @param part
-     * @param rootElem
+     * @param part part
+     * @param rootElem rootElem
      */
     protected createXmlRepresentationOfEndTagPart(part: ParsedMessagePartEndTag, rootElem: Element): Node {
         // not used
@@ -203,8 +208,8 @@ export class Xliff2MessageParser extends AbstractMessageParser {
      * the xml used for empty tag in the message.
      * Returns an empty ph-Element.
      * e.g. <ph id="3" equiv="TAG_IMG" type="image" disp="&lt;img/>"/>
-     * @param part
-     * @param rootElem
+     * @param part part
+     * @param rootElem rootElem
      * @param id id number in xliff2
      */
     protected createXmlRepresentationOfEmptyTagPart(part: ParsedMessagePartEmptyTag, rootElem: Element, id: number): Node {
@@ -239,12 +244,12 @@ export class Xliff2MessageParser extends AbstractMessageParser {
     /**
      * the xml used for placeholder in the message.
      * Returns e.g. <ph id="1" equiv="INTERPOLATION_1" disp="{{total()}}"/>
-     * @param part
-     * @param rootElem
+     * @param part part
+     * @param rootElem rootElem
      * @param id id number in xliff2
      */
     protected createXmlRepresentationOfPlaceholderPart(part: ParsedMessagePartPlaceholder, rootElem: Element, id: number): Node {
-        let phElem = rootElem.ownerDocument.createElement('ph');
+        const phElem = rootElem.ownerDocument.createElement('ph');
         let equivAttrib = 'INTERPOLATION';
         if (part.index() > 0) {
             equivAttrib = 'INTERPOLATION_' + part.index().toString(10);
@@ -260,11 +265,11 @@ export class Xliff2MessageParser extends AbstractMessageParser {
 
     /**
      * the xml used for icu message refs in the message.
-     * @param part
-     * @param rootElem
+     * @param part part
+     * @param rootElem rootElem
      */
     protected createXmlRepresentationOfICUMessageRefPart(part: ParsedMessagePartICUMessageRef, rootElem: Element): Node {
-        let phElem = rootElem.ownerDocument.createElement('ph');
+        const phElem = rootElem.ownerDocument.createElement('ph');
         let equivAttrib = 'ICU';
         if (part.index() > 0) {
             equivAttrib = 'ICU_' + part.index().toString(10);

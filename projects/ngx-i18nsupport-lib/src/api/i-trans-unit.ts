@@ -122,13 +122,13 @@ export interface ITransUnit {
 
     /**
      * Change description property of trans-unit.
-     * @param {string} description
+     * @param description description
      */
     setDescription(description: string);
 
     /**
      * Change meaning property of trans-unit.
-     * @param {string} meaning
+     * @param meaning meaning
      */
     setMeaning(meaning: string);
 

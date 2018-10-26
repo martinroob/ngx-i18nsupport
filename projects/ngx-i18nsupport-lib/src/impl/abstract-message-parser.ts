@@ -44,14 +44,14 @@ export abstract class AbstractMessageParser implements IMessageParser {
      * Throws an error if normalized xml is not well formed.
      */
     createNormalizedMessageFromXMLString(xmlString: string, sourceMessage: ParsedMessage): ParsedMessage {
-        let doc: Document = new DOMParser().parseFromString('<dummy>' + xmlString + '</dummy>', 'text/xml');
-        let xmlElement: Element = <Element> doc.childNodes.item(0);
+        const doc: Document = new DOMParser().parseFromString('<dummy>' + xmlString + '</dummy>', 'text/xml');
+        const xmlElement: Element = <Element> doc.childNodes.item(0);
         return this.createNormalizedMessageFromXML(xmlElement, sourceMessage);
     }
 
     /**
      * recursively run through a node and add all identified parts to the message.
-     * @param node
+     * @param node node
      * @param message message to be generated.
      * @param includeSelf if true, add node by itself, otherwise only children.
      */
@@ -92,7 +92,7 @@ export abstract class AbstractMessageParser implements IMessageParser {
 
     /**
      * Return the ICU message content of the node, if it is an ICU Message.
-     * @param node
+     * @param node node
      * @return message or null, if it is no ICU Message.
      */
     protected getICUMessageText(node: Node): string {
@@ -114,7 +114,7 @@ export abstract class AbstractMessageParser implements IMessageParser {
 
     /**
      * Test, wether text is beginning of ICU Message.
-     * @param text
+     * @param text text
      */
     public isICUMessageStart(text: string): boolean {
         return ParsedMessagePartICUMessage.looksLikeICUMessage(text);
@@ -124,7 +124,7 @@ export abstract class AbstractMessageParser implements IMessageParser {
     /**
      * Handle this node.
      * This is called before the children are done.
-     * @param elementNode
+     * @param elementNode elementNode
      * @param message message to be altered
      * @return true, if children should be processed too, false otherwise (children ignored then)
      */
@@ -133,7 +133,7 @@ export abstract class AbstractMessageParser implements IMessageParser {
     /**
      * Handle end of this node.
      * This is called after all children are processed.
-     * @param elementNode
+     * @param elementNode elementNode
      * @param message message to be altered
      */
     protected abstract processEndElement(elementNode: Element, message: ParsedMessage);
@@ -147,7 +147,7 @@ export abstract class AbstractMessageParser implements IMessageParser {
      */
     public parseNormalizedString(normalizedString: string, sourceMessage: ParsedMessage): ParsedMessage {
         const message: ParsedMessage = new ParsedMessage(this, sourceMessage);
-        let openTags = [];
+        const openTags = [];
         let tokens: Token[];
         try {
             tokens = new ParsedMesageTokenizer().tokenize(normalizedString);
@@ -215,8 +215,8 @@ export abstract class AbstractMessageParser implements IMessageParser {
      * name optionally ends with _<number>. This is the idcount.
      * E.g. name="TAG_IMG" returns 0
      * name = "TAG_IMG_1" returns 1
-     * @param {string} name
-     * @return {number}
+     * @param name name
+     * @return id count
      */
     protected parseIdCountFromName(name: string): number {
         const regex = /.*_([0-9]*)/;
@@ -232,11 +232,11 @@ export abstract class AbstractMessageParser implements IMessageParser {
     /**
      * Create the native xml for a message.
      * Parts are already set here.
-     * @param message
+     * @param message message
      */
     protected createXmlRepresentation(message: ParsedMessage): Element {
-        let root: Document = new DOMParser().parseFromString('<dummy/>', 'text/xml');
-        let rootElem: Element = root.getElementsByTagName('dummy').item(0);
+        const root: Document = new DOMParser().parseFromString('<dummy/>', 'text/xml');
+        const rootElem: Element = root.getElementsByTagName('dummy').item(0);
         this.addXmlRepresentationToRoot(message, rootElem);
         return rootElem;
     }
@@ -249,39 +249,39 @@ export abstract class AbstractMessageParser implements IMessageParser {
 
     /**
      * the xml used for start tag in the message.
-     * @param part
-     * @param rootElem
+     * @param part part
+     * @param rootElem rootElem
      * @param id id number in xliff2
      */
     protected abstract createXmlRepresentationOfStartTagPart(part: ParsedMessagePartStartTag, rootElem: Element, id?: number): Node;
 
     /**
      * the xml used for end tag in the message.
-     * @param part
-     * @param rootElem
+     * @param part part
+     * @param rootElem rootElem
      */
     protected abstract createXmlRepresentationOfEndTagPart(part: ParsedMessagePartEndTag, rootElem: Element): Node;
 
     /**
      * the xml used for empty tag in the message.
-     * @param part
-     * @param rootElem
+     * @param part part
+     * @param rootElem rootElem
      * @param id id number in xliff2
      */
     protected abstract createXmlRepresentationOfEmptyTagPart(part: ParsedMessagePartEmptyTag, rootElem: Element, id?: number): Node;
 
     /**
      * the xml used for placeholder in the message.
-     * @param part
-     * @param rootElem
+     * @param part part
+     * @param rootElem rootElem
      * @param id id number in xliff2
      */
     protected abstract createXmlRepresentationOfPlaceholderPart(part: ParsedMessagePartPlaceholder, rootElem: Element, id?: number): Node;
 
     /**
      * the xml used for icu message refs in the message.
-     * @param part
-     * @param rootElem
+     * @param part part
+     * @param rootElem rootElem
      */
     protected abstract createXmlRepresentationOfICUMessageRefPart(part: ParsedMessagePartICUMessageRef, rootElem: Element): Node;
 }

@@ -1,7 +1,9 @@
-import {ITranslationMessagesFile, ITransUnit, STATE_NEW, STATE_TRANSLATED, STATE_FINAL} from '../api';
+import {STATE_NEW, STATE_TRANSLATED, STATE_FINAL} from '../api/constants';
+import {ITranslationMessagesFile} from '../api/i-translation-messages-file';
+import {INormalizedMessage} from '../api/i-normalized-message';
+import {ITransUnit} from '../api/i-trans-unit';
 import {DOMUtilities} from './dom-utilities';
 import {ParsedMessage} from './parsed-message';
-import {INormalizedMessage} from '../api/i-normalized-message';
 import {AbstractTransUnit} from './abstract-trans-unit';
 import {Xliff2MessageParser} from './xliff2-message-parser';
 import {AbstractMessageParser} from './abstract-message-parser';
@@ -13,7 +15,7 @@ import {isNullOrUndefined} from 'util';
 
 export class Xliff2TransUnit extends AbstractTransUnit  implements ITransUnit {
 
-    constructor(_element: Element, _id: string,_translationMessagesFile: ITranslationMessagesFile) {
+    constructor(_element: Element, _id: string, _translationMessagesFile: ITranslationMessagesFile) {
         super(_element, _id, _translationMessagesFile);
     }
 
@@ -32,7 +34,7 @@ export class Xliff2TransUnit extends AbstractTransUnit  implements ITransUnit {
         let source = DOMUtilities.getFirstElementByTagName(this._element, 'source');
         if (!source) {
             // should not happen, there always has to be a source, but who knows..
-            let segment = DOMUtilities.getFirstElementByTagName(this._element, 'segment');
+            const segment = DOMUtilities.getFirstElementByTagName(this._element, 'segment');
             source = segment.parentNode.appendChild(this._element.ownerDocument.createElement('source'));
         }
         DOMUtilities.replaceContentWithXMLContent(source, newContent);
@@ -78,7 +80,7 @@ export class Xliff2TransUnit extends AbstractTransUnit  implements ITransUnit {
      * State of the translation as stored in the xml.
      */
     public nativeTargetState(): string {
-        let segmentElement = DOMUtilities.getFirstElementByTagName(this._element, 'segment');
+        const segmentElement = DOMUtilities.getFirstElementByTagName(this._element, 'segment');
         if (segmentElement) {
             return segmentElement.getAttribute('state');
         } else {
@@ -88,10 +90,10 @@ export class Xliff2TransUnit extends AbstractTransUnit  implements ITransUnit {
 
     /**
      * set state in xml.
-     * @param nativeState
+     * @param nativeState nativeState
      */
     protected setNativeTargetState(nativeState: string) {
-        let segmentElement = DOMUtilities.getFirstElementByTagName(this._element, 'segment');
+        const segmentElement = DOMUtilities.getFirstElementByTagName(this._element, 'segment');
         if (segmentElement) {
             segmentElement.setAttribute('state', nativeState);
         }
@@ -105,7 +107,7 @@ export class Xliff2TransUnit extends AbstractTransUnit  implements ITransUnit {
      * @throws error, if state is invalid.
      */
     protected mapStateToNativeState(state: string): string {
-        switch( state) {
+        switch ( state) {
             case STATE_NEW:
                 return 'initial';
             case STATE_TRANSLATED:
@@ -120,10 +122,10 @@ export class Xliff2TransUnit extends AbstractTransUnit  implements ITransUnit {
     /**
      * Map a native state (found in the document) to an abstract state (new, translated, final).
      * Returns the abstract state.
-     * @param nativeState
+     * @param nativeState nativeState
      */
     protected mapNativeStateToState(nativeState: string): string {
-        switch( nativeState) {
+        switch ( nativeState) {
             case 'initial':
                 return STATE_NEW;
             case 'translated':
@@ -147,8 +149,8 @@ export class Xliff2TransUnit extends AbstractTransUnit  implements ITransUnit {
      */
     public sourceReferences(): {sourcefile: string, linenumber: number}[] {
         // Source is found as <file>:<line> in <note category="location">...
-        let noteElements = this._element.getElementsByTagName('note');
-        let sourceRefs: { sourcefile: string, linenumber: number }[] = [];
+        const noteElements = this._element.getElementsByTagName('note');
+        const sourceRefs: { sourcefile: string, linenumber: number }[] = [];
         for (let i = 0; i < noteElements.length; i++) {
             const noteElem = noteElements.item(i);
             if (noteElem.getAttribute('category') === 'location') {
@@ -162,25 +164,25 @@ export class Xliff2TransUnit extends AbstractTransUnit  implements ITransUnit {
     /**
      * Parses something like 'c:\xxx:7' and returns source and linenumber.
      * @param sourceAndPos something like 'c:\xxx:7', last colon is the separator
-     * @return {{sourcefile: string, linenumber: number}}
+     * @return source and line number
      */
     private parseSourceAndPos(sourceAndPos: string): { sourcefile: string, linenumber } {
-        let index = sourceAndPos.lastIndexOf(':');
+        const index = sourceAndPos.lastIndexOf(':');
         if (index < 0) {
             return {
                 sourcefile: sourceAndPos,
                 linenumber: 0
-            }
+            };
         } else {
             return {
                 sourcefile: sourceAndPos.substring(0, index),
                 linenumber: this.parseLineNumber(sourceAndPos.substring(index + 1))
-            }
+            };
         }
     }
 
     private parseLineNumber(lineNumberString: string): number {
-        return Number.parseInt(lineNumberString);
+        return Number.parseInt(lineNumberString, 10);
     }
 
     /**
@@ -202,7 +204,7 @@ export class Xliff2TransUnit extends AbstractTransUnit  implements ITransUnit {
             this._element.insertBefore(notesElement, this._element.childNodes.item(0));
         }
         sourceRefs.forEach((ref) => {
-            let note = this._element.ownerDocument.createElement('note');
+            const note = this._element.ownerDocument.createElement('note');
             note.setAttribute('category', 'location');
             note.appendChild(this._element.ownerDocument.createTextNode(ref.sourcefile + ':' + ref.linenumber.toString(10)));
             notesElement.appendChild(note);
@@ -210,15 +212,15 @@ export class Xliff2TransUnit extends AbstractTransUnit  implements ITransUnit {
     }
 
     private removeAllSourceReferences() {
-        let noteElements = this._element.getElementsByTagName('note');
-        let toBeRemoved = [];
+        const noteElements = this._element.getElementsByTagName('note');
+        const toBeRemoved = [];
         for (let i = 0; i < noteElements.length; i++) {
-            let elem = noteElements.item(i);
+            const elem = noteElements.item(i);
             if (elem.getAttribute('category') === 'location') {
                 toBeRemoved.push(elem);
             }
         }
-        toBeRemoved.forEach((elem) => {elem.parentNode.removeChild(elem);});
+        toBeRemoved.forEach((elem) => {elem.parentNode.removeChild(elem); });
     }
 
     /**
@@ -237,7 +239,7 @@ export class Xliff2TransUnit extends AbstractTransUnit  implements ITransUnit {
 
     /**
      * Change description property of trans-unit.
-     * @param {string} description
+     * @param description description
      */
     public setDescription(description: string) {
         let noteElem = this.findNoteElementWithCategoryAttribute('description');
@@ -257,11 +259,11 @@ export class Xliff2TransUnit extends AbstractTransUnit  implements ITransUnit {
 
     /**
      * Find a note element with attribute from='<attrValue>'
-     * @param {string} attrValue
-     * @return {Element} element or null is absent
+     * @param attrValue attrValue
+     * @return element or null is absent
      */
     private findNoteElementWithCategoryAttribute(attrValue: string): Element {
-        let noteElements = this._element.getElementsByTagName('note');
+        const noteElements = this._element.getElementsByTagName('note');
         for (let i = 0; i < noteElements.length; i++) {
             const noteElem = noteElements.item(i);
             if (noteElem.getAttribute('category') === attrValue) {
@@ -273,7 +275,7 @@ export class Xliff2TransUnit extends AbstractTransUnit  implements ITransUnit {
 
     /**
      * Create a new note element with attribute from='<attrValue>'
-     * @param {string} attrValue
+     * @param attrValue attrValue
      * @return the new created element
      */
     private createNoteElementWithCategoryAttribute(attrValue: string): Element {
@@ -291,7 +293,7 @@ export class Xliff2TransUnit extends AbstractTransUnit  implements ITransUnit {
 
     /**
      * Remove note element with attribute from='<attrValue>'
-     * @param {string} attrValue
+     * @param attrValue attrValue
      */
     private removeNoteElementWithCategoryAttribute(attrValue: string) {
         const noteElement = this.findNoteElementWithCategoryAttribute(attrValue);
@@ -317,7 +319,7 @@ export class Xliff2TransUnit extends AbstractTransUnit  implements ITransUnit {
 
     /**
      * Change meaning property of trans-unit.
-     * @param {string} meaning
+     * @param meaning meaning
      */
     public setMeaning(meaning: string) {
         let noteElem = this.findNoteElementWithCategoryAttribute('meaning');
@@ -337,12 +339,12 @@ export class Xliff2TransUnit extends AbstractTransUnit  implements ITransUnit {
 
     /**
      * Set the translation to a given string (including markup).
-     * @param translation
+     * @param translation translation
      */
     protected translateNative(translation: string) {
         let target = DOMUtilities.getFirstElementByTagName(this._element, 'target');
         if (!target) {
-            let source = DOMUtilities.getFirstElementByTagName(this._element, 'source');
+            const source = DOMUtilities.getFirstElementByTagName(this._element, 'source');
             target = source.parentNode.appendChild(this._element.ownerDocument.createElement('target'));
         }
         DOMUtilities.replaceContentWithXMLContent(target, <string> translation);
@@ -356,8 +358,8 @@ export class Xliff2TransUnit extends AbstractTransUnit  implements ITransUnit {
      * (internal usage only, a client should call importNewTransUnit on ITranslationMessageFile)
      */
     public cloneWithSourceAsTarget(isDefaultLang: boolean, copyContent: boolean, targetFile: ITranslationMessagesFile): AbstractTransUnit {
-        let element = <Element> this._element.cloneNode(true);
-        let clone = new Xliff2TransUnit(element, this._id, targetFile);
+        const element = <Element> this._element.cloneNode(true);
+        const clone = new Xliff2TransUnit(element, this._id, targetFile);
         clone.useSourceAsTarget(isDefaultLang, copyContent);
         return clone;
     }
@@ -367,7 +369,7 @@ export class Xliff2TransUnit extends AbstractTransUnit  implements ITransUnit {
      * (internal usage only, a client should call createTranslationFileForLang on ITranslationMessageFile)
      */
     public useSourceAsTarget(isDefaultLang: boolean, copyContent: boolean) {
-        let source = DOMUtilities.getFirstElementByTagName(this._element, 'source');
+        const source = DOMUtilities.getFirstElementByTagName(this._element, 'source');
         let target = DOMUtilities.getFirstElementByTagName(this._element, 'target');
         if (!target) {
             target = source.parentNode.appendChild(this._element.ownerDocument.createElement('target'));
@@ -384,7 +386,7 @@ export class Xliff2TransUnit extends AbstractTransUnit  implements ITransUnit {
         } else {
             DOMUtilities.replaceContentWithXMLContent(target, '');
         }
-        let segment = DOMUtilities.getFirstElementByTagName(this._element, 'segment');
+        const segment = DOMUtilities.getFirstElementByTagName(this._element, 'segment');
         if (segment) {
             if (isDefaultLang) {
                 segment.setAttribute('state', this.mapStateToNativeState(STATE_FINAL));

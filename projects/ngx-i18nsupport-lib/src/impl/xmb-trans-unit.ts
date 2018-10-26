@@ -1,7 +1,7 @@
-import {isNullOrUndefined} from 'util';
-import {ITranslationMessagesFile, ITransUnit} from '../api';
-import {DOMUtilities} from './dom-utilities';
+import {ITranslationMessagesFile} from '../api/i-translation-messages-file';
 import {INormalizedMessage} from '../api/i-normalized-message';
+import {ITransUnit} from '../api/i-trans-unit';
+import {DOMUtilities} from './dom-utilities';
 import {AbstractTransUnit} from './abstract-trans-unit';
 import {XmbMessageParser} from './xmb-message-parser';
 import {ParsedMessage} from './parsed-message';
@@ -18,13 +18,37 @@ export class XmbTransUnit extends AbstractTransUnit implements ITransUnit {
     }
 
     /**
+     * Parses something like 'c:\xxx:7' and returns source and linenumber.
+     * @param sourceAndPos something like 'c:\xxx:7', last colon is the separator
+     * @return source and linenumber
+     */
+    private static parseSourceAndPos(sourceAndPos: string): { sourcefile: string, linenumber } {
+        const index = sourceAndPos.lastIndexOf(':');
+        if (index < 0) {
+            return {
+                sourcefile: sourceAndPos,
+                linenumber: 0
+            };
+        } else {
+            return {
+                sourcefile: sourceAndPos.substring(0, index),
+                linenumber: XmbTransUnit.parseLineNumber(sourceAndPos.substring(index + 1))
+            };
+        }
+    }
+
+    private static parseLineNumber(lineNumberString: string): number {
+        return Number.parseInt(lineNumberString, 10);
+    }
+
+    /**
      * Get content to translate.
      * Source parts are excluded here.
-     * @return {string}
+     * @return source content
      */
     public sourceContent(): string {
         let msgContent = DOMUtilities.getXMLContent(this._element);
-        let reSourceElem: RegExp = /<source>.*<\/source>/g;
+        const reSourceElem: RegExp = /<source>.*<\/source>/g;
         msgContent = msgContent.replace(reSourceElem, '');
         return msgContent;
     }
@@ -100,7 +124,7 @@ export class XmbTransUnit extends AbstractTransUnit implements ITransUnit {
     /**
      * Map a native state (found in the document) to an abstract state (new, translated, final).
      * Returns the abstract state.
-     * @param nativeState
+     * @param nativeState nativeState
      */
     protected mapNativeStateToState(nativeState: string): string {
         return nativeState;
@@ -109,7 +133,7 @@ export class XmbTransUnit extends AbstractTransUnit implements ITransUnit {
     /**
      * set state in xml.
      * (not supported in xmb)
-     * @param nativeState
+     * @param nativeState nativeState
      */
     protected setNativeTargetState(nativeState: string) {
         // not supported for xmb
@@ -124,10 +148,10 @@ export class XmbTransUnit extends AbstractTransUnit implements ITransUnit {
      * Otherwise it just returns an empty array.
      */
     public sourceReferences(): { sourcefile: string, linenumber: number }[] {
-        let sourceElements = this._element.getElementsByTagName('source');
-        let sourceRefs: { sourcefile: string, linenumber: number }[] = [];
+        const sourceElements = this._element.getElementsByTagName('source');
+        const sourceRefs: { sourcefile: string, linenumber: number }[] = [];
         for (let i = 0; i < sourceElements.length; i++) {
-            let elem = sourceElements.item(i);
+            const elem = sourceElements.item(i);
             const sourceAndPos: string = DOMUtilities.getPCDATA(elem);
             sourceRefs.push(XmbTransUnit.parseSourceAndPos(sourceAndPos));
         }
@@ -144,8 +168,8 @@ export class XmbTransUnit extends AbstractTransUnit implements ITransUnit {
         this.removeAllSourceReferences();
         let insertPosition = this._element.childNodes.item(0);
         for (let i = sourceRefs.length - 1; i >= 0; i--) {
-            let ref = sourceRefs[i];
-            let source = this._element.ownerDocument.createElement('source');
+            const ref = sourceRefs[i];
+            const source = this._element.ownerDocument.createElement('source');
             source.appendChild(this._element.ownerDocument.createTextNode(ref.sourcefile + ':' + ref.linenumber.toString(10)));
             this._element.insertBefore(source, insertPosition);
             insertPosition = source;
@@ -153,37 +177,13 @@ export class XmbTransUnit extends AbstractTransUnit implements ITransUnit {
     }
 
     private removeAllSourceReferences() {
-        let sourceElements = this._element.getElementsByTagName('source');
-        let toBeRemoved = [];
+        const sourceElements = this._element.getElementsByTagName('source');
+        const toBeRemoved = [];
         for (let i = 0; i < sourceElements.length; i++) {
-            let elem = sourceElements.item(i);
+            const elem = sourceElements.item(i);
             toBeRemoved.push(elem);
         }
-        toBeRemoved.forEach((elem) => {elem.parentNode.removeChild(elem);});
-    }
-
-    /**
-     * Parses something like 'c:\xxx:7' and returns source and linenumber.
-     * @param sourceAndPos something like 'c:\xxx:7', last colon is the separator
-     * @return {{sourcefile: string, linenumber: number}}
-     */
-    private static parseSourceAndPos(sourceAndPos: string): { sourcefile: string, linenumber } {
-        let index = sourceAndPos.lastIndexOf(':');
-        if (index < 0) {
-            return {
-                sourcefile: sourceAndPos,
-                linenumber: 0
-            }
-        } else {
-            return {
-                sourcefile: sourceAndPos.substring(0, index),
-                linenumber: XmbTransUnit.parseLineNumber(sourceAndPos.substring(index + 1))
-            }
-        }
-    }
-
-    private static parseLineNumber(lineNumberString: string): number {
-        return Number.parseInt(lineNumberString);
+        toBeRemoved.forEach((elem) => {elem.parentNode.removeChild(elem); });
     }
 
     /**
@@ -216,7 +216,7 @@ export class XmbTransUnit extends AbstractTransUnit implements ITransUnit {
 
     /**
      * Change description property of trans-unit.
-     * @param {string} description
+     * @param description description
      */
     public setDescription(description: string) {
         // not supported, do nothing
@@ -224,7 +224,7 @@ export class XmbTransUnit extends AbstractTransUnit implements ITransUnit {
 
     /**
      * Change meaning property of trans-unit.
-     * @param {string} meaning
+     * @param meaning meaning
      */
     public setMeaning(meaning: string) {
         // not supported, do nothing
@@ -253,21 +253,10 @@ export class XmbTransUnit extends AbstractTransUnit implements ITransUnit {
      * Set the translation to a given string (including markup).
      * In fact, xmb cannot be translated.
      * So this throws an error.
-     * @param translation
+     * @param translation translation
      */
     protected translateNative(translation: string) {
         throw new Error('You cannot translate xmb files, use xtb instead.');
     }
 
-    /**
-     * convert the source refs to html.
-     * Result is something like <source>c:\x:93</source>
-     */
-    private sourceRefsToHtml(): string {
-        let result: string = '';
-        this.sourceReferences().forEach((sourceRef) => {
-            result = result + '<source>' + sourceRef.sourcefile + ':' + sourceRef.linenumber + '</source>';
-        });
-        return result;
-    }
 }

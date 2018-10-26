@@ -24,17 +24,20 @@
       "tooling/*": [
         "dist/tooling/*"
       ],
+      "ngx-i18nsupport-lib": [
+        "dist/ngx-i18nsupport-lib"
+      ],
+      "ngx-i18nsupport-lib/*": [
+        "dist/ngx-i18nsupport-lib/*"
+      ],
       "@ngx-i18nsupport/ngx-i18nsupport": [
         "xliffmerge"
       ],
       "@ngx-i18nsupport/tooling": [
         "tooling"
       ],
-      "ngx-i18nsupport-lib": [
-        "dist/ngx-i18nsupport-lib"
-      ],
-      "ngx-i18nsupport-lib/*": [
-        "dist/ngx-i18nsupport-lib/*"
+      "@ngx-i18nsupport/ngx-i18nsupport-lib": [
+        "ngx-i18nsupport-lib"
       ]
     }
   }

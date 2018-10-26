@@ -1,8 +1,10 @@
-import {ITranslationMessagesFile, ITransUnit, FILETYPE_XTB, FORMAT_XTB} from '../api';
+import {ITranslationMessagesFileFactory} from '../api/i-translation-messages-file-factory';
+import {ITranslationMessagesFile} from '../api/i-translation-messages-file';
+import {ITransUnit} from '../api/i-trans-unit';
+import {FORMAT_XTB, FILETYPE_XTB, FORMAT_XMB} from '../api/constants';
 import {format} from 'util';
 import {DOMUtilities} from './dom-utilities';
 import {AbstractTranslationMessagesFile} from './abstract-translation-messages-file';
-import {XmbFile} from './xmb-file';
 import {XtbTransUnit} from './xtb-trans-unit';
 import {AbstractTransUnit} from './abstract-trans-unit';
 /**
@@ -11,51 +13,52 @@ import {AbstractTransUnit} from './abstract-trans-unit';
  * xtb is the translated counterpart to xmb.
  */
 
-export const XTB_DOCTYPE = `<!DOCTYPE translationbundle [
-  <!ELEMENT translationbundle (translation)*>
-  <!ATTLIST translationbundle lang CDATA #REQUIRED>
-  <!ELEMENT translation (#PCDATA|ph)*>
-  <!ATTLIST translation id CDATA #REQUIRED>
-  <!ELEMENT ph EMPTY>
-  <!ATTLIST ph name CDATA #REQUIRED>
-]>`;
-
 export class XtbFile extends AbstractTranslationMessagesFile implements ITranslationMessagesFile {
 
     // attached master file, if any
     // used as source to determine state ...
-    private _masterFile: XmbFile;
+    private _masterFile: ITranslationMessagesFile; // an xmb-file
 
     /**
      * Create an xmb-File from source.
+     * @param _translationMessageFileFactory factory to create a translation file (xtb) for the xmb file
      * @param xmlString file content
      * @param path Path to file
      * @param encoding optional encoding of the xml.
      * This is read from the file, but if you know it before, you can avoid reading the file twice.
      * @param optionalMaster in case of xmb the master file, that contains the original texts.
      * (this is used to support state infos, that are based on comparing original with translated version)
-     * @return {XmbFile}
+     * @return XmbFile
      */
-    constructor(xmlString: string, path: string, encoding: string, optionalMaster?: { xmlContent: string, path: string, encoding: string }) {
+    constructor(private _translationMessageFileFactory: ITranslationMessagesFileFactory,
+                xmlString: string, path: string, encoding: string,
+                optionalMaster?: { xmlContent: string, path: string, encoding: string }) {
         super();
         this._warnings = [];
         this._numberOfTransUnitsWithMissingId = 0;
         this.initializeFromContent(xmlString, path, encoding, optionalMaster);
     }
 
-    private initializeFromContent(xmlString: string, path: string, encoding: string, optionalMaster?: { xmlContent: string, path: string, encoding: string }): XtbFile {
+    private initializeFromContent(xmlString: string, path: string, encoding: string,
+                                  optionalMaster?: { xmlContent: string, path: string, encoding: string }): XtbFile {
         this.parseContent(xmlString, path, encoding);
         if (this._parsedDocument.getElementsByTagName('translationbundle').length !== 1) {
             throw new Error(format('File "%s" seems to be no xtb file (should contain a translationbundle element)', path));
         }
         if (optionalMaster) {
             try {
-                this._masterFile = new XmbFile(optionalMaster.xmlContent, optionalMaster.path, optionalMaster.encoding);
+                this._masterFile = this._translationMessageFileFactory.createFileFromFileContent(
+                    FORMAT_XMB,
+                    optionalMaster.xmlContent,
+                    optionalMaster.path,
+                    optionalMaster.encoding);
                 // check, wether this can be the master ...
                 const numberInMaster = this._masterFile.numberOfTransUnits();
                 const myNumber = this.numberOfTransUnits();
                 if (numberInMaster !== myNumber) {
-                    this._warnings.push(format('%s trans units found in master, but this file has %s. Check if it is the correct master', numberInMaster, myNumber));
+                    this._warnings.push(format(
+                        '%s trans units found in master, but this file has %s. Check if it is the correct master',
+                        numberInMaster, myNumber));
                 }
             } catch (error) {
                 throw new Error(format('File "%s" seems to be no xmb file. An xtb file needs xmb as master file.', optionalMaster.path));
@@ -66,10 +69,10 @@ export class XtbFile extends AbstractTranslationMessagesFile implements ITransla
 
     protected initializeTransUnits() {
         this.transUnits = [];
-        let transUnitsInFile = this._parsedDocument.getElementsByTagName('translation');
+        const transUnitsInFile = this._parsedDocument.getElementsByTagName('translation');
         for (let i = 0; i < transUnitsInFile.length; i++) {
-            let msg = transUnitsInFile.item(i);
-            let id = msg.getAttribute('id');
+            const msg = transUnitsInFile.item(i);
+            const id = msg.getAttribute('id');
             if (!id) {
                 this._warnings.push(format('oops, msg without "id" found in master, please check file %s', this._filename));
             }
@@ -111,7 +114,7 @@ export class XtbFile extends AbstractTranslationMessagesFile implements ITransla
      * Get source language.
      * Unsupported in xmb/xtb.
      * Try to guess it from master filename if any..
-     * @return {string}
+     * @return source language.
      */
     public sourceLanguage(): string {
         if (this._masterFile) {
@@ -124,7 +127,7 @@ export class XtbFile extends AbstractTranslationMessagesFile implements ITransla
     /**
      * Edit the source language.
      * Unsupported in xmb/xtb.
-     * @param language
+     * @param language language
      */
     public setSourceLanguage(language: string) {
         // do nothing, xtb has no notation for this.
@@ -132,7 +135,7 @@ export class XtbFile extends AbstractTranslationMessagesFile implements ITransla
 
     /**
      * Get target language.
-     * @return {string}
+     * @return target language.
      */
     public targetLanguage(): string {
         const translationbundleElem = DOMUtilities.getFirstElementByTagName(this._parsedDocument, 'translationbundle');
@@ -145,7 +148,7 @@ export class XtbFile extends AbstractTranslationMessagesFile implements ITransla
 
     /**
      * Edit the target language.
-     * @param language
+     * @param language language
      */
     public setTargetLanguage(language: string) {
         const translationbundleElem = DOMUtilities.getFirstElementByTagName(this._parsedDocument, 'translationbundle');
@@ -176,27 +179,28 @@ export class XtbFile extends AbstractTranslationMessagesFile implements ITransla
      * @return the newly imported trans unit (since version 1.7.0)
      * @throws an error if trans-unit with same id already is in the file.
      */
-    importNewTransUnit(foreignTransUnit: ITransUnit, isDefaultLang: boolean, copyContent: boolean, importAfterElement?: ITransUnit): ITransUnit {
+    importNewTransUnit(foreignTransUnit: ITransUnit, isDefaultLang: boolean, copyContent: boolean, importAfterElement?: ITransUnit)
+        : ITransUnit {
         if (this.transUnitWithId(foreignTransUnit.id)) {
             throw new Error(format('tu with id %s already exists in file, cannot import it', foreignTransUnit.id));
         }
-        let newMasterTu = (<AbstractTransUnit> foreignTransUnit).cloneWithSourceAsTarget(isDefaultLang, copyContent, this);
-        let translationbundleElem = DOMUtilities.getFirstElementByTagName(this._parsedDocument, 'translationbundle');
+        const newMasterTu = (<AbstractTransUnit> foreignTransUnit).cloneWithSourceAsTarget(isDefaultLang, copyContent, this);
+        const translationbundleElem = DOMUtilities.getFirstElementByTagName(this._parsedDocument, 'translationbundle');
         if (!translationbundleElem) {
             throw new Error(format('File "%s" seems to be no xtb file (should contain a translationbundle element)', this._filename));
         }
-        let translationElement = translationbundleElem.ownerDocument.createElement('translation');
+        const translationElement = translationbundleElem.ownerDocument.createElement('translation');
         translationElement.setAttribute('id', foreignTransUnit.id);
         let newContent = (copyContent || isDefaultLang) ? foreignTransUnit.sourceContent() : '';
         if (!(<AbstractTransUnit> foreignTransUnit).isICUMessage(newContent)) {
             newContent = this.getNewTransUnitTargetPraefix() + newContent + this.getNewTransUnitTargetSuffix();
         }
         DOMUtilities.replaceContentWithXMLContent(translationElement, newContent);
-        let newTu = new XtbTransUnit(translationElement, foreignTransUnit.id, this, newMasterTu);
+        const newTu = new XtbTransUnit(translationElement, foreignTransUnit.id, this, newMasterTu);
         let inserted = false;
         let isAfterElementPartOfFile = false;
         if (!!importAfterElement) {
-            let insertionPoint = this.transUnitWithId(importAfterElement.id);
+            const insertionPoint = this.transUnitWithId(importAfterElement.id);
             if (!!insertionPoint) {
                 isAfterElementPartOfFile = true;
             }
@@ -205,7 +209,7 @@ export class XtbFile extends AbstractTranslationMessagesFile implements ITransla
             translationbundleElem.appendChild(newTu.asXmlElement());
             inserted = true;
         } else if (importAfterElement === null) {
-            let firstTranslationElement = DOMUtilities.getFirstElementByTagName(this._parsedDocument, 'translation');
+            const firstTranslationElement = DOMUtilities.getFirstElementByTagName(this._parsedDocument, 'translation');
             if (firstTranslationElement) {
                 DOMUtilities.insertBefore(newTu.asXmlElement(), firstTranslationElement);
                 inserted = true;
@@ -215,7 +219,7 @@ export class XtbFile extends AbstractTranslationMessagesFile implements ITransla
                 inserted = true;
             }
         } else {
-            let refUnitElement = DOMUtilities.getElementByTagNameAndId(this._parsedDocument, 'translation', importAfterElement.id);
+            const refUnitElement = DOMUtilities.getElementByTagNameAndId(this._parsedDocument, 'translation', importAfterElement.id);
             if (refUnitElement) {
                 DOMUtilities.insertAfter(newTu.asXmlElement(), refUnitElement);
                 inserted = true;
@@ -245,7 +249,8 @@ export class XtbFile extends AbstractTranslationMessagesFile implements ITransla
      * Wben true, content will be copied from source.
      * When false, content will be left empty (if it is not the default language).
      */
-    public createTranslationFileForLang(lang: string, filename: string, isDefaultLang: boolean, copyContent: boolean): ITranslationMessagesFile {
+    public createTranslationFileForLang(lang: string, filename: string, isDefaultLang: boolean, copyContent: boolean)
+        : ITranslationMessagesFile {
         throw new Error(format('File "%s", xtb files are not translatable, they are already translations', filename));
     }
 }

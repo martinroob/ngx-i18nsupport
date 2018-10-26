@@ -1,5 +1,6 @@
-import {TranslationMessagesFileFactory, ITranslationMessagesFile, ITransUnit, INormalizedMessage, STATE_NEW, STATE_TRANSLATED, STATE_FINAL} from '../api';
-import * as fs from "fs";
+import {TranslationMessagesFileFactory, ITranslationMessagesFile, ITransUnit, INormalizedMessage,
+    STATE_NEW, STATE_TRANSLATED, STATE_FINAL} from '../api/index';
+import * as fs from 'fs';
 import {AbstractTransUnit} from './abstract-trans-unit';
 import {DOMUtilities} from './dom-utilities';
 import {DOMParser} from 'xmldom';
@@ -11,13 +12,12 @@ import {DOMParser} from 'xmldom';
 
 describe('ngx-i18nsupport-lib xliff 1.2 test spec', () => {
 
-    let SRCDIR = 'test/testdata/i18n/';
+    const SRCDIR = 'test/testdata/i18n/';
 
-    let ENCODING = 'UTF-8';
+    const ENCODING = 'UTF-8';
 
     /**
      * Helper function to read Xliff from File
-     * @type {string}
      */
     function readFile(path: string): ITranslationMessagesFile {
         const content = fs.readFileSync(path, ENCODING);
@@ -25,28 +25,28 @@ describe('ngx-i18nsupport-lib xliff 1.2 test spec', () => {
     }
 
     describe('xlf 1.2 format tests', () => {
-        let MASTER1SRC = SRCDIR + 'ngExtractedMaster1.xlf';
-        let TRANSLATED_FILE_SRC = SRCDIR + 'translatedFile.xlf';
+        const MASTER1SRC = SRCDIR + 'ngExtractedMaster1.xlf';
+        const TRANSLATED_FILE_SRC = SRCDIR + 'translatedFile.xlf';
 
-        let ID_TRANSLATED_SCHLIESSEN = '1ead0ad1063d0c9e005fe56c9529aef4c1ef9d21'; // an ID from ngExtractedMaster1.xlf
-        let ID_WITH_PLACEHOLDER = 'af0819ea4a5db68737ebcabde2f5e432b66352e8';
-        let ID_WITH_REPEATED_PLACEHOLDER = 'af0819ea4a5db68737ebcabde2f5e432b663repl';
-        let ID_WITH_PLACEHOLDER_2 = 'af0819ea4a5db68737ebcabde2f5e432b66352e8xxx'; // same with </x> tags
-        let ID_WITH_MEANING_AND_DESCRIPTION = '84e8cd8ba480129d90f512cc3462bb43efcf389f';
-        let ID_WITH_NO_SOURCEREFS = 'no_sourceref_test'; // an ID with no source elements
-        let ID_WITH_ONE_SOURCEREF = '57e605bfa130afb4de4ee40e496e854a9e8a28a7';
-        let ID_WITH_TWO_SOURCEREFS = '78eab955529ba0f1817c84991d9175f55bfdf937'; // an ID with 2 source elements
-        let ID_WITH_TAGS = '7e8dd1fd1c57afafc38550ce80b5bcc1ced49f85';
-        let ID_WITH_TAGS_2 = '7e8dd1fd1c57afafc38550ce80b5bcc1ced49f85xxx'; // same with </x> tags
-        let ID_UNTRANSLATED_DESCRIPTION = 'a52ba049c16778bdb2e5a19a41acaadf87b104dc';
-        let ID_TO_MERGE = 'unittomerge';
-        let ID_ICU_PLURAL = 'efec69fdcf74bd6d640b2a771558b7b09e271c28';
-        let ID_ICU_SELECT = '8967ef1e10bdf8ea6d8e65ba7ffe7fc69960d1da';
-        let ID_ICU_EMBEDDED_TAGS = '304b4d798bf51257538949844e121724110d37ed';
-        let ID_CONTAINS_ICU = '1f3c670be000dbb6cbe05353d12ef62793d91fec';
-        let ID_CONTAINS_TWO_ICU = 'complextags.icuTwoICU';
-        let ID_WITH_BR_TAG = 'e05aa009b849e0a5725e819b14c77a32576513a8';
-        let ID_WITH_IMG_TAG = 'ea7a3dece8868782142a70b3e1c8b064f6027e20';
+        const ID_TRANSLATED_SCHLIESSEN = '1ead0ad1063d0c9e005fe56c9529aef4c1ef9d21'; // an ID from ngExtractedMaster1.xlf
+        const ID_WITH_PLACEHOLDER = 'af0819ea4a5db68737ebcabde2f5e432b66352e8';
+        const ID_WITH_REPEATED_PLACEHOLDER = 'af0819ea4a5db68737ebcabde2f5e432b663repl';
+        const ID_WITH_PLACEHOLDER_2 = 'af0819ea4a5db68737ebcabde2f5e432b66352e8xxx'; // same with </x> tags
+        const ID_WITH_MEANING_AND_DESCRIPTION = '84e8cd8ba480129d90f512cc3462bb43efcf389f';
+        const ID_WITH_NO_SOURCEREFS = 'no_sourceref_test'; // an ID with no source elements
+        const ID_WITH_ONE_SOURCEREF = '57e605bfa130afb4de4ee40e496e854a9e8a28a7';
+        const ID_WITH_TWO_SOURCEREFS = '78eab955529ba0f1817c84991d9175f55bfdf937'; // an ID with 2 source elements
+        const ID_WITH_TAGS = '7e8dd1fd1c57afafc38550ce80b5bcc1ced49f85';
+        const ID_WITH_TAGS_2 = '7e8dd1fd1c57afafc38550ce80b5bcc1ced49f85xxx'; // same with </x> tags
+        const ID_UNTRANSLATED_DESCRIPTION = 'a52ba049c16778bdb2e5a19a41acaadf87b104dc';
+        const ID_TO_MERGE = 'unittomerge';
+        const ID_ICU_PLURAL = 'efec69fdcf74bd6d640b2a771558b7b09e271c28';
+        const ID_ICU_SELECT = '8967ef1e10bdf8ea6d8e65ba7ffe7fc69960d1da';
+        const ID_ICU_EMBEDDED_TAGS = '304b4d798bf51257538949844e121724110d37ed';
+        const ID_CONTAINS_ICU = '1f3c670be000dbb6cbe05353d12ef62793d91fec';
+        const ID_CONTAINS_TWO_ICU = 'complextags.icuTwoICU';
+        const ID_WITH_BR_TAG = 'e05aa009b849e0a5725e819b14c77a32576513a8';
+        const ID_WITH_IMG_TAG = 'ea7a3dece8868782142a70b3e1c8b064f6027e20';
 
         it('should read xlf file', () => {
             const file: ITranslationMessagesFile = readFile(MASTER1SRC);
@@ -60,15 +60,18 @@ describe('ngx-i18nsupport-lib xliff 1.2 test spec', () => {
         it('should read xlf file and pretty print it', () => {
             const file: ITranslationMessagesFile = readFile(MASTER1SRC);
             expect(file).toBeTruthy();
-            expect(file.editedContent()).toContain('<source>Beschreibung zu <x id="INTERPOLATION"/> (<x id="INTERPOLATION_1"/>)</source>');
-            expect(file.editedContent(true)).toContain(`        <source>Beschreibung zu <x id="INTERPOLATION"/> (<x id="INTERPOLATION_1"/>)</source>`);
+            expect(file.editedContent())
+                .toContain('<source>Beschreibung zu <x id="INTERPOLATION"/> (<x id="INTERPOLATION_1"/>)</source>');
+            expect(file.editedContent(true))
+                .toContain(`        <source>Beschreibung zu <x id="INTERPOLATION"/> (<x id="INTERPOLATION_1"/>)</source>`);
         });
 
         it('should not add empty lines when beautifying (issue ngx-i18nsupport #97)', () => {
             const file: ITranslationMessagesFile = readFile(MASTER1SRC);
             expect(file).toBeTruthy();
             const editedContentBeautified = file.editedContent(true);
-            const file2: ITranslationMessagesFile = TranslationMessagesFileFactory.fromFileContent('xlf', editedContentBeautified, null, ENCODING);
+            const file2: ITranslationMessagesFile =
+                TranslationMessagesFileFactory.fromFileContent('xlf', editedContentBeautified, null, ENCODING);
             const editedContentBeautifiedAgain = file2.editedContent(true);
             expect(editedContentBeautifiedAgain).toMatch(/Beschreibung zu <x/);
             expect(editedContentBeautifiedAgain).not.toMatch(/Beschreibung zu\s*\r\n?/);
@@ -141,7 +144,8 @@ describe('ngx-i18nsupport-lib xliff 1.2 test spec', () => {
             const changedMessage = tu.sourceContent() + 'a changed source content';
             tu.setSourceContent(changedMessage);
             expect(tu.sourceContent()).toBe(changedMessage);
-            const file2: ITranslationMessagesFile = TranslationMessagesFileFactory.fromUnknownFormatFileContent(file.editedContent(), null, null);
+            const file2: ITranslationMessagesFile =
+                TranslationMessagesFileFactory.fromUnknownFormatFileContent(file.editedContent(), null, null);
             const tu2: ITransUnit = file2.transUnitWithId(ID_WITH_BR_TAG);
             expect(tu2.sourceContent()).toBe(changedMessage);
         });
@@ -163,7 +167,8 @@ describe('ngx-i18nsupport-lib xliff 1.2 test spec', () => {
             const changedMessage = 'a changed description';
             tu.setDescription(changedMessage);
             expect(tu.description()).toBe(changedMessage);
-            const file2: ITranslationMessagesFile = TranslationMessagesFileFactory.fromUnknownFormatFileContent(file.editedContent(), null, null);
+            const file2: ITranslationMessagesFile =
+                TranslationMessagesFileFactory.fromUnknownFormatFileContent(file.editedContent(), null, null);
             const tu2: ITransUnit = file2.transUnitWithId(ID_WITH_MEANING_AND_DESCRIPTION);
             expect(tu2.description()).toBe(changedMessage);
         });
@@ -177,11 +182,12 @@ describe('ngx-i18nsupport-lib xliff 1.2 test spec', () => {
             const changedMessage = 'a changed description';
             tu.setDescription(changedMessage);
             expect(tu.description()).toBe(changedMessage);
-            const file2: ITranslationMessagesFile = TranslationMessagesFileFactory.fromUnknownFormatFileContent(file.editedContent(), null, null);
+            const file2: ITranslationMessagesFile =
+                TranslationMessagesFileFactory.fromUnknownFormatFileContent(file.editedContent(), null, null);
             const tu2: ITransUnit = file2.transUnitWithId(ID_WITH_BR_TAG);
             expect(tu.description()).toBe(changedMessage);
             const xmlElem = (<AbstractTransUnit> tu2).asXmlElement();
-            const noteElem = DOMUtilities.getFirstElementByTagName(xmlElem,'note');
+            const noteElem = DOMUtilities.getFirstElementByTagName(xmlElem, 'note');
             expect(noteElem).toBeTruthy();
             expect(noteElem.getAttribute('priority')).toBe('1');
         });
@@ -194,7 +200,8 @@ describe('ngx-i18nsupport-lib xliff 1.2 test spec', () => {
             expect(tu.supportsSetDescriptionAndMeaning()).toBeTruthy();
             tu.setDescription(null);
             expect(tu.description()).toBeFalsy();
-            const file2: ITranslationMessagesFile = TranslationMessagesFileFactory.fromUnknownFormatFileContent(file.editedContent(), null, null);
+            const file2: ITranslationMessagesFile =
+                TranslationMessagesFileFactory.fromUnknownFormatFileContent(file.editedContent(), null, null);
             const tu2: ITransUnit = file2.transUnitWithId(ID_WITH_MEANING_AND_DESCRIPTION);
             expect(tu2.description()).toBeFalsy();
         });
@@ -208,7 +215,8 @@ describe('ngx-i18nsupport-lib xliff 1.2 test spec', () => {
             const changedMessage = 'a changed description';
             tu.setMeaning(changedMessage);
             expect(tu.meaning()).toBe(changedMessage);
-            const file2: ITranslationMessagesFile = TranslationMessagesFileFactory.fromUnknownFormatFileContent(file.editedContent(), null, null);
+            const file2: ITranslationMessagesFile =
+                TranslationMessagesFileFactory.fromUnknownFormatFileContent(file.editedContent(), null, null);
             const tu2: ITransUnit = file2.transUnitWithId(ID_WITH_MEANING_AND_DESCRIPTION);
             expect(tu2.meaning()).toBe(changedMessage);
         });
@@ -222,7 +230,8 @@ describe('ngx-i18nsupport-lib xliff 1.2 test spec', () => {
             const changedMessage = 'a changed description';
             tu.setMeaning(changedMessage);
             expect(tu.meaning()).toBe(changedMessage);
-            const file2: ITranslationMessagesFile = TranslationMessagesFileFactory.fromUnknownFormatFileContent(file.editedContent(), null, null);
+            const file2: ITranslationMessagesFile =
+                TranslationMessagesFileFactory.fromUnknownFormatFileContent(file.editedContent(), null, null);
             const tu2: ITransUnit = file2.transUnitWithId(ID_WITH_BR_TAG);
             expect(tu2.meaning()).toBe(changedMessage);
         });
@@ -235,7 +244,8 @@ describe('ngx-i18nsupport-lib xliff 1.2 test spec', () => {
             expect(tu.supportsSetDescriptionAndMeaning()).toBeTruthy();
             tu.setMeaning(null);
             expect(tu.meaning()).toBeFalsy();
-            const file2: ITranslationMessagesFile = TranslationMessagesFileFactory.fromUnknownFormatFileContent(file.editedContent(), null, null);
+            const file2: ITranslationMessagesFile =
+                TranslationMessagesFileFactory.fromUnknownFormatFileContent(file.editedContent(), null, null);
             const tu2: ITransUnit = file2.transUnitWithId(ID_WITH_MEANING_AND_DESCRIPTION);
             expect(tu2.meaning()).toBeFalsy();
         });
@@ -273,7 +283,8 @@ describe('ngx-i18nsupport-lib xliff 1.2 test spec', () => {
             expect(tu).toBeTruthy();
             expect(tu.sourceReferences().length).toBe(0);
             tu.setSourceReferences([{sourcefile: 'x', linenumber: 10}, {sourcefile: 'y', linenumber: 20}]);
-            const file2: ITranslationMessagesFile = TranslationMessagesFileFactory.fromUnknownFormatFileContent(file.editedContent(), null, null);
+            const file2: ITranslationMessagesFile =
+                TranslationMessagesFileFactory.fromUnknownFormatFileContent(file.editedContent(), null, null);
             const tu2: ITransUnit = file2.transUnitWithId(ID_TO_MERGE);
             expect(tu2.sourceReferences().length).toBe(2);
             expect(tu2.sourceReferences()[0].sourcefile).toBe('x');
@@ -289,7 +300,8 @@ describe('ngx-i18nsupport-lib xliff 1.2 test spec', () => {
             expect(tu.supportsSetSourceReferences()).toBeTruthy();
             expect(tu.sourceReferences().length).toBe(2);
             tu.setSourceReferences([{sourcefile: 'x:komisch', linenumber: 10}]);
-            const file2: ITranslationMessagesFile = TranslationMessagesFileFactory.fromUnknownFormatFileContent(file.editedContent(), null, null);
+            const file2: ITranslationMessagesFile =
+                TranslationMessagesFileFactory.fromUnknownFormatFileContent(file.editedContent(), null, null);
             const tu2: ITransUnit = file2.transUnitWithId(ID_WITH_TWO_SOURCEREFS);
             expect(tu2.sourceReferences().length).toBe(1);
             expect(tu2.sourceReferences()[0].sourcefile).toBe('x:komisch');
@@ -302,7 +314,8 @@ describe('ngx-i18nsupport-lib xliff 1.2 test spec', () => {
             expect(tu).toBeTruthy();
             expect(tu.sourceReferences().length).toBe(2);
             tu.translate('a translated value');
-            const file2: ITranslationMessagesFile = TranslationMessagesFileFactory.fromUnknownFormatFileContent(file.editedContent(), null, null);
+            const file2: ITranslationMessagesFile =
+                TranslationMessagesFileFactory.fromUnknownFormatFileContent(file.editedContent(), null, null);
             const tu2: ITransUnit = file2.transUnitWithId(ID_WITH_TWO_SOURCEREFS);
             expect(tu2.targetContent()).toBe('a translated value');
             expect(tu2.sourceReferences().length).toBe(2);
@@ -349,7 +362,7 @@ describe('ngx-i18nsupport-lib xliff 1.2 test spec', () => {
             const file: ITranslationMessagesFile = readFile(MASTER1SRC);
             const tu: ITransUnit = file.transUnitWithId(ID_WITH_BR_TAG);
             expect(tu.sourceContentNormalized().asDisplayString()).toBe('Dieser Text enthält<br>einen Zeilenumbruch per HTML-br-Element.');
-            let translation = tu.sourceContentNormalized().translate('This text contains<br> a linebreak');
+            const translation = tu.sourceContentNormalized().translate('This text contains<br> a linebreak');
             tu.translate(translation);
             expect(tu.targetContent()).toBe('This text contains<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/>"/> a linebreak');
         });
@@ -358,9 +371,10 @@ describe('ngx-i18nsupport-lib xliff 1.2 test spec', () => {
             const file: ITranslationMessagesFile = readFile(MASTER1SRC);
             const tu: ITransUnit = file.transUnitWithId(ID_WITH_IMG_TAG);
             expect(tu.sourceContentNormalized().asDisplayString()).toBe('Dieser Text enthält ein Bild <img> mitt en in der Nachricht');
-            let translation = tu.sourceContentNormalized().translate('This text contains an img <img> in the message');
+            const translation = tu.sourceContentNormalized().translate('This text contains an img <img> in the message');
             tu.translate(translation);
-            expect(tu.targetContent()).toBe('This text contains an img <x id="TAG_IMG" ctype="image" equiv-text="&lt;img/>"/> in the message');
+            expect(tu.targetContent())
+                .toBe('This text contains an img <x id="TAG_IMG" ctype="image" equiv-text="&lt;img/>"/> in the message');
         });
 
         it('should remove a transunit by id', () => {
@@ -368,7 +382,8 @@ describe('ngx-i18nsupport-lib xliff 1.2 test spec', () => {
             const tu: ITransUnit = file.transUnitWithId(ID_WITH_TWO_SOURCEREFS);
             expect(tu).toBeTruthy();
             file.removeTransUnitWithId(ID_WITH_TWO_SOURCEREFS);
-            const file2: ITranslationMessagesFile = TranslationMessagesFileFactory.fromUnknownFormatFileContent(file.editedContent(), null, null);
+            const file2: ITranslationMessagesFile =
+                TranslationMessagesFileFactory.fromUnknownFormatFileContent(file.editedContent(), null, null);
             const tu2: ITransUnit = file2.transUnitWithId(ID_WITH_TWO_SOURCEREFS);
             expect(tu2).toBeFalsy(); // should not exist any more
         });
@@ -380,13 +395,15 @@ describe('ngx-i18nsupport-lib xliff 1.2 test spec', () => {
             expect(tu.targetContent()).toBeFalsy();
             // first translate
             tu.translate('Anwendung läuft');
-            const file2: ITranslationMessagesFile = TranslationMessagesFileFactory.fromUnknownFormatFileContent(file.editedContent(), null, null);
+            const file2: ITranslationMessagesFile =
+                TranslationMessagesFileFactory.fromUnknownFormatFileContent(file.editedContent(), null, null);
             const tu2: ITransUnit = file2.transUnitWithId(ID_TRANSLATED_SCHLIESSEN);
             expect(tu2.targetContentNormalized().asDisplayString()).toBe('Anwendung läuft');
             expect(tu2.targetState()).toBe(STATE_TRANSLATED);
             // translate again
             tu2.translate('Anwendung funktioniert');
-            const file3: ITranslationMessagesFile = TranslationMessagesFileFactory.fromUnknownFormatFileContent(file2.editedContent(), null, null);
+            const file3: ITranslationMessagesFile =
+                TranslationMessagesFileFactory.fromUnknownFormatFileContent(file2.editedContent(), null, null);
             const tu3: ITransUnit = file3.transUnitWithId(ID_TRANSLATED_SCHLIESSEN);
             expect(tu3.targetContentNormalized().asDisplayString()).toBe('Anwendung funktioniert');
             expect(tu3.targetState()).toBe(STATE_TRANSLATED);
@@ -397,8 +414,8 @@ describe('ngx-i18nsupport-lib xliff 1.2 test spec', () => {
             const tu: ITransUnit = file.transUnitWithId(ID_UNTRANSLATED_DESCRIPTION);
             expect(tu).toBeTruthy();
             expect(tu.targetContent()).toBeFalsy();
-            let isDefaultLang: boolean = true;
-            let copyContent: boolean = false;
+            const isDefaultLang = true;
+            const copyContent = false;
             const file2: ITranslationMessagesFile = file.createTranslationFileForLang('xy', null, isDefaultLang, copyContent);
             const tu2: ITransUnit = file2.transUnitWithId(ID_UNTRANSLATED_DESCRIPTION);
             expect(tu2.targetContentNormalized().asDisplayString()).toBe('Beschreibung zu {{0}} ({{1}})');
@@ -409,8 +426,8 @@ describe('ngx-i18nsupport-lib xliff 1.2 test spec', () => {
             const tu: ITransUnit = file.transUnitWithId(ID_UNTRANSLATED_DESCRIPTION);
             expect(tu).toBeTruthy();
             expect(tu.targetContent()).toBeFalsy();
-            let isDefaultLang: boolean = false;
-            let copyContent: boolean = true;
+            const isDefaultLang = false;
+            const copyContent = true;
             const file2: ITranslationMessagesFile = file.createTranslationFileForLang('xy', null, isDefaultLang, copyContent);
             const tu2: ITransUnit = file2.transUnitWithId(ID_UNTRANSLATED_DESCRIPTION);
             expect(tu2.targetContentNormalized().asDisplayString()).toBe('Beschreibung zu {{0}} ({{1}})');
@@ -418,8 +435,8 @@ describe('ngx-i18nsupport-lib xliff 1.2 test spec', () => {
 
         it ('should copy source to target for non default lang and set state new, native state initial, #57', () => {
             const file: ITranslationMessagesFile = readFile(MASTER1SRC);
-            let isDefaultLang: boolean = false;
-            let copyContent: boolean = true;
+            const isDefaultLang = false;
+            const copyContent = true;
             const file2: ITranslationMessagesFile = file.createTranslationFileForLang('xy', null, isDefaultLang, copyContent);
             const tu2: ITransUnit = file2.transUnitWithId(ID_UNTRANSLATED_DESCRIPTION);
             expect(tu2.targetState()).toBe(STATE_NEW);
@@ -431,8 +448,8 @@ describe('ngx-i18nsupport-lib xliff 1.2 test spec', () => {
             const tu: ITransUnit = file.transUnitWithId(ID_UNTRANSLATED_DESCRIPTION);
             expect(tu).toBeTruthy();
             expect(tu.targetContent()).toBeFalsy();
-            let isDefaultLang: boolean = false;
-            let copyContent: boolean = false;
+            const isDefaultLang = false;
+            const copyContent = false;
             const file2: ITranslationMessagesFile = file.createTranslationFileForLang('xy', null, isDefaultLang, copyContent);
             const tu2: ITransUnit = file2.transUnitWithId(ID_UNTRANSLATED_DESCRIPTION);
             expect(tu2.targetContent()).toBeFalsy();
@@ -444,8 +461,8 @@ describe('ngx-i18nsupport-lib xliff 1.2 test spec', () => {
             const tu: ITransUnit = file.transUnitWithId(ID_NO_TARGET);
             expect(tu).toBeTruthy();
             expect(tu.targetContent()).toBeFalsy();
-            let isDefaultLang: boolean = false;
-            let copyContent: boolean = true;
+            const isDefaultLang = false;
+            const copyContent = true;
             const file2: ITranslationMessagesFile = file.createTranslationFileForLang('xy', null, isDefaultLang, copyContent);
             const tu2: ITransUnit = file2.transUnitWithId(ID_NO_TARGET);
             expect(tu2.targetContent()).toBeTruthy();
@@ -470,8 +487,8 @@ describe('ngx-i18nsupport-lib xliff 1.2 test spec', () => {
             const newTu = targetFile.importNewTransUnit(tu, false, true);
             expect(targetFile.transUnitWithId(ID_TO_MERGE)).toBeTruthy();
             expect(targetFile.transUnitWithId(ID_TO_MERGE)).toEqual(newTu);
-            let changedTargetFile = TranslationMessagesFileFactory.fromUnknownFormatFileContent(targetFile.editedContent(), null, null);
-            let targetTu = changedTargetFile.transUnitWithId(ID_TO_MERGE);
+            const changedTargetFile = TranslationMessagesFileFactory.fromUnknownFormatFileContent(targetFile.editedContent(), null, null);
+            const targetTu = changedTargetFile.transUnitWithId(ID_TO_MERGE);
             expect(targetTu.sourceContent()).toBe('Test for merging units');
             expect(targetTu.targetContent()).toBe('Test for merging units');
         });
@@ -486,8 +503,8 @@ describe('ngx-i18nsupport-lib xliff 1.2 test spec', () => {
             const newTu = targetFile.importNewTransUnit(tu, false, false);
             expect(targetFile.transUnitWithId(ID_TO_MERGE)).toBeTruthy();
             expect(targetFile.transUnitWithId(ID_TO_MERGE)).toEqual(newTu);
-            let changedTargetFile = TranslationMessagesFileFactory.fromUnknownFormatFileContent(targetFile.editedContent(), null, null);
-            let targetTu = changedTargetFile.transUnitWithId(ID_TO_MERGE);
+            const changedTargetFile = TranslationMessagesFileFactory.fromUnknownFormatFileContent(targetFile.editedContent(), null, null);
+            const targetTu = changedTargetFile.transUnitWithId(ID_TO_MERGE);
             expect(targetTu.sourceContent()).toBe('Test for merging units');
             expect(targetTu.targetContent()).toBe('');
         });
@@ -508,8 +525,8 @@ describe('ngx-i18nsupport-lib xliff 1.2 test spec', () => {
             const existingElem = DOMUtilities.getElementByTagNameAndId(doc, 'trans-unit', ID_EXISTING);
             const newElem = DOMUtilities.getElementByTagNameAndId(doc, 'trans-unit', ID_TO_MERGE);
             expect(DOMUtilities.getElementFollowingSibling(existingElem)).toEqual(newElem);
-            let changedTargetFile = TranslationMessagesFileFactory.fromUnknownFormatFileContent(targetFile.editedContent(), null, null);
-            let targetTu = changedTargetFile.transUnitWithId(ID_TO_MERGE);
+            const changedTargetFile = TranslationMessagesFileFactory.fromUnknownFormatFileContent(targetFile.editedContent(), null, null);
+            const targetTu = changedTargetFile.transUnitWithId(ID_TO_MERGE);
             expect(targetTu.sourceContent()).toBe('Test for merging units');
         });
 
@@ -527,8 +544,8 @@ describe('ngx-i18nsupport-lib xliff 1.2 test spec', () => {
             const newElem = DOMUtilities.getElementByTagNameAndId(doc, 'trans-unit', ID_TO_MERGE);
             expect(newElem).toBeTruthy();
             expect(DOMUtilities.getElementPrecedingSibling(newElem)).toBeFalsy();
-            let changedTargetFile = TranslationMessagesFileFactory.fromUnknownFormatFileContent(targetFile.editedContent(), null, null);
-            let targetTu = changedTargetFile.transUnitWithId(ID_TO_MERGE);
+            const changedTargetFile = TranslationMessagesFileFactory.fromUnknownFormatFileContent(targetFile.editedContent(), null, null);
+            const targetTu = changedTargetFile.transUnitWithId(ID_TO_MERGE);
             expect(targetTu.sourceContent()).toBe('Test for merging units');
         });
 
@@ -536,8 +553,8 @@ describe('ngx-i18nsupport-lib xliff 1.2 test spec', () => {
             const file: ITranslationMessagesFile = readFile(MASTER1SRC);
             file.setNewTransUnitTargetPraefix('%%');
             file.setNewTransUnitTargetSuffix('!!');
-            let isDefaultLang: boolean = false;
-            let copyContent: boolean = true;
+            const isDefaultLang = false;
+            const copyContent = true;
             const file2: ITranslationMessagesFile = file.createTranslationFileForLang('xy', null, isDefaultLang, copyContent);
             const tu2: ITransUnit = file2.transUnitWithId(ID_TO_MERGE);
             expect(tu2.targetState()).toBe(STATE_NEW);
@@ -548,8 +565,8 @@ describe('ngx-i18nsupport-lib xliff 1.2 test spec', () => {
             const file: ITranslationMessagesFile = readFile(MASTER1SRC);
             file.setNewTransUnitTargetPraefix('%%');
             file.setNewTransUnitTargetSuffix('!!');
-            let isDefaultLang: boolean = false;
-            let copyContent: boolean = true;
+            const isDefaultLang = false;
+            const copyContent = true;
             const file2: ITranslationMessagesFile = file.createTranslationFileForLang('xy', null, isDefaultLang, copyContent);
             const tuICU: ITransUnit = file2.transUnitWithId(ID_ICU_PLURAL);
             expect(tuICU.targetState()).toBe(STATE_NEW);
@@ -568,8 +585,8 @@ describe('ngx-i18nsupport-lib xliff 1.2 test spec', () => {
             const newTu = targetFile.importNewTransUnit(tu, false, true);
             expect(targetFile.transUnitWithId(ID_TO_MERGE)).toBeTruthy();
             expect(targetFile.transUnitWithId(ID_TO_MERGE)).toEqual(newTu);
-            let changedTargetFile = TranslationMessagesFileFactory.fromUnknownFormatFileContent(targetFile.editedContent(), null, null);
-            let targetTu = changedTargetFile.transUnitWithId(ID_TO_MERGE);
+            const changedTargetFile = TranslationMessagesFileFactory.fromUnknownFormatFileContent(targetFile.editedContent(), null, null);
+            const targetTu = changedTargetFile.transUnitWithId(ID_TO_MERGE);
             expect(targetTu.targetContent()).toBe('%%Test for merging units!!');
         });
 
@@ -584,8 +601,8 @@ describe('ngx-i18nsupport-lib xliff 1.2 test spec', () => {
             const newTu = targetFile.importNewTransUnit(tu, false, true);
             expect(targetFile.transUnitWithId(ID_ICU_SELECT)).toBeTruthy();
             expect(targetFile.transUnitWithId(ID_ICU_SELECT)).toEqual(newTu);
-            let changedTargetFile = TranslationMessagesFileFactory.fromUnknownFormatFileContent(targetFile.editedContent(), null, null);
-            let targetTu = changedTargetFile.transUnitWithId(ID_ICU_SELECT);
+            const changedTargetFile = TranslationMessagesFileFactory.fromUnknownFormatFileContent(targetFile.editedContent(), null, null);
+            const targetTu = changedTargetFile.transUnitWithId(ID_ICU_SELECT);
             expect(targetTu.targetContent()).not.toContain('%%');
             expect(targetTu.targetContent()).not.toContain('!!');
         });
@@ -609,10 +626,11 @@ describe('ngx-i18nsupport-lib xliff 1.2 test spec', () => {
             expect(tu).toBeTruthy();
             const translationString = 'Anwendung läuft';
             // first translate
-            let translation: INormalizedMessage = tu.sourceContentNormalized().translate(translationString);
+            const translation: INormalizedMessage = tu.sourceContentNormalized().translate(translationString);
             tu.translate(translation);
             expect(tu.targetContent()).toBe(translationString);
-            const file2: ITranslationMessagesFile = TranslationMessagesFileFactory.fromUnknownFormatFileContent(file.editedContent(), null, null);
+            const file2: ITranslationMessagesFile =
+                TranslationMessagesFileFactory.fromUnknownFormatFileContent(file.editedContent(), null, null);
             const tu2: ITransUnit = file2.transUnitWithId(ID_TRANSLATED_SCHLIESSEN);
             expect(tu2.targetContentNormalized().asDisplayString()).toBe(translationString);
         });
@@ -701,9 +719,11 @@ describe('ngx-i18nsupport-lib xliff 1.2 test spec', () => {
             expect(icuMessage.getCategories()[0].getCategory()).toBe('wert0');
             expect(icuMessage.getCategories()[0].getMessageNormalized().asDisplayString()).toBe('wert0 ausgewählt');
             expect(icuMessage.getCategories()[1].getCategory()).toBe('wert1');
-            expect(icuMessage.getCategories()[1].getMessageNormalized().asDisplayString()).toBe('ein <b>anderer</b> Wert (wert1) ausgewählt');
+            expect(icuMessage.getCategories()[1].getMessageNormalized().asDisplayString())
+                .toBe('ein <b>anderer</b> Wert (wert1) ausgewählt');
             expect(icuMessage.getCategories()[2].getCategory()).toBe('wert2');
-            expect(icuMessage.getCategories()[2].getMessageNormalized().asDisplayString()).toBe('was <em>ganz anderes</em> wurde ausgewählt');
+            expect(icuMessage.getCategories()[2].getMessageNormalized().asDisplayString())
+                .toBe('was <em>ganz anderes</em> wurde ausgewählt');
         });
 
         it('should translate ICU with embedded tags', () => {
@@ -720,7 +740,9 @@ describe('ngx-i18nsupport-lib xliff 1.2 test spec', () => {
             expect(icuMessage.getCategories().length).toBe(3);
             expect(icuMessage.getCategories()[1].getCategory()).toBe('wert1');
             expect(icuMessage.getCategories()[1].getMessageNormalized().asDisplayString()).toBe('<em>changed</em>');
-            expect(tu.targetContent()).toContain('wert1 {<x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em>"/>changed<x id="CLOSE_EMPHASISED_TEXT" ctype="x-em"/>}');
+            expect(tu.targetContent())
+                .toContain('wert1 {<x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em>"/>' +
+                    'changed<x id="CLOSE_EMPHASISED_TEXT" ctype="x-em"/>}');
             // TODO find warnings in embedded message, known limitation in the moment.
             //            const warnings = icuMessage.getCategories()[1].getMessageNormalized().validateWarnings();
             //            expect(warnings).toBeTruthy();

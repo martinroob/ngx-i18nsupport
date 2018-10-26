@@ -1,12 +1,11 @@
 import {ParsedMessagePart, ParsedMessagePartType} from './parsed-message-part';
-import {IICUMessage} from '../api/i-icu-message';
+import {IICUMessage, INormalizedMessage} from '../api/index';
 import {
     COMMA, CURLY_BRACE_CLOSE, CURLY_BRACE_OPEN, ICUMessageTokenizer, ICUToken, PLURAL, SELECT,
     TEXT
 } from './icu-message-tokenizer';
 import {ICUMessage} from './icu-message';
 import {format} from 'util';
-import {INormalizedMessage} from '../api/i-normalized-message';
 import {IMessageParser} from './i-message-parser';
 
 /**
@@ -32,21 +31,21 @@ export class ParsedMessagePartICUMessage extends ParsedMessagePart {
     /**
      * Test wether text might be an ICU message.
      * Should at least start with something like '{<name>, select, ..' or '{<name>, plural, ...'
-     * @param {string} icuMessageText
-     * @return {boolean}
+     * @param icuMessageText icuMessageText
+     * @return wether text might be an ICU message.
      */
     static looksLikeICUMessage(icuMessageText: string): boolean {
         const part = new ParsedMessagePartICUMessage(null, null);
         return part.looksLikeICUMessage(icuMessageText);
     }
 
-    public asDisplayString(format?: string) {
+    public asDisplayString(displayFormat?: string) {
         return '<ICU-Message/>';
     }
 
     /**
      * return the parsed message.
-     * @return {ICUMessage}
+     * @return parsed message
      */
     public getICUMessage(): IICUMessage {
         return this._message;
@@ -78,9 +77,9 @@ export class ParsedMessagePartICUMessage extends ParsedMessagePart {
         this.expectNext(COMMA);
         token = this._tokenizer.peek();
         while (token.type !== CURLY_BRACE_CLOSE) {
-            let category = this.expectNext(TEXT).value.trim();
+            const category = this.expectNext(TEXT).value.trim();
             this.expectNext(CURLY_BRACE_OPEN);
-            let message = this.expectNext(TEXT).value;
+            const message = this.expectNext(TEXT).value;
             this._message.addCategory(category, this.parseNativeSubMessage(message));
             this.expectNext(CURLY_BRACE_CLOSE);
             token = this._tokenizer.peek();
@@ -106,7 +105,7 @@ export class ParsedMessagePartICUMessage extends ParsedMessagePart {
             this.expectNext(CURLY_BRACE_OPEN);
             this.expectNext(TEXT); // varname, not used currently, ng always used VAR_PLURAL or VAR_SELECT
             this.expectNext(COMMA);
-            let token: ICUToken = this._tokenizer.next();
+            const token: ICUToken = this._tokenizer.next();
             if (token.type !== PLURAL && token.type !== SELECT) {
                 return false;
             }
@@ -120,7 +119,7 @@ export class ParsedMessagePartICUMessage extends ParsedMessagePart {
     /**
      * Read next token and expect, that it is of the given type.
      * @param tokentype expected type.
-     * @return {ICUToken} Token
+     * @return Token
      * @throws error, if next token has wrong type.
      */
     private expectNext(tokentype: string): ICUToken {
@@ -133,9 +132,9 @@ export class ParsedMessagePartICUMessage extends ParsedMessagePart {
     }
 
     /**
-     * Parse XML text to normalozed message.
+     * Parse XML text to normalized message.
      * @param message message in format dependent xml syntax.
-     * @return {INormalizedMessage}
+     * @return normalized message
      */
     private parseNativeSubMessage(message: string): INormalizedMessage {
         return this._parser.createNormalizedMessageFromXMLString(message, null);

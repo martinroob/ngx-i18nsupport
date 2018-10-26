@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xliff version="2.0" xmlns="urn:oasis:names:tc:xliff:document:2.0" srcLang="de" trgLang="en">
+  <file original="ng.template" id="ngi18n">
+    <unit id="2047558209369508311">
+      <segment state="final">
+        <source>Meine erste I18N-Anwendung</source>
+        <target>My first i18n application</target>
+      </segment>
+    </unit>
+    <unit id="4371668001355139802">
+      <segment state="final">
+        <source>Anwendung läuft!</source>
+        <target>app workst!</target>
+      </segment>
+    </unit>
+    <unit id="7499557905529977371">
+      <notes>
+        <note category="description">Beschreibung der Anwendung</note>
+      </notes>
+      <segment state="final">
+        <source>Diese Anwendung ist eine reine Demonstration und hat keine wirklich nutzbare Funktion.</source>
+        <target>This app is for demonstration purposes only.</target>
+      </segment>
+    </unit>
+    <unit id="3274258156935474372">
+      <notes>
+        <note category="description">sampleapp.appdescription</note>
+        <note category="meaning">ngx-translate</note>
+      </notes>
+      <segment state="final">
+        <source>Diese Anwendung ist eine reine Demonstration und hat keine wirklich nutzbare Funktion.</source>
+        <target>This app is for demonstration purposes only.</target>
+      </segment>
+    </unit>
+    <unit id="9030312858648510700">
+      <notes>
+        <note category="description">placeholder sample</note>
+      </notes>
+      <segment state="final">
+        <source>Eintrag <ph id="0" equiv="INTERPOLATION" disp="{{number()}}"/> von <ph id="1" equiv="INTERPOLATION_1" disp="{{total()}}"/> hinzugefügt.</source>
+        <target>Entry <ph id="0" equiv="INTERPOLATION" disp="{{number()}}"/> of total <ph id="1" equiv="INTERPOLATION_1" disp="{{total()}}"/> added.</target>
+      </segment>
+    </unit>
+    <unit id="7149517499881679376">
+      <notes>
+        <note category="description">linebreak sample</note>
+      </notes>
+      <segment state="final">
+        <source>Dieser Text
+  enthält einen Zeilenumbruch.</source>
+        <target>This text
+          contains a line break.</target>
+      </segment>
+    </unit>
+    <unit id="8998006760999956868">
+      <notes>
+        <note category="description">embedded html sample</note>
+      </notes>
+      <segment state="final">
+        <source>Dieser Text enthält <pc id="0" equivStart="START_BOLD_TEXT" equivEnd="CLOSE_BOLD_TEXT" type="fmt" dispStart="&lt;b&gt;" dispEnd="&lt;/b&gt;">eingebettetes html</pc></source>
+        <target>This text contains <pc id="0" equivStart="START_BOLD_TEXT" equivEnd="CLOSE_BOLD_TEXT" type="fmt" dispStart="&lt;b&gt;" dispEnd="&lt;/b&gt;">embedded html</pc></target>
+      </segment>
+    </unit>
+    <unit id="5917488050182782344">
+      <segment state="final">
+        <source>Eine Nachricht per ngx-translate</source>
+        <target>A message via ngx-translate</target>
+      </segment>
+    </unit>
+    <unit id="6797180050921917715">
+      <notes>
+        <note category="description">ngx-translate</note>
+        <note category="meaning">appTitle</note>
+      </notes>
+      <segment state="final">
+        <source>Sample App Title</source>
+        <target>Sample App Title</target>
+      </segment>
+    </unit>
+    <unit id="8247252724313224625">
+      <notes>
+        <note category="description">ngx-translate</note>
+        <note category="meaning">messages.example</note>
+      </notes>
+      <segment state="final">
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{priority}}"/>: A message from a service</source>
+        <target><ph id="0" equiv="INTERPOLATION" disp="{{priority}}"/>: A message from a service</target>
+      </segment>
+    </unit>
+    <unit id="1650190705028986163">
+      <notes>
+        <note category="description">ngx-translate</note>
+        <note category="meaning">myapp</note>
+      </notes>
+      <segment state="final">
+        <source>Meine Anwendung</source>
+        <target>My app</target>
+      </segment>
+    </unit>
+    <unit id="6830980354990918030">
+      <notes>
+        <note category="description">ngx-translate</note>
+        <note category="meaning">dateservice.monday</note>
+      </notes>
+      <segment state="final">
+        <source>Montag</source>
+        <target>Monday</target>
+      </segment>
+    </unit>
+    <unit id="6375749062310329756">
+      <notes>
+        <note category="description">ngx-translate</note>
+        <note category="meaning">dateservice.tuesday</note>
+      </notes>
+      <segment state="final">
+        <source>Dienstag</source>
+        <target>Tuesday</target>
+      </segment>
+    </unit>
+    <unit id="8721860357562818797">
+      <notes>
+        <note category="description">ngx-translate</note>
+        <note category="meaning">dateservice.wednesday</note>
+      </notes>
+      <segment state="final">
+        <source>Mittwoch</source>
+        <target>Wednesday</target>
+      </segment>
+    </unit>
+    <unit id="1711956122115192435">
+      <notes>
+        <note category="description">ngx-translate</note>
+        <note category="meaning">dateservice.thursday</note>
+      </notes>
+      <segment state="final">
+        <source>Donnerstag</source>
+        <target>Thursday</target>
+      </segment>
+    </unit>
+    <unit id="6553664200740484336">
+      <notes>
+        <note category="description">ngx-translate</note>
+        <note category="meaning">dateservice.friday</note>
+      </notes>
+      <segment state="final">
+        <source>Freitag</source>
+        <target>Fryday</target>
+      </segment>
+    </unit>
+    <unit id="3334880142338745041">
+      <notes>
+        <note category="description">ngx-translate</note>
+        <note category="meaning">dateservice.saturday</note>
+      </notes>
+      <segment state="final">
+        <source>Samstag</source>
+        <target>Saturday</target>
+      </segment>
+    </unit>
+    <unit id="1409816038285774052">
+      <notes>
+        <note category="description">ngx-translate</note>
+        <note category="meaning">dateservice.sunday</note>
+      </notes>
+      <segment state="final">
+        <source>Sonntag</source>
+        <target>Sunday</target>
+      </segment>
+    </unit>
+    <unit id="7644074577681906834">
+      <notes>
+        <note category="description">ngx-translate</note>
+        <note category="meaning">placeholders.test1placeholder</note>
+      </notes>
+      <segment state="final">
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{priority}}"/>: Eine Nachricht mit einem Platzhalter</source>
+        <target><ph id="0" equiv="INTERPOLATION" disp="{{priority}}"/>: A message with a placeholder</target>
+      </segment>
+    </unit>
+    <unit id="9223042936546558865">
+      <notes>
+        <note category="description">ngx-translate</note>
+        <note category="meaning">placeholders.test2placeholder</note>
+      </notes>
+      <segment state="final">
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{priority}}"/>: Eine Nachricht mit 2 Platzhaltern: <ph id="1" equiv="INTERPOLATION_1" disp="{{placeholder2}}"/></source>
+        <target><ph id="0" equiv="INTERPOLATION" disp="{{priority}}"/>: A message with 2 placeholders: <ph id="1" equiv="INTERPOLATION_1" disp="{{placeholder2}}"/></target>
+      </segment>
+    </unit>
+    <unit id="7049669989298349710">
+      <notes>
+        <note category="description">ngx-translate</note>
+        <note category="meaning">placeholders.test2placeholderRepeated</note>
+      </notes>
+      <segment state="final">
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{priority}}"/>: Eine Nachricht mit 2 Platzhaltern: <ph id="1" equiv="INTERPOLATION" disp="{{priority}}"/> <ph id="2" equiv="INTERPOLATION_1" disp="{{placeholder2}}"/></source>
+        <target><ph id="0" equiv="INTERPOLATION" disp="{{priority}}"/>: A message with 2 placeholders: <ph id="1" equiv="INTERPOLATION" disp="{{priority}}"/> <ph id="2" equiv="INTERPOLATION_1" disp="{{placeholder2}}"/></target>
+      </segment>
+    </unit>
+    <unit id="6651165993266138235">
+      <notes>
+        <note category="description">ngx-translate</note>
+        <note category="meaning">embeddedhtml.bold</note>
+      </notes>
+      <segment state="final">
+        <source>Diese Nachricht ist <pc id="0" equivStart="START_BOLD_TEXT" equivEnd="CLOSE_BOLD_TEXT" type="fmt" dispStart="&lt;b&gt;" dispEnd="&lt;/b&gt;">WICHTIG</pc></source>
+        <target>This message is <pc id="0" equivStart="START_BOLD_TEXT" equivEnd="CLOSE_BOLD_TEXT" type="fmt" dispStart="&lt;b&gt;" dispEnd="&lt;/b&gt;">IMPORTANT</pc></target>
+      </segment>
+    </unit>
+    <unit id="7609655310648429098">
+      <notes>
+        <note category="description">ngx-translate</note>
+        <note category="meaning">embeddedhtml.boldstrong</note>
+      </notes>
+      <segment state="final">
+        <source>Diese Nachricht ist <pc id="0" equivStart="START_BOLD_TEXT" equivEnd="CLOSE_BOLD_TEXT" type="fmt" dispStart="&lt;b&gt;" dispEnd="&lt;/b&gt;"><pc id="1" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong&gt;" dispEnd="&lt;/strong&gt;">SEHR WICHTIG</pc></pc></source>
+        <target>This message is <pc id="0" equivStart="START_BOLD_TEXT" equivEnd="CLOSE_BOLD_TEXT" type="fmt" dispStart="&lt;b&gt;" dispEnd="&lt;/b&gt;"><pc id="1" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong&gt;" dispEnd="&lt;/strong&gt;">VERY IMPORTANT</pc></pc></target>
+      </segment>
+    </unit>
+    <unit id="7610784844464920497">
+      <notes>
+        <note category="description">ngx-translate</note>
+        <note category="meaning">embeddedhtml.strange</note>
+      </notes>
+      <segment state="final">
+        <source>Diese Nachricht ist <pc id="0" equivStart="START_TAG_STRANGE" equivEnd="CLOSE_TAG_STRANGE" type="other" dispStart="&lt;strange&gt;" dispEnd="&lt;/strange&gt;"><ph id="1" equiv="INTERPOLATION" disp="{{strangeness}}"/></pc></source>
+        <target>This message is <pc id="0" equivStart="START_TAG_STRANGE" equivEnd="CLOSE_TAG_STRANGE" type="other" dispStart="&lt;strange&gt;" dispEnd="&lt;/strange&gt;"><ph id="1" equiv="INTERPOLATION" disp="{{strangeness}}"/></pc></target>
+      </segment>
+    </unit>
+    <unit id="explicitlysetids.test1">
+      <segment state="final">
+        <source>Explizit gesetzte ID</source>
+        <target>Explicitly set ID</target>
+      </segment>
+    </unit>
+  </file>
+</xliff>

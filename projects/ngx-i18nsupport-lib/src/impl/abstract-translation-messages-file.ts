@@ -1,4 +1,7 @@
-import {ITranslationMessagesFile, ITransUnit, STATE_NEW, STATE_TRANSLATED} from '../api';
+import {STATE_NEW, STATE_TRANSLATED} from '../api/constants';
+import {ITranslationMessagesFile} from '../api/i-translation-messages-file';
+import {INormalizedMessage} from '../api/i-normalized-message';
+import {ITransUnit} from '../api/i-trans-unit';
 import {isNullOrUndefined} from 'util';
 import {DOMParser} from 'xmldom';
 import {XmlSerializer, XmlSerializerOptions} from './xml-serializer';
@@ -32,7 +35,7 @@ export abstract class AbstractTranslationMessagesFile implements ITranslationMes
 
     protected targetSuffix: string;
 
-    constructor() {
+    protected constructor() {
         this.transUnits = null;
         this._warnings = [];
     }
@@ -40,12 +43,16 @@ export abstract class AbstractTranslationMessagesFile implements ITranslationMes
     /**
      * Parse file content.
      * Sets _parsedDocument, line ending, encoding, etc.
-     * @param {string} xmlString
-     * @param {string} path
-     * @param {string} encoding
-     * @param {{xmlContent: string; path: string; encoding: string}} optionalMaster
+     * @param xmlString xmlString
+     * @param path path
+     * @param encoding encoding
+     * @param optionalMaster optionalMaster
      */
-    protected parseContent(xmlString: string, path: string, encoding: string, optionalMaster?: { xmlContent: string, path: string, encoding: string }): void {
+    protected parseContent(
+        xmlString: string,
+        path: string, encoding: string,
+        optionalMaster?: { xmlContent: string, path: string, encoding: string })
+        : void {
         this._filename = path;
         this._encoding = encoding;
         this._parsedDocument = new DOMParser().parseFromString(xmlString, 'text/xml');
@@ -139,19 +146,19 @@ export abstract class AbstractTranslationMessagesFile implements ITranslationMes
 
     /**
      * Get source language.
-     * @return {string}
+     * @return source language.
      */
     abstract sourceLanguage(): string;
 
     /**
      * Get target language.
-     * @return {string}
+     * @return target language.
      */
     abstract targetLanguage(): string;
 
     /**
      * Loop over all Translation Units.
-     * @param callback
+     * @param callback callback
      */
     public forEachTransUnit(callback: ((transunit: ITransUnit) => void)) {
         this.lazyInitializeTransUnits();
@@ -160,8 +167,8 @@ export abstract class AbstractTranslationMessagesFile implements ITranslationMes
 
     /**
      * Get trans-unit with given id.
-     * @param id
-     * @return {ITransUnit}
+     * @param id id
+     * @return trans-unit with given id.
      */
     public transUnitWithId(id: string): ITransUnit {
         this.lazyInitializeTransUnits();
@@ -174,13 +181,13 @@ export abstract class AbstractTranslationMessagesFile implements ITranslationMes
 
     /**
      * Edit the source language.
-     * @param language
+     * @param language language
      */
     abstract setSourceLanguage(language: string);
 
     /**
      * Edit the target language.
-     * @param language
+     * @param language language
      */
     abstract setTargetLanguage(language: string);
 
@@ -188,7 +195,7 @@ export abstract class AbstractTranslationMessagesFile implements ITranslationMes
      * Set the praefix used when copying source to target.
      * This is used by importNewTransUnit and createTranslationFileForLang methods.
      * (since 1.8.0)
-     * @param {string} targetPraefix
+     * @param targetPraefix targetPraefix
      */
     public setNewTransUnitTargetPraefix(targetPraefix: string) {
         this.targetPraefix = targetPraefix;
@@ -197,7 +204,7 @@ export abstract class AbstractTranslationMessagesFile implements ITranslationMes
     /**
      * Get the praefix used when copying source to target.
      * (since 1.8.0)
-     * @return {string}
+     * @return the praefix used when copying source to target.
      */
     getNewTransUnitTargetPraefix(): string {
         return isNullOrUndefined(this.targetPraefix) ? '' : this.targetPraefix;
@@ -207,7 +214,7 @@ export abstract class AbstractTranslationMessagesFile implements ITranslationMes
      * Set the suffix used when copying source to target.
      * This is used by importNewTransUnit and createTranslationFileForLang methods.
      * (since 1.8.0)
-     * @param {string} targetSuffix
+     * @param targetSuffix targetSuffix
      */
     public setNewTransUnitTargetSuffix(targetSuffix: string) {
         this.targetSuffix = targetSuffix;
@@ -216,7 +223,7 @@ export abstract class AbstractTranslationMessagesFile implements ITranslationMes
     /**
      * Get the suffix used when copying source to target.
      * (since 1.8.0)
-     * @return {string}
+     * @return the suffix used when copying source to target.
      */
     getNewTransUnitTargetSuffix(): string {
         return isNullOrUndefined(this.targetSuffix) ? '' : this.targetSuffix;
@@ -244,14 +251,15 @@ export abstract class AbstractTranslationMessagesFile implements ITranslationMes
      * @return the newly imported trans unit (since version 1.7.0)
      * @throws an error if trans-unit with same id already is in the file.
      */
-    abstract importNewTransUnit(foreignTransUnit: ITransUnit, isDefaultLang: boolean, copyContent: boolean, importAfterElement?: ITransUnit): ITransUnit;
+    abstract importNewTransUnit(foreignTransUnit: ITransUnit, isDefaultLang: boolean, copyContent: boolean, importAfterElement?: ITransUnit)
+        : ITransUnit;
 
     /**
      * Remove the trans-unit with the given id.
-     * @param id
+     * @param id id
      */
     public removeTransUnitWithId(id: string) {
-        let tuNode: Node = this._parsedDocument.getElementById(id);
+        const tuNode: Node = this._parsedDocument.getElementById(id);
         if (tuNode) {
             tuNode.parentNode.removeChild(tuNode);
             this.lazyInitializeTransUnits();
@@ -282,13 +290,13 @@ export abstract class AbstractTranslationMessagesFile implements ITranslationMes
      * Default is false.
      */
     public editedContent(beautifyOutput?: boolean): string {
-        let options: XmlSerializerOptions = {};
+        const options: XmlSerializerOptions = {};
         if (beautifyOutput === true) {
            options.beautify = true;
            options.indentString = '  ';
            options.mixedContentElements = this.elementsWithMixedContent();
         }
-        let result = new XmlSerializer().serializeToString(this._parsedDocument, options);
+        const result = new XmlSerializer().serializeToString(this._parsedDocument, options);
         if (this._fileEndsWithEOL) {
             // add eol if there was eol in original source
             return result + '\n';
@@ -311,5 +319,6 @@ export abstract class AbstractTranslationMessagesFile implements ITranslationMes
      * Wben true, content will be copied from source.
      * When false, content will be left empty (if it is not the default language).
      */
-    abstract createTranslationFileForLang(lang: string, filename: string, isDefaultLang: boolean, copyContent: boolean): ITranslationMessagesFile;
+    abstract createTranslationFileForLang(lang: string, filename: string, isDefaultLang: boolean, copyContent: boolean)
+        : ITranslationMessagesFile;
 }

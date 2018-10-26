@@ -33,7 +33,7 @@ export class ParsedMesageTokenizer {
         });
         lexer.finish((ctx) => {
             if (plaintext !== '') {
-                ctx.accept(TEXT, {text: plaintext})
+                ctx.accept(TEXT, {text: plaintext});
             }
          });
         // empty tag, there are only a few allowed (see tag-mappings): ['BR', 'HR', 'IMG', 'AREA', 'LINK', 'WBR']

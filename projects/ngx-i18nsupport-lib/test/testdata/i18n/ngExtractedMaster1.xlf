@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file source-language="en" datatype="plaintext" original="ng2.template">
+    <body>
+      <trans-unit id="57e605bfa130afb4de4ee40e496e854a9e8a28a7" datatype="html">
+        <source>Nachrichten</source>
+        <target/>
+        <context-group purpose="location">
+          <context context-type="sourcefile">S:/experimente/sampleapp41/src/app/app.component.ts</context>
+          <context context-type="linenumber">10</context>
+        </context-group>
+        <note priority="1" from="description">data.edit.newstitle</note>
+      </trans-unit>
+      <trans-unit id="78eab955529ba0f1817c84991d9175f55bfdf937" datatype="html">
+        <source>Bearbeiten Beschreibung</source>
+        <target/>
+        <context-group purpose="location">
+          <context context-type="sourcefile">S:/experimente/sampleapp41/src/app/app.component.ts</context>
+          <context context-type="linenumber">20</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">S:/experimente/sampleapp41/src/app/app.component.ts</context>
+          <context context-type="linenumber">21</context>
+        </context-group>
+        <note priority="1" from="description">data.edit.titles.description</note>
+      </trans-unit>
+      <trans-unit id="a52ba049c16778bdb2e5a19a41acaadf87b104dc" datatype="html">
+        <source>Beschreibung zu <x id="INTERPOLATION"/> (<x id="INTERPOLATION_1"/>)</source>
+        <target/>
+        <note priority="1" from="description">data.edit.subtitles.description</note>
+      </trans-unit>
+      <trans-unit id="1ead0ad1063d0c9e005fe56c9529aef4c1ef9d21" datatype="html">
+        <source>Schließen</source>
+        <target/>
+      </trans-unit>
+      <trans-unit id="c536247d71822c272f8e9155f831e0efb5aa0d31" datatype="html">
+        <source>Startseite</source>
+        <target/>
+      </trans-unit>
+      <trans-unit id="d17aee1ddf9fe1c0afe8440e02ef5ab906a69699" datatype="html">
+        <source>Suche</source>
+        <target/>
+      </trans-unit>
+      <trans-unit id="af0819ea4a5db68737ebcabde2f5e432b66352e8" datatype="html">
+        <source>Eintrag <x id="INTERPOLATION"/> von <x id="INTERPOLATION_1"/> hinzugefügt.</source>
+        <target>Eintrag <x id="INTERPOLATION"/> von <x id="INTERPOLATION_1"/> hinzugefügt.</target>
+        <note priority="1" from="description">placeholder sample</note>
+      </trans-unit>
+      <trans-unit id="af0819ea4a5db68737ebcabde2f5e432b66352e8xxx" datatype="html">
+        <source>Eintrag <x id="INTERPOLATION"></x> von <x id="INTERPOLATION_1"></x> hinzugefügt.</source>
+        <target>Eintrag <x id="INTERPOLATION"></x> von <x id="INTERPOLATION_1"></x> hinzugefügt.</target>
+        <note priority="1" from="description">placeholder sample with closing tags</note>
+      </trans-unit>
+      <trans-unit id="af0819ea4a5db68737ebcabde2f5e432b663repl" datatype="html">
+        <source><x id="INTERPOLATION"/>: Eine Nachricht mit 2 Platzhaltern: <x id="INTERPOLATION"/> <x id="INTERPOLATION_1"/></source>
+        <target><x id="INTERPOLATION"/>: Eine Nachricht mit 2 Platzhaltern: <x id="INTERPOLATION"/> <x id="INTERPOLATION_1"/></target>
+        <note priority="1" from="description">placeholder sample</note>
+      </trans-unit>
+        <trans-unit id="84e8cd8ba480129d90f512cc3462bb43efcf389f" datatype="html">
+            <source>Montag</source>
+            <target/>
+            <note priority="1" from="description">ngx-translate</note>
+            <note priority="1" from="meaning">dateservice.monday</note>
+        </trans-unit>
+      <trans-unit id="e4e521770b592e6fca431a4a131efcfd13f35634" datatype="html">
+        <source>Dieser Text
+          enthält einen Zeilenumbruch.</source>
+        <target/>
+        <note priority="1" from="description">linebreak sample</note>
+      </trans-unit>
+      <trans-unit id="7e8dd1fd1c57afafc38550ce80b5bcc1ced49f85" datatype="html">
+        <source>Dieser Text enthält <x id="START_BOLD_TEXT" ctype="x-b"/>eingebettetes html<x id="CLOSE_BOLD_TEXT" ctype="x-b"/></source>
+        <target>Dieser Text enthält <x id="START_BOLD_TEXT" ctype="x-b"/>eingebettetes html<x id="CLOSE_BOLD_TEXT" ctype="x-b"/></target>
+        <note priority="1" from="description">embedded html sample</note>
+      </trans-unit>
+      <trans-unit id="7e8dd1fd1c57afafc38550ce80b5bcc1ced49f85xxx" datatype="html">
+        <source>Dieser Text enthält <x id="START_BOLD_TEXT" ctype="x-b"></x>eingebettetes html<x id="CLOSE_BOLD_TEXT" ctype="x-b"></x></source>
+        <target>Dieser Text enthält <x id="START_BOLD_TEXT" ctype="x-b"></x>eingebettetes html<x id="CLOSE_BOLD_TEXT" ctype="x-b"></x></target>
+        <note priority="1" from="description">embedded html sample with closing tags</note>
+      </trans-unit>
+      <trans-unit id="no_sourceref_test" datatype="html">
+        <source>no_sourceref_test</source>
+        <target/>
+      </trans-unit>
+      <trans-unit id="unittomerge" datatype="html">
+        <source>Test for merging units</source>
+        <target/>
+      </trans-unit>
+      <trans-unit datatype="html">
+        <source>no id</source>
+        <target/>
+      </trans-unit>
+	  <trans-unit id="complextags.tagsWithAttribute1" datatype="html">
+        <source><x id="START_LINK" ctype="x-a"/>link1<x id="CLOSE_LINK" ctype="x-a"/> and <x id="START_EMPHASISED_TEXT" ctype="x-em"/><x id="START_LINK_1" ctype="x-a"/><x id="TAG_IMG" ctype="image"/><x id="CLOSE_LINK" ctype="x-a"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em"/></source>
+        <target><x id="START_LINK" ctype="x-a"/>link1<x id="CLOSE_LINK" ctype="x-a"/> and <x id="START_EMPHASISED_TEXT" ctype="x-em"/><x id="START_LINK_1" ctype="x-a"/><x id="TAG_IMG" ctype="image"/><x id="CLOSE_LINK" ctype="x-a"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em"/></target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">S:/experimente/sampleapp41/src/app/ngx-translate-test-data/ngx-translate-test-data.component.ts</context>
+          <context context-type="linenumber">19</context>
+        </context-group>
+      </trans-unit>
+	  <trans-unit id="complextags.tagsWithAttribute2" datatype="html">
+        <source><x id="START_LINK" ctype="x-a"/>link1 with placeholder <x id="INTERPOLATION"/><x id="CLOSE_LINK" ctype="x-a"/></source>
+        <target><x id="START_LINK" ctype="x-a"/>link1 with placeholder <x id="INTERPOLATION"/><x id="CLOSE_LINK" ctype="x-a"/></target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">S:/experimente/sampleapp41/src/app/ngx-translate-test-data/ngx-translate-test-data.component.ts</context>
+          <context context-type="linenumber">20</context>
+        </context-group>
+      </trans-unit>
+	  <trans-unit id="complextags.tagsWithAttribute3" datatype="html">
+        <source><x id="START_LINK" ctype="x-a"/>link1 with placeholder <x id="INTERPOLATION"/><x id="CLOSE_LINK" ctype="x-a"/></source>
+        <target><x id="START_LINK" ctype="x-a"/>link1 with placeholder <x id="INTERPOLATION"/><x id="CLOSE_LINK" ctype="x-a"/></target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">S:/experimente/sampleapp41/src/app/ngx-translate-test-data/ngx-translate-test-data.component.ts</context>
+          <context context-type="linenumber">21</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="efec69fdcf74bd6d640b2a771558b7b09e271c28" datatype="html">
+        <source>{VAR_PLURAL, plural, =0 {kein Schaf} =1 {1 Schaf} other {x Schafe} }</source>
+        <target/>
+        <context-group purpose="location">
+          <context context-type="sourcefile">S:/experimente/sampleapp41/src/app/app.component.ts</context>
+          <context context-type="linenumber">14</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1f3c670be000dbb6cbe05353d12ef62793d91fec" datatype="html">
+        <source>Zum Wert <x id="INTERPOLATION"/> gehört der Text <x id="ICU"/></source>
+        <target/>
+        <context-group purpose="location">
+          <context context-type="sourcefile">S:/experimente/sampleapp41/src/app/app.component.ts</context>
+          <context context-type="linenumber">16</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="complextags.icuTwoICU" datatype="html">
+        <source>first: <x id="ICU"/>, second <x id="ICU_1"/></source>
+        <target state="new">first: <x id="ICU"/>, second <x id="ICU_1"/></target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">S:/experimente/sampleapp41/src/app/ngx-translate-test-data/ngx-translate-test-data.component.ts</context>
+          <context context-type="linenumber">24</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8967ef1e10bdf8ea6d8e65ba7ffe7fc69960d1da" datatype="html">
+        <source>{VAR_SELECT, select, wert0 {wert0 wurde gewählt} wert1 {ein anderer Wert (wert1) wurde gewählt} wert2 {was ganz anderes wurde gewählt} }</source>
+        <target/>
+        <context-group purpose="location">
+          <context context-type="sourcefile">S:/experimente/sampleapp41/src/app/app.component.ts</context>
+          <context context-type="linenumber">16</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="304b4d798bf51257538949844e121724110d37ed" datatype="html">
+        <source>{VAR_SELECT, select, wert0 {wert0 ausgewählt} wert1 {ein <x id="START_BOLD_TEXT" ctype="x-b"/>anderer<x id="CLOSE_BOLD_TEXT" ctype="x-b"/> Wert (wert1) ausgewählt} wert2 {was <x id="START_EMPHASISED_TEXT" ctype="x-em"/>ganz anderes<x id="CLOSE_EMPHASISED_TEXT" ctype="x-em"/> wurde ausgewählt} }</source>
+        <target state="new">{VAR_SELECT, select, wert0 {wert0 ausgewählt} wert1 {ein <x id="START_BOLD_TEXT" ctype="x-b"/>anderer<x id="CLOSE_BOLD_TEXT" ctype="x-b"/> Wert (wert1) ausgewählt} wert2 {was <x id="START_EMPHASISED_TEXT" ctype="x-em"/>ganz anderes<x id="CLOSE_EMPHASISED_TEXT" ctype="x-em"/> wurde ausgewählt} }</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">S:/experimente/sampleapp41/src/app/app.component.ts</context>
+          <context context-type="linenumber">17</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="explicit_linebreaks" datatype="html">
+         <source>Explicit line break<x id="LINE_BREAK" ctype="lb"/>
+              Next line.<x id="LINE_BREAK" ctype="lb"/>
+              Third line.</source>
+         <target/>
+      </trans-unit>
+      <trans-unit id="e05aa009b849e0a5725e819b14c77a32576513a8" datatype="html">
+        <source>Dieser Text enthält<x id="LINE_BREAK" ctype="lb"/>einen Zeilenumbruch per HTML-br-Element.</source>
+        <target/>
+        <context-group purpose="location">
+          <context context-type="sourcefile">S:/experimente/sampleapp41/src/app/app.component.ts</context>
+          <context context-type="linenumber">9</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ea7a3dece8868782142a70b3e1c8b064f6027e20" datatype="html">
+        <source>Dieser Text enthält ein Bild <x id="TAG_IMG" ctype="image"/> mitt en in der Nachricht</source>
+        <target/>
+        <context-group purpose="location">
+          <context context-type="sourcefile">S:/experimente/sampleapp41/src/app/app.component.ts</context>
+          <context context-type="linenumber">11</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="a52ba049c16778bdb2e5a19a41acaadf87b10001" datatype="html">
+        <source>Test no target element #50</source>
+        <note priority="1" from="description">data.edit.subtitles.description</note>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

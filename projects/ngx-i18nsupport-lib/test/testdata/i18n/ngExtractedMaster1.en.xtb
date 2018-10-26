@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE translationbundle [
+  <!ELEMENT translationbundle (translation)*>
+  <!ATTLIST translationbundle lang CDATA #REQUIRED>
+  <!ELEMENT translation (#PCDATA|ph)*>
+  <!ATTLIST translation id CDATA #REQUIRED>
+  <!ELEMENT ph EMPTY>
+  <!ATTLIST ph name CDATA #REQUIRED>
+]>
+<translationbundle lang="en">
+    <translation id="2047558209369508311">My first I18N Application</translation>
+    <translation id="4371668001355139802">App works!</translation>
+    <translation id="7499557905529977371">This app is for demonstration purposed only.</translation>
+    <translation id="3274258156935474372">Monday</translation>
+    <translation id="9030312858648510700">Entry <ph name="INTERPOLATION"><ex>INTERPOLATION</ex></ph> of <ph name="INTERPOLATION_1"><ex>INTERPOLATION_1</ex></ph> added.</translation>
+    <translation id="7149517499881679376">This text
+        contains a line break.</translation>
+    <translation id="7149517499881679376">This text
+        contains a line break.</translation>
+    <translation>no id</translation>
+    <translation id="7609655310648429098">This message is <ph name="START_BOLD_TEXT"><ex>&lt;b&gt;</ex></ph><ph name="START_TAG_STRONG"><ex>&lt;strong&gt;</ex></ph>VERY IMPORTANT<ph name="CLOSE_TAG_STRONG"><ex>&lt;/strong&gt;</ex></ph><ph name="CLOSE_BOLD_TEXT"><ex>&lt;/b&gt;</ex></ph></translation>
+    <translation id="7610784844464920497">This message is <ph name="START_TAG_STRANGE"><ex>&lt;strange&gt;</ex></ph><ph name="INTERPOLATION"><ex>INTERPOLATION</ex></ph><ph name="CLOSE_TAG_STRANGE"><ex>&lt;/strange&gt;</ex></ph></translation>
+    <translation id="no_sourceref_test">no source ref</translation>
+    <translation id="2747218257718409559">Zum Wert <ph name="INTERPOLATION"><ex>INTERPOLATION</ex></ph> gehört der Text <ph name="ICU"><ex>ICU</ex></ph></translation>
+    <translation id="complextags.icuTwoICU">first: <ph name="ICU"><ex>ICU</ex></ph>, second <ph name="ICU_1"><ex>ICU_1</ex></ph></translation>
+    <translation id="157616252019374389">{VAR_PLURAL, plural, =0 {kein Schaf} =1 {1 Schaf} other {x Schafe} }</translation>
+    <translation id="4002068837191765530">{VAR_SELECT, select, wert0 {wert0 wurde gewählt} wert1 {ein anderer Wert (wert1) wurde gewählt} wert2 {was ganz anderes wurde gewählt} }</translation>
+    <translation id="6710804210857077393">{VAR_SELECT, select, wert0 {wert0 ausgewählt} wert1 {ein <ph name="START_BOLD_TEXT"><ex>&lt;b&gt;</ex></ph>anderer<ph name="CLOSE_BOLD_TEXT"><ex>&lt;/b&gt;</ex></ph> Wert (wert1) ausgewählt} wert2 {was <ph name="START_EMPHASISED_TEXT"><ex>&lt;em&gt;</ex></ph>ganz anderes<ph name="CLOSE_EMPHASISED_TEXT"><ex>&lt;/em&gt;</ex></ph> wurde ausgewählt} }</translation>
+    <translation id="3944017551463298929"></translation>
+    <translation id="705837031073461246"></translation>
+</translationbundle>

@@ -47,7 +47,7 @@ export class XmlSerializer {
      * @param options can be used to activate beautifying.
      */
     serializeToString(document: Document, options?: XmlSerializerOptions): string {
-        let buf = [];
+        const buf = [];
         let visibleNamespaces: Namespace[] = [];
         const refNode = document.documentElement;
         let prefix = refNode.prefix;
@@ -58,8 +58,8 @@ export class XmlSerializer {
             if (prefix == null) {
                 visibleNamespaces = [
                     {namespace: uri, prefix: null}
-                    //{namespace:uri,prefix:''}
-                ]
+                    // {namespace:uri,prefix:''}
+                ];
             }
         }
         if (!options) {
@@ -78,13 +78,14 @@ export class XmlSerializer {
      * Main format method that does all the work.
      * Outputs a node to the outputbuffer.
      * @param node the node to be formatted.
-     * @param options
+     * @param options options
      * @param buf outputbuffer, new output will be appended to this array.
      * @param indentLevel Lever of indentation for formatted output.
      * @param partOfMixedContent true, if node is a subelement of an element containind mixed content.
-     * @param visibleNamespaces
+     * @param visibleNamespaces visibleNamespaces
      */
-    private doSerializeToString(node: Node, options: XmlSerializerOptions, buf: string[], indentLevel: number, partOfMixedContent: boolean, visibleNamespaces: Namespace[]) {
+    private doSerializeToString(node: Node, options: XmlSerializerOptions, buf: string[],
+                                indentLevel: number, partOfMixedContent: boolean, visibleNamespaces: Namespace[]) {
         let child: Node;
         switch (node.nodeType) {
             case node.ELEMENT_NODE:
@@ -102,7 +103,7 @@ export class XmlSerializer {
 
                 for (let i = 0; i < len; i++) {
                     // add namespaces for attributes
-                    let attr = attrs.item(i);
+                    const attr = attrs.item(i);
                     if (attr.prefix === 'xmlns') {
                         visibleNamespaces.push({prefix: attr.localName, namespace: attr.value});
                     } else if (attr.nodeName === 'xmlns') {
@@ -110,11 +111,11 @@ export class XmlSerializer {
                     }
                 }
                 for (let i = 0; i < len; i++) {
-                    let attr = attrs.item(i);
+                    const attr = attrs.item(i);
                     if (this.needNamespaceDefine(attr, visibleNamespaces)) {
                         const prefix = attr.prefix || '';
                         const uri = attr.namespaceURI;
-                        const ns = prefix ? ' xmlns:' + prefix : " xmlns";
+                        const ns = prefix ? ' xmlns:' + prefix : ' xmlns';
                         buf.push(ns, '="', uri, '"');
                         visibleNamespaces.push({prefix: prefix, namespace: uri});
                     }
@@ -124,20 +125,21 @@ export class XmlSerializer {
                 if (this.needNamespaceDefine(elementNode, visibleNamespaces)) {
                     const prefix = elementNode.prefix || '';
                     const uri = node.namespaceURI;
-                    const ns = prefix ? ' xmlns:' + prefix : " xmlns";
+                    const ns = prefix ? ' xmlns:' + prefix : ' xmlns';
                     buf.push(ns, '="', uri, '"');
                     visibleNamespaces.push({prefix: prefix, namespace: uri});
                 }
 
                 if (child) {
                     buf.push('>');
-                    //if is cdata child node
+                    // if is cdata child node
                     let hasComplexContent = false;
                     while (child) {
                         if (child.nodeType === child.ELEMENT_NODE) {
                             hasComplexContent = true;
                         }
-                        this.doSerializeToString(child, options, buf, indentLevel + 1, partOfMixedContent || elementHasMixedContent, visibleNamespaces);
+                        this.doSerializeToString(child, options, buf, indentLevel + 1,
+                            partOfMixedContent || elementHasMixedContent, visibleNamespaces);
                         child = child.nextSibling;
                     }
                     if (!partOfMixedContent && !elementHasMixedContent && hasComplexContent) {
@@ -171,7 +173,7 @@ export class XmlSerializer {
                 return buf.push('<![CDATA[', cdatasectionNode.data, ']]>');
             case node.COMMENT_NODE:
                 const commentNode = <Comment> node;
-                return buf.push("<!--", commentNode.data, "-->");
+                return buf.push('<!--', commentNode.data, '-->');
             case node.DOCUMENT_TYPE_NODE:
                 const documenttypeNode = <DocumentType> node;
                 const pubid = documenttypeNode.publicId;
@@ -186,20 +188,20 @@ export class XmlSerializer {
                 } else if (sysid && sysid !== '.') {
                     buf.push(' SYSTEM "', sysid, '">');
                 } else {
-                    var sub = documenttypeNode.internalSubset;
+                    const sub = documenttypeNode.internalSubset;
                     if (sub) {
-                        buf.push(" [", sub, "]");
+                        buf.push(' [', sub, ']');
                     }
-                    buf.push(">");
+                    buf.push('>');
                 }
                 return;
             case node.PROCESSING_INSTRUCTION_NODE:
                 const piNode = <ProcessingInstruction> node;
-                return buf.push("<?", piNode.target, " ", piNode.data, "?>");
+                return buf.push( '<?', piNode.target, ' ', piNode.data, '?>');
             case node.ENTITY_REFERENCE_NODE:
                 return buf.push('&', node.nodeName, ';');
-            //case ENTITY_NODE:
-            //case NOTATION_NODE:
+            // case ENTITY_NODE:
+            // case NOTATION_NODE:
             default:
                 buf.push('??', node.nodeName);
         }
@@ -211,7 +213,7 @@ export class XmlSerializer {
         if (!prefix && !uri) {
             return false;
         }
-        if (prefix === "xml" && uri === "http://www.w3.org/XML/1998/namespace"
+        if (prefix === 'xml' && uri === 'http://www.w3.org/XML/1998/namespace'
             || uri === 'http://www.w3.org/2000/xmlns/') {
             return false;
         }
@@ -232,7 +234,7 @@ export class XmlSerializer {
             c === '>' && '&gt;' ||
             c === '&' && '&amp;' ||
             c === '"' && '&quot;' ||
-            '&#'+ c.charCodeAt(0)+';'
+            '&#' + c.charCodeAt(0) + ';';
     }
 
     private outputIndented(options: XmlSerializerOptions, buf: string[], indentLevel: number, ...outputParts: string[]) {
@@ -256,8 +258,8 @@ export class XmlSerializer {
 
     /**
      * Test, wether tagName is an element containing mixed content.
-     * @param tagName
-     * @param options
+     * @param tagName tagName
+     * @param options options
      */
     private isMixedContentElement(tagName: string, options: XmlSerializerOptions): boolean {
         if (options && options.mixedContentElements) {

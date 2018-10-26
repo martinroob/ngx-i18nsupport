@@ -1,6 +1,6 @@
 import {Xliff2MessageParser} from './xliff2-message-parser';
 import {ParsedMessage} from './parsed-message';
-import {INormalizedMessage} from '../api/i-normalized-message';
+import {INormalizedMessage} from '../api/index';
 import {IMessageParser} from './i-message-parser';
 import {XliffMessageParser} from './xliff-message-parser';
 import {XmbMessageParser} from './xmb-message-parser';
@@ -13,21 +13,21 @@ describe('normalized message test spec', () => {
 
     /**
      * Helperfunction to create a parsed message from normalized string.
-     * @param normalizedString
-     * @param sourceMessage
-     * @return {ParsedMessage}
+     * @param normalizedString normalizedString
+     * @param sourceMessage sourceMessage
+     * @return new parsed message
      */
     function parsedMessageFor(normalizedString: string, sourceMessage?: ParsedMessage): ParsedMessage {
-        let parser = new Xliff2MessageParser(); // parser does not matter here, every format should be the same.
+        const parser = new Xliff2MessageParser(); // parser does not matter here, every format should be the same.
         return parser.parseNormalizedString(normalizedString, sourceMessage);
     }
 
     /**
      * Helperfunction to create an ICU Message.
-     * @param icuMessageString
-     * @param sourceMessage
+     * @param icuMessageString icuMessageString
+     * @param sourceMessage sourceMessage
      * @param parserType (optional) xlf or xlf2 or xmb, default xlf2
-     * @return {INormalizedMessage}
+     * @return new isu message
      */
     function parsedICUMessage(icuMessageString: string, sourceMessage?: ParsedMessage, parserType?: string): INormalizedMessage {
         let parser: IMessageParser;
@@ -56,26 +56,26 @@ describe('normalized message test spec', () => {
     describe('validation test cases ', () => {
 
         it('should find nothing wrong with simple text message', () => {
-            let translation = 'a text without anything special';
-            let parsedMessage = parsedMessageFor(translation);
+            const translation = 'a text without anything special';
+            const parsedMessage = parsedMessageFor(translation);
             expect(parsedMessage.validate()).toBeFalsy();
             expect(parsedMessage.validateWarnings()).toBeFalsy();
         });
 
         it('should find nothing wrong with simple text as translation of simple text', () => {
-            let original = 'any text';
-            let translation = 'a text without anything special';
-            let sourceMessage = parsedMessageFor(original);
-            let translatedMessage = sourceMessage.translate(translation);
+            const original = 'any text';
+            const translation = 'a text without anything special';
+            const sourceMessage = parsedMessageFor(original);
+            const translatedMessage = sourceMessage.translate(translation);
             expect(translatedMessage.validate()).toBeFalsy();
             expect(translatedMessage.validateWarnings()).toBeFalsy();
         });
 
         it('should warn if you remove a placeholder in the translation', () => {
-            let original = 'a text with placeholder: {{0}}';
-            let translation = 'a text without anything special';
-            let sourceMessage = parsedMessageFor(original);
-            let translatedMessage = sourceMessage.translate(translation);
+            const original = 'a text with placeholder: {{0}}';
+            const translation = 'a text without anything special';
+            const sourceMessage = parsedMessageFor(original);
+            const translatedMessage = sourceMessage.translate(translation);
             expect(translatedMessage.validate()).toBeFalsy();
             const warnings = translatedMessage.validateWarnings();
             expect(warnings).toBeTruthy();
@@ -83,10 +83,10 @@ describe('normalized message test spec', () => {
         });
 
         it('should warn if you remove 2 placeholders in the translation', () => {
-            let original = 'a text with placeholders: {{0}} and {{1}}';
-            let translation = 'a text without anything special';
-            let sourceMessage = parsedMessageFor(original);
-            let translatedMessage = sourceMessage.translate(translation);
+            const original = 'a text with placeholders: {{0}} and {{1}}';
+            const translation = 'a text without anything special';
+            const sourceMessage = parsedMessageFor(original);
+            const translatedMessage = sourceMessage.translate(translation);
             expect(translatedMessage.validate()).toBeFalsy();
             const warnings = translatedMessage.validateWarnings();
             expect(warnings).toBeTruthy();
@@ -94,10 +94,10 @@ describe('normalized message test spec', () => {
         });
 
         it('should report an error if you add a new placeholder in the translation', () => {
-            let original = 'a text with placeholder: {{0}}';
-            let translation = 'a text with 2 placeholders: {{0}} and {{1}}';
-            let sourceMessage = parsedMessageFor(original);
-            let translatedMessage = sourceMessage.translate(translation);
+            const original = 'a text with placeholder: {{0}}';
+            const translation = 'a text with 2 placeholders: {{0}} and {{1}}';
+            const sourceMessage = parsedMessageFor(original);
+            const translatedMessage = sourceMessage.translate(translation);
             expect(translatedMessage.validateWarnings()).toBeFalsy();
             const errors = translatedMessage.validate();
             expect(errors).toBeTruthy();
@@ -105,10 +105,10 @@ describe('normalized message test spec', () => {
         });
 
         it('should report an error if you add 2 new placeholders in the translation', () => {
-            let original = 'a text with placeholder: {{0}}';
-            let translation = 'a text with 3 placeholders: {{0}} and {{1}} and {{2}}';
-            let sourceMessage = parsedMessageFor(original);
-            let translatedMessage = sourceMessage.translate(translation);
+            const original = 'a text with placeholder: {{0}}';
+            const translation = 'a text with 3 placeholders: {{0}} and {{1}} and {{2}}';
+            const sourceMessage = parsedMessageFor(original);
+            const translatedMessage = sourceMessage.translate(translation);
             expect(translatedMessage.validateWarnings()).toBeFalsy();
             const errors = translatedMessage.validate();
             expect(errors).toBeTruthy();
@@ -116,19 +116,19 @@ describe('normalized message test spec', () => {
         });
 
         it('should not report an error if you duplicate a placeholder in the translation', () => {
-            let original = 'a text with placeholder: {{0}}';
-            let translation = 'a text with a duplicated placeholders: {{0}} and {{0}}';
-            let sourceMessage = parsedMessageFor(original);
-            let translatedMessage = sourceMessage.translate(translation);
+            const original = 'a text with placeholder: {{0}}';
+            const translation = 'a text with a duplicated placeholders: {{0}} and {{0}}';
+            const sourceMessage = parsedMessageFor(original);
+            const translatedMessage = sourceMessage.translate(translation);
             expect(translatedMessage.validate()).toBeFalsy();
             expect(translatedMessage.validateWarnings()).toBeFalsy();
         });
 
         it('should warn if you remove a tag in the translation', () => {
-            let original = 'a <b>bold</b> text';
-            let translation = 'a non bold text';
-            let sourceMessage = parsedMessageFor(original);
-            let translatedMessage = sourceMessage.translate(translation);
+            const original = 'a <b>bold</b> text';
+            const translation = 'a non bold text';
+            const sourceMessage = parsedMessageFor(original);
+            const translatedMessage = sourceMessage.translate(translation);
             expect(translatedMessage.validate()).toBeFalsy();
             const warnings = translatedMessage.validateWarnings();
             expect(warnings).toBeTruthy();
@@ -136,10 +136,10 @@ describe('normalized message test spec', () => {
         });
 
         it('should warn if you add a tag in the translation', () => {
-            let original = 'a normal text';
-            let translation = 'a <strange>text</strange>';
-            let sourceMessage = parsedMessageFor(original);
-            let translatedMessage = sourceMessage.translate(translation);
+            const original = 'a normal text';
+            const translation = 'a <strange>text</strange>';
+            const sourceMessage = parsedMessageFor(original);
+            const translatedMessage = sourceMessage.translate(translation);
             expect(translatedMessage.validate()).toBeFalsy();
             const warnings = translatedMessage.validateWarnings();
             expect(warnings).toBeTruthy();
@@ -147,10 +147,10 @@ describe('normalized message test spec', () => {
         });
 
         it('should warn if you remove an empty tag in the translation', () => {
-            let original = 'a text with <br>line break and <img>';
-            let translation = 'a text';
-            let sourceMessage = parsedMessageFor(original);
-            let translatedMessage = sourceMessage.translate(translation);
+            const original = 'a text with <br>line break and <img>';
+            const translation = 'a text';
+            const sourceMessage = parsedMessageFor(original);
+            const translatedMessage = sourceMessage.translate(translation);
             expect(translatedMessage.validate()).toBeFalsy();
             const warnings = translatedMessage.validateWarnings();
             expect(warnings).toBeTruthy();
@@ -158,10 +158,10 @@ describe('normalized message test spec', () => {
         });
 
         it('should warn if you add an empty tag in the translation', () => {
-            let original = 'a normal text';
-            let translation = 'a normal text with <br> line break';
-            let sourceMessage = parsedMessageFor(original);
-            let translatedMessage = sourceMessage.translate(translation);
+            const original = 'a normal text';
+            const translation = 'a normal text with <br> line break';
+            const sourceMessage = parsedMessageFor(original);
+            const translatedMessage = sourceMessage.translate(translation);
             expect(translatedMessage.validate()).toBeFalsy();
             const warnings = translatedMessage.validateWarnings();
             expect(warnings).toBeTruthy();
@@ -169,10 +169,10 @@ describe('normalized message test spec', () => {
         });
 
         it('should warn if you add 2 empty tags in the translation', () => {
-            let original = 'a normal text';
-            let translation = 'a normal text with <br> line break and <img>';
-            let sourceMessage = parsedMessageFor(original);
-            let translatedMessage = sourceMessage.translate(translation);
+            const original = 'a normal text';
+            const translation = 'a normal text with <br> line break and <img>';
+            const sourceMessage = parsedMessageFor(original);
+            const translatedMessage = sourceMessage.translate(translation);
             expect(translatedMessage.validate()).toBeFalsy();
             const warnings = translatedMessage.validateWarnings();
             expect(warnings).toBeTruthy();
@@ -180,30 +180,30 @@ describe('normalized message test spec', () => {
         });
 
         it('should find nothing wrong with text containing line breaks', () => {
-            let original = 'a text without\na line break';
-            let translation = 'a text without\na line break';
-            let sourceMessage = parsedMessageFor(original);
-            let translatedMessage = sourceMessage.translate(translation);
+            const original = 'a text without\na line break';
+            const translation = 'a text without\na line break';
+            const sourceMessage = parsedMessageFor(original);
+            const translatedMessage = sourceMessage.translate(translation);
             expect(translatedMessage.asDisplayString()).toBe(translation);
             expect(translatedMessage.validate()).toBeFalsy();
             expect(translatedMessage.validateWarnings()).toBeFalsy();
         });
 
         it('should find nothing wrong in complex nested tags', () => {
-            let original = '<span>a <b>bold</b> text</span> and <span>a <b>bold</b> text</span>';
-            let translation = '<span>a <b>bold</b> text</span> and <span>a <b>bold</b> text</span>';
-            let sourceMessage = parsedMessageFor(original);
-            let translatedMessage = sourceMessage.translate(translation);
+            const original = '<span>a <b>bold</b> text</span> and <span>a <b>bold</b> text</span>';
+            const translation = '<span>a <b>bold</b> text</span> and <span>a <b>bold</b> text</span>';
+            const sourceMessage = parsedMessageFor(original);
+            const translatedMessage = sourceMessage.translate(translation);
             expect(translatedMessage.asDisplayString()).toBe(translation);
             expect(translatedMessage.validate()).toBeFalsy();
             expect(translatedMessage.validateWarnings()).toBeFalsy();
         });
 
         it('should report an error if you remove an ICU ref in the translation', () => {
-            let original = 'a text with <ICU-Message-Ref_0/>';
-            let translation = 'a text without icu-ref';
-            let sourceMessage = parsedMessageFor(original);
-            let translatedMessage = sourceMessage.translate(translation);
+            const original = 'a text with <ICU-Message-Ref_0/>';
+            const translation = 'a text without icu-ref';
+            const sourceMessage = parsedMessageFor(original);
+            const translatedMessage = sourceMessage.translate(translation);
             expect(translatedMessage.validateWarnings()).toBeFalsy();
             const errors = translatedMessage.validate();
             expect(errors).toBeTruthy();
@@ -211,10 +211,10 @@ describe('normalized message test spec', () => {
         });
 
         it('should report an error if you remove 2 ICU refs in the translation', () => {
-            let original = 'a text with <ICU-Message-Ref_0/> and <ICU-Message-Ref_1/>';
-            let translation = 'a text without icu-ref';
-            let sourceMessage = parsedMessageFor(original);
-            let translatedMessage = sourceMessage.translate(translation);
+            const original = 'a text with <ICU-Message-Ref_0/> and <ICU-Message-Ref_1/>';
+            const translation = 'a text without icu-ref';
+            const sourceMessage = parsedMessageFor(original);
+            const translatedMessage = sourceMessage.translate(translation);
             expect(translatedMessage.validateWarnings()).toBeFalsy();
             const errors = translatedMessage.validate();
             expect(errors).toBeTruthy();
@@ -222,10 +222,10 @@ describe('normalized message test spec', () => {
         });
 
         it('should report an error if you add an ICU ref in the translation', () => {
-            let original = 'a text with <ICU-Message-Ref_0/>';
-            let translation = 'a text with <ICU-Message-Ref_0/> and  <ICU-Message-Ref_1/>';
-            let sourceMessage = parsedMessageFor(original);
-            let translatedMessage = sourceMessage.translate(translation);
+            const original = 'a text with <ICU-Message-Ref_0/>';
+            const translation = 'a text with <ICU-Message-Ref_0/> and  <ICU-Message-Ref_1/>';
+            const sourceMessage = parsedMessageFor(original);
+            const translatedMessage = sourceMessage.translate(translation);
             expect(translatedMessage.validateWarnings()).toBeFalsy();
             const errors = translatedMessage.validate();
             expect(errors).toBeTruthy();
@@ -233,10 +233,10 @@ describe('normalized message test spec', () => {
         });
 
         it('should report an error if you add 2 ICU refs in the translation', () => {
-            let original = 'a text with <ICU-Message-Ref_0/>';
-            let translation = 'a text with <ICU-Message-Ref_0/> and  <ICU-Message-Ref_1/> and  <ICU-Message-Ref_2/>';
-            let sourceMessage = parsedMessageFor(original);
-            let translatedMessage = sourceMessage.translate(translation);
+            const original = 'a text with <ICU-Message-Ref_0/>';
+            const translation = 'a text with <ICU-Message-Ref_0/> and  <ICU-Message-Ref_1/> and  <ICU-Message-Ref_2/>';
+            const sourceMessage = parsedMessageFor(original);
+            const translatedMessage = sourceMessage.translate(translation);
             expect(translatedMessage.validateWarnings()).toBeFalsy();
             const errors = translatedMessage.validate();
             expect(errors).toBeTruthy();
@@ -244,8 +244,8 @@ describe('normalized message test spec', () => {
         });
 
         it('should parse tags with - and [0-9]', () => {
-            let original = '<h1><md-icon>info</md-icon></h1>';
-            let sourceMessage = parsedMessageFor(original);
+            const original = '<h1><md-icon>info</md-icon></h1>';
+            const sourceMessage = parsedMessageFor(original);
             expect(sourceMessage.parts().length).toBe(5);
         });
 
@@ -253,20 +253,21 @@ describe('normalized message test spec', () => {
 
     describe('ICU test cases', () => {
         it('should parse ICU plural message', () => {
-            let original = '{n, plural, =0 {kein Schaf} =1 {ein Schaf} other {Schafe}}';
-            let sourceICUMessage = parsedICUMessage(original);
+            const original = '{n, plural, =0 {kein Schaf} =1 {ein Schaf} other {Schafe}}';
+            const sourceICUMessage = parsedICUMessage(original);
             expect(sourceICUMessage).toBeTruthy();
             expect(sourceICUMessage.getICUMessage()).toBeTruthy();
             expect(sourceICUMessage.getICUMessage().isPluralMessage()).toBeTruthy();
             expect(sourceICUMessage.getICUMessage().getCategories().length).toBe(3);
             expect(sourceICUMessage.getICUMessage().getCategories()[0].getCategory()).toBe('=0');
             expect(sourceICUMessage.getICUMessage().getCategories()[0].getMessageNormalized().asDisplayString()).toBe('kein Schaf');
-            expect(sourceICUMessage.getICUMessage().asNativeString()).toBe('{VAR_PLURAL, plural, =0 {kein Schaf} =1 {ein Schaf} other {Schafe}}');
+            expect(sourceICUMessage.getICUMessage().asNativeString())
+                .toBe('{VAR_PLURAL, plural, =0 {kein Schaf} =1 {ein Schaf} other {Schafe}}');
         });
 
         it('should parse ICU select message', () => {
-            let original = '{gender, select, m {männlich} f {weiblich}}';
-            let sourceICUMessage = parsedICUMessage(original);
+            const original = '{gender, select, m {männlich} f {weiblich}}';
+            const sourceICUMessage = parsedICUMessage(original);
             expect(sourceICUMessage).toBeTruthy();
             expect(sourceICUMessage.getICUMessage()).toBeTruthy();
             expect(sourceICUMessage.getICUMessage().isPluralMessage()).toBeFalsy();
@@ -277,8 +278,8 @@ describe('normalized message test spec', () => {
         });
 
         it('should parse ICU select message with select or plural in message text', () => {
-            let original = '{VAR_SELECT, select, wert0 {value0 selected} wert1 {plural selected} wert2 {anything else selected} }';
-            let sourceICUMessage = parsedICUMessage(original);
+            const original = '{VAR_SELECT, select, wert0 {value0 selected} wert1 {plural selected} wert2 {anything else selected} }';
+            const sourceICUMessage = parsedICUMessage(original);
             expect(sourceICUMessage).toBeTruthy();
             expect(sourceICUMessage.getICUMessage()).toBeTruthy();
             expect(sourceICUMessage.getICUMessage().isPluralMessage()).toBeFalsy();
@@ -288,8 +289,8 @@ describe('normalized message test spec', () => {
         });
 
         it('should parse ICU select message with masked } {', () => {
-            let original = '{VAR_SELECT, select, wert0 {value0 \'}\'\'\'\'{\'}}';
-            let sourceICUMessage = parsedICUMessage(original);
+            const original = '{VAR_SELECT, select, wert0 {value0 \'}\'\'\'\'{\'}}';
+            const sourceICUMessage = parsedICUMessage(original);
             expect(sourceICUMessage).toBeTruthy();
             expect(sourceICUMessage.getICUMessage()).toBeTruthy();
             expect(sourceICUMessage.getICUMessage().isPluralMessage()).toBeFalsy();
@@ -299,10 +300,10 @@ describe('normalized message test spec', () => {
         });
 
         it('should translate ICU plural message', () => {
-            let original = '{n, plural, =0 {kein Schaf} =1 {ein Schaf} other {Schafe}}';
-            let sourceICUMessage: INormalizedMessage = parsedICUMessage(original);
+            const original = '{n, plural, =0 {kein Schaf} =1 {ein Schaf} other {Schafe}}';
+            const sourceICUMessage: INormalizedMessage = parsedICUMessage(original);
             expect(sourceICUMessage).toBeTruthy();
-            let translatedICUMessage = sourceICUMessage.translateICUMessage({
+            const translatedICUMessage = sourceICUMessage.translateICUMessage({
                 '=0': 'no sheep',
                 '=1': 'one sheep',
                 'other': 'sheep'
@@ -311,36 +312,38 @@ describe('normalized message test spec', () => {
         });
 
         it('should translate ICU plural message with new categories', () => {
-            let original = '{n, plural, =0 {kein Schaf} =1 {ein Schaf} other {Schafe}}';
-            let sourceICUMessage: INormalizedMessage = parsedICUMessage(original);
+            const original = '{n, plural, =0 {kein Schaf} =1 {ein Schaf} other {Schafe}}';
+            const sourceICUMessage: INormalizedMessage = parsedICUMessage(original);
             expect(sourceICUMessage).toBeTruthy();
-            let translatedICUMessage = sourceICUMessage.translateICUMessage({
+            const translatedICUMessage = sourceICUMessage.translateICUMessage({
                 '=0': 'no sheep',
                 'many': 'a lot of sheep'
             });
-            expect(translatedICUMessage.asNativeString()).toBe('{VAR_PLURAL, plural, =0 {no sheep} =1 {ein Schaf} other {Schafe} many {a lot of sheep}}');
+            expect(translatedICUMessage.asNativeString())
+                .toBe('{VAR_PLURAL, plural, =0 {no sheep} =1 {ein Schaf} other {Schafe} many {a lot of sheep}}');
         });
 
         it('should throw an error when translation of ICU plural message adds invalid category', () => {
-            let original = '{n, plural, =0 {kein Schaf} =1 {ein Schaf} other {Schafe}}';
-            let sourceICUMessage: INormalizedMessage = parsedICUMessage(original);
+            const original = '{n, plural, =0 {kein Schaf} =1 {ein Schaf} other {Schafe}}';
+            const sourceICUMessage: INormalizedMessage = parsedICUMessage(original);
             expect(sourceICUMessage).toBeTruthy();
             try {
-                let translatedICUMessage = sourceICUMessage.translateICUMessage({
+                const translatedICUMessage = sourceICUMessage.translateICUMessage({
                     '=0': 'no sheep',
                     'verdammtviele': 'a lot of sheep'
                 });
                 expect('').toBe('should have thrown an error "invalid category"');
             } catch (error) {
-                expect(error.toString()).toBe('Error: invalid plural category "verdammtviele", allowed are =<n> and zero,one,two,few,many,other');
+                expect(error.toString())
+                    .toBe('Error: invalid plural category "verdammtviele", allowed are =<n> and zero,one,two,few,many,other');
             }
         });
 
         it('should translate ICU select message', () => {
-            let original = '{gender, select, m {männlich} f {weiblich}}';
-            let sourceICUMessage: INormalizedMessage = parsedICUMessage(original);
+            const original = '{gender, select, m {männlich} f {weiblich}}';
+            const sourceICUMessage: INormalizedMessage = parsedICUMessage(original);
             expect(sourceICUMessage).toBeTruthy();
-            let translatedICUMessage = sourceICUMessage.translateICUMessage({
+            const translatedICUMessage = sourceICUMessage.translateICUMessage({
                 'm': 'male',
                 'f': 'female'
             });
@@ -348,23 +351,23 @@ describe('normalized message test spec', () => {
         });
 
         it('should partially translate ICU select message', () => {
-            let original = '{gender, select, m {männlich} f {weiblich}}';
-            let sourceICUMessage: INormalizedMessage = parsedICUMessage(original);
+            const original = '{gender, select, m {männlich} f {weiblich}}';
+            const sourceICUMessage: INormalizedMessage = parsedICUMessage(original);
             expect(sourceICUMessage).toBeTruthy();
             // only translate one part of message
-            let translatedICUMessage = sourceICUMessage.translateICUMessage({
+            const translatedICUMessage = sourceICUMessage.translateICUMessage({
                 'f': 'female'
             });
             expect(translatedICUMessage.asNativeString()).toBe('{VAR_SELECT, select, m {männlich} f {female}}');
         });
 
         it('should throw an error if translation of ICU select message contains additional categories', () => {
-            let original = '{gender, select, m {männlich} f {weiblich}}';
-            let sourceICUMessage: INormalizedMessage = parsedICUMessage(original);
+            const original = '{gender, select, m {männlich} f {weiblich}}';
+            const sourceICUMessage: INormalizedMessage = parsedICUMessage(original);
             expect(sourceICUMessage).toBeTruthy();
             try {
                 // a category not part of the message
-                let translatedICUMessage = sourceICUMessage.translateICUMessage({
+                const translatedICUMessage = sourceICUMessage.translateICUMessage({
                     'u': 'unknown'
                 });
                 expect('').toBe('should have thrown an error "unknown category"');
@@ -374,8 +377,8 @@ describe('normalized message test spec', () => {
         });
 
         it('should parse plural ICU message with placeholder in xlf format', () => {
-            let original = '{minutes, plural, =0 {just now} =1 {one minute ago} other {<x id="INTERPOLATION" equiv-text="{{minutes}}"/> minutes ago} }';
-            let parsedMessage: INormalizedMessage = parsedICUMessage(original, null, 'xlf');
+            const original = '{minutes, plural, =0 {just now} =1 {one minute ago} other {<x id="INTERPOLATION" equiv-text="{{minutes}}"/> minutes ago} }';
+            const parsedMessage: INormalizedMessage = parsedICUMessage(original, null, 'xlf');
             expect(parsedMessage.asDisplayString()).toBe('<ICU-Message/>');
             expect(parsedMessage.getICUMessage()).toBeTruthy();
             const icuMessage = parsedMessage.getICUMessage();
@@ -384,8 +387,8 @@ describe('normalized message test spec', () => {
         });
 
         it('should parse plural ICU message with placeholder in xlf2 format', () => {
-            let original = '{minutes, plural, =0 {just now} =1 {one minute ago} other {<ph id="3" equiv="INTERPOLATION" disp="{{minutes}}"/> minutes ago} }';
-            let parsedMessage: INormalizedMessage = parsedICUMessage(original);
+            const original = '{minutes, plural, =0 {just now} =1 {one minute ago} other {<ph id="3" equiv="INTERPOLATION" disp="{{minutes}}"/> minutes ago} }';
+            const parsedMessage: INormalizedMessage = parsedICUMessage(original);
             expect(parsedMessage.asDisplayString()).toBe('<ICU-Message/>');
             expect(parsedMessage.getICUMessage()).toBeTruthy();
             const icuMessage = parsedMessage.getICUMessage();
@@ -394,7 +397,7 @@ describe('normalized message test spec', () => {
         });
 
         it('should parse nested ICU messages', () => {
-            let original = `{gender_of_host, select, 
+            const original = `{gender_of_host, select, 
   female {
     {num_guests, plural, 
       =0 {{host} does not give a party.}
@@ -414,7 +417,7 @@ describe('normalized message test spec', () => {
       =2 {{host} invites {guest} and one other person to their party.}
       other {{host} invites {guest} and # other people to their party.}}}}`;
 
-            let parsedMessage: INormalizedMessage = parsedICUMessage(original, null, 'xlf');
+            const parsedMessage: INormalizedMessage = parsedICUMessage(original, null, 'xlf');
             expect(parsedMessage.asDisplayString()).toBe('<ICU-Message/>');
             expect(parsedMessage.getICUMessage()).toBeTruthy();
             const outerIcuMessage = parsedMessage.getICUMessage();
@@ -434,7 +437,7 @@ describe('normalized message test spec', () => {
         });
 
         it('should parse nested ICU messages with placeholder', () => {
-            let original = `{gender_of_host, select, 
+            const original = `{gender_of_host, select, 
   female {
     {num_guests, plural, 
       =0 {{host} does not give a party.}
@@ -454,7 +457,7 @@ describe('normalized message test spec', () => {
       =2 {{host} invites {guest} and one other person to their party.}
       other {{host} invites {guest} and # other people to their party.}}}}`;
 
-            let parsedMessage: INormalizedMessage = parsedICUMessage(original, null, 'xlf');
+            const parsedMessage: INormalizedMessage = parsedICUMessage(original, null, 'xlf');
             expect(parsedMessage.asDisplayString()).toBe('<ICU-Message/>');
             expect(parsedMessage.getICUMessage()).toBeTruthy();
             const outerIcuMessage = parsedMessage.getICUMessage();
