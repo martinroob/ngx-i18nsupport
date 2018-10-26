@@ -1,4 +1,4 @@
-import * as fs from "fs";
+import * as fs from 'fs';
 import {FileUtil} from '../common/file-util';
 import {format} from 'util';
 import {AutoTranslateService} from './auto-translate-service';
@@ -14,7 +14,7 @@ import {AutoTranslateService} from './auto-translate-service';
  */
 export function getApiKey(): string {
         const apikeyPath = process.env.API_KEY_FILE;
-        if (apikeyPath){
+        if (apikeyPath) {
             if (fs.existsSync(apikeyPath)) {
                 return FileUtil.read(apikeyPath, 'utf-8');
             } else {
@@ -45,7 +45,7 @@ describe('Autotranslate tests', () => {
             return;
         }
         service.setApiKey('lmaa');
-        service.translateMultipleStrings(['a', 'b'], 'en', 'de').subscribe((translations: string[]) => {
+        service.translateMultipleStrings(['a', 'b'], 'en', 'de').subscribe(() => {
             expect('should not be called').toBe('');
             done();
         }, (err) => {
@@ -59,7 +59,7 @@ describe('Autotranslate tests', () => {
             done();
             return;
         }
-        service.translateMultipleStrings(['a', 'b'], 'en', 'klingon').subscribe((translations: string[]) => {
+        service.translateMultipleStrings(['a', 'b'], 'en', 'klingon').subscribe(() => {
             expect('should not be called').toBe('');
             done();
         }, (err) => {
@@ -159,7 +159,8 @@ describe('Autotranslate tests', () => {
             done();
             return;
         }
-        const longString = 'abcdefghijklmnopqrstuvwabcdefghijklmnopqrstuvwabcdefghijklmnopqrstuvwabcdefghijklmnopqrstuvwabcdefghijklmnopqrstuvwabcdefghijklmnopqrstuvwabcdefghijklmnopqrstuvwabcdefghijklmnopqrstuvwabcdefghijklmnopqrstuvwabcdefghijklmnopqrstuvw';
+        const longString = 'abcdefghijklmnopqrstuvwabcdefghijklmnopqrstuvwabcdefghijklmnopqrstuvwabcdefghijklmnopqrstuvwabcdefghijklmn' +
+            'opqrstuvwabcdefghijklmnopqrstuvwabcdefghijklmnopqrstuvwabcdefghijklmnopqrstuvwabcdefghijklmnopqrstuvwabcdefghijklmnopqrstuvw';
         const longMessages: string[] = [];
         const NUM = 30;  // 30 * 260char = 5200
         for (let i = 0; i < NUM; i++) {
@@ -184,7 +185,7 @@ describe('Autotranslate tests', () => {
         service.translateMultipleStrings(['Operator Logs'], 'en', 'fr').subscribe((translations: string[]) => {
             expect(translations).toBeTruthy();
             expect(translations.length).toBe(1);
-            expect(translations[0]).toBe('Journaux de l&#39;opérateur');
+            expect(translations[0]).toBe('Journaux d&#39;opérateur');
             done();
         }, (err) => {
             expect(err.message).toBe(''); // should not be invoked

@@ -9,10 +9,10 @@ export class NgxTranslateExtractionPattern {
 
     /**
      * Construct the pattern from given description string
-     * @param extractionPatternString
+     * @param extractionPatternString extractionPatternString
      * @throws an error, if there is a syntax error
      */
-    constructor(private extractionPatternString) {
+    constructor(private extractionPatternString: string) {
         const parts = extractionPatternString.split('|');
         this._matchExplicitId = false;
         this._descriptionPatterns = [];
@@ -35,8 +35,8 @@ export class NgxTranslateExtractionPattern {
 
     /**
      * Check, wether an explicitly set id matches the pattern.
-     * @param {string} id
-     * @return {boolean}
+     * @param id id
+     * @return wether an explicitly set id matches the pattern.
      */
     public isExplicitIdMatched(id: string): boolean {
         return id && this._matchExplicitId;
@@ -44,8 +44,8 @@ export class NgxTranslateExtractionPattern {
 
     /**
      * Check, wether a given description matches the pattern.
-     * @param {string} description
-     * @return {boolean}
+     * @param description description
+     * @return wether a given description matches the pattern.
      */
     public isDescriptionMatched(description: string): boolean {
         return this._descriptionPatterns.indexOf(description) >= 0;
@@ -58,7 +58,7 @@ export class NgxTranslateExtractionPattern {
         if (/^[a-zA-Z_][a-zA-Z_-]*$/.test(descriptionPattern)) {
             return null; // it is ok
         } else {
-            return 'description pattern must be an identifier containing only letters, digits, _ or -'
+            return 'description pattern must be an identifier containing only letters, digits, _ or -';
         }
     }
 }

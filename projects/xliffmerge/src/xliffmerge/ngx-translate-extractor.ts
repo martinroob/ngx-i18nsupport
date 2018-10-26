@@ -1,6 +1,6 @@
 import {ITranslationMessagesFile, ITransUnit, NORMALIZATION_FORMAT_NGXTRANSLATE} from 'ngx-i18nsupport-lib';
 import {FileUtil} from '../common/file-util';
-import {isNullOrUndefined} from 'util';
+import {isNullOrUndefined} from '../common/util';
 import {NgxTranslateExtractionPattern} from './ngx-translate-extraction-pattern';
 /**
  * Created by roobm on 15.03.2017.
@@ -32,12 +32,14 @@ export class NgxTranslateExtractor {
 
     /**
      * Check, wether extractionPattern has valid syntax.
-     * @param {string} extractionPatternString
-     * @return {string} null, if pattern is ok, string describing the error, if it is not ok.
+     * @param extractionPatternString extractionPatternString
+     * @return null, if pattern is ok, string describing the error, if it is not ok.
      */
     public static checkPattern(extractionPatternString: string): string {
         try {
-          new NgxTranslateExtractionPattern(extractionPatternString);
+          if (new NgxTranslateExtractionPattern(extractionPatternString)) {
+              return null;
+          }
         } catch (error) {
             return error.message;
         }
@@ -54,12 +56,12 @@ export class NgxTranslateExtractor {
 
     /**
      * Extact messages and write them to a file.
-     * @param outputFile
+     * @param outputFile outputFile
      */
     public extractTo(outputFile: string) {
-        let translations: NgxTranslations = this.toNgxTranslations(this.extract());
+        const translations: NgxTranslations = this.toNgxTranslations(this.extract());
         if (translations && Object.keys(translations).length > 0) {
-            FileUtil.replaceContent(outputFile, JSON.stringify(translations, null, 4), 'UTF-8')
+            FileUtil.replaceContent(outputFile, JSON.stringify(translations, null, 4), 'UTF-8');
         } else {
             if (FileUtil.exists(outputFile)) {
                 FileUtil.deleteFile(outputFile);
@@ -72,11 +74,11 @@ export class NgxTranslateExtractor {
      *  @return the translation objects.
      */
     private extract(): NgxMessage[] {
-        let result: NgxMessage[] = [];
+        const result: NgxMessage[] = [];
         this.messagesFile.forEachTransUnit((tu: ITransUnit) => {
-            let ngxId = this.ngxTranslateIdFromTU(tu);
+            const ngxId = this.ngxTranslateIdFromTU(tu);
             if (ngxId) {
-                let messagetext = tu.targetContentNormalized().asDisplayString(NORMALIZATION_FORMAT_NGXTRANSLATE);
+                const messagetext = tu.targetContentNormalized().asDisplayString(NORMALIZATION_FORMAT_NGXTRANSLATE);
                 result.push({id: ngxId, message: messagetext});
             }
         });
@@ -88,7 +90,7 @@ export class NgxTranslateExtractor {
      * There are 2 possibilities:
      * 1. description is set to "ngx-translate" and meaning contains the id.
      * 2. id is explicitly set to a string.
-     * @param tu
+     * @param tu tu
      * @return an ngx id or null, if this tu should not be extracted.
      */
     private ngxTranslateIdFromTU(tu: ITransUnit): string {
@@ -99,7 +101,7 @@ export class NgxTranslateExtractor {
                 return null;
             }
         }
-        let description = tu.description();
+        const description = tu.description();
         if (description && this.extractionPattern.isDescriptionMatched(description)) {
             return tu.meaning();
         }
@@ -108,24 +110,24 @@ export class NgxTranslateExtractor {
     /**
      * Test, wether ID was explicitly set (via i18n="@myid).
      * Just heuristic, an ID is explicitly, if it does not look like a generated one.
-     * @param id
-     * @return {boolean}
+     * @param id id
+     * @return wether ID was explicitly set (via i18n="@myid).
      */
     private isExplicitlySetId(id: string): boolean {
         if (isNullOrUndefined(id)) {
             return false;
         }
         // generated IDs are either decimal or sha1 hex
-        let reForGeneratedId = /^[0-9a-f]{11,}$/;
+        const reForGeneratedId = /^[0-9a-f]{11,}$/;
         return !reForGeneratedId.test(id);
     }
 
     /**
      * Convert list of relevant TUs to ngx translations object.
-     * @param msgList
+     * @param msgList msgList
      */
     private toNgxTranslations(msgList: NgxMessage[]): NgxTranslations {
-        let translationObject: NgxTranslations = {};
+        const translationObject: NgxTranslations = {};
         msgList.forEach((msg: NgxMessage) => {
             this.putInTranslationObject(translationObject, msg);
         });
@@ -139,14 +141,14 @@ export class NgxTranslateExtractor {
      * {myapp: {
      *   example: 'test'
      *   }}
-     * @param translationObject
-     * @param msg
+     * @param translationObject translationObject
+     * @param msg msg
      */
     private putInTranslationObject(translationObject: NgxTranslations, msg: NgxMessage) {
         let firstPartOfId: string;
         let restOfId: string;
-        let indexOfDot = msg.id.indexOf('.');
-        if (indexOfDot == 0 || indexOfDot == (msg.id.length - 1)) {
+        const indexOfDot = msg.id.indexOf('.');
+        if (indexOfDot === 0 || indexOfDot === (msg.id.length - 1)) {
             throw new Error('bad nxg-translate id "' + msg.id + '"');
         }
         if (indexOfDot < 0) {

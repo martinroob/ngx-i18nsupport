@@ -8,7 +8,8 @@ import * as fs from 'fs';
 import {XliffMergeError} from './xliff-merge-error';
 import {Stats} from 'fs';
 import {CommandOutput} from '../common/command-output';
-import {format, isArray, isNullOrUndefined} from 'util';
+import {format} from 'util';
+import {isArray, isNullOrUndefined} from '../common/util';
 import {ProgramOptions, IConfigFile} from './i-xliff-merge-options';
 import {FileUtil} from '../common/file-util';
 import {NgxTranslateExtractor} from './ngx-translate-extractor';
@@ -331,7 +332,7 @@ export class XliffMergeParameters {
      */
     public showAllParameters(commandOutput: CommandOutput): void {
         commandOutput.debug('xliffmerge Used Parameters:');
-        commandOutput.debug('usedProfilePath:\t"%s")', this.usedProfilePath);
+        commandOutput.debug('usedProfilePath:\t"%s"', this.usedProfilePath);
         commandOutput.debug('defaultLanguage:\t"%s"', this.defaultLanguage());
         commandOutput.debug('srcDir:\t"%s"', this.srcDir());
         commandOutput.debug('genDir:\t"%s"', this.genDir());

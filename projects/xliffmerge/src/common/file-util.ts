@@ -1,4 +1,4 @@
-import * as fs from "fs";
+import * as fs from 'fs';
 
 /**
  * Created by martin on 17.02.2017.
@@ -10,8 +10,8 @@ export class FileUtil {
 
     /**
      * Check for existence.
-     * @param filename
-     * @return {boolean}
+     * @param filename filename
+     * @return wether file exists
      */
     public static exists(filename: string) {
         return fs.existsSync(filename);
@@ -19,9 +19,9 @@ export class FileUtil {
 
     /**
      * Read a file.
-     * @param filename
-     * @param encoding
-     * @return {string}
+     * @param filename filename
+     * @param encoding encoding
+     * @return content of file
      */
     public static read(filename: string, encoding: string) {
         return fs.readFileSync(filename, encoding);
@@ -29,24 +29,24 @@ export class FileUtil {
 
     /**
      * Write a file with given content.
-     * @param filename
-     * @param newContent
-     * @param encoding
+     * @param filename filename
+     * @param newContent newContent
+     * @param encoding encoding
      */
     public static replaceContent(filename: string, newContent: string, encoding: string) {
         fs.writeFileSync(filename, newContent, {encoding: encoding});
     }
 
     public static copy(srcFile: string, destFile: string) {
-        let BUF_LENGTH = 64*1024;
-        let buff = new Buffer(BUF_LENGTH);
-        let fdr = fs.openSync(srcFile, 'r');
-        let fdw = fs.openSync(destFile, 'w');
+        const BUF_LENGTH = 64 * 1024;
+        const buff = new Buffer(BUF_LENGTH);
+        const fdr = fs.openSync(srcFile, 'r');
+        const fdw = fs.openSync(destFile, 'w');
         let bytesRead = 1;
         let pos = 0;
         while (bytesRead > 0) {
             bytesRead = fs.readSync(fdr, buff, 0, BUF_LENGTH, pos);
-            fs.writeSync(fdw,buff,0,bytesRead);
+            fs.writeSync(fdw, buff, 0, bytesRead);
             pos += bytesRead;
         }
         fs.closeSync(fdr);
@@ -55,15 +55,15 @@ export class FileUtil {
 
     /**
      * Delete the folder and all of its content (rm -rf).
-     * @param path
+     * @param path path
      */
     public static deleteFolderRecursive(path: string) {
-        var files = [];
-        if( fs.existsSync(path) ) {
+        let files = [];
+        if (fs.existsSync(path) ) {
             files = fs.readdirSync(path);
-            files.forEach(function(file,index){
-                var curPath = path + "/" + file;
-                if(fs.lstatSync(curPath).isDirectory()) { // recurse
+            files.forEach(function(file) {
+                const curPath = path + '/' + file;
+                if (fs.lstatSync(curPath).isDirectory()) { // recurse
                     FileUtil.deleteFolderRecursive(curPath);
                 } else { // delete file
                     fs.unlinkSync(curPath);
@@ -71,31 +71,31 @@ export class FileUtil {
             });
             fs.rmdirSync(path);
         }
-    };
+    }
 
     /**
      * Delete folders content recursively, but do not delete folder.
      * Folder is left empty at the end.
-     * @param path
+     * @param path path
      */
     public static deleteFolderContentRecursive(path: string) {
-        var files = [];
-        if( fs.existsSync(path) ) {
+        let files = [];
+        if (fs.existsSync(path) ) {
             files = fs.readdirSync(path);
-            files.forEach(function(file,index){
-                var curPath = path + "/" + file;
-                if(fs.lstatSync(curPath).isDirectory()) { // recurse
+            files.forEach(function(file) {
+                const curPath = path + '/' + file;
+                if (fs.lstatSync(curPath).isDirectory()) { // recurse
                     FileUtil.deleteFolderRecursive(curPath);
                 } else { // delete file
                     fs.unlinkSync(curPath);
                 }
             });
         }
-    };
+    }
 
     /**
      * Delete a file.
-     * @param path
+     * @param path path
      */
     public static deleteFile(path: string) {
         fs.unlinkSync(path);

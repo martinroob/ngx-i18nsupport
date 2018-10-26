@@ -19,8 +19,8 @@ export class XmlReader {
             encoding = XmlReader.DEFAULT_ENCODING;
         }
         let content: string = FileUtil.read(path, encoding);
-        let foundEncoding = XmlReader.encodingFromXml(content);
-        if (foundEncoding != encoding) {
+        const foundEncoding = XmlReader.encodingFromXml(content);
+        if (foundEncoding !== encoding) {
             // read again with the correct encoding
             content = FileUtil.read(path, foundEncoding);
         }
@@ -33,15 +33,15 @@ export class XmlReader {
     /**
      * Read the encoding from the xml.
      * xml File starts with .. encoding=".."
-     * @param xmlString
-     * @return {any}
+     * @param xmlString xmlString
+     * @return encoding
      */
     private static encodingFromXml(xmlString: string): string {
-        let index = xmlString.indexOf('encoding="');
+        const index = xmlString.indexOf('encoding="');
         if (index < 0) {
             return this.DEFAULT_ENCODING; // default in xml if not explicitly set
         }
-        let endIndex = xmlString.indexOf('"', index + 10); // 10 = length of 'encoding="'
+        const endIndex = xmlString.indexOf('"', index + 10); // 10 = length of 'encoding="'
         return xmlString.substring(index + 10, endIndex);
     }
 

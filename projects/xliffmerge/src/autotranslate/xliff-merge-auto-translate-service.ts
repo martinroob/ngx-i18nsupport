@@ -1,4 +1,4 @@
-import {isNullOrUndefined} from 'util';
+import {isNullOrUndefined} from '../common/util';
 import {Observable, forkJoin, of} from 'rxjs';
 import {map, catchError} from 'rxjs/operators';
 import * as entityDecoderLib from 'he';
@@ -25,12 +25,13 @@ export class XliffMergeAutoTranslateService {
     /**
      * Auto translate file via Google Translate.
      * Will translate all new units in file.
-     * @param from
-     * @param to
-     * @param languageSpecificMessagesFile
+     * @param from from
+     * @param to to
+     * @param languageSpecificMessagesFile languageSpecificMessagesFile
      * @return a promise with the execution result as a summary report.
      */
-    public autoTranslate(from: string, to: string, languageSpecificMessagesFile: ITranslationMessagesFile): Observable<AutoTranslateSummaryReport> {
+    public autoTranslate(from: string, to: string, languageSpecificMessagesFile: ITranslationMessagesFile)
+        : Observable<AutoTranslateSummaryReport> {
         return forkJoin([
             this.doAutoTranslateNonICUMessages(from, to, languageSpecificMessagesFile),
             ...this.doAutoTranslateICUMessages(from, to, languageSpecificMessagesFile)])
@@ -46,8 +47,8 @@ export class XliffMergeAutoTranslateService {
 
     /**
      * Collect all units that are untranslated.
-     * @param languageSpecificMessagesFile
-     * @return {ITransUnit[]}
+     * @param languageSpecificMessagesFile languageSpecificMessagesFile
+     * @return all untranslated units
      */
     private allUntranslatedTUs(languageSpecificMessagesFile: ITranslationMessagesFile): ITransUnit[] {
         // collect all units, that should be auto translated
@@ -60,7 +61,8 @@ export class XliffMergeAutoTranslateService {
         return allUntranslated;
     }
 
-    private doAutoTranslateNonICUMessages(from: string, to: string, languageSpecificMessagesFile: ITranslationMessagesFile): Observable<AutoTranslateSummaryReport> {
+    private doAutoTranslateNonICUMessages(from: string, to: string, languageSpecificMessagesFile: ITranslationMessagesFile)
+        : Observable<AutoTranslateSummaryReport> {
         const allUntranslated: ITransUnit[] = this.allUntranslatedTUs(languageSpecificMessagesFile);
         const allTranslatable = allUntranslated.filter((tu) => isNullOrUndefined(tu.sourceContentNormalized().getICUMessage()));
         const allMessages: string[] = allTranslatable.map((tu) => {
@@ -88,7 +90,8 @@ export class XliffMergeAutoTranslateService {
             }));
     }
 
-    private doAutoTranslateICUMessages(from: string, to: string, languageSpecificMessagesFile: ITranslationMessagesFile): Observable<AutoTranslateSummaryReport>[] {
+    private doAutoTranslateICUMessages(from: string, to: string, languageSpecificMessagesFile: ITranslationMessagesFile)
+        : Observable<AutoTranslateSummaryReport>[] {
         const allUntranslated: ITransUnit[] = this.allUntranslatedTUs(languageSpecificMessagesFile);
         const allTranslatableICU = allUntranslated.filter((tu) => !isNullOrUndefined(tu.sourceContentNormalized().getICUMessage()));
         return allTranslatableICU.map((tu) => {
@@ -98,10 +101,10 @@ export class XliffMergeAutoTranslateService {
 
     /**
      * Translate single ICU Messages.
-     * @param from
-     * @param to
+     * @param from from
+     * @param to to
      * @param tu transunit to translate (must contain ICU Message)
-     * @return {Observable<AutoTranslateSummaryReport>}
+     * @return summary report
      */
     private doAutoTranslateICUMessage(from: string, to: string, tu: ITransUnit): Observable<AutoTranslateSummaryReport> {
         const icuMessage: IICUMessage = tu.sourceContentNormalized().getICUMessage();
@@ -121,8 +124,7 @@ export class XliffMergeAutoTranslateService {
                     const summary = new AutoTranslateSummaryReport(from, to);
                     const icuTranslation: IICUMessageTranslation = {};
                     for (let i = 0; i < translations.length; i++) {
-                        const translationText = translations[i];
-                        icuTranslation[categories[i].getCategory()] = translationText;
+                        icuTranslation[categories[i].getCategory()] = translations[i];
                     }
                     const result = this.autoTranslateICUUnit(tu, icuTranslation);
                     summary.addSingleResult(tu, result);

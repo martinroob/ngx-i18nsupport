@@ -57,6 +57,22 @@ export class AutoTranslateService {
     _rootUrl: string;
     _apiKey: string;
 
+    /**
+     * Strip region code and convert to lower
+     * @param lang lang
+     * @return lang without region code and in lower case.
+     */
+    public static stripRegioncode(lang: string): string {
+        const langLower = lang.toLowerCase();
+        for (let i = 0; i < langLower.length; i++) {
+            const c = langLower.charAt(i);
+            if (c < 'a' || c > 'z') {
+                return langLower.substring(0, i);
+            }
+        }
+        return langLower;
+    }
+
     constructor(apiKey: string) {
         this._request = request;
         this._apiKey = apiKey;
@@ -65,7 +81,7 @@ export class AutoTranslateService {
 
     /**
      * Change API key (just for tests).
-     * @param apikey
+     * @param apikey apikey
      */
     public setApiKey(apikey: string) {
         this._apiKey = apikey;
@@ -80,7 +96,7 @@ export class AutoTranslateService {
      */
     public translateMultipleStrings(messages: string[], from: string, to: string): Observable<string[]> {
         // empty array needs no translation and always works ... (#78)
-        if (messages.length == 0) {
+        if (messages.length === 0) {
             return of([]);
         }
         if (!this._apiKey) {
@@ -129,10 +145,10 @@ export class AutoTranslateService {
     /**
      * Return translation request, but messages must be limited to google limits.
      * Not more that 128 single messages.
-     * @param messages
-     * @param from
-     * @param to
-     * @return {Observable<string[]>} the translated strings
+     * @param messages messages
+     * @param from from
+     * @param to to
+     * @return the translated strings
      */
     private limitedTranslateMultipleStrings(messages: string[], from: string, to: string): Observable<string[]> {
         const realUrl = this._rootUrl + 'language/translate/v2' + '?key=' + this._apiKey;
@@ -171,28 +187,12 @@ export class AutoTranslateService {
     }
 
     /**
-     * Strip region code and convert to lower
-     * @param lang
-     * @return {string} lang without region code and in lower case.
-     */
-    public static stripRegioncode(lang: string): string {
-        const langLower = lang.toLowerCase();
-        for(let i = 0; i < langLower.length; i++) {
-            const c = langLower.charAt(i);
-            if (c < 'a' || c > 'z') {
-                return langLower.substring(0, i);
-            }
-        }
-        return langLower;
-    }
-
-    /**
      * Function to do a POST HTTP request
      *
-     * @param uri {string}
-     * @param options {CoreOptions}
+     * @param uri uri
+     * @param options options
      *
-     * @return {Observable<InternalRequestResponse>}
+     * @return response
      */
     post(uri: string, options?: request.CoreOptions): Observable<InternalRequestResponse> {
         return <Observable<InternalRequestResponse>> this._call.apply(this, [].concat('post', <string> uri,
@@ -202,13 +202,12 @@ export class AutoTranslateService {
     /**
      * Function to do a HTTP request for given method
      *
-     * @param method {string}
-     * @param uri {string}
-     * @param options {CoreOptions}
+     * @param method method
+     * @param uri uri
+     * @param options options
      *
-     * @return {Observable<InternalRequestResponse>}
+     * @return response
      *
-     * @private
      */
     private _call(method: string, uri: string, options?: request.CoreOptions): Observable<InternalRequestResponse> {
         return <Observable<InternalRequestResponse>> Observable.create((observer) => {
@@ -228,7 +227,11 @@ export class AutoTranslateService {
 
             // _call request method
             try {
-                this._request[<string> method].apply(<request.RequestAPI<request.Request, request.CoreOptions, request.RequiredUriUrl>> this._request, params);
+                this._request[<string> method].apply(
+                    <request.RequestAPI<request.Request,
+                    request.CoreOptions,
+                    request.RequiredUriUrl>> this._request,
+                    params);
             } catch (error) {
                 observer.error(error);
             }

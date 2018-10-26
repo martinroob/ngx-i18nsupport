@@ -1,5 +1,5 @@
 import {Writable} from 'stream';
-import {isString} from 'util';
+import {isString} from './util';
 /**
  * Created by martin on 20.02.2017.
  * A helper class for testing.
@@ -31,7 +31,7 @@ export class WriterToString extends Writable {
 
     /**
      * Returns a string of everything, that was written to the stream so far.
-     * @return {string}
+     * @return written data
      */
     public writtenData(): string {
         return this.resultString;

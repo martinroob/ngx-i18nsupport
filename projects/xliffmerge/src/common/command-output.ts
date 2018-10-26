@@ -9,15 +9,15 @@
  * If not are enabled (strange), we assumed the default.
  */
 
-import chalk from "chalk";
+import chalk from 'chalk';
 import WritableStream = NodeJS.WritableStream;
-import * as util from "util";
+import {format} from 'util';
 
 enum LogLevel {
-    "ERROR",
-    "WARN",
-    "INFO",
-    "DEBUG"
+    'ERROR',
+    'WARN',
+    'INFO',
+    'DEBUG'
 }
 
 export class CommandOutput {
@@ -54,15 +54,15 @@ export class CommandOutput {
 
     /**
      * Test, wether verbose is enabled.
-     * @return {boolean}
+     * @return wether verbose is enabled.
      */
     public verbose(): boolean {
         return this._verbose;
     }
 
     /**
-     * Test, wether queit is enabled.
-     * @return {boolean}
+     * Test, wether quiet is enabled.
+     * @return wether quiet is enabled.
      */
     public quiet(): boolean {
         return this._quiet;
@@ -100,7 +100,7 @@ export class CommandOutput {
                 coloredMessage = chalk.gray('* ' + msg);
                 break;
         }
-        let outMsg = util.format(coloredMessage, ...params);
+        const outMsg = format(coloredMessage, ...params);
         this.outputStream.write(outMsg + '\n');
     }
 

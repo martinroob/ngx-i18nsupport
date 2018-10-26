@@ -27,8 +27,8 @@ export class AutoTranslateSummaryReport {
 
   /**
    * Set error if total call failed (e.g. "invalid api key" or "no connection" ...)
-   * @param error
-   * @param total
+   * @param error error
+   * @param total total
    */
   public setError(error: string, total: number) {
     this._error = error;
@@ -47,11 +47,10 @@ export class AutoTranslateSummaryReport {
 
   /**
    * Add a single result to the summary.
-   * @param tu
-   * @param result
+   * @param tu tu
+   * @param result result
    */
   public addSingleResult(tu: ITransUnit, result: AutoTranslateResult) {
-    // TODO
     this._total++;
     if (result.success()) {
       this._success++;
@@ -62,7 +61,7 @@ export class AutoTranslateSummaryReport {
 
   /**
    * Merge another summary into this one.
-   * @param anotherSummary
+   * @param anotherSummary anotherSummary
    */
   public merge(anotherSummary: AutoTranslateSummaryReport) {
     if (!this._error) {
