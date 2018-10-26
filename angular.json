@@ -156,6 +156,41 @@
           }
         }
       }
+    },
+    "ngx-i18nsupport-lib": {
+      "root": "projects/ngx-i18nsupport-lib",
+      "sourceRoot": "projects/ngx-i18nsupport-lib/src",
+      "projectType": "library",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/ngx-i18nsupport-lib/tsconfig.lib.json",
+            "project": "projects/ngx-i18nsupport-lib/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/ngx-i18nsupport-lib/src/test.ts",
+            "tsConfig": "projects/ngx-i18nsupport-lib/tsconfig.spec.json",
+            "karmaConfig": "projects/ngx-i18nsupport-lib/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/ngx-i18nsupport-lib/tsconfig.lib.json",
+              "projects/ngx-i18nsupport-lib/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
     }
   },
   "defaultProject": "ngx-i18nsupport"
