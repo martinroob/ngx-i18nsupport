@@ -1,6 +1,6 @@
 {
   "name": "@ngx-i18nsupport/tooling",
-  "version": "0.1.1",
+  "version": "1.0.0",
   "private": false,
   "description": "Schematics to add the tooling to be used with the Angular 2 i18n workflow",
   "schematics": "./schematics/src/collection.json",
@@ -34,8 +34,8 @@
     "cpx": "^1.5.0"
   },
   "peerDependencies": {
-    "@angular-devkit/core": "^0.8.4",
-    "@angular-devkit/schematics": "^0.8.4",
+    "@angular-devkit/core": "^0.8.6",
+    "@angular-devkit/schematics": "^0.8.6",
     "@angular/common": "^6.0.0",
     "@angular/core": "^6.0.0"
   }

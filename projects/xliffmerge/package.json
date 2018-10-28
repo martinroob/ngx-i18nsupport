@@ -1,6 +1,6 @@
 {
   "name": "@ngx-i18nsupport/ngx-i18nsupport",
-  "version": "0.17.0",
+  "version": "1.0.0",
   "private": false,
   "description": "Some tooling to be used with the Angular 2 i18n workflow",
   "main": "index.js",
@@ -45,7 +45,6 @@
     "@types/jasmine": "^2.8.6",
     "@types/node": "9.3.0",
     "@types/request": "^2.47.0",
-    "coveralls": "^3.0.0",
     "cpx": "^1.5.0",
     "move-cli": "^1.2.0",
     "istanbul": "^0.4.5",
@@ -56,7 +55,7 @@
     "chalk": "^2.4.1",
     "commander": "^2.15.1",
     "he": "^1.1.1",
-    "ngx-i18nsupport-lib": "^1.10.2",
+    "@ngx-i18nsupport/ngx-i18nsupport-lib": "^1.10.3",
     "request": "^2.85.0",
     "rxjs": "^6.0.0"
   },

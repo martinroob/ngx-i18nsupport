@@ -1,7 +1,6 @@
 [![Build Status][travis-badge]][travis-badge-url]
 [![Dependency Status][david-badge]][david-badge-url]
 [![devDependency Status][david-dev-badge]][david-dev-badge-url]
-[![Code coverage][coverage-badge]][coverage-badge-url]
 [![npm][npm-badge]][npm-badge-url]
 
 ngx-i18nsupport
@@ -260,7 +259,5 @@ But if you are interesting, send me an email, so that we can discuss it.
 [david-badge-url]: https://david-dm.org/martinroob/ngx-i18nsupport
 [david-dev-badge]: https://david-dm.org/martinroob/ngx-i18nsupport/dev-status.svg
 [david-dev-badge-url]: https://david-dm.org/martinroob/ngx-i18nsupport?type=dev
-[npm-badge]: https://badge.fury.io/js/ngx-i18nsupport.svg
-[npm-badge-url]: https://badge.fury.io/js/ngx-i18nsupport
-[coverage-badge]: https://coveralls.io/repos/github/martinroob/ngx-i18nsupport/badge.svg?branch=master
-[coverage-badge-url]: https://coveralls.io/github/martinroob/ngx-i18nsupport
+[npm-badge]: https://badge.fury.io/js/@ngx-i18nsupport/xliffmerge.svg
+[npm-badge-url]: https://badge.fury.io/js/@ngx-i18nsupport/xliffmerge

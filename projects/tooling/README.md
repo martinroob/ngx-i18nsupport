@@ -1,3 +1,8 @@
+[![Build Status][travis-badge]][travis-badge-url]
+[![Dependency Status][david-badge]][david-badge-url]
+[![devDependency Status][david-dev-badge]][david-dev-badge-url]
+[![npm][npm-badge]][npm-badge-url]
+
 @ngx-i18nsupport/tooling
 =========
 
@@ -40,3 +45,11 @@ For example you can use the following
 
 This will add `de` and `ru` as additional languages.
 
+[travis-badge]: https://travis-ci.org/martinroob/ngx-i18nsupport.svg?branch=master
+[travis-badge-url]: https://travis-ci.org/martinroob/ngx-i18nsupport
+[david-badge]: https://david-dm.org/martinroob/ngx-i18nsupport.svg
+[david-badge-url]: https://david-dm.org/martinroob/ngx-i18nsupport
+[david-dev-badge]: https://david-dm.org/martinroob/ngx-i18nsupport/dev-status.svg
+[david-dev-badge-url]: https://david-dm.org/martinroob/ngx-i18nsupport?type=dev
+[npm-badge]: https://badge.fury.io/js/@ngx-i18nsupport/tooling.svg
+[npm-badge-url]: https://badge.fury.io/js/@ngx-i18nsupport/tooling
