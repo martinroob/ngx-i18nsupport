@@ -1,7 +1,6 @@
 {
   "extends": "../tsconfig.lib.json",
   "compilerOptions": {
-    "baseUrl": "tsconfig",
     "outDir": "../../../dist/ngx-i18nsupport-lib/src",
     "lib": [
       "es2017",

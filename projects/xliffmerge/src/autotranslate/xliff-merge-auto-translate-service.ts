@@ -5,7 +5,7 @@ import * as entityDecoderLib from 'he';
 import {
     IICUMessage, IICUMessageTranslation, INormalizedMessage, ITranslationMessagesFile, ITransUnit,
     STATE_NEW
-} from 'ngx-i18nsupport-lib/dist';
+} from '@ngx-i18nsupport/ngx-i18nsupport-lib';
 import {AutoTranslateService} from './auto-translate-service';
 import {AutoTranslateResult} from './auto-translate-result';
 import {AutoTranslateSummaryReport} from './auto-translate-summary-report';

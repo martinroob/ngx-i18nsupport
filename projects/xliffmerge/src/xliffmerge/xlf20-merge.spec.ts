@@ -6,7 +6,7 @@ import {WriterToString} from '../common/writer-to-string';
 import {FileUtil} from '../common/file-util';
 import {ITranslationMessagesFile, ITransUnit} from 'ngx-i18nsupport-lib';
 import {TranslationMessagesFileReader} from './translation-messages-file-reader';
-import {STATE_FINAL, STATE_NEW, STATE_TRANSLATED} from 'ngx-i18nsupport-lib/dist';
+import {STATE_FINAL, STATE_NEW, STATE_TRANSLATED} from '@ngx-i18nsupport/ngx-i18nsupport-lib';
 import {getApiKey} from '../autotranslate/auto-translate-service.spec';
 import {XmlReader} from './xml-reader';
 

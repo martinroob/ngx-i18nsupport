@@ -8,8 +8,8 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "buildall": "cd projects/tooling && npm run build && cd ../../projects/xliffmerge && npm run build && cd ../../projects/ngx-i18nsupport-lib && npm run build && cd ../..",
-    "coverall": "cd projects/tooling && npm run cover && cd ../../projects/xliffmerge && npm run cover && cd ../../projects/ngx-i18nsupport-lib && npm run cover && cd ../.."
+    "buildall": "cd projects/ngx-i18nsupport-lib && npm run build && cd ../../projects/xliffmerge && npm run build && cd ../../projects/tooling && npm run build && cd ../..",
+    "coverall": "cd projects/ngx-i18nsupport-lib && npm run cover && cd ../../projects/xliffmerge && npm run cover && cd ../../projects/tooling && npm run cover && cd ../.."
   },
   "private": true,
   "workspaces": [
