@@ -9,7 +9,7 @@
     "copy:apiAndLib": "cpx \"./src/api/**\" ../../dist/ngx-i18nsupport-lib/src/api && cpx \"./src/impl/**\" ../../dist/ngx-i18nsupport-lib/src/impl",
     "pretest": "npm run build",
     "test": "jasmine ../../dist/ngx-i18nsupport-lib/src/**/*spec.js",
-    "precover": "npm run build",
+    "precover": "npm run build && npm link",
     "cover": "istanbul cover --dir ../../coverage/ngx-i18nsupport-lib --root ../../dist/ngx-i18nsupport-lib/src --include-all-sources ../../node_modules/jasmine-node/bin/jasmine-node -- ../../dist/ngx-i18nsupport-lib/src",
     "prepublish": "npm run build"
   },
