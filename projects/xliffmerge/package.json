@@ -15,7 +15,7 @@
   "scripts": {
     "build": "tsc -p ./tsconfig.json && npm run build:copy && npm run build:move",
     "build:copy": "cpx ./README.md ../../dist/xliffmerge && cpx ./dist.package.json ../../dist/xliffmerge && cpx ./src/xliffmerge/xliffmerge ../../dist/xliffmerge/dist/xliffmerge && cpx ./src/xliffmerge/configuration-schema.json ../../dist/xliffmerge/dist/xliffmerge",
-    "build:move": "mv ../../dist/xliffmerge/dist.package.json ../../dist/xliffmerge/package.json",
+    "build:move": "move-cli ../../dist/xliffmerge/dist.package.json ../../dist/xliffmerge/package.json",
     "xliffmerge": "npm link && xliffmerge",
     "pretest": "npm run build",
     "test": "jasmine-node ../../dist/xliffmerge/dist",
@@ -42,21 +42,15 @@
   },
   "homepage": "https://github.com/martinroob/ngx-i18nsupport#readme",
   "devDependencies": {
-    "@types/jasmine": "^2.8.6",
-    "@types/node": "9.3.0",
-    "@types/request": "^2.47.0",
-    "cpx": "^1.5.0",
-    "move-cli": "^1.2.0",
-    "istanbul": "^0.4.5",
-    "jasmine-node": "^1.14.5",
-    "typescript": "^2.8.3"
   },
   "dependencies": {
     "chalk": "^2.4.1",
     "commander": "^2.15.1",
     "he": "^1.1.1",
     "@ngx-i18nsupport/ngx-i18nsupport-lib": "^1.10.3",
-    "request": "^2.85.0",
+    "request": "^2.85.0"
+  },
+  "peerDependencies": {
     "rxjs": "^6.0.0"
   },
   "xliffmergeOptions": {

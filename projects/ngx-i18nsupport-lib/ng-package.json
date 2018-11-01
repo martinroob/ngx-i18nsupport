@@ -8,5 +8,9 @@
       "util": "util",
       "tokenizr": "tokenizr"
     }
-  }
+  },
+  "whitelistedNonPeerDependencies": [
+    "xmldom",
+    "tokenizr"
+  ]
 }
