@@ -6,7 +6,7 @@ import {branchAndMerge, chain, Rule, SchematicContext, SchematicsException, Tree
 import {AddLanguageOptions} from './schema';
 import {addScriptToPackageJson, getScriptFromPackageJson} from '../../schematics-core';
 import {CommonOptions, extractScriptName, OptionsAfterSetup, setupCommonOptions} from '../common';
-import {IXliffMergeOptions} from '@ngx-i18nsupport/ngx-i18nsupport';
+import {IXliffMergeOptions} from '@ngx-i18nsupport/ngx-i18nsupport/src/xliffmerge/i-xliff-merge-options';
 import {
     addLanguageConfigurationToProject,
     addStartScriptToPackageJson, defaultI18nFormat, defaultI18nLocale,
