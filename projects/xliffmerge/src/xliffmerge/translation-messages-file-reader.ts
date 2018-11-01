@@ -1,7 +1,7 @@
 /**
  * Created by roobm on 21.03.2017.
  */
-import {TranslationMessagesFileFactory, ITranslationMessagesFile} from 'ngx-i18nsupport-lib';
+import {TranslationMessagesFileFactory, ITranslationMessagesFile} from '@ngx-i18nsupport/ngx-i18nsupport-lib';
 import {FileUtil} from '../common/file-util';
 import {XmlReader} from './xml-reader';
 

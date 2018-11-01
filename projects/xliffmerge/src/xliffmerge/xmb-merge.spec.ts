@@ -4,7 +4,7 @@ import {IConfigFile} from './i-xliff-merge-options';
 import {CommandOutput} from '../common/command-output';
 import {WriterToString} from '../common/writer-to-string';
 import {FileUtil} from '../common/file-util';
-import {ITranslationMessagesFile, ITransUnit, STATE_NEW} from 'ngx-i18nsupport-lib';
+import {ITranslationMessagesFile, ITransUnit, STATE_NEW} from '@ngx-i18nsupport/ngx-i18nsupport-lib';
 import {TranslationMessagesFileReader} from './translation-messages-file-reader';
 import {XmlReader} from './xml-reader';
 

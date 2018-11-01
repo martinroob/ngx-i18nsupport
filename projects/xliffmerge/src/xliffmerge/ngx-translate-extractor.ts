@@ -1,4 +1,4 @@
-import {ITranslationMessagesFile, ITransUnit, NORMALIZATION_FORMAT_NGXTRANSLATE} from 'ngx-i18nsupport-lib';
+import {ITranslationMessagesFile, ITransUnit, NORMALIZATION_FORMAT_NGXTRANSLATE} from '@ngx-i18nsupport/ngx-i18nsupport-lib';
 import {FileUtil} from '../common/file-util';
 import {isNullOrUndefined} from '../common/util';
 import {NgxTranslateExtractionPattern} from './ngx-translate-extraction-pattern';

@@ -6,7 +6,9 @@ import {FileUtil} from '../common/file-util';
 import {VERSION} from './version';
 import {format} from 'util';
 import {isNullOrUndefined} from '../common/util';
-import {ITranslationMessagesFile, ITransUnit, FORMAT_XMB, FORMAT_XTB} from 'ngx-i18nsupport-lib';
+import {ITranslationMessagesFile, ITransUnit,
+    FORMAT_XMB, FORMAT_XTB,
+    NORMALIZATION_FORMAT_DEFAULT, STATE_FINAL, STATE_TRANSLATED} from '@ngx-i18nsupport/ngx-i18nsupport-lib';
 import {ProgramOptions, IConfigFile} from './i-xliff-merge-options';
 import {NgxTranslateExtractor} from './ngx-translate-extractor';
 import {TranslationMessagesFileReader} from './translation-messages-file-reader';
@@ -14,7 +16,6 @@ import {Observable, of, forkJoin} from 'rxjs';
 import {map, catchError} from 'rxjs/operators';
 import {XliffMergeAutoTranslateService} from '../autotranslate/xliff-merge-auto-translate-service';
 import {AutoTranslateSummaryReport} from '../autotranslate/auto-translate-summary-report';
-import {NORMALIZATION_FORMAT_DEFAULT, STATE_FINAL, STATE_TRANSLATED} from '@ngx-i18nsupport/ngx-i18nsupport-lib';
 
 /**
  * Created by martin on 17.02.2017.
