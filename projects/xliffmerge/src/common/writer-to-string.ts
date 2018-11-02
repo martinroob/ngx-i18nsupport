@@ -23,7 +23,7 @@ export class WriterToString extends Writable {
         } else if (chunk instanceof Buffer) {
             chunkString = chunk.toString();
         } else {
-            chunkString = new Buffer(chunk).toString(encoding);
+            chunkString = Buffer.alloc(chunk).toString(encoding);
         }
         this.resultString = this.resultString + chunkString;
         callback();

@@ -39,7 +39,7 @@ export class FileUtil {
 
     public static copy(srcFile: string, destFile: string) {
         const BUF_LENGTH = 64 * 1024;
-        const buff = new Buffer(BUF_LENGTH);
+        const buff = Buffer.alloc(BUF_LENGTH);
         const fdr = fs.openSync(srcFile, 'r');
         const fdw = fs.openSync(destFile, 'w');
         let bytesRead = 1;
