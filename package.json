@@ -9,6 +9,7 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "buildall": "cd projects/ngx-i18nsupport-lib && npm run build && cd ../../projects/xliffmerge && npm run build && cd ../../projects/tooling && npm run build && cd ../..",
+    "testall": "cd projects/ngx-i18nsupport-lib && npm run test && cd ../../projects/xliffmerge && npm run test && cd ../../projects/tooling && npm run test && cd ../..",
     "coverall": "cd projects/ngx-i18nsupport-lib && npm run cover && cd ../../projects/xliffmerge && npm run cover && cd ../../projects/tooling && npm run cover && cd ../.."
   },
   "private": true,
