@@ -1,0 +1,116 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+  "id": "https://github.com/martinroob/ngx-i18nsupport/configuration-schema.json",
+  "title": "ngx-i18nsupport-configuration",
+  "description": "config file for ngx-i18nsupport xliffmerge",
+  "type": "object",
+  "properties": {
+    "xliffmergeOptions": {
+      "description": "required root of configuration options",
+      "type": "object",
+      "properties": {
+        "srcDir": {
+          "description": "directory, where the master file is expected (default \".\")",
+          "type": "string"
+        },
+        "genDir": {
+          "description": "directory, where files are written to (normally identical with srcDir) (default \".\")",
+          "type": "string"
+        },
+        "i18nFile": {
+          "description": "master file (relativ to srcDir) (default \"messages.xlf\")",
+          "type": "string"
+        },
+        "i18nBaseFile": {
+          "description": "base name of master file (default \"messages\")",
+          "type": "string"
+        },
+        "i18nFormat": {
+          "description": "\"xlf\" for XLIFF 1.2 or \"xlf2\" for XLIFF 2.0 or \"xmb\" for XML Message Bundles (default \"xlf\")",
+          "type": "string"
+        },
+        "encoding": {
+          "description": "expected encoding of xlf, xlf2 or xmb files (default \"UTF-8\")",
+          "type": "string"
+        },
+        "defaultLanguage": {
+          "description": "the native language used in your templates (default \"en\")",
+          "type": "string"
+        },
+        "languages": {
+          "description": "list of languages (if not specified at command line)",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "removeUnusedIds": {
+          "description": "flag, if unused IDs should be removed during merge (default \"true\")",
+          "type": "boolean"
+        },
+        "supportNgxTranslate": {
+          "description": "flag to active json translation files for ngx-translate (default \"false\")",
+          "type": "boolean"
+        },
+        "ngxTranslateExtractionPattern": {
+          "description": "defines what messages are exported to json translation files for ngx-translate.",
+          "type": "string"
+        },
+        "useSourceAsTarget": {
+          "description": "flag, if source should be copied to target for new trans-units (default \"true\")",
+          "type": "boolean"
+        },
+        "targetPraefix": {
+          "description": "when the flag `useSourceAsTarget` is set and a source is copied to target, then the target string will be praefixed by this value.",
+          "type": "string"
+        },
+        "beautifyOutput": {
+          "description": "when set to true, the generated xml output will be send through a beautifier to get consistent output.(default \"false\")",
+          "type": "boolean"
+        },
+        "preserveOrder": {
+          "description": "when set to true, new trans units will be at the same position as in the master file. When set to false, they will be added at the end (default \"true\")",
+          "type": "boolean"
+        },
+        "targetSuffix": {
+          "description": "when the flag `useSourceAsTarget` is set and a source is copied to target, then the target string will be suffixed by this value.",
+          "type": "string"
+        },
+        "allowIdChange": {
+          "description": "flag, wether xliffmerge should merge transunits with changed IDs. (default \"false\")",
+          "type": "boolean"
+        },
+        "autotranslate": {
+          "description": "flag, if new units should be automatically translated by Google Translate. List of languages is also allowed. (default \"false\")",
+          "oneOf": [
+            {"type": "boolean"},
+            {"type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          ]
+        },
+        "apikey": {
+          "description": "API key for usage of Google Translate.",
+          "type": "string"
+        },
+        "apikeyfile": {
+          "description": "file that contains API key for usage of Google Translate.",
+          "type": "string"
+        },
+        "verbose": {
+          "description": "controls output (default \"false\")",
+          "type": "boolean"
+        },
+        "quiet": {
+          "description": "controls output (default \"false\")",
+          "type": "boolean"
+        }
+      },
+      "required": [],
+      "additionalProperties": false
+    }
+   },
+  "required": ["xliffmergeOptions"]
+}

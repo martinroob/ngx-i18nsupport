@@ -1,0 +1,20 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "declaration": false,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "lib": ["es6", "dom"],
+    "module": "CommonJS",
+    "moduleResolution": "node",
+    "outDir": "../../dist/xliffmerge/dist",
+    "sourceMap": false,
+    "target": "es5",
+    "typeRoots": [
+      "../../node_modules/@types"
+    ]
+  },
+  "include": [
+    "./src/**/*"
+  ]
+}

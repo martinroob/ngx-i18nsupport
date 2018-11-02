@@ -1,0 +1,43 @@
+{
+  "name": "@ngx-i18nsupport/ngx-i18nsupport-lib",
+  "version": "1.10.3",
+  "description": "A Typescript library to work with Angular generated i18n files (xliff, xmb)",
+  "private": false,
+  "scripts": {
+    "build": "ng build ngx-i18nsupport-lib && npm run build:apiAndLib && npm run copy:apiAndLib",
+    "build:apiAndLib": "tsc -p src/tsconfig.json",
+    "copy:apiAndLib": "cpx \"./src/api/**\" ../../dist/ngx-i18nsupport-lib/src/api && cpx \"./src/impl/**\" ../../dist/ngx-i18nsupport-lib/src/impl",
+    "pretest": "npm run build",
+    "test": "jasmine ../../dist/ngx-i18nsupport-lib/src/**/*spec.js",
+    "precover": "npm run build && npm run link",
+    "link": "rm -f ../../node_modules/@ngx-i18nsupport/ngx-i18nsupport-lib && ln -sf ../../dist/ngx-i18nsupport-lib ../../node_modules/@ngx-i18nsupport/ngx-i18nsupport-lib",
+    "cover": "istanbul cover --dir ../../coverage/ngx-i18nsupport-lib --root ../../dist/ngx-i18nsupport-lib/src --include-all-sources ../../node_modules/jasmine-node/bin/jasmine-node -- ../../dist/ngx-i18nsupport-lib/src",
+    "prepublish": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/martinroob/ngx-i18nsupport.git"
+  },
+  "keywords": [
+    "i18n",
+    "tooling",
+    "angular",
+    "xliff",
+    "xmb"
+  ],
+  "author": "Martin Roob <martinroob65@gmail.com> (www.roobsoft.de)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/martinroob/ngx-i18nsupport/issues"
+  },
+  "homepage": "https://github.com/martinroob/ngx-i18nsupport/projects/ngx-i18nsupport-lib/#readme",
+  "dependencies": {
+    "@types/xmldom": "^0.1.29",
+    "tokenizr": "^1.3.10",
+    "xmldom": "^0.1.27"
+  },
+  "devDependencies": {
+  },
+  "peerDependencies": {
+  }
+}

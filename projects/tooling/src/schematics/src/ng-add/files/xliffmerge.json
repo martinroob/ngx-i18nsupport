@@ -1,0 +1,9 @@
+{
+  "xliffmergeOptions": {
+    "i18nFormat": "<%= i18nFormat %>",
+    "srcDir": "<%= srcDir %>",
+    "genDir": "<%= genDir %>",
+    "defaultLanguage": "<%= i18nLocale %>",
+    "languages": <%= toArrayString(parsedLanguages) %>
+  }
+}

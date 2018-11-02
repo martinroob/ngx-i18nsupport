@@ -1,0 +1,59 @@
+{
+  "name": "@ngx-i18nsupport/ngx-i18nsupport",
+  "version": "1.0.0",
+  "private": false,
+  "description": "Some tooling to be used with the Angular 2 i18n workflow",
+  "main": "index.js",
+  "module": "./src",
+  "es2015": "./src",
+  "bin": {
+    "xliffmerge": "../../dist/xliffmerge/dist/xliffmerge/xliffmerge"
+  },
+  "engines": {
+    "node": ">=6.9"
+  },
+  "scripts": {
+    "build": "tsc -p ./tsconfig.json && npm run build:copy && npm run build:move",
+    "build:copy": "cpx ./README.md ../../dist/xliffmerge && cpx ./dist.package.json ../../dist/xliffmerge && cpx ./src/xliffmerge/xliffmerge ../../dist/xliffmerge/dist/xliffmerge && cpx ./src/xliffmerge/configuration-schema.json ../../dist/xliffmerge/dist/xliffmerge",
+    "build:move": "mv ../../dist/xliffmerge/dist.package.json ../../dist/xliffmerge/package.json",
+    "xliffmerge": "npm link && xliffmerge",
+    "pretest": "npm run build",
+    "test": "jasmine-node ../../dist/xliffmerge/dist",
+    "testintern": "set API_KEY_FILE=s:\\experimente\\ngx-i18nsupport\\projects\\xliffmerge\\googleTranslateApiKey.txt&& npm run test",
+    "precover": "npm run build",
+    "cover": "istanbul cover --dir ../../coverage/xliffmerge --root ../../dist/xliffmerge/dist --include-all-sources ../../node_modules/jasmine-node/bin/jasmine-node -- ../../dist/xliffmerge/dist",
+    "prepublish": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/martinroob/ngx-i18nsupport.git"
+  },
+  "keywords": [
+    "i18n",
+    "tooling",
+    "angular",
+    "xliff",
+    "xmb"
+  ],
+  "author": "Martin Roob <martinroob65@gmail.com> (www.roobsoft.de)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/martinroob/ngx-i18nsupport/issues"
+  },
+  "homepage": "https://github.com/martinroob/ngx-i18nsupport#readme",
+  "devDependencies": {
+  },
+  "dependencies": {
+    "chalk": "^2.4.1",
+    "commander": "^2.15.1",
+    "he": "^1.1.1",
+    "@ngx-i18nsupport/ngx-i18nsupport-lib": "^1.10.3",
+    "request": "^2.85.0"
+  },
+  "peerDependencies": {
+    "rxjs": "^6.0.0"
+  },
+  "xliffmergeOptions": {
+    "description": "just for some tests here"
+  }
+}

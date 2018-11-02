@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE messagebundle [
+        <!ELEMENT messagebundle (msg)*>
+        <!ATTLIST messagebundle class CDATA #IMPLIED>
+
+        <!ELEMENT msg (#PCDATA|ph|source)*>
+        <!ATTLIST msg id CDATA #IMPLIED>
+        <!ATTLIST msg seq CDATA #IMPLIED>
+        <!ATTLIST msg name CDATA #IMPLIED>
+        <!ATTLIST msg desc CDATA #IMPLIED>
+        <!ATTLIST msg meaning CDATA #IMPLIED>
+        <!ATTLIST msg obsolete (obsolete) #IMPLIED>
+        <!ATTLIST msg xml:space (default|preserve) "default">
+        <!ATTLIST msg is_hidden CDATA #IMPLIED>
+
+        <!ELEMENT source (#PCDATA)>
+
+        <!ELEMENT ph (#PCDATA|ex)*>
+        <!ATTLIST ph name CDATA #REQUIRED>
+
+        <!ELEMENT ex (#PCDATA)>
+        ]>
+<messagebundle>
+    <msg id="2047558209369508311"><source>S:/experimente/sampleapp41/src/app/app.component.ts:1</source>Meine erste I18N-Anwendung</msg>
+    <msg id="4371668001355139802"><source>S:/experimente/sampleapp41/src/app/app.component.ts:2</source><source>S:/experimente/sampleapp41/src/app/app.component.ts:3</source>Anwendung läuft!</msg>
+    <msg id="7499557905529977371" desc="Beschreibung der Anwendung"><source>S:/experimente/sampleapp41/src/app/app.component.ts:4</source>Diese Anwendung ist eine reine Demonstration und hat keine wirklich nutzbare Funktion.</msg>
+    <msg id="7499557905529977372" desc="data.edit.subtitles.description">Beschreibung zu <ph name="INTERPOLATION"><ex>INTERPOLATION</ex></ph> (<ph name="INTERPOLATION_1"><ex>INTERPOLATION</ex></ph>)</msg>
+    <msg id="3274258156935474372" desc="ngx-translate" meaning="dateservice.monday">Montag</msg>
+    <msg id="9030312858648510700" desc="placeholder sample"><source>S:/experimente/sampleapp41/src/app/app.component.ts:6</source>Eintrag <ph name="INTERPOLATION"><ex>INTERPOLATION</ex></ph> von <ph name="INTERPOLATION_1"><ex>INTERPOLATION_1</ex></ph> hinzugefügt.</msg>
+    <msg id="7149517499881679376" desc="linebreak sample"><source>S:/experimente/sampleapp41/src/app/app.component.ts:7,8</source>Dieser Text
+        enthält einen Zeilenumbruch.</msg>
+    <msg id="7609655310648429098" desc="ngx-translate" meaning="embeddedhtml.boldstrong"><source>S:/experimente/sampleapp41/src/app/ngx-translate-test-data/ngx-translate-test-data.component.ts:16</source>Diese Nachricht ist <ph name="START_BOLD_TEXT"><ex>&lt;b&gt;</ex></ph><ph name="START_TAG_STRONG"><ex>&lt;strong&gt;</ex></ph>SEHR WICHTIG<ph name="CLOSE_TAG_STRONG"><ex>&lt;/strong&gt;</ex></ph><ph name="CLOSE_BOLD_TEXT"><ex>&lt;/b&gt;</ex></ph></msg>
+    <msg id="7610784844464920497" desc="ngx-translate" meaning="embeddedhtml.strange"><source>S:/experimente/sampleapp41/src/app/ngx-translate-test-data/ngx-translate-test-data.component.ts:17</source>Diese Nachricht ist <ph name="START_TAG_STRANGE"><ex>&lt;strange&gt;</ex></ph><ph name="INTERPOLATION"><ex>INTERPOLATION</ex></ph><ph name="CLOSE_TAG_STRANGE"><ex>&lt;/strange&gt;</ex></ph></msg>
+    <msg id="no_sourceref_test">no source ref</msg>
+    <msg>no id</msg>
+    <msg id="unittomerge">Test for merging units</msg>
+  <msg id="complextags.tagsWithAttribute1"><source>S:/experimente/sampleapp41/src/app/ngx-translate-test-data/ngx-translate-test-data.component.ts:19</source><ph name="START_LINK"><ex>&lt;a&gt;</ex></ph>link1<ph name="CLOSE_LINK"><ex>&lt;/a&gt;</ex></ph> and <ph name="START_EMPHASISED_TEXT"><ex>&lt;em&gt;</ex></ph><ph name="START_LINK_1"><ex>&lt;a&gt;</ex></ph><ph name="TAG_IMG"><ex>&lt;img&gt;</ex></ph><ph name="CLOSE_LINK"><ex>&lt;/a&gt;</ex></ph><ph name="CLOSE_EMPHASISED_TEXT"><ex>&lt;/em&gt;</ex></ph></msg>
+  <msg id="complextags.tagsWithAttribute2"><source>S:/experimente/sampleapp41/src/app/ngx-translate-test-data/ngx-translate-test-data.component.ts:20</source><ph name="START_LINK"><ex>&lt;a&gt;</ex></ph>link1 with placeholder <ph name="INTERPOLATION"><ex>INTERPOLATION</ex></ph><ph name="CLOSE_LINK"><ex>&lt;/a&gt;</ex></ph></msg>
+  <msg id="complextags.tagsWithAttribute3"><source>S:/experimente/sampleapp41/src/app/ngx-translate-test-data/ngx-translate-test-data.component.ts:21</source><ph name="START_LINK"><ex>&lt;a&gt;</ex></ph>link1 with placeholder <ph name="INTERPOLATION"><ex>INTERPOLATION</ex></ph><ph name="CLOSE_LINK"><ex>&lt;/a&gt;</ex></ph></msg>
+    <msg id="2747218257718409559"><source>S:/experimente/sampleapp41/src/app/app.component.ts:16</source><source>S:/experimente/sampleapp41/src/app/ngx-translate-test-data/ngx-translate-test-data.component.ts:25</source>Zum Wert <ph name="INTERPOLATION"><ex>INTERPOLATION</ex></ph> gehört der Text <ph name="ICU"><ex>ICU</ex></ph></msg>
+    <msg id="complextags.icuTwoICU"><source>S:/experimente/sampleapp41/src/app/ngx-translate-test-data/ngx-translate-test-data.component.ts:24</source>first: <ph name="ICU"><ex>ICU</ex></ph>, second <ph name="ICU_1"><ex>ICU_1</ex></ph></msg>
+    <msg id="157616252019374389"><source>S:/experimente/sampleapp41/src/app/app.component.ts:14</source>{VAR_PLURAL, plural, =0 {kein Schaf} =1 {1 Schaf} other {x Schafe} }</msg>
+    <msg id="4002068837191765530"><source>S:/experimente/sampleapp41/src/app/app.component.ts:16</source><source>S:/experimente/sampleapp41/src/app/ngx-translate-test-data/ngx-translate-test-data.component.ts:25</source>{VAR_SELECT, select, wert0 {wert0 wurde gewählt} wert1 {ein anderer Wert (wert1) wurde gewählt} wert2 {was ganz anderes wurde gewählt} }</msg>
+    <msg id="4002068837191765531"><source>S:/experimente/sampleapp41/src/app/app.component.ts:16</source><source>S:/experimente/sampleapp41/src/app/ngx-translate-test-data/ngx-translate-test-data.component.ts:25</source>{VAR_SELECT, select, wert0 {wert0 wurde gewählt} wert1 {ein anderer Wert (wert1) wurde gewählt} wert2 {was ganz anderes wurde gewählt} }</msg>
+    <msg id="6710804210857077393"><source>S:/experimente/sampleapp41/src/app/app.component.ts:17</source>{VAR_SELECT, select, wert0 {wert0 ausgewählt} wert1 {ein <ph name="START_BOLD_TEXT"><ex>&lt;b&gt;</ex></ph>anderer<ph name="CLOSE_BOLD_TEXT"><ex>&lt;/b&gt;</ex></ph> Wert (wert1) ausgewählt} wert2 {was <ph name="START_EMPHASISED_TEXT"><ex>&lt;em&gt;</ex></ph>ganz anderes<ph name="CLOSE_EMPHASISED_TEXT"><ex>&lt;/em&gt;</ex></ph> wurde ausgewählt} }</msg>
+</messagebundle>

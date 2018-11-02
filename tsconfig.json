@@ -1,25 +1,32 @@
 {
+  "compileOnSave": false,
   "compilerOptions": {
-    "baseUrl": "tsconfig",
+    "baseUrl": "./",
+    "outDir": "./dist/out-tsc",
+    "sourceMap": true,
     "declaration": false,
+    "module": "es2015",
+    "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "lib": ["es6", "dom"],
-    "mapRoot": "./",
-    "module": "CommonJS",
-    "moduleResolution": "node",
-    "outDir": "./dist",
-    "sourceMap": true,
     "target": "es5",
     "typeRoots": [
-      "./node_modules/@types"
-    ]
-  },
-  "include": [
-    "./src/**/*"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist"
-  ]
+      "node_modules/@types"
+    ],
+    "lib": [
+      "es2017",
+      "dom"
+    ],
+    "paths": {
+      "@ngx-i18nsupport/ngx-i18nsupport/*": [
+        "dist/xliffmerge/*"
+      ],
+      "@ngx-i18nsupport/tooling/*": [
+        "dist/tooling/*"
+      ],
+      "@ngx-i18nsupport/ngx-i18nsupport-lib": [
+        "dist/ngx-i18nsupport-lib"
+      ]
+    }
+  }
 }

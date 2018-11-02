@@ -1,0 +1,15 @@
+{
+  "$schema": "../node_modules/@angular-devkit/schematics/collection-schema.json",
+  "schematics": {
+    "ng-add": {
+      "description": "Add support for @ngx-i18nsupport/xliffmerge",
+      "factory": "./ng-add/index#ngAdd",
+      "schema": "./ng-add/schema.json"
+    },
+    "addLanguage": {
+      "description": "Add an additional language to the configuration",
+      "factory": "./addLanguage/index#addLanguage",
+      "schema": "./addLanguage/schema.json"
+    }
+  }
+}
