@@ -10,7 +10,7 @@
     "pretest": "npm run build",
     "test": "jasmine ../../dist/ngx-i18nsupport-lib/src/**/*spec.js",
     "precover": "npm run build && npm run link",
-    "link": "ln -sf ../../dist/ngx-i18nsupport-lib ../../node_modules/@ngx-i18nsupport/ngx-i18nsupport-lib && ls -l ../../node_modules/@ngx*",
+    "link": "rm -f ../../node_modules/@ngx-i18nsupport/ngx-i18nsupport-lib && ln -sf ../../dist/ngx-i18nsupport-lib ../../node_modules/@ngx-i18nsupport/ngx-i18nsupport-lib && ls -l ../../node_modules/@ngx*",
     "cover": "istanbul cover --dir ../../coverage/ngx-i18nsupport-lib --root ../../dist/ngx-i18nsupport-lib/src --include-all-sources ../../node_modules/jasmine-node/bin/jasmine-node -- ../../dist/ngx-i18nsupport-lib/src",
     "prepublish": "npm run build"
   },
