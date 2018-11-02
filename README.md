@@ -30,11 +30,11 @@ This is a **monorepo** containing projects
 [david-badge-url]: https://david-dm.org/martinroob/ngx-i18nsupport
 [david-dev-badge]: https://david-dm.org/martinroob/ngx-i18nsupport/dev-status.svg
 [david-dev-badge-url]: https://david-dm.org/martinroob/ngx-i18nsupport?type=dev
-[npm-badge-tooling]: https://badge.fury.io/js/@ngx-i18nsupport/tooling.svg
-[npm-badge-url-tooling]: https://badge.fury.io/js/@ngx-i18nsupport/tooling
-[npm-badge-xliffmerge]: https://badge.fury.io/js/@ngx-i18nsupport/ngx-i18nsupport.svg
-[npm-badge-url-xliffmerge]: https://badge.fury.io/js/@ngx-i18nsupport/ngx-i18nsupport
-[npm-badge-ngx-i18nsupport-lib]: https://badge.fury.io/js/@ngx-i18nsupport/ngx-i18nsupport-lib.svg
-[npm-badge-url-ngx-i18nsupport-lib]: https://badge.fury.io/js/@ngx-i18nsupport/ngx-i18nsupport-lib
+[npm-badge-tooling]: https://badge.fury.io/js/%40ngx-i18nsupport%2Ftooling.svg
+[npm-badge-url-tooling]: https://badge.fury.io/js/%40ngx-i18nsupport%2Ftooling
+[npm-badge-xliffmerge]: https://badge.fury.io/js/%40ngx-i18nsupport%2Fngx-i18nsupport.svg
+[npm-badge-url-xliffmerge]: https://badge.fury.io/js/%40ngx-i18nsupport%2Fngx-i18nsupport
+[npm-badge-ngx-i18nsupport-lib]: https://badge.fury.io/js/%40ngx-i18nsupport%2Fngx-i18nsupport-lib.svg
+[npm-badge-url-ngx-i18nsupport-lib]: https://badge.fury.io/js/%40ngx-i18nsupport%2Fngx-i18nsupport-lib
 [coverage-badge]: https://coveralls.io/repos/github/martinroob/ngx-i18nsupport/badge.svg?branch=master
 [coverage-badge-url]: https://coveralls.io/github/martinroob/ngx-i18nsupport
