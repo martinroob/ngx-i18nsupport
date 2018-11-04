@@ -90,5 +90,5 @@ But if you are interesting, send me an email, so that we can discuss it.
 [david-badge-url]: https://david-dm.org/martinroob/ngx-i18nsupport
 [david-dev-badge]: https://david-dm.org/martinroob/ngx-i18nsupport/dev-status.svg
 [david-dev-badge-url]: https://david-dm.org/martinroob/ngx-i18nsupport?type=dev
-[npm-badge]: https://badge.fury.io/js/@ngx-i18nsupport/ngx-i18nsupport-lib.svg
-[npm-badge-url]: https://badge.fury.io/js/@ngx-i18nsupport/ngx-i18nsupport-lib
+[npm-badge]: https://badge.fury.io/js/%40ngx-i18nsupport%2Fngx-i18nsupport-lib.svg
+[npm-badge-url]: https://badge.fury.io/js/%40ngx-i18nsupport%2Fngx-i18nsupport-lib
