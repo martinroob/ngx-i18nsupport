@@ -119,9 +119,9 @@ function setupOptions(optionsFromCommandline: AddLanguageOptions, host: Tree, co
         throw new SchematicsException(msg);
     }
     if (xliffmergeOptions.xliffmergeOptions.i18nFormat) {
-        options['i18n-format'] = xliffmergeOptions.xliffmergeOptions.i18nFormat;
+        options.i18nFormat = xliffmergeOptions.xliffmergeOptions.i18nFormat;
     } else {
-        options['i18n-format'] = defaultI18nFormat;
+        options.i18nFormat = defaultI18nFormat;
     }
     if (xliffmergeOptions.xliffmergeOptions.srcDir) {
         options.srcDir = xliffmergeOptions.xliffmergeOptions.srcDir;
@@ -130,9 +130,9 @@ function setupOptions(optionsFromCommandline: AddLanguageOptions, host: Tree, co
         options.genDir = xliffmergeOptions.xliffmergeOptions.genDir;
     }
     if (xliffmergeOptions.xliffmergeOptions.defaultLanguage) {
-        options['i18n-locale'] = xliffmergeOptions.xliffmergeOptions.defaultLanguage;
+        options.i18nLocale = xliffmergeOptions.xliffmergeOptions.defaultLanguage;
     } else {
-        options['i18n-locale'] = defaultI18nLocale;
+        options.i18nLocale = defaultI18nLocale;
     }
     if (optionsFromCommandline.language && optionsFromCommandline.languages) {
         const msg = 'Only language as parameter or --languages can be used, not both.';
@@ -153,8 +153,8 @@ function setupOptions(optionsFromCommandline: AddLanguageOptions, host: Tree, co
         context.logger.fatal(msg);
         throw new SchematicsException(msg);
     }
-    if (options.parsedLanguages.indexOf(options['i18n-locale']) >= 0) {
-        const msg = `Language "${options['i18n-locale']}" is already configured (as default language).`;
+    if (options.parsedLanguages.indexOf(options.i18nLocale) >= 0) {
+        const msg = `Language "${options.i18nLocale}" is already configured (as default language).`;
         context.logger.fatal(msg);
         throw new SchematicsException(msg);
     }
@@ -185,7 +185,7 @@ export function addLanguage(optionsFromCommandline: AddLanguageOptions): Rule {
     return (host: Tree, context: SchematicContext) => {
         const options: OptionsAfterSetup = setupOptions(optionsFromCommandline, host, context);
         const languagesToAdd = options.parsedLanguages
-            .filter(lang => lang !== options['i18n-locale']);
+            .filter(lang => lang !== options.i18nLocale);
         const configurationAdditions = languagesToAdd
             .map(lang => addLanguageConfigurationToProject(options, lang));
         const startScriptAdditions = languagesToAdd

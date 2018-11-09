@@ -20,12 +20,12 @@ This adds the required packages and configures everything for the default langua
 There are some command line parameters available:
 - `--project` add the tooling to a specific project in your workspace
 - `--languages` the languages to be used (a comma separated list like `en,de,ru`)
-- `--i18n-locale` set the locale used in your templates (default is first language or `en`)
-- `--i18n-format` the format to be used (`xlf`, `xlf2` or `xmb`)
+- `--i18nLocale` set the locale used in your templates (default is first language or `en`)
+- `--i18nFormat` the format to be used (`xlf`, `xlf2` or `xmb`)
 
 For example you can use the following
 
-`ng add @ngx-i18nsupport/tooling --project=myproject --i18n-format=xlf2 --languages=en,de,ru`
+`ng add @ngx-i18nsupport/tooling --project=myproject --i18nFormat=xlf2 --languages=en,de,ru`
 
 ## Add a new language (addLanguage)
 In an already configured project you can add one or more additional languages by using

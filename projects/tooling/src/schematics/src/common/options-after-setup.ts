@@ -18,8 +18,8 @@ export interface OptionsAfterSetup {
     localePath: string;
     srcDir: string;
     genDir: string;
-    'i18n-format': string; // the used format (xlf, xlf2, xmb)
-    'i18n-locale': string; // the default language
+    i18nFormat: string; // the used format (xlf, xlf2, xmb)
+    i18nLocale: string; // the default language
     languages?: string; // languages given at command line as comma separated list
     parsedLanguages: string[]; // languages given at command line plus default language
     configuredLanguages: string[]; // languages that are already in the workspace

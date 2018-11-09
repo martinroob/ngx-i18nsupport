@@ -24,8 +24,8 @@ export function isValidLanguageSyntax(lang: string): boolean {
 }
 
 export function fullExtractScript(options: OptionsAfterSetup): string {
-    const defaultLanguage = options['i18n-locale'];
-    const i18nFormat = options['i18n-format'];
+    const defaultLanguage = options.i18nLocale;
+    const i18nFormat = options.i18nFormat;
     const languagesBlankSeparated = options.languages ? options.languages.replace(/,/g, ' ') : '';
     const languagesCommandLineArgument = (options.useComandlineForLanguages) ? ' ' + languagesBlankSeparated : '';
     const localeDir = options.localePath;
@@ -42,7 +42,7 @@ export function buildConfigurationForLanguage(options: OptionsAfterSetup, langua
         aot: true,
         outputPath: `dist/${options.project}-${language}`,
         i18nFile: `${options.genDir}/messages.${language}.xlf`,
-        i18nFormat: options['i18n-format'],
+        i18nFormat: options.i18nFormat,
         i18nLocale: language
     };
 }

@@ -1,5 +1,2 @@
 TODOs
 script extract-i18n wenn schon vorhanden, warnen
-OK Bei Aufruf --languages=en,de kam 2x added configuration de to.. und 2x added build configuration...
-OK angular-devkit peer version zu klein
-Setzen i18n-format per "--i18n-format=xlf2" hat nicht funktioniert (Testfall angelegt, da funktioniert es)

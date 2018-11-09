@@ -56,7 +56,7 @@ describe('ng-add', () => {
 
       it('should throw an exception when called with invalid language code as default language', () => {
           try {
-              runSchematic({'i18n-locale': 'a,b'}, appTree);
+              runSchematic({i18nLocale: 'a,b'}, appTree);
               fail('expected exception (is not a valid language code) did not occur');
           } catch (e) {
               expect(e.message).toContain('is not a valid language code');
@@ -105,7 +105,7 @@ describe('ng-add', () => {
       });
 
       it('should create xliffmerge configuration file containing all given languages and default language', () => {
-          const tree = runSchematic({'i18n-locale': 'en', languages: 'de,fr,ru'}, appTree);
+          const tree = runSchematic({i18nLocale: 'en', languages: 'de,fr,ru'}, appTree);
           expect(tree.files).toContain('/projects/bar/xliffmerge.json');
           const configFile = readAsJson<{xliffmergeOptions: IXliffMergeOptions}>(tree, '/projects/bar/xliffmerge.json');
           expect(configFile.xliffmergeOptions).toBeTruthy();
@@ -115,7 +115,7 @@ describe('ng-add', () => {
       });
 
       it('should create xliffmerge configuration with specified xlf format', () => {
-          const tree = runSchematic({'i18n-locale': 'en', 'i18n-format': 'xlf2'}, appTree);
+          const tree = runSchematic({i18nLocale: 'en', i18nFormat: 'xlf2'}, appTree);
           expect(tree.files).toContain('/projects/bar/xliffmerge.json');
           const configFile = readAsJson<{xliffmergeOptions: IXliffMergeOptions}>(tree, '/projects/bar/xliffmerge.json');
           expect(configFile.xliffmergeOptions).toBeTruthy();
@@ -171,7 +171,7 @@ describe('ng-add', () => {
 
       it('should add npm script "start-xyz" to package.json when called with language xyz', () => {
           const lang = 'xyz';
-          const tree = runSchematic({'i18n-locale': 'de', languages: lang}, appTree);
+          const tree = runSchematic({i18nLocale: 'de', languages: lang}, appTree);
           const packageJson = readPackageJson(tree);
           const startScriptDefaultLang = packageJson.scripts['start-de'];
           expect(startScriptDefaultLang).toBeFalsy(); // no start script for default lang needed
@@ -186,7 +186,7 @@ describe('ng-add', () => {
           // normally, when you specify a project "bar", start script should be called start-bar-xyz
           // but if bar is the default project, it is just called start-xyz.
           const lang = 'xyz';
-          const tree = runSchematic({'i18n-locale': 'de', project: 'bar', languages: lang}, appTree);
+          const tree = runSchematic({i18nLocale: 'de', project: 'bar', languages: lang}, appTree);
           const packageJson = readPackageJson(tree);
           const startScriptDefaultLang = packageJson.scripts['start-de'];
           expect(startScriptDefaultLang).toBeFalsy(); // no start script for default lang needed
@@ -249,7 +249,7 @@ describe('ng-add', () => {
         it('should add npm script "start-foolib-xyz" to package.json when called with language xyz', () => {
             // when you specify a project "foo", start script should be called start-foo-xyz
             const lang = 'xyz';
-            const tree = runSchematic({'i18n-locale': 'de', project: 'foo', languages: lang}, appTree);
+            const tree = runSchematic({i18nLocale: 'de', project: 'foo', languages: lang}, appTree);
             const packageJson = readPackageJson(tree);
             const startScriptDefaultLang = packageJson.scripts['start-de'];
             expect(startScriptDefaultLang).toBeFalsy(); // no start script for default lang needed

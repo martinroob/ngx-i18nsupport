@@ -57,14 +57,14 @@ function setupOptions(optionsFromCommandline: NgAddOptions, host: Tree, context:
         optionsFromCommandline.useComandlineForLanguages
         : false;
     const languagesFromCommandline = (optionsFromCommandline.languages) ? optionsFromCommandline.languages.split(',') : [];
-    if (!optionsFromCommandline['i18n-locale']) {
+    if (!optionsFromCommandline.i18nLocale) {
         if (languagesFromCommandline.length > 0) {
-            options['i18n-locale'] = languagesFromCommandline[0];
+            options.i18nLocale = languagesFromCommandline[0];
         } else {
-            options['i18n-locale'] = defaultI18nLocale;
+            options.i18nLocale = defaultI18nLocale;
         }
     }
-    options.parsedLanguages = [options['i18n-locale']];
+    options.parsedLanguages = [options.i18nLocale];
     if (optionsFromCommandline.languages) {
         options.parsedLanguages.push(...languagesFromCommandline);
     }
@@ -90,17 +90,17 @@ export function ngAdd(optionsFromCommandline: NgAddOptions): Rule {
           template({
               ...stringUtils,
               ...(options as object),
-              'i18nLocale': options['i18n-locale'],
-              'i18nFormat': options['i18n-format']
+              'i18nLocale': options.i18nLocale,
+              'i18nFormat': options.i18nFormat
           } as any),
           move(options.path ? options.path : ''),
       ]);
 
       const configurationAdditions = options.parsedLanguages
-          .filter(lang => lang !== options['i18n-locale'])
+          .filter(lang => lang !== options.i18nLocale)
           .map(lang => addLanguageConfigurationToProject(options, lang));
       const startScriptAdditions = options.parsedLanguages
-          .filter(lang => lang !== options['i18n-locale'])
+          .filter(lang => lang !== options.i18nLocale)
           .map(lang => addStartScriptToPackageJson(options, lang));
       return chain([
           branchAndMerge(
