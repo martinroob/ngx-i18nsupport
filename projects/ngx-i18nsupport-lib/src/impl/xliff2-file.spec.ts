@@ -1,5 +1,7 @@
-import {TranslationMessagesFileFactory, ITranslationMessagesFile,
-    ITransUnit, INormalizedMessage, STATE_NEW, STATE_TRANSLATED, STATE_FINAL} from '../api/index';
+import {
+    TranslationMessagesFileFactory, ITranslationMessagesFile,
+    ITransUnit, INormalizedMessage, STATE_NEW, STATE_TRANSLATED, STATE_FINAL, INote
+} from '../api/index';
 import * as fs from 'fs';
 import {AbstractTransUnit} from './abstract-trans-unit';
 import {DOMUtilities} from './dom-utilities';
@@ -32,6 +34,7 @@ describe('ngx-i18nsupport-lib XLIFF 2.0 test spec', () => {
         const ID_WITH_PLACEHOLDER = '9030312858648510700';
         const ID_WITH_REPEATED_PLACEHOLDER = '7049669989298349710';
         const ID_WITH_MEANING_AND_DESCRIPTION = '6830980354990918030';
+        const ID_WITH_NOTES = 'notefromreviewer';
         const ID_WITH_NO_SOURCEREFS = '4371668001355139802'; // an ID with no source elements
         const ID_WITH_ONE_SOURCEREF = '7499557905529977371';
         const ID_WITH_TWO_SOURCEREFS = '3274258156935474372'; // an ID with 2 source elements
@@ -84,7 +87,7 @@ describe('ngx-i18nsupport-lib XLIFF 2.0 test spec', () => {
 
         it('should count units', () => {
             const file: ITranslationMessagesFile = readFile(MASTER1SRC);
-            expect(file.numberOfTransUnits()).toBe(39);
+            expect(file.numberOfTransUnits()).toBe(40);
             expect(file.numberOfTransUnitsWithMissingId()).toBe(1);
             expect(file.numberOfUntranslatedTransUnits()).toBe(file.numberOfTransUnits());
             expect(file.numberOfReviewedTransUnits()).toBe(0);
@@ -237,6 +240,41 @@ describe('ngx-i18nsupport-lib XLIFF 2.0 test spec', () => {
                 TranslationMessagesFileFactory.fromUnknownFormatFileContent(file.editedContent(), null, null);
             const tu2: ITransUnit = file2.transUnitWithId(ID_WITH_MEANING_AND_DESCRIPTION);
             expect(tu2.meaning()).toBeFalsy();
+        });
+
+        it('should read additional notes, issue #56', () => {
+            const file: ITranslationMessagesFile = readFile(MASTER1SRC);
+            const tu: ITransUnit = file.transUnitWithId(ID_WITH_NOTES);
+            expect(tu).toBeTruthy();
+            const notes: INote[] = tu.notes();
+            expect(notes.length).toBe(2);
+            expect(notes[0].from).toBe('reviewer');
+            expect(notes[0].text).toBe('a note from reviewer');
+            expect(notes[1].from).toBe('author');
+            expect(notes[1].text).toBe('a note from author');
+        });
+
+        it('should edit additional notes, issue #56', () => {
+            const file: ITranslationMessagesFile = readFile(MASTER1SRC);
+            const tu: ITransUnit = file.transUnitWithId(ID_WITH_NOTES);
+            expect(tu).toBeTruthy();
+            expect(tu.supportsSetNotes()).toBeTruthy();
+            const notes: INote[] = tu.notes();
+            expect(notes.length).toBe(2);
+            const newNotes = [{from: 'testcase', text: 'changed note'}];
+            tu.setNotes(newNotes);
+            expect(tu.notes().length).toBe(1);
+            expect(tu.notes()[0].from).toBe('testcase');
+            expect(tu.notes()[0].text).toBe('changed note');
+            const file2: ITranslationMessagesFile =
+                TranslationMessagesFileFactory.fromUnknownFormatFileContent(file.editedContent(), null, null);
+            const tu2: ITransUnit = file2.transUnitWithId(ID_WITH_NOTES);
+            // meaning and description should not be touched
+            expect(tu2.description()).toBe('test notes feature');
+            expect(tu2.meaning()).toBe('meaning');
+            expect(tu2.notes().length).toBe(1);
+            expect(tu2.notes()[0].from).toBe('testcase');
+            expect(tu2.notes()[0].text).toBe('changed note');
         });
 
         it('should return empty source references array if source not set', () => {

@@ -1,5 +1,6 @@
 import {INormalizedMessage} from './i-normalized-message';
 import {ITranslationMessagesFile} from './i-translation-messages-file';
+import {INote} from './i-note';
 
 /**
  * Created by martin on 19.03.2017.
@@ -131,6 +132,27 @@ export interface ITransUnit {
      * @param meaning meaning
      */
     setMeaning(meaning: string);
+
+    /**
+     * Get all notes of the trans-unit.
+     * Notes are remarks made by a translator.
+     * (description and meaning are not included here!)
+     */
+    notes(): INote[];
+
+    /**
+     * Test, wether setting of notes is supported.
+     * If not, setNotes will do nothing.
+     * xtb does not support this, all other formats do.
+     */
+    supportsSetNotes(): boolean;
+
+    /**
+     * Add notes to trans unit.
+     * @param newNotes the notes to add.
+     * @throws an Error if any note contains description or meaning as from attribute.
+     */
+    setNotes(newNotes: INote[]);
 
     /**
      * Translate the trans unit.

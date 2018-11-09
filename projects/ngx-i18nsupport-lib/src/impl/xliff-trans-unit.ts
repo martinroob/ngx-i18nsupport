@@ -2,6 +2,7 @@ import {STATE_NEW, STATE_TRANSLATED, STATE_FINAL} from '../api/constants';
 import {ITranslationMessagesFile} from '../api/i-translation-messages-file';
 import {INormalizedMessage} from '../api/i-normalized-message';
 import {ITransUnit} from '../api/i-trans-unit';
+import {INote} from '../api/i-note';
 import {DOMUtilities} from './dom-utilities';
 import {AbstractTransUnit} from './abstract-trans-unit';
 import {XliffMessageParser} from './xliff-message-parser';
@@ -240,9 +241,10 @@ export class XliffTransUnit extends AbstractTransUnit implements ITransUnit {
         if (description) {
            if (isNullOrUndefined(noteElem)) {
                // create it
-               noteElem = this.createNoteElementWithFromAttribute('description');
+               noteElem = this.createNoteElementWithFromAttribute('description', description);
+           } else {
+               DOMUtilities.replaceContentWithXMLContent(noteElem, description);
            }
-           DOMUtilities.replaceContentWithXMLContent(noteElem, description);
         } else {
             if (!isNullOrUndefined(noteElem)) {
                 // remove node
@@ -268,14 +270,37 @@ export class XliffTransUnit extends AbstractTransUnit implements ITransUnit {
     }
 
     /**
+     * Get all note elements where from attribute is not description or meaning
+     * @return elements
+     */
+    private findAllAdditionalNoteElements(): Element[] {
+        const noteElements = this._element.getElementsByTagName('note');
+        const result: Element[] = [];
+        for (let i = 0; i < noteElements.length; i++) {
+            const noteElem = noteElements.item(i);
+            const fromAttribute = noteElem.getAttribute('from');
+            if (fromAttribute !== 'description' && fromAttribute !== 'meaning') {
+                result.push(noteElem);
+            }
+        }
+        return result;
+    }
+
+    /**
      * Create a new note element with attribute from='<attrValue>'
-     * @param attrValue attrValue
+     * @param fromAttrValue value of "from" attribute
+     * @param content text value of note element
      * @return the new created element
      */
-    private createNoteElementWithFromAttribute(attrValue: string): Element {
+    private createNoteElementWithFromAttribute(fromAttrValue: string, content: string): Element {
         const noteElement = this._element.ownerDocument.createElement('note');
-        noteElement.setAttribute('from', attrValue);
+        if (fromAttrValue) {
+            noteElement.setAttribute('from', fromAttrValue);
+        }
         noteElement.setAttribute('priority', '1');
+        if (content) {
+            DOMUtilities.replaceContentWithXMLContent(noteElement, content);
+        }
         this._element.appendChild(noteElement);
         return noteElement;
     }
@@ -289,6 +314,16 @@ export class XliffTransUnit extends AbstractTransUnit implements ITransUnit {
         if (noteElement) {
             this._element.removeChild(noteElement);
         }
+    }
+
+    /**
+     * Remove all note elements where attribute "from" is not description or meaning.
+     */
+    private removeAllAdditionalNoteElements() {
+        const noteElements = this.findAllAdditionalNoteElements();
+        noteElements.forEach((noteElement) => {
+            this._element.removeChild(noteElement);
+        });
     }
 
     /**
@@ -315,14 +350,56 @@ export class XliffTransUnit extends AbstractTransUnit implements ITransUnit {
         if (meaning) {
             if (isNullOrUndefined(noteElem)) {
                 // create it
-                noteElem = this.createNoteElementWithFromAttribute('meaning');
+                noteElem = this.createNoteElementWithFromAttribute('meaning', meaning);
+            } else {
+                DOMUtilities.replaceContentWithXMLContent(noteElem, meaning);
             }
-            DOMUtilities.replaceContentWithXMLContent(noteElem, meaning);
         } else {
             if (!isNullOrUndefined(noteElem)) {
                 // remove node
                 this.removeNoteElementWithFromAttribute('meaning');
             }
+        }
+    }
+
+    /**
+     * Get all notes of the trans-unit.
+     * Notes are remarks made by a translator.
+     * (description and meaning are not included here!)
+     */
+    public notes(): INote[] {
+        const noteElememts: Element[] = this.findAllAdditionalNoteElements();
+        return noteElememts.map(elem => {
+            return {
+                from: elem.getAttribute('from'),
+                text: DOMUtilities.getPCDATA(elem)
+            };
+        });
+     }
+
+    /**
+     * Test, wether setting of notes is supported.
+     * If not, setNotes will do nothing.
+     * xtb does not support this, all other formats do.
+     */
+    public supportsSetNotes(): boolean {
+        return true;
+    }
+
+    /**
+     * Add notes to trans unit.
+     * @param newNotes the notes to add.
+     * @throws an Error if any note contains description or meaning as from attribute.
+     */
+    public setNotes(newNotes: INote[]) {
+        if (!isNullOrUndefined(newNotes)) {
+            this.checkNotes(newNotes);
+        }
+        this.removeAllAdditionalNoteElements();
+        if (!isNullOrUndefined(newNotes)) {
+            newNotes.forEach((note) => {
+                const noteElem = this.createNoteElementWithFromAttribute(note.from, note.text);
+            });
         }
     }
 

@@ -62,6 +62,14 @@
             <note priority="1" from="description">ngx-translate</note>
             <note priority="1" from="meaning">dateservice.monday</note>
         </trans-unit>
+      <trans-unit id="notefromreviewer" datatype="html">
+        <source>a unit with an additional note</source>
+        <target/>
+        <note priority="1" from="description">test notes feature</note>
+        <note priority="1" from="meaning">meaning</note>
+        <note priority="2" from="reviewer">a note from reviewer</note>
+        <note annotates="target" from="author">a note from author</note>
+      </trans-unit>
       <trans-unit id="e4e521770b592e6fca431a4a131efcfd13f35634" datatype="html">
         <source>Dieser Text
           enthält einen Zeilenumbruch.</source>

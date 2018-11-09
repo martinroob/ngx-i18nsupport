@@ -1,7 +1,4 @@
-import {STATE_TRANSLATED} from '../api/constants';
-import {ITranslationMessagesFile} from '../api/i-translation-messages-file';
-import {INormalizedMessage} from '../api/i-normalized-message';
-import {ITransUnit} from '../api/i-trans-unit';
+import {STATE_TRANSLATED, ITranslationMessagesFile, INormalizedMessage, ITransUnit, INote} from './internalapi';
 import {AbstractTranslationMessagesFile} from './abstract-translation-messages-file';
 import {isNullOrUndefined, isString} from 'util';
 import {ParsedMessage} from './parsed-message';
@@ -192,6 +189,40 @@ export abstract class AbstractTransUnit implements ITransUnit {
      * @param meaning meaning
      */
     abstract setMeaning(meaning: string);
+
+    /**
+     * Get all notes of the trans-unit.
+     * Notes are remarks made by a translator.
+     * (description and meaning are not included here!)
+     */
+    abstract notes(): INote[];
+
+    /**
+     * Test, wether setting of notes is supported.
+     * If not, setNotes will do nothing.
+     * xtb does not support this, all other formats do.
+     */
+    abstract supportsSetNotes(): boolean;
+
+    /**
+     * Add notes to trans unit.
+     * @param newNotes the notes to add.
+     * @throws an Error if any note contains descpription or meaning as from attribute.
+     */
+    abstract setNotes(newNotes: INote[]);
+
+    /**
+     * Check notes
+     * @param newNotes the notes to add.
+     * @throws an Error if any note contains description or meaning as from attribute.
+     */
+    protected checkNotes(newNotes: INote[]) {
+        // check from values
+        const errorInFromNote = newNotes.find((note) => note.from === 'description' || note.from === 'meaning');
+        if (!isNullOrUndefined(errorInFromNote)) {
+            throw new Error('description or meaning are not allowed as from atttribute');
+        }
+    }
 
     /**
      * The real xml element used for the trans unit.

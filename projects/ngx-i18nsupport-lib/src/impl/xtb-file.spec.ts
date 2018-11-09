@@ -164,6 +164,16 @@ describe('ngx-i18nsupport-lib xtb test spec', () => {
             expect(tu.meaning()).toBe(oldValue);
         });
 
+        it('should not have notes and should not allow to change them', () => {
+            const file: ITranslationMessagesFile = readFile(TRANSLATION_EN_XTB, MASTER_DE_XMB);
+            const tu: ITransUnit = file.transUnitWithId(ID_WITH_MEANING_AND_DESCRIPTION);
+            expect(tu).toBeTruthy();
+            expect(tu.notes()).toEqual([]);
+            expect(tu.supportsSetNotes()).toBeFalsy();
+            tu.setNotes([{from: 'testcase', text: 'a note that should not be stored'}]);
+            expect(tu.notes()).toEqual([]);
+        });
+
         it('should ignore source attribute in sourceContent', () => {
             const file: ITranslationMessagesFile = readFile(TRANSLATION_EN_XTB, MASTER_DE_XMB);
             const tu: ITransUnit = file.transUnitWithId(ID_WITH_PLACEHOLDER);
