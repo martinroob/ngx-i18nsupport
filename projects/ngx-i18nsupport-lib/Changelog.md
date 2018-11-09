@@ -1,3 +1,12 @@
+<a name="1.11.0"></a>
+# 1.11.0 (2018-11-09)
+
+### Features
+
+* **API** [#56](https://github.com/martinroob/ngx-i18nsupport-lib/issues/56) **Modeling the "Notes" part as well by default in the object model**.
+Now there are new methods on ITransUnit: `notes()` to read notes from XLIFF-files (version 1.2 and 2.0) and `setNotes` to edit them.
+So a translator program can show these notes and edot them too.
+
 <a name="1.10.3"></a>
 # 1.10.3 (2018-10-28)
 

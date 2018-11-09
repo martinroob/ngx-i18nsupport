@@ -1,5 +1,5 @@
 import {TranslationMessagesFileFactory, ITranslationMessagesFile, ITransUnit, INormalizedMessage,
-    STATE_NEW, STATE_TRANSLATED, STATE_FINAL, FILETYPE_XTB} from '../api/index';
+    STATE_NEW, STATE_FINAL, FILETYPE_XTB} from '../api';
 import * as fs from 'fs';
 
 /**
@@ -24,7 +24,6 @@ describe('ngx-i18nsupport-lib xmb test spec', () => {
     describe('xmb format tests', () => {
         const MASTER1SRC = SRCDIR + 'ngExtractedMaster1.xmb';
         const MASTER_DE_XMB = SRCDIR + 'ngExtractedMaster1.de.xmb';
-        const TRANSLATED_FILE_SRC = SRCDIR + 'ngExtractedMaster1.en.xtb';
 
         const ID_MY_FIRST = '2047558209369508311'; // an ID from ngExtractedMaster1.xmb
         const ID_WITH_PLACEHOLDER = '9030312858648510700';
@@ -128,6 +127,16 @@ describe('ngx-i18nsupport-lib xmb test spec', () => {
             const changedMessage = 'a changed description';
             tu.setMeaning(changedMessage);
             expect(tu.meaning()).toBe(oldValue);
+        });
+
+        it('should not have notes and should not allow to change them', () => {
+            const file: ITranslationMessagesFile = readFile(MASTER1SRC);
+            const tu: ITransUnit = file.transUnitWithId(ID_WITH_MEANING_AND_DESCRIPTION);
+            expect(tu).toBeTruthy();
+            expect(tu.notes()).toEqual([]);
+            expect(tu.supportsSetNotes()).toBeFalsy();
+            tu.setNotes([{from: 'testcase', text: 'a note that should not be stored'}]);
+            expect(tu.notes()).toEqual([]);
         });
 
         it('should ignore source attribute in sourceContent', () => {

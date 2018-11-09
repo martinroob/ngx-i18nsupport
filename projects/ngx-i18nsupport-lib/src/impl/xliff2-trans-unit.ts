@@ -2,6 +2,7 @@ import {STATE_NEW, STATE_TRANSLATED, STATE_FINAL} from '../api/constants';
 import {ITranslationMessagesFile} from '../api/i-translation-messages-file';
 import {INormalizedMessage} from '../api/i-normalized-message';
 import {ITransUnit} from '../api/i-trans-unit';
+import {INote} from '../api/i-note';
 import {DOMUtilities} from './dom-utilities';
 import {ParsedMessage} from './parsed-message';
 import {AbstractTransUnit} from './abstract-trans-unit';
@@ -242,13 +243,14 @@ export class Xliff2TransUnit extends AbstractTransUnit  implements ITransUnit {
      * @param description description
      */
     public setDescription(description: string) {
-        let noteElem = this.findNoteElementWithCategoryAttribute('description');
+        const noteElem = this.findNoteElementWithCategoryAttribute('description');
         if (description) {
             if (isNullOrUndefined(noteElem)) {
                 // create it
-                noteElem = this.createNoteElementWithCategoryAttribute('description');
+                this.createNoteElementWithCategoryAttribute('description', description);
+            } else {
+                DOMUtilities.replaceContentWithXMLContent(noteElem, description);
             }
-            DOMUtilities.replaceContentWithXMLContent(noteElem, description);
         } else {
             if (!isNullOrUndefined(noteElem)) {
                 // remove node
@@ -258,8 +260,8 @@ export class Xliff2TransUnit extends AbstractTransUnit  implements ITransUnit {
     }
 
     /**
-     * Find a note element with attribute from='<attrValue>'
-     * @param attrValue attrValue
+     * Find a note element with attribute category='<attrValue>'
+     * @param attrValue value of category attribute
      * @return element or null is absent
      */
     private findNoteElementWithCategoryAttribute(attrValue: string): Element {
@@ -274,11 +276,29 @@ export class Xliff2TransUnit extends AbstractTransUnit  implements ITransUnit {
     }
 
     /**
+     * Get all note elements where from attribute is not description or meaning
+     * @return elements
+     */
+    private findAllAdditionalNoteElements(): Element[] {
+        const noteElements = this._element.getElementsByTagName('note');
+        const result: Element[] = [];
+        for (let i = 0; i < noteElements.length; i++) {
+            const noteElem = noteElements.item(i);
+            const fromAttribute = noteElem.getAttribute('category');
+            if (fromAttribute !== 'description' && fromAttribute !== 'meaning') {
+                result.push(noteElem);
+            }
+        }
+        return result;
+    }
+
+    /**
      * Create a new note element with attribute from='<attrValue>'
-     * @param attrValue attrValue
+     * @param attrValue category attribute value
+     * @param content content of note element
      * @return the new created element
      */
-    private createNoteElementWithCategoryAttribute(attrValue: string): Element {
+    private createNoteElementWithCategoryAttribute(attrValue: string, content: string): Element {
         let notesElement = DOMUtilities.getFirstElementByTagName(this._element, 'notes');
         if (isNullOrUndefined(notesElement)) {
             // create it
@@ -286,9 +306,25 @@ export class Xliff2TransUnit extends AbstractTransUnit  implements ITransUnit {
             this._element.appendChild(notesElement);
         }
         const noteElement = this._element.ownerDocument.createElement('note');
-        noteElement.setAttribute('category', attrValue);
+        if (attrValue) {
+            noteElement.setAttribute('category', attrValue);
+        }
+        if (content) {
+            DOMUtilities.replaceContentWithXMLContent(noteElement, content);
+        }
         notesElement.appendChild(noteElement);
         return noteElement;
+    }
+
+    private removeNotesElementIfEmpty() {
+        const notesElement = DOMUtilities.getFirstElementByTagName(this._element, 'notes');
+        if (notesElement) {
+            const childNote = DOMUtilities.getFirstElementByTagName(this._element, 'note');
+            if (!childNote) {
+                // remove notes element
+                notesElement.parentNode.removeChild(notesElement);
+            }
+        }
     }
 
     /**
@@ -298,8 +334,20 @@ export class Xliff2TransUnit extends AbstractTransUnit  implements ITransUnit {
     private removeNoteElementWithCategoryAttribute(attrValue: string) {
         const noteElement = this.findNoteElementWithCategoryAttribute(attrValue);
         if (noteElement) {
-            this._element.removeChild(noteElement);
+            noteElement.parentNode.removeChild(noteElement);
         }
+        this.removeNotesElementIfEmpty();
+    }
+
+    /**
+     * Remove all note elements where attribute "from" is not description or meaning.
+     */
+    private removeAllAdditionalNoteElements() {
+        const noteElements = this.findAllAdditionalNoteElements();
+        noteElements.forEach((noteElement) => {
+            noteElement.parentNode.removeChild(noteElement);
+        });
+        this.removeNotesElementIfEmpty();
     }
 
     /**
@@ -322,18 +370,59 @@ export class Xliff2TransUnit extends AbstractTransUnit  implements ITransUnit {
      * @param meaning meaning
      */
     public setMeaning(meaning: string) {
-        let noteElem = this.findNoteElementWithCategoryAttribute('meaning');
+        const noteElem = this.findNoteElementWithCategoryAttribute('meaning');
         if (meaning) {
             if (isNullOrUndefined(noteElem)) {
                 // create it
-                noteElem = this.createNoteElementWithCategoryAttribute('meaning');
+                this.createNoteElementWithCategoryAttribute('meaning', meaning);
+            } else {
+                DOMUtilities.replaceContentWithXMLContent(noteElem, meaning);
             }
-            DOMUtilities.replaceContentWithXMLContent(noteElem, meaning);
         } else {
             if (!isNullOrUndefined(noteElem)) {
                 // remove node
                 this.removeNoteElementWithCategoryAttribute('meaning');
             }
+        }
+    }
+
+    /**
+     * Get all notes of the trans-unit.
+     * Notes are remarks made by a translator.
+     * (description and meaning are not included here!)
+     */
+    public notes(): INote[] {
+        const noteElememts: Element[] = this.findAllAdditionalNoteElements();
+        return noteElememts.map(elem => {
+            return {
+                from: elem.getAttribute('category'),
+                text: DOMUtilities.getPCDATA(elem)
+            };
+        });
+    }
+
+    /**
+     * Test, wether setting of notes is supported.
+     * If not, setNotes will do nothing.
+     * xtb does not support this, all other formats do.
+     */
+    public supportsSetNotes(): boolean {
+        return true;
+    }
+
+    /**
+     * Add notes to trans unit.
+     * @param newNotes the notes to add.
+     */
+    public setNotes(newNotes: INote[]) {
+        if (!isNullOrUndefined(newNotes)) {
+            this.checkNotes(newNotes);
+        }
+        this.removeAllAdditionalNoteElements();
+        if (!isNullOrUndefined(newNotes)) {
+            newNotes.forEach((note) => {
+                this.createNoteElementWithCategoryAttribute(note.from, note.text);
+            });
         }
     }
 

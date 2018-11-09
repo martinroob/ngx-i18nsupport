@@ -97,6 +97,17 @@
         <source>Montag</source>
       </segment>
     </unit>
+    <unit id="notefromreviewer">
+      <notes>
+        <note category="description">test notes feature</note>
+        <note category="meaning">meaning</note>
+        <note category="reviewer">a note from reviewer</note>
+        <note category="author">a note from author</note>
+      </notes>
+      <segment>
+        <source>a unit with an additional note</source>
+      </segment>
+    </unit>
     <unit id="6375749062310329756">
       <notes>
         <note category="description">ngx-translate</note>

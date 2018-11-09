@@ -1,6 +1,7 @@
 import {ITranslationMessagesFile} from '../api/i-translation-messages-file';
 import {INormalizedMessage} from '../api/i-normalized-message';
 import {ITransUnit} from '../api/i-trans-unit';
+import {INote} from '../api/i-note';
 import {DOMUtilities} from './dom-utilities';
 import {AbstractTransUnit} from './abstract-trans-unit';
 import {XmbMessageParser} from './xmb-message-parser';
@@ -227,6 +228,32 @@ export class XmbTransUnit extends AbstractTransUnit implements ITransUnit {
      * @param meaning meaning
      */
     public setMeaning(meaning: string) {
+        // not supported, do nothing
+    }
+
+    /**
+     * Get all notes of the trans-unit.
+     * There are NO notes in xmb/xtb
+     */
+    public notes(): INote[] {
+        return [];
+    }
+
+    /**
+     * Test, wether setting of notes is supported.
+     * If not, setNotes will do nothing.
+     * xtb does not support this, all other formats do.
+     */
+    public supportsSetNotes(): boolean {
+        return false;
+    }
+
+    /**
+     * Add notes to trans unit.
+     * @param newNotes the notes to add.
+     * NOT Supported in xmb/xtb
+     */
+    public setNotes(newNotes: INote[]) {
         // not supported, do nothing
     }
 
