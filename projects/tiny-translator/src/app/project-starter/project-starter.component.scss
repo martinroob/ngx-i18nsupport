@@ -1,0 +1,31 @@
+@import '~@angular/material/theming';
+
+@import '../../styles.scss';
+
+/*
+Styling of file upload part.
+follows https://tympanus.net/codrops/2015/09/15/styling-customizing-file-inputs-smart-way/
+ make input file button invisible
+*/
+.inputfile {
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
+}
+
+.inputfile + label {
+  font-size: 1.25em;
+  font-weight: 700;
+  color: black;
+  background-color: mat-color($dit-app-accent);
+  display: inline-block;
+  padding: 20px;
+}
+
+.inputfile:focus + label,
+.inputfile + label:hover {
+  background-color: mat-color($dit-app-primary);
+}

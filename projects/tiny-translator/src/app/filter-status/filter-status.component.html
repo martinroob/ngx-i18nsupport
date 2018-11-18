@@ -1,0 +1,16 @@
+<div fxLayout="row" fxLayoutAlign="start center">
+  <a mat-icon-button routerLink="/selectfilter" routerLinkActive="active"><mat-icon>filter_list</mat-icon>
+    <ng-container [ngSwitch]="currentFilterName()">
+      <ng-container *ngSwitchCase="'all'" i18n>All units</ng-container>
+      <ng-container *ngSwitchCase="'autotranslated'" i18n>Autotranslated units</ng-container>
+      <ng-container *ngSwitchCase="'autotranslatedFailed'" i18n>failed Autotranslated</ng-container>
+      <ng-container *ngSwitchCase="'autotranslatedIgnored'" i18n>ignored Autotranslated</ng-container>
+      <ng-container *ngSwitchCase="'untranslated'" i18n>Untranslated units</ng-container>
+      <ng-container *ngSwitchCase="'needsReview'" i18n>Review needed</ng-container>
+      <ng-container *ngSwitchCase="'bySubstring'" i18n>Substring {{substringFilterPattern()}}</ng-container>
+      <ng-container *ngSwitchDefault>{{currentFilterName()}}</ng-container>
+    </ng-container>
+  </a>
+  <span fxFlex></span>
+  <span *ngIf="translationFileView?.currentTransUnitIndex() > 0" i18n>{{translationFileView?.currentTransUnitIndex()}} of {{translationFileView?.scrollabeTransUnitsLength()}}</span>
+</div>

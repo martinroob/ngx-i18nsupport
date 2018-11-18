@@ -1,0 +1,43 @@
+mat-card {
+  min-width: 300px;
+}
+
+.mdcardcontent_gt {
+  height: calc(100vh - 456px);
+  /* 456 = toolbar 128 + 2 * margin 8 + projectstatus (72 oder 132,5) + 2 * card padding 24 + card header 56 + 2 * card content margin 16 + action bar 44 + footer 20 */
+  overflow: auto;
+}
+
+.mdcardcontent_sm {
+  height: calc(100vh - 368px);
+  /* 368 = toolbar 112 + 2 * margin 8 + filter 40 + 2 * card padding 24 + card header 56 + 2 * card content margin 16 + action bar 44 + footer 20 */
+}
+
+mat-card-header {
+  min-height: 50px;
+}
+
+mat-form-field {
+  min-width: 250px;
+}
+
+mat-card-content {
+  overflow: scroll;
+}
+
+#translation {
+  border: 2px solid;
+  padding: 5px;
+}
+
+#translationinput {
+  border: 1px solid;
+}
+#sourcemessage {
+  border: 1px solid;
+  padding: 5px;
+}
+
+.normalizationhint {
+  font-size: 10px;
+}

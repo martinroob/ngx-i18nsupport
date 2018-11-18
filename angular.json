@@ -226,6 +226,133 @@
           }
         }
       }
+    },
+    "tiny-translator": {
+      "root": "projects/tiny-translator/",
+      "sourceRoot": "projects/tiny-translator/src",
+      "projectType": "application",
+      "prefix": "app",
+      "schematics": {},
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/tiny-translator",
+            "index": "projects/tiny-translator/src/index.html",
+            "main": "projects/tiny-translator/src/main.ts",
+            "polyfills": "projects/tiny-translator/src/polyfills.ts",
+            "tsConfig": "projects/tiny-translator/tsconfig.app.json",
+            "assets": [
+              "projects/tiny-translator/src/favicon.ico",
+              "projects/tiny-translator/src/assets"
+            ],
+            "styles": [
+              "projects/tiny-translator/src/styles.css"
+            ],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "projects/tiny-translator/src/environments/environment.ts",
+                  "with": "projects/tiny-translator/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "tiny-translator:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "tiny-translator:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "tiny-translator:build"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/tiny-translator/src/test.ts",
+            "polyfills": "projects/tiny-translator/src/polyfills.ts",
+            "tsConfig": "projects/tiny-translator/tsconfig.spec.json",
+            "karmaConfig": "projects/tiny-translator/karma.conf.js",
+            "styles": [
+              "projects/tiny-translator/src/styles.css"
+            ],
+            "scripts": [],
+            "assets": [
+              "projects/tiny-translator/src/favicon.ico",
+              "projects/tiny-translator/src/assets"
+            ]
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/tiny-translator/tsconfig.app.json",
+              "projects/tiny-translator/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "tiny-translator-e2e": {
+      "root": "projects/tiny-translator-e2e/",
+      "projectType": "application",
+      "prefix": "",
+      "architect": {
+        "e2e": {
+          "builder": "@angular-devkit/build-angular:protractor",
+          "options": {
+            "protractorConfig": "projects/tiny-translator-e2e/protractor.conf.js",
+            "devServerTarget": "tiny-translator:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "tiny-translator:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": "projects/tiny-translator-e2e/tsconfig.e2e.json",
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
     }
   },
   "defaultProject": "ngx-i18nsupport"

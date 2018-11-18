@@ -1,0 +1,50 @@
+<h3 i18n>Google Translate status for current project</h3>
+<div *ngIf="autoTranslateDisabled()|async; else okBlock">
+  <p><mat-icon color="primary">error</mat-icon><span i18n>Google Translate is currently disabled due to the following reason:</span></p>
+  <p class="reason">{{autoTranslateDisabledReason()|async}}</p>
+</div>
+<ng-template #okBlock>
+  <div>
+    <p><mat-icon>done</mat-icon><span i18n>Google Translate is ready to translate from {{sourceLanguage()}} to {{targetLanguage()}}</span></p>
+  </div>
+</ng-template>
+<h3 i18n>Google Translate Settings</h3>
+<div class="info">
+  <p i18n>To use Google Translate you need an account on <a href="https://cloud.google.com">Google Cloud Platform</a>.</p>
+  <p i18n>Then you have to create an API Key.</p>
+  <p><span i18n>For details follow:</span> <a href="https://support.google.com/cloud/answer/6158862?hl=en" target="_blank">create an API key for your Google Cloud Platform Console project</a></p>
+</div>
+<form fxLayout="column">
+  <mat-form-field>
+    <input matInput [(ngModel)]="apiKey" name="apiKey" placeholder="API key" i18n-placeholder
+    matTooltip="API Key will be stored in the local storage of your browser. It will not be sent to anywhere but the Google Translate Service." i18n-matTooltip>
+  </mat-form-field>
+  <button color="primary" mat-raised-button i18n (click)="setApiKey()"
+          matTooltip="API Key will be stored in the local storage of your browser. It will not be sent to anywhere but the Google Translate Service." i18n-matTooltip>
+    Store API Key
+  </button>
+</form>
+<h3 i18n>Google Translate Test</h3>
+<div *ngIf="autoTranslateDisabledTest()|async; else okBlockTest">
+  <p><mat-icon color="primary">error</mat-icon><span i18n>Google Translate cannot translate from {{sourceLanguageTest()}} to {{targetLanguageTest()}} due to the following reason:</span></p>
+  <p class="reason">{{autoTranslateDisabledReasonTest()|async}}</p>
+</div>
+<ng-template #okBlockTest>
+  <div>
+    <p><mat-icon>done</mat-icon><span i18n>Google Translate is ready to translate from {{sourceLanguageTest()}} to {{targetLanguageTest()}}</span></p>
+    <p>{{testCallSourceResult}}</p>
+    <p>{{testCallTargetResult}}</p>
+  </div>
+</ng-template>
+<form fxLayout="column">
+  <mat-form-field>
+    <input matInput [(ngModel)]="_sourceLanguageTest" name="_sourceLanguageTest" placeholder="Source language code" i18n-placeholder>
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput [(ngModel)]="_targetLanguageTest" name="_targetLanguageTest" placeholder="Target language code" i18n-placeholder>
+  </mat-form-field>
+  <button mat-raised-button color="accent" i18n (click)="testCall()"
+          matTooltip="Test a call" i18n-matTooltip>
+    Test
+  </button>
+</form>

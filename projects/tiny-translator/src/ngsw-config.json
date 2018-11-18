@@ -1,0 +1,40 @@
+{
+  "appData": {
+    "version": "0.11.0",
+    "message": "Introducing Service Worker"
+  },
+
+  "index": "/index.html",
+
+  "assetGroups": [{
+    "name": "app",
+    "installMode": "prefetch",
+    "resources": {
+      "files": [
+        "/favicon.ico",
+        "/index.html"
+      ],
+      "versionedFiles": [
+        "/*.bundle.css",
+        "/*.bundle.js",
+        "/*.chunk.js"
+      ]
+    }
+  }, {
+    "name": "assets",
+    "installMode": "lazy",
+    "updateMode": "prefetch",
+    "resources": {
+      "files": [
+        "/assets/**"
+      ]
+    }
+  }, {
+    "name": "fonts",
+    "resources": {
+      "urls": [
+        "https://fonts.googleapis.com/**"
+      ]
+    }
+  }]
+}

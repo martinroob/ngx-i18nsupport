@@ -1,0 +1,33 @@
+<div id="container">
+  <ng-container *ngIf="readonly">
+    <ng-container *ngIf="!isICUMessage() || !normalized">
+      <p>{{textToDisplay()}}</p>
+    </ng-container>
+    <ng-container *ngIf="isICUMessage() && normalized">
+      <div *ngFor="let category of getICUMessageCategories(); index as i" fxLayout="row" fxLayoutGap="20px">
+        <p>{{category.getCategory()}}</p>
+        <p>{{category.getMessageNormalized().asDisplayString()}}</p>
+      </div>
+    </ng-container>
+  </ng-container>
+  <form *ngIf="!readonly" [formGroup]="form" fxLayout="column">
+    <ng-container *ngIf="!isICUMessage() || !normalized">
+      <mat-form-field fxFlex="noshrink">
+        <textarea matInput type="text"
+          formControlName="displayedText"
+          matTextareaAutosize
+          [matAutosizeMinRows]="2"
+          (keyup.control.enter)="accept.next()">
+        </textarea>
+     </mat-form-field>
+    </ng-container>
+    <ng-container *ngIf="isICUMessage() && normalized">
+      <div fxFlex="noshrink" *ngFor="let category of getICUMessageCategories(); index as i" fxLayout="row" fxLayoutGap="20px" formArrayName="icuMessages">
+        <p>{{category.getCategory()}}</p>
+        <mat-form-field fxFlexFill>
+          <input matInput type="text" [formControlName]="i" (keyup.control.enter)="accept.next()">
+        </mat-form-field>
+      </div>
+    </ng-container>
+  </form>
+</div>

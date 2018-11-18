@@ -1,0 +1,16 @@
+<div id="page" fxLayout="row">
+  <app-translate-unit-list [translationFileView]="currentView()" [workflowType]="currentProject()?.workflowType"
+                           [hasAutotranslatedUnits]="hasAutotranslatedUnits()"
+                           (changeTranslationUnit)="onChangeTranslationUnit($event)"
+                           fxFlex="0 0 25%" fxHide.lt-md></app-translate-unit-list>
+  <div id="transunit" fxLayout="column" fxFlex="grow">
+    <app-filter-status fxHide.gt-sm [translationFileView]="currentView()"></app-filter-status>
+    <app-project-status fxHide.lt-md [project]="currentProject()" (onSave)="save()"></app-project-status>
+    <app-translate-unit
+      [translationFileView]="currentView()"
+      [translationUnit]="currentTranslationUnit()"
+      [workflowType]="currentProject()?.workflowType"
+      [reviewMode]="isInReviewMode()"
+      (changed)="commitChanges($event)"></app-translate-unit>
+  </div>
+</div>

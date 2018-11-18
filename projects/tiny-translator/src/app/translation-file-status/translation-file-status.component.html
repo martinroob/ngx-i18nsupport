@@ -1,0 +1,31 @@
+<div *ngIf="!shortInfo" fxLayout="column">
+  <p *ngIf="translationFile?.hasErrors()" class="error">{{translationFile?.error}}</p>
+  <p *ngFor="let warning of translationFile?.warnings()" class="warn">{{warning}}</p>
+  <div fxLayout="row">
+    <span i18n>Translate <b>from</b></span>&nbsp;<app-language [code]="translationFile?.sourceLanguage()"></app-language>
+    &nbsp;<span i18n><b>to</b></span>&nbsp;<app-language [code]="translationFile?.targetLanguage()"></app-language>
+  </div>
+  <div fxLayout="row" fxLayoutAlign="start center">
+    <span>{{translationFile?.name}}, </span>
+    <span i18n>{{translationFile?.size}} bytes, </span>
+    <span i18n>{{translationFile?.numberOfTransUnits}} entries</span>
+    <mat-icon *ngIf="translationFile?.isDirty()" matTooltip="There are unpublished changes" i18n-matTooltip>warning</mat-icon>
+    <button mat-icon-button color="primary" (click)="save()" matTooltip="save current state to file (download)" i18n-matTooltip><mat-icon>save</mat-icon></button>
+  </div>
+  <div *ngIf="translationFile?.masterName">
+    <span i18n>(translation of file {{translationFile?.masterName}})</span>
+  </div>
+  <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px">
+    <mat-progress-spinner mode="determinate" [diameter]="30" [strokeWidth]="5" [value]="translationFile?.percentageTranslated()" color="accent"></mat-progress-spinner>
+    <span i18n>{{percentageTranslated()}} % translated</span>
+  </div>
+</div>
+<div *ngIf="shortInfo" fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="start center">
+  <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px">
+    <mat-progress-spinner mode="determinate" [diameter]="30" [strokeWidth]="5" [value]="translationFile?.percentageTranslated()" color="accent"></mat-progress-spinner>
+    <span i18n>{{percentageTranslated()}} % translated</span>
+  </div>
+  <p *ngIf="translationFileView?.currentTransUnitIndex() > 0" i18n>current transunit {{translationFileView?.currentTransUnitIndex()}} of {{translationFileView?.scrollabeTransUnitsLength()}}</p>
+  <mat-icon *ngIf="translationFile?.isDirty()" matTooltip="There are unpublished changes" i18n-matTooltip>warning</mat-icon>
+  <button mat-icon-button color="primary" (click)="save()" matTooltip="export current translation state to file (download)" i18n-matTooltip><mat-icon>save</mat-icon></button>
+</div>

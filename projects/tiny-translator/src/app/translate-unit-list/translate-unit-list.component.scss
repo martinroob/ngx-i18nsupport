@@ -1,0 +1,14 @@
+@import '~@angular/material/theming';
+
+@import '../../styles.scss';
+
+#list {
+  /* 164px = Height of toolbar (128) plus footer (20) + 2*margin */
+  max-height: calc(100vh - 164px);
+  min-width: 300px;
+  overflow: auto;
+}
+
+.selected {
+  background-color: mat-color($dit-app-accent);
+}

@@ -1,0 +1,10 @@
+<h3 matDialogTitle i18n>There are problems with the translation</h3>
+<div mat-dialog-content>
+  <p class="warning" *ngFor="let warning of data.warnings"><mat-icon>warning</mat-icon>&nbsp;{{warning}}</p>
+  <p class="error" *ngFor="let error of data.errors"><mat-icon>error</mat-icon>&nbsp;{{error}}</p>
+</div>
+<div mat-dialog-actions>
+  <button mat-button matDialogClose (click)="accept()" [disabled]="data?.errors?.length > 0" i18n>Accept, I know what I do</button>
+  <button mat-button matDialogClose (click)="discard()" i18n>Discard changes</button>
+  <button mat-button matDialogClose (click)="cancel()" i18n>Cancel</button>
+</div>

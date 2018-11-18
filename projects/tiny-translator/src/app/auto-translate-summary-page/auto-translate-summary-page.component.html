@@ -1,0 +1,48 @@
+<h3 i18n>Autotranslate Run Result</h3>
+<div *ngIf="!hasTranslateSummaryReport()">
+  <p i18n>No Autotranslate run result available.</p>
+</div>
+<div *ngIf="hasTranslateSummaryReport()">
+  <p>{{autoTranslateSummaryReport().content()}}</p>
+  <div *ngIf="ignoredResults().length > 0">
+    <div fxLayout="row" fxLayoutGap="50px">
+      <h4 i18n>Ignored</h4>
+      <button fxFlexAlign="start" mat-raised-button color="accent" (click)="navigateToAutoTranslatedIgnored()"
+              i18n matTooltip="show all untranslated that were ignored by auto translation" i18n-matTooltip>navigate to ignored units</button>
+    </div>
+    <mat-list>
+      <mat-list-item *ngFor="let result of ignoredResults()">
+        <h4 matLine>{{showTransUnitOfResult(result)}}</h4>
+        <p matLine>{{result.details()}}</p>
+      </mat-list-item>
+    </mat-list>
+  </div>
+  <div *ngIf="failedResults().length > 0">
+    <div fxLayout="row" fxLayoutGap="50px">
+      <h4 i18n>Failed</h4>
+      <button fxFlexAlign="start" mat-raised-button color="accent" (click)="navigateToAutoTranslatedFailed()"
+              i18n matTooltip="show all untranslated where auto translation failed" i18n-matTooltip>navigate to failed units</button>
+    </div>
+    <mat-list>
+      <mat-list-item *ngFor="let result of failedResults()">
+        <h4 matLine>{{showTransUnitOfResult(result)}}</h4>
+        <p matLine>{{result.details()}}</p>
+      </mat-list-item>
+    </mat-list>
+  </div>
+  <div fxLayout="row" fxLayoutGap="50px">
+    <button *ngIf="autoTranslateSummaryReport().success() > 0"
+            fxFlexAlign="start"
+            mat-raised-button color="accent"
+            (click)="navigateToAutoTranslated()"
+            i18n
+            matTooltip="show overview of auto translated units" i18n-matTooltip>navigate to translated units</button>
+    <button
+            fxFlexAlign="start"
+            mat-raised-button color="accent"
+            (click)="navigateToContinueWork()"
+            i18n
+            matTooltip="continue translation" i18n-matTooltip>continue</button>
+  </div>
+
+</div>
