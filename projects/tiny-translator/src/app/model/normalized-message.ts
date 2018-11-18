@@ -3,7 +3,7 @@ import {ValidationErrors} from '@angular/forms';
 import {isNullOrUndefined} from 'util';
 import {IICUMessage, IICUMessageTranslation} from 'ngx-i18nsupport-lib/dist';
 import {AutoTranslateServiceAPI} from './auto-translate-service-api';
-import {Observable} from 'rxjs/Observable';
+import {Observable} from 'rxjs';
 /**
  * Created by martin on 19.05.2017.
  * Wrapper around INormalizedMessage for GUI usage.

@@ -1,7 +1,7 @@
 import {TranslationMessagesFileFactory, ITranslationMessagesFile, ITransUnit} from 'ngx-i18nsupport-lib';
 import {isNullOrUndefined} from 'util';
 import {TranslationUnit} from './translation-unit';
-import {Observable} from 'rxjs/Observable';
+import {Observable} from 'rxjs';
 import {AsynchronousFileReaderResult} from './asynchronous-file-reader.service';
 import {
   FILETYPE_XTB, FORMAT_XMB, IICUMessage, IICUMessageTranslation,

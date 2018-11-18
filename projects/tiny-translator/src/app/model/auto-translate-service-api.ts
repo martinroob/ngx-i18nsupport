@@ -1,4 +1,5 @@
-import {Observable} from 'rxjs/Observable';
+
+import {throwError as observableThrowError, Observable} from 'rxjs';
 
 /**
  * Reasons, why you cannot use the API.
@@ -73,7 +74,7 @@ export class AutoTranslateServiceAPI {
    * @return Observable with translated message or error
    */
   public translate(message: string, from: string, to: string): Observable<string> {
-    return Observable.throw('no translation service installed');
+    return observableThrowError('no translation service installed');
   }
 
   /**
@@ -84,6 +85,6 @@ export class AutoTranslateServiceAPI {
    * @return Observable with translated messages or error
    */
   public translateMultipleStrings(messages: string[], from: string, to: string): Observable<string[]> {
-    return Observable.throw('no translation service installed');
+    return observableThrowError('no translation service installed');
   }
 }

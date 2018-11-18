@@ -3,7 +3,7 @@ import {TranslationFile} from './translation-file';
 import {isNullOrUndefined} from 'util';
 import {BackendServiceAPI} from './backend-service-api';
 import {TranslationProject, WorkflowType} from './translation-project';
-import {Observable} from 'rxjs/Observable';
+import {Observable} from 'rxjs';
 import {DownloaderService} from './downloader.service';
 import {AsynchronousFileReaderService} from './asynchronous-file-reader.service';
 import {

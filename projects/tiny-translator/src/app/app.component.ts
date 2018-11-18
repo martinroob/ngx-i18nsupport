@@ -2,7 +2,7 @@ import {Component, Inject, OnInit, Optional} from '@angular/core';
 import {AppConfig, APP_CONFIG} from './app.config';
 import {TinyTranslatorService} from './model/tiny-translator.service';
 import {isNullOrUndefined} from 'util';
-import {Observable} from 'rxjs/Observable';
+import {Observable} from 'rxjs';
 import {Router} from '@angular/router';
 import {SwUpdate} from '@angular/service-worker';
 import {MatSnackBar} from '@angular/material';

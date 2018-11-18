@@ -3,8 +3,7 @@ import {TranslationUnit} from '../model/translation-unit';
 import {MatRadioChange} from '@angular/material';
 import {TranslationFileView} from '../model/translation-file-view';
 import {WorkflowType} from '../model/translation-project';
-import {Subject} from 'rxjs/Subject';
-import {Subscription} from 'rxjs/Subscription';
+import {Subject, Subscription} from 'rxjs';
 import {
   FILTER_ALL, FILTER_AUTOTRANSLATED, FILTER_AUTOTRANSLATED_FAILED, FILTER_AUTOTRANSLATED_IGNORED, FILTER_NEEDS_REVIEW,
   FILTER_SUBSTRING,

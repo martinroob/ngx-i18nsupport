@@ -1,6 +1,6 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {TinyTranslatorService} from '../model/tiny-translator.service';
-import {Observable} from 'rxjs/Observable';
+import {Observable} from 'rxjs';
 
 const TEST_MESSAGE = 'Hello world!';
 

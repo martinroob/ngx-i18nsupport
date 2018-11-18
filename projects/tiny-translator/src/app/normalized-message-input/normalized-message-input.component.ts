@@ -13,7 +13,7 @@ import {NormalizedMessage} from '../model/normalized-message';
 import {isNullOrUndefined} from 'util';
 import {ControlValueAccessor, FormBuilder, FormGroup, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {IICUMessageCategory, IICUMessageTranslation} from 'ngx-i18nsupport-lib/dist';
-import {Subscription} from 'rxjs/Subscription';
+import {Subscription} from 'rxjs';
 /**
  * A component used as an input field for normalized message.
  */

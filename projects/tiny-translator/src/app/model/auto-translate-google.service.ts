@@ -1,13 +1,13 @@
+
+import {throwError as observableThrowError, Observable, BehaviorSubject} from 'rxjs';
 import {Inject, Injectable} from '@angular/core';
 import {
   AutoTranslateDisabledReason, AutoTranslateDisabledReasonKey, AutoTranslateServiceAPI,
   Language
 } from './auto-translate-service-api';
 import {APP_CONFIG, AppConfig} from '../app.config';
-import {Observable} from 'rxjs/Observable';
 import {HttpClient} from '@angular/common/http';
 import {isNullOrUndefined} from 'util';
-import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 
 /**
  * Types form google translate api.
@@ -217,7 +217,7 @@ export class AutoTranslateGoogleService extends AutoTranslateServiceAPI {
    */
   public translate(message: string, from: string, to: string): Observable<string> {
     if (!this._apiKey) {
-      return Observable.throw('error, no api key');
+      return observableThrowError('error, no api key');
     }
     from = AutoTranslateGoogleService.stripRegioncode(from);
     to = AutoTranslateGoogleService.stripRegioncode(to);
@@ -243,7 +243,7 @@ export class AutoTranslateGoogleService extends AutoTranslateServiceAPI {
    */
   public translateMultipleStrings(messages: string[], from: string, to: string): Observable<string[]> {
     if (!this._apiKey) {
-      return Observable.throw('error, no api key');
+      return observableThrowError('error, no api key');
     }
     if (messages.length === 0) {
       return Observable.of([]);
@@ -272,7 +272,7 @@ export class AutoTranslateGoogleService extends AutoTranslateServiceAPI {
    */
   private limitedTranslateMultipleStrings(messages: string[], from: string, to: string): Observable<string[]> {
     if (!this._apiKey) {
-      return Observable.throw('error, no api key');
+      return observableThrowError('error, no api key');
     }
     from = AutoTranslateGoogleService.stripRegioncode(from);
     to = AutoTranslateGoogleService.stripRegioncode(to);

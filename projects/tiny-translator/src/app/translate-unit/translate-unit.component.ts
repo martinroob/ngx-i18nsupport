@@ -3,7 +3,7 @@ import {TranslationUnit} from '../model/translation-unit';
 import {MatDialog, MatSnackBar} from '@angular/material';
 import {NormalizedMessage} from '../model/normalized-message';
 import {FormBuilder, FormGroup} from '@angular/forms';
-import {Observable} from 'rxjs/Observable';
+import {Observable} from 'rxjs';
 import {TranslateUnitWarningConfirmDialogComponent} from '../translate-unit-warning-confirm-dialog/translate-unit-warning-confirm-dialog.component';
 import {TranslationFileView} from '../model/translation-file-view';
 import {WorkflowType} from '../model/translation-project';
