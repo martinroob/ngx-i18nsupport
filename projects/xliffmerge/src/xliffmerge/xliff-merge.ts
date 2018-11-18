@@ -1,4 +1,3 @@
-import * as program from 'commander';
 import {CommandOutput} from '../common/command-output';
 import {XliffMergeParameters} from './xliff-merge-parameters';
 import {XliffMergeError} from './xliff-merge-error';
@@ -40,52 +39,56 @@ export class XliffMerge {
 
     static main(argv: string[]) {
         const options = XliffMerge.parseArgs(argv);
-        new XliffMerge(new CommandOutput(process.stdout), options).run((result) => {
-            process.exit(result);
-        });
+        if (options) {
+            new XliffMerge(new CommandOutput(process.stdout), options).run((result) => {
+                process.exit(result);
+            });
+        }
     }
 
     static parseArgs(argv: string[]): ProgramOptions {
-        let languages: string[] = null;
-        delete program.verbose;
-        delete program.quiet;
-        delete program.profilePath;
-        delete program.languages;
-        program
-            .version(VERSION)
-            .arguments('<language...>')
-            .option('-p, --profile [configfile]', 'a json configuration file containing all relevant parameters (see details below)')
-            .option('-v, --verbose', 'show some output for debugging purposes')
-            .option('-q, --quiet', 'only show errors, nothing else')
-            .on('--help', () => {
-                console.log('  <language> has to be a valid language short string, e,g. "en", "de", "de-ch"');
-                console.log('');
-                console.log('  configfile can contain the following values:');
-                console.log('\tquiet verbose defaultLanguage languages srcDir i18nBaseFile i18nFile i18nFormat encoding genDir' +
-                    '\n\tremoveUnusedIds allowIdChange' +
-                    '\n\tsupportNgxTranslate ngxTranslateExtractionPattern' +
-                    '\n\tuseSourceAsTarget targetPraefix targetSuffix' +
-                    '\n\tautotranslate apikey apikeyfile');
-                console.log('\tfor details please consult the home page https://github.com/martinroob/ngx-i18nsupport');
-            })
-            .action((languageArray) => {
-                languages = languageArray;
-            })
-            .parse(argv);
-
         const options: ProgramOptions = {
-            languages: languages
+            languages: []
         };
-        if (program.profile) {
-            options.profilePath = program.profile;
-        }
-        if (program.quiet) {
-            options.quiet = true;
-        }
-        if (program.verbose && program.verbose > 0) {
-            options.verbose = true;
+        for (let i = 1; i < argv.length; i++) {
+            const arg = argv[i];
+            if (arg === '--version' || arg === '-version') {
+                console.log('xliffmerge ' + VERSION);
+            } else if (arg === '--verbose' || arg === '-v') {
+                options.verbose = true;
+            } else if (arg === '--profile' || arg === '-p') {
+                i++;
+                if (i >= argv.length) {
+                    console.log('missing config file');
+                    XliffMerge.showUsage();
+                    return null;
+                } else {
+                    options.profilePath = argv[i];
+                }
+            } else if (arg === '--quiet' || arg === '-q') {
+                options.quiet = true;
+            } else if (arg === '--help' || arg === '-help' || arg === '-h') {
+                XliffMerge.showUsage();
+            } else if (arg.length > 0 && arg.charAt(0) === '-') {
+                console.log('unknown option');
+                return null;
+            } else {
+                options.languages.push(arg);
+            }
         }
         return options;
+    }
+
+    static showUsage() {
+        console.log('usage: xliffmerge <option>* <language>*');
+        console.log('Options');
+        console.log('\t-p|--profile a json configuration file containing all relevant parameters.');
+        console.log('\t\tfor details please consult the home page https://github.com/martinroob/ngx-i18nsupport');
+        console.log('\t-v|--verbose show some output for debugging purposes');
+        console.log('\t-q|--quiet only show errors, nothing else');
+        console.log('\t-version|--version show version string');
+        console.log('');
+        console.log('\t<language> has to be a valid language short string, e,g. "en", "de", "de-ch"');
     }
 
     /**

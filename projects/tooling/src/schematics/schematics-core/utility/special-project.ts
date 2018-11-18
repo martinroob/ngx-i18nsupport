@@ -3,8 +3,7 @@
  */
 
 import {SchematicContext, SchematicsException, Tree} from '@angular-devkit/schematics';
-import {WorkspaceSchema} from './config';
-import {WorkspaceProject} from './project';
+import {WorkspaceSchema, WorkspaceProject, ProjectType} from './workspace-models';
 
 /*
 private helper function
@@ -35,7 +34,7 @@ export function getProjectByName(
     host: Tree,
     _context: SchematicContext,
     projectName: string,
-): WorkspaceProject {
+): WorkspaceProject<ProjectType> {
         const json = readAngularJson(host);
         const projects = json['projects'];
         if (!projects) {
@@ -133,7 +132,7 @@ export function addArchitectServeConfigurationToProject(
  * @param path path like ['architect', 'build', 'configurations']
  * @return the object at the path position
  */
-function getObjectFromProjectUsingPath(projectName: string, project: WorkspaceProject, path: string[]): any {
+function getObjectFromProjectUsingPath(projectName: string, project: WorkspaceProject<ProjectType>, path: string[]): any {
     let object: any = project;
     let currentPath = '';
     for (let i = 0; i < path.length; i++) {

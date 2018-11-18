@@ -1,5 +1,6 @@
 import {Tree, SchematicContext, SchematicsException} from '@angular-devkit/schematics';
-import {getWorkspace, WorkspaceSchema} from '../../schematics-core/utility/config';
+import {getWorkspace} from '../../schematics-core/utility/config';
+import {WorkspaceSchema} from '../../schematics-core/utility/workspace-models';
 import {Location} from '../../schematics-core/utility/parse-name';
 import {parseName} from '../../schematics-core';
 
@@ -61,7 +62,7 @@ export function setupCommonOptions(optionsFromCommandline: CommonOptions, host: 
     if (options.path === undefined) {
         options.path = `/${project.root}`;
     }
-    const parsedPath: Location = parseName(options.path, '');
+    const parsedPath: Location = parseName(options.path, 'anyfile');
     options.path = parsedPath.path;
     options.srcDir = 'src' + '/' + options.localePath;
     options.genDir = 'src' + '/' + options.localePath;

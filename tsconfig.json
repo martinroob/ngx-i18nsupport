@@ -18,11 +18,11 @@
       "dom"
     ],
     "paths": {
-      "@ngx-i18nsupport/ngx-i18nsupport/*": [
-        "dist/xliffmerge/*"
+      "@ngx-i18nsupport/ngx-i18nsupport": [
+        "dist/xliffmerge"
       ],
-      "@ngx-i18nsupport/tooling/*": [
-        "dist/tooling/*"
+      "@ngx-i18nsupport/tooling": [
+        "dist/tooling"
       ],
       "@ngx-i18nsupport/ngx-i18nsupport-lib": [
         "dist/ngx-i18nsupport-lib"

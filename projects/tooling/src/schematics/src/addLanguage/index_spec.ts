@@ -1,10 +1,9 @@
 import { Tree } from '@angular-devkit/schematics';
 import { SchematicTestRunner, UnitTestTree } from '@angular-devkit/schematics/testing';
 import * as path from 'path';
-import {readAngularJson, readPackageJson, readXliffmergeJson, workspaceOptions} from '../common/common-testing_spec';
-import {Schema as ApplicationOptions} from '@schematics/angular/application/schema';
+import {readAngularJson, readPackageJson, readXliffmergeJson, workspaceOptions, appOptions} from '../common/common-testing_spec';
 import {AddLanguageOptions} from './schema';
-import {WorkspaceSchema} from '../../schematics-core/utility/config';
+import {WorkspaceSchema} from '../../schematics-core/utility/workspace-models';
 
 const collectionPath = path.join(__dirname, '../collection.json');
 
@@ -25,16 +24,6 @@ describe('addLanguage', () => {
     });
 
     describe('with workspace without installed tooling', () => {
-
-        const appOptions: ApplicationOptions = {
-            name: 'bar',
-            inlineStyle: false,
-            inlineTemplate: false,
-            routing: false,
-            style: 'css',
-            skipTests: false,
-            skipPackageJson: false,
-        };
 
         let appTree: UnitTestTree;
         beforeEach(() => {
@@ -62,16 +51,6 @@ describe('addLanguage', () => {
     });
 
     describe('with one instrumented project', () => {
-
-        const appOptions: ApplicationOptions = {
-            name: 'bar',
-            inlineStyle: false,
-            inlineTemplate: false,
-            routing: false,
-            style: 'css',
-            skipTests: false,
-            skipPackageJson: false,
-        };
 
         let appTree: UnitTestTree;
         beforeEach(() => {
@@ -142,7 +121,7 @@ describe('addLanguage', () => {
             // @ts-ignore
             expect(angularJson.projects.bar.architect.build.configurations[lang]).toBeTruthy();
             // @ts-ignore
-            expect(angularJson.projects.bar.architect.build.configurations[lang]).toEqual({
+            expect(angularJson.projects.bar.architect.build.configurations[lang] as any).toEqual({
                 aot: true,
                 outputPath: 'dist/bar-de',
                 i18nFile: 'src/i18n/messages.de.xlf',

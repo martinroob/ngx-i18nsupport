@@ -1,49 +1,48 @@
-import { getWorkspace } from './config';
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 import { Tree } from '@angular-devkit/schematics';
+import { getWorkspace } from '../utility/config';
+import { ProjectType, WorkspaceProject, WorkspaceSchema } from '../utility/workspace-models';
 
-export interface WorkspaceProject {
-    root: string;
-    projectType: string;
+
+/**
+ * Build a default project path for generating.
+ * @param project The project to build the path for.
+ */
+export function buildDefaultPath(project: WorkspaceProject): string {
+  const root = project.sourceRoot
+    ? `/${project.sourceRoot}/`
+    : `/${project.root}/src/`;
+
+  const projectDirName = project.projectType === ProjectType.Application ? 'app' : 'lib';
+
+  return `${root}${projectDirName}`;
 }
 
-export function getProject(
-    host: Tree,
-    options: { project?: string | undefined; path?: string | undefined }
-): WorkspaceProject {
-    const workspace = getWorkspace(host);
+export function getProject<TProjectType extends ProjectType = ProjectType.Application>(
+  workspaceOrHost: WorkspaceSchema | Tree,
+  projectName: string,
+): WorkspaceProject<TProjectType> {
+  const workspace = isWorkspaceSchema(workspaceOrHost)
+    ? workspaceOrHost
+    : getWorkspace(workspaceOrHost);
 
-    if (!options.project) {
-        options.project = Object.keys(workspace.projects)[0];
-    }
-
-    return workspace.projects[options.project];
+  return workspace.projects[projectName] as WorkspaceProject<TProjectType>;
 }
 
-export function getProjectPath(
-    host: Tree,
-    options: { project?: string | undefined; path?: string | undefined }
-) {
-    const project = getProject(host, options);
-
-    if (project.root.substr(-1) === '/') {
-        project.root = project.root.substr(0, project.root.length - 1);
-    }
-
-    if (options.path === undefined) {
-        const projectDirName =
-            project.projectType === 'application' ? 'app' : 'lib';
-
-        return `${project.root ? `/${project.root}` : ''}/src/${projectDirName}`;
-    }
-
-    return options.path;
+// TODO(hans): change this any to unknown when google3 supports TypeScript 3.0.
+// tslint:disable-next-line:no-any
+export function isWorkspaceSchema(workspace: any): workspace is WorkspaceSchema {
+  return !!(workspace && (workspace as WorkspaceSchema).projects);
 }
 
-export function isLib(
-    host: Tree,
-    options: { project?: string | undefined; path?: string | undefined }
-) {
-    const project = getProject(host, options);
-
-    return project.projectType === 'library';
+// TODO(hans): change this any to unknown when google3 supports TypeScript 3.0.
+// tslint:disable-next-line:no-any
+export function isWorkspaceProject(project: any): project is WorkspaceProject {
+  return !!(project && (project as WorkspaceProject).projectType);
 }

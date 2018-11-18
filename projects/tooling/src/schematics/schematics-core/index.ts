@@ -9,17 +9,15 @@ import {
     camelize,
     classify,
     underscore,
-    group,
-    capitalize,
-    featurePath,
+    capitalize
 } from './utility/strings';
 
 import {commaseparatedToArrayString, toArrayString} from './utility/special-strings';
 
 export { parseName } from './utility/parse-name';
-export { getProjectPath, getProject, isLib } from './utility/project';
+export { getProject} from './utility/project';
 export { AppConfig, getWorkspace, getWorkspacePath } from './utility/config';
-export { addPackageToPackageJson } from './utility/package';
+export { addPackageJsonDependency, getPackageJsonDependency, NodeDependency, NodeDependencyType } from './utility/dependencies';
 export {readPackageJson, getScriptFromPackageJson, addScriptToPackageJson, IPackageJson} from './utility/special-package';
 export {getAngularJson,
     getProjectByName,
@@ -32,9 +30,7 @@ export const stringUtils = {
     camelize,
     classify,
     underscore,
-    group,
     capitalize,
-    featurePath,
     commaseparatedToArrayString,
     toArrayString
 };
