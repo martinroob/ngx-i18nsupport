@@ -1,5 +1,5 @@
 
-import {throwError as observableThrowError, Observable} from 'rxjs';
+import {throwError, Observable, of} from 'rxjs';
 
 /**
  * Reasons, why you cannot use the API.
@@ -43,17 +43,17 @@ export class AutoTranslateServiceAPI {
    * @param target the language to translate to
    */
   public canAutoTranslate(source: string, target: string): Observable<boolean> {
-    return Observable.of(false);
+    return of(false);
   }
 
   /**
    * The reason, why canAutoTranslate returns false.
    * @param source the language to translate from
    * @param target the language to translate to
-   * @return {AutoTranslateDisabledReason} or null, if API is enabled.
+   * @return reason or null, if API is enabled.
    */
   public disabledReason(source: string, target: string): Observable<AutoTranslateDisabledReason> {
-    return Observable.of({reason: AutoTranslateDisabledReasonKey.NO_PROVIDER});
+    return of({reason: AutoTranslateDisabledReasonKey.NO_PROVIDER});
   }
 
   /**
@@ -62,7 +62,7 @@ export class AutoTranslateServiceAPI {
    * @param target language for readable name. (default is en)
    */
   supportedLanguages(target?: string): Observable<Language[]> {
-    return Observable.of([]);
+    return of([]);
   }
 
   /**
@@ -74,7 +74,7 @@ export class AutoTranslateServiceAPI {
    * @return Observable with translated message or error
    */
   public translate(message: string, from: string, to: string): Observable<string> {
-    return observableThrowError('no translation service installed');
+    return throwError('no translation service installed');
   }
 
   /**
@@ -85,6 +85,6 @@ export class AutoTranslateServiceAPI {
    * @return Observable with translated messages or error
    */
   public translateMultipleStrings(messages: string[], from: string, to: string): Observable<string[]> {
-    return observableThrowError('no translation service installed');
+    return throwError('no translation service installed');
   }
 }

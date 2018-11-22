@@ -1,9 +1,8 @@
-import {ITransUnit, INormalizedMessage, STATE_NEW} from 'ngx-i18nsupport-lib';
+import {ITransUnit, INormalizedMessage, STATE_NEW, IICUMessageTranslation} from '@ngx-i18nsupport/ngx-i18nsupport-lib';
 import {TranslationFile} from './translation-file';
 import {NormalizedMessage} from './normalized-message';
 import {format, isNullOrUndefined} from 'util';
 import {AutoTranslateResult} from './auto-translate-result';
-import {IICUMessageTranslation} from 'ngx-i18nsupport-lib/dist';
 
 /**
  * A wrapper around ITransUnit.
@@ -79,7 +78,8 @@ export class TranslationUnit {
         } catch (error) {
           parseError = error.message;
         }
-        this._normalizedTargetContent = new NormalizedMessage(original, normalizedMessage, parseError, this._transUnit.sourceContentNormalized());
+        this._normalizedTargetContent = new NormalizedMessage(
+            original, normalizedMessage, parseError, this._transUnit.sourceContentNormalized());
       }
       return this._normalizedTargetContent;
     } else {
@@ -153,8 +153,8 @@ export class TranslationUnit {
   /**
    * Try to use the given generated message as a translation.
    * If there are any errors or warnings, translation will not take place.
-   * @param translatedMessage
-   * @return {AutoTranslateResult} wether it was successful or not.
+   * @param translatedMessage translatedMessage
+   * @return wether it was successful or not.
    */
   public autoTranslate(translatedMessage: NormalizedMessage): AutoTranslateResult {
     const errors = translatedMessage.validate(true);

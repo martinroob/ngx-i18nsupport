@@ -1,9 +1,9 @@
-import {INormalizedMessage} from 'ngx-i18nsupport-lib';
+import {INormalizedMessage, IICUMessage, IICUMessageTranslation} from '@ngx-i18nsupport/ngx-i18nsupport-lib';
 import {ValidationErrors} from '@angular/forms';
 import {isNullOrUndefined} from 'util';
-import {IICUMessage, IICUMessageTranslation} from 'ngx-i18nsupport-lib/dist';
 import {AutoTranslateServiceAPI} from './auto-translate-service-api';
 import {Observable} from 'rxjs';
+import {map} from 'rxjs/operators';
 /**
  * Created by martin on 19.05.2017.
  * Wrapper around INormalizedMessage for GUI usage.
@@ -114,27 +114,33 @@ export class NormalizedMessage {
 
   /**
    * Auto translate this normalized message via Google Translate.
-   * @param autoTranslateService
+   * @param autoTranslateService autoTranslateService
    * @param sourceLanguage Language of source
    * @param targetLanguage Language of target
    * @return new translated message (as Observable, it is an async call)
    */
-  public autoTranslateUsingService(autoTranslateService: AutoTranslateServiceAPI, sourceLanguage: string, targetLanguage: string): Observable<NormalizedMessage> {
+  public autoTranslateUsingService(autoTranslateService: AutoTranslateServiceAPI,
+                                   sourceLanguage: string,
+                                   targetLanguage: string): Observable<NormalizedMessage> {
     // TODO corner cases to be researched like special tags, ...
     if (this.getICUMessage()) {
       return this.autoTranslateICUMessageUsingService(autoTranslateService, sourceLanguage, targetLanguage);
     } else {
-      return autoTranslateService.translate(this.dislayText(true), sourceLanguage, targetLanguage).map((translation: string) => {
-        if (!isNullOrUndefined(translation)) {
-          return this.translate(translation, true);
-        } else {
-          return null;
-        }
-      });
+      return autoTranslateService.translate(this.dislayText(true), sourceLanguage, targetLanguage).pipe(
+          map((translation: string) => {
+            if (!isNullOrUndefined(translation)) {
+              return this.translate(translation, true);
+            } else {
+              return null;
+            }
+          }
+      ));
     }
   }
 
-  private autoTranslateICUMessageUsingService(autoTranslateService: AutoTranslateServiceAPI, sourceLanguage: string, targetLanguage: string): Observable<NormalizedMessage> {
+  private autoTranslateICUMessageUsingService(autoTranslateService: AutoTranslateServiceAPI,
+                                              sourceLanguage: string,
+                                              targetLanguage: string): Observable<NormalizedMessage> {
     const icuMessage: IICUMessage = this.getICUMessage();
     const categories = icuMessage.getCategories();
     // check for nested ICUs, we do not support that
@@ -143,7 +149,7 @@ export class NormalizedMessage {
     }
     const allMessages: string[] = categories.map((category) => category.getMessageNormalized().asDisplayString());
     return autoTranslateService.translateMultipleStrings(allMessages, sourceLanguage, targetLanguage)
-      .map((translations: string[]) => {
+      .pipe(map((translations: string[]) => {
         const icuTranslation: IICUMessageTranslation = {};
         for (let i = 0; i < translations.length; i++) {
           const translationText = translations[i];
@@ -151,7 +157,7 @@ export class NormalizedMessage {
         }
         const result = this.translateICUMessage(icuTranslation);
         return result;
-      });
+      }));
   }
 
   public translateICUMessage(newValue: IICUMessageTranslation): NormalizedMessage {

@@ -67,7 +67,7 @@
     <button fxFlexAlign="center"
             mat-raised-button
             color="primary"
-            (click)="addProject()"
+            (click)="emitAddProject()"
             matTooltip="add as new project and start working" i18n-matTooltip
             [disabled]="!isInputComplete()">
       <mat-icon>add</mat-icon>&nbsp;<span i18n>Add project</span>

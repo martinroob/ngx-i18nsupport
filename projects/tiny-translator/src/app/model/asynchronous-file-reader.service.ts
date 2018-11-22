@@ -28,7 +28,7 @@ export class AsynchronousFileReaderService {
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        const fileContent = reader.result;
+        const fileContent = reader.result as string;
         subject.next({name: file.name, size: file.size, content: fileContent});
         subject.complete();
       };

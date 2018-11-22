@@ -1,7 +1,7 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {TinyTranslatorService} from '../model/tiny-translator.service';
 import {TranslationProject, UserRole, WorkflowType} from '../model/translation-project';
-import {FILETYPE_XTB} from 'ngx-i18nsupport-lib/dist';
+import {FILETYPE_XTB} from '@ngx-i18nsupport/ngx-i18nsupport-lib';
 import {isNullOrUndefined} from 'util';
 import {FormBuilder, FormGroup} from '@angular/forms';
 
@@ -16,7 +16,7 @@ import {FormBuilder, FormGroup} from '@angular/forms';
 })
 export class ProjectStarterComponent implements OnInit {
 
-  @Output() onAddProject: EventEmitter<TranslationProject> = new EventEmitter();
+  @Output() addProject: EventEmitter<TranslationProject> = new EventEmitter();
 
   private createdProject: TranslationProject;
 
@@ -77,8 +77,8 @@ export class ProjectStarterComponent implements OnInit {
 
   /**
    * Convert string type from form to enum.
-   * @param type
-   * @return {any}
+   * @param type type
+   * @return type as enum
    */
   toWorkflowType(type: string): WorkflowType {
     switch (type) {
@@ -93,8 +93,8 @@ export class ProjectStarterComponent implements OnInit {
 
   /**
    * Convert string type from form to enum.
-   * @param type
-   * @return {any}
+   * @param role type
+   * @return role as enum
    */
   toUserRole(role: string): UserRole {
     switch (role) {
@@ -107,8 +107,8 @@ export class ProjectStarterComponent implements OnInit {
     }
   }
 
-  addProject() {
-      this.onAddProject.emit(this.createdProject);
+  emitAddProject() {
+      this.addProject.emit(this.createdProject);
   }
 
   selectedFilesFormatted(): string {

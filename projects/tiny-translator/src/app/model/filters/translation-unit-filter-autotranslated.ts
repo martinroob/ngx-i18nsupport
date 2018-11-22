@@ -1,6 +1,6 @@
 import {ITranslationUnitFilter} from './i-translation-unit-filter';
 import {TranslationUnit} from '../translation-unit';
-import {STATE_TRANSLATED} from 'ngx-i18nsupport-lib/dist';
+import {STATE_TRANSLATED} from '@ngx-i18nsupport/ngx-i18nsupport-lib';
 import {AutoTranslateSummaryReport} from '../auto-translate-summary-report';
 import {isNullOrUndefined} from 'util';
 /**

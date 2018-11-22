@@ -247,7 +247,7 @@
               "projects/tiny-translator/src/assets"
             ],
             "styles": [
-              "projects/tiny-translator/src/styles.css"
+              "projects/tiny-translator/src/styles.scss"
             ],
             "scripts": []
           },
@@ -303,7 +303,7 @@
             "tsConfig": "projects/tiny-translator/tsconfig.spec.json",
             "karmaConfig": "projects/tiny-translator/karma.conf.js",
             "styles": [
-              "projects/tiny-translator/src/styles.css"
+              "projects/tiny-translator/src/styles.scss"
             ],
             "scripts": [],
             "assets": [

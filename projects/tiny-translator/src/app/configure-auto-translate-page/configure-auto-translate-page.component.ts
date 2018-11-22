@@ -1,6 +1,7 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {TinyTranslatorService} from '../model/tiny-translator.service';
 import {Observable} from 'rxjs';
+import {map} from 'rxjs/operators';
 
 const TEST_MESSAGE = 'Hello world!';
 
@@ -34,7 +35,7 @@ export class ConfigureAutoTranslatePageComponent implements OnInit {
   }
 
   autoTranslateDisabled(): Observable<boolean> {
-    return this.translatorService.canAutoTranslate().map((val) => !val);
+    return this.translatorService.canAutoTranslate().pipe(map((val) => !val));
   }
 
   autoTranslateDisabledReason(): Observable<string> {
@@ -50,7 +51,7 @@ export class ConfigureAutoTranslatePageComponent implements OnInit {
   }
 
   autoTranslateDisabledTest(): Observable<boolean> {
-    return this.translatorService.canAutoTranslateForLanguages(this._sourceLanguageTest, this._targetLanguageTest).map((val) => !val);
+    return this.translatorService.canAutoTranslateForLanguages(this._sourceLanguageTest, this._targetLanguageTest).pipe(map((val) => !val));
   }
 
   autoTranslateDisabledReasonTest(): Observable<string> {

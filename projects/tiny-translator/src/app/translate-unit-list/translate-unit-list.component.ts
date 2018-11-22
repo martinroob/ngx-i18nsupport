@@ -10,6 +10,7 @@ import {
   FILTER_UNTRANSLATED,
   TranslationUnitFilterService
 } from '../model/filters/translation-unit-filter.service';
+import {debounceTime} from 'rxjs/operators';
 
 /**
  * Component that shows a list of trans units.
@@ -37,7 +38,6 @@ export class TranslateUnitListComponent implements OnInit {
 
   /**
    * Emitted, when user wants to navigate to another unit.
-   * @type {EventEmitter<TranslationUnit>} the wanted trans unit.
    */
   @Output() changeTranslationUnit: EventEmitter<TranslationUnit> = new EventEmitter();
 
@@ -84,7 +84,7 @@ export class TranslateUnitListComponent implements OnInit {
     }
     const substr = this.substringToSearch ? this.substringToSearch : '';
     this.translationFileView.setActiveFilter(this.translationUnitFilterService.getFilter(FILTER_SUBSTRING, substr));
-    this.substringSubscription = this.substringSubject.debounceTime(200).subscribe((sub) => {
+    this.substringSubscription = this.substringSubject.pipe(debounceTime(200)).subscribe((sub) => {
       this.translationFileView.setActiveFilter(this.translationUnitFilterService.getFilter(FILTER_SUBSTRING, sub));
     });
   }

@@ -3,13 +3,14 @@ import {TranslationUnit} from '../model/translation-unit';
 import {MatDialog, MatSnackBar} from '@angular/material';
 import {NormalizedMessage} from '../model/normalized-message';
 import {FormBuilder, FormGroup} from '@angular/forms';
-import {Observable} from 'rxjs';
+import {Observable, of} from 'rxjs';
 import {TranslateUnitWarningConfirmDialogComponent} from '../translate-unit-warning-confirm-dialog/translate-unit-warning-confirm-dialog.component';
 import {TranslationFileView} from '../model/translation-file-view';
 import {WorkflowType} from '../model/translation-project';
-import {STATE_FINAL, STATE_TRANSLATED} from 'ngx-i18nsupport-lib/dist';
+import {STATE_FINAL, STATE_TRANSLATED} from '@ngx-i18nsupport/ngx-i18nsupport-lib';
 import {AutoTranslateServiceAPI} from '../model/auto-translate-service-api';
 import {isNullOrUndefined} from 'util';
+import {map} from 'rxjs/operators';
 
 export enum NavigationDirection {
   NEXT,
@@ -285,16 +286,16 @@ export class TranslateUnitComponent implements OnInit, OnChanges {
    * 'cancel': do not do anything, stay on this trans unit.
    * 'discard': do not translate, leave transunit unchanged, but go to the next/prev unit.
    * 'accept': translate tu as given, ignoring warnings (errors cannot be ignored).
-   * @return {any}
+   * @return any
    */
   openConfirmWarningsDialog(): Observable<any> {
     const warnings = this.warnings();
     const errors = this.errors();
     if (warnings.length === 0 && errors.length === 0) {
       // everything good, we don´t need a dialog then.
-      return Observable.of('accept');
+      return of('accept');
     } else if (!this.isTranslationChanged()) {
-      return Observable.of('accept');
+      return of('accept');
     } else {
       const dialogRef = this.dialog.open(TranslateUnitWarningConfirmDialogComponent,
         {
@@ -331,7 +332,7 @@ export class TranslateUnitComponent implements OnInit, OnChanges {
 
   /**
    * Check, wether there is a next trans unit.
-   * @return {boolean}
+   * @return wether there is a next trans unit
    */
   public hasNext(): boolean {
     if (this.translationUnit) {
@@ -386,11 +387,11 @@ export class TranslateUnitComponent implements OnInit, OnChanges {
 
   autoTranslateDisabled(): Observable<boolean> {
     if (!this.translationUnit) {
-      return Observable.of(true);
+      return of(true);
     }
     return this.autoTranslateService.canAutoTranslate(
       this.translationUnit.translationFile().sourceLanguage(),
-      this.translationUnit.translationFile().targetLanguage()).map(val => !val);
+      this.translationUnit.translationFile().targetLanguage()).pipe(map(val => !val));
   }
 
 }

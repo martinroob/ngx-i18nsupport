@@ -8,12 +8,13 @@ import {
   SimpleChanges,
   Output,
   EventEmitter
-} from "@angular/core";
+} from '@angular/core';
 import {NormalizedMessage} from '../model/normalized-message';
 import {isNullOrUndefined} from 'util';
 import {ControlValueAccessor, FormBuilder, FormGroup, NG_VALUE_ACCESSOR} from '@angular/forms';
-import {IICUMessageCategory, IICUMessageTranslation} from 'ngx-i18nsupport-lib/dist';
+import {IICUMessageCategory, IICUMessageTranslation} from '@ngx-i18nsupport/ngx-i18nsupport-lib';
 import {Subscription} from 'rxjs';
+import {debounceTime} from 'rxjs/operators';
 /**
  * A component used as an input field for normalized message.
  */
@@ -83,8 +84,10 @@ export class NormalizedMessageInputComponent implements OnInit, OnChanges, Contr
       displayedText: [{value: this.textToDisplay(), disabled: this.disabled}],
       icuMessages: this.formBuilder.array(this.initIcuMessagesFormArray())
     });
-    this.subscription = this.form.valueChanges.debounceTime(200).subscribe(formValue => {
-      this.valueChanged(formValue);
+    this.subscription = this.form.valueChanges.pipe(
+        debounceTime(200)
+    ).subscribe(formValue => {
+        this.valueChanged(formValue);
     });
   }
 
@@ -120,8 +123,7 @@ export class NormalizedMessageInputComponent implements OnInit, OnChanges, Contr
   /**
    * This function is called when the control status changes to or from "DISABLED".
    * Depending on the value, it will enable or disable the appropriate DOM element.
-   *
-   * @param isDisabled
+   * @param isDisabled isDisabled
    */
   setDisabledState?(isDisabled: boolean): void {
     this.disabled = isDisabled;
@@ -130,7 +132,7 @@ export class NormalizedMessageInputComponent implements OnInit, OnChanges, Contr
 
   /**
    * The text to be shown in the readonly mode.
-   * @return {any}
+   * @return text to be shown in readonly mode
    */
   textToDisplay(): string {
     if (this.editedMessage) {
