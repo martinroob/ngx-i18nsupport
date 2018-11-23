@@ -1,0 +1,944 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file source-language="en" datatype="plaintext" original="ng2.template">
+    <body>
+      <trans-unit id="8305daea742cd945ac4268e5fcf8d30df30c8038" datatype="html">
+        <source>A newer version of the app is available</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\update-available\update-available.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="bb239ba357ffecd3a7be3b1f2d4aa9799e6de16e" datatype="html">
+        <source>Refresh Application</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\update-available\update-available.component.ts</context>
+          <context context-type="linenumber">2</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="704b13c5f32d986c19bf803546de5dd0626f8fff" datatype="html">
+        <source>Ignore</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\update-available\update-available.component.ts</context>
+          <context context-type="linenumber">3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cecce9108254c2771317c2fd8a6ace406579041d" datatype="html">
+        <source>Details of the project (click to open)</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\app.component.ts</context>
+          <context context-type="linenumber">23</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\project-status\project-status.component.ts</context>
+          <context context-type="linenumber">3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9d5137b2cf03ba36936c43ab24f1a0f487ffd434" datatype="html">
+        <source>Save..</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\app.component.ts</context>
+          <context context-type="linenumber">32</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5a96c7f7a29ee51b58316aa6cb9f914c10368d95" datatype="html">
+        <source>export current translation state to file (download)</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\app.component.ts</context>
+          <context context-type="linenumber">30</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\translation-file-status\translation-file-status.component.ts</context>
+          <context context-type="linenumber">30</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4b725f2ba664dae3def5416198a32f1ad152369a" datatype="html">
+        <source>Google Translate settings..</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\app.component.ts</context>
+          <context context-type="linenumber">37</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="d4b7dbc9a30d91dd5a1b88251d7a654f00e6ef52" datatype="html">
+        <source>configure Google Translate API Key</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\app.component.ts</context>
+          <context context-type="linenumber">35</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="f4b94231ace292964b73b1ba8b77c69ca1d42947" datatype="html">
+        <source>Google Translate units..</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\app.component.ts</context>
+          <context context-type="linenumber">42</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b3da02a762691a868113c1555c0a74c2252c31d3" datatype="html">
+        <source>Translate all untranslated units with Google Translate</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\app.component.ts</context>
+          <context context-type="linenumber">40</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b7aaa15193ff68fb36dbbf5cb6388672aba9c7d8" datatype="html">
+        <source>Last results..</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\app.component.ts</context>
+          <context context-type="linenumber">47</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="199c0c9528e7ded8511f4c5dcceacb0f4de13d15" datatype="html">
+        <source>Open summary page of last autotranslate run</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\app.component.ts</context>
+          <context context-type="linenumber">45</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="84972a39ee3484b97abdfe3863284af16564f9b2" datatype="html">
+        <source>Open a new project</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\project-starter\project-starter.component.ts</context>
+          <context context-type="linenumber">2</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c660f51d0a809bdffb6939f4c4459858abc2288b" datatype="html">
+        <source>Project name</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\project-starter\project-starter.component.ts</context>
+          <context context-type="linenumber">6</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\project-editor\project-editor.component.ts</context>
+          <context context-type="linenumber">6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6ea6fd6e11f219096dc53edcb89479798a1f826b" datatype="html">
+        <source>Select the file you want to translate.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>
+        The file can be of format XLIFF 1.2, XLIFF 2.0 or XMB.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>
+        The file will be stored in your browser local storage until you export the translated version.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\project-starter\project-starter.component.ts</context>
+          <context context-type="linenumber">10</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="165f5612a1516d3841d036e3d6d593e4743372bf" datatype="html">
+        <source>Upload a translation file (xlf, xtb)</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\project-starter\project-starter.component.ts</context>
+          <context context-type="linenumber">16</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3f32c24015d7838361235a7f1fb7c9eb93b01d30" datatype="html">
+        <source>selected: </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\project-starter\project-starter.component.ts</context>
+          <context context-type="linenumber">17</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\project-starter\project-starter.component.ts</context>
+          <context context-type="linenumber">29</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="42649fcfb37e5731e215dfb39fc060a2cc3d1a7d" datatype="html">
+        <source>You selected an xtb file.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>
+        This file type only contains one language, the target language.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>
+        To show you the original source texts, you should also select the master xmb file.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\project-starter\project-starter.component.ts</context>
+          <context context-type="linenumber">21</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="40d683bc93efb370ba71ad3cd7897e2c2b36b94a" datatype="html">
+        <source>Upload master xmb file</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\project-starter\project-starter.component.ts</context>
+          <context context-type="linenumber">28</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="599fdab6eaf0912dc7aa50e65a2749c763d9c162" datatype="html">
+        <source>Selected translation file:</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\project-starter\project-starter.component.ts</context>
+          <context context-type="linenumber">32</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\project-editor\project-editor.component.ts</context>
+          <context context-type="linenumber">9</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="f3ba2e517a9f0ee2fa5346acc19d259d185685f9" datatype="html">
+        <source>Explicitly set source language</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\project-starter\project-starter.component.ts</context>
+          <context context-type="linenumber">41</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\project-editor\project-editor.component.ts</context>
+          <context context-type="linenumber">17</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="d468177dfc7419e3d29614b1293796d2adb649cd" datatype="html">
+        <source>Your selected file contains no information about the language used. You can set it here explicitly.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\project-starter\project-starter.component.ts</context>
+          <context context-type="linenumber">40</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\project-editor\project-editor.component.ts</context>
+          <context context-type="linenumber">16</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b2ec941a71700e0a09f243cb7946f1924b5bcbff" datatype="html">
+        <source>Workflow type you are using</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\project-starter\project-starter.component.ts</context>
+          <context context-type="linenumber">46</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\project-editor\project-editor.component.ts</context>
+          <context context-type="linenumber">22</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cab2db0e2da8dff5d34bb5904d5f88ee7bf995ad" datatype="html">
+        <source>Single User</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\project-starter\project-starter.component.ts</context>
+          <context context-type="linenumber">50</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\project-editor\project-editor.component.ts</context>
+          <context context-type="linenumber">24</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="bc044499ac0e07e81804c919f9d709d6aedb9945" datatype="html">
+        <source>Single user workflow. You are translator and reviewer in one person. Every translated unit will directly get the state &apos;final&apos;</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\project-starter\project-starter.component.ts</context>
+          <context context-type="linenumber">49</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3464dfa4b46545e4511324aa3b48dee75bb1392d" datatype="html">
+        <source>Translator/Reviewer</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\project-starter\project-starter.component.ts</context>
+          <context context-type="linenumber">53</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\project-editor\project-editor.component.ts</context>
+          <context context-type="linenumber">25</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="17f972504a525e40d37583055db2d8569499bfe2" datatype="html">
+        <source>Workflow with explicit translator and reviewer. Translation get te state &apos;translated&apos;. The reviewer must mark them as &apos;final&apos; later.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\project-starter\project-starter.component.ts</context>
+          <context context-type="linenumber">52</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9a61282719c1955ab95a4c9c62aa9c7b96c73fc6" datatype="html">
+        <source>Your role</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\project-starter\project-starter.component.ts</context>
+          <context context-type="linenumber">58</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\project-editor\project-editor.component.ts</context>
+          <context context-type="linenumber">30</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6cdc5b25318491e0c0e5ed059f2b9a2b3523452c" datatype="html">
+        <source>Translator</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\project-starter\project-starter.component.ts</context>
+          <context context-type="linenumber">60</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\project-editor\project-editor.component.ts</context>
+          <context context-type="linenumber">32</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3005c11319b17d34f0021b21e36823d4e82ebc4b" datatype="html">
+        <source>Reviewer</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\project-starter\project-starter.component.ts</context>
+          <context context-type="linenumber">61</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\project-editor\project-editor.component.ts</context>
+          <context context-type="linenumber">33</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="12cd052fa3e0ea8ec8457daaa98d549057c40179" datatype="html">
+        <source>Add project</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\project-starter\project-starter.component.ts</context>
+          <context context-type="linenumber">73</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4fd0a9dfdb0cd2e905ea22770ab54449cbeb8585" datatype="html">
+        <source>add as new project and start working</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\project-starter\project-starter.component.ts</context>
+          <context context-type="linenumber">71</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="92c7024852ec03b5fd29a5e7ecd58ba8b39f5cb3" datatype="html">
+        <source>Translate <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/>from<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\translation-file-status\translation-file-status.component.ts</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="0f00b1615388646b985be70cbd27f0e94f093976" datatype="html">
+        <source><x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/>to<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\translation-file-status\translation-file-status.component.ts</context>
+          <context context-type="linenumber">6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="17cb0e566c8ae68d987c74444b0ab259f783ee0c" datatype="html">
+        <source><x id="INTERPOLATION" equiv-text="{{translationFile?.size}}"/> bytes, </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\translation-file-status\translation-file-status.component.ts</context>
+          <context context-type="linenumber">10</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="12470b9fe142a72111de02bb045de9c841bce64a" datatype="html">
+        <source><x id="INTERPOLATION" equiv-text="{{translationFile?.numberOfTransUnits}}"/> entries</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\translation-file-status\translation-file-status.component.ts</context>
+          <context context-type="linenumber">11</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b0a601002055bb07b804db00cda9cc209f54b5a5" datatype="html">
+        <source>There are unpublished changes</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\translation-file-status\translation-file-status.component.ts</context>
+          <context context-type="linenumber">12</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\translation-file-status\translation-file-status.component.ts</context>
+          <context context-type="linenumber">29</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="25c34b740fa0303c3e31e35d944d73ffa7e534dd" datatype="html">
+        <source>save current state to file (download)</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\translation-file-status\translation-file-status.component.ts</context>
+          <context context-type="linenumber">13</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="abb32ed4141f1d6669fbd2d7258c33eb8da04119" datatype="html">
+        <source>(translation of file <x id="INTERPOLATION" equiv-text="{{translationFile?.masterName}}"/>)</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\translation-file-status\translation-file-status.component.ts</context>
+          <context context-type="linenumber">16</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2b5754331bc53b5fed19b7945e81e7dea1fc8221" datatype="html">
+        <source><x id="INTERPOLATION" equiv-text="{{percentageTranslated()}}"/> % translated</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\translation-file-status\translation-file-status.component.ts</context>
+          <context context-type="linenumber">20</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\translation-file-status\translation-file-status.component.ts</context>
+          <context context-type="linenumber">26</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="f0a34959bca31a411dabad58e0be83432592163e" datatype="html">
+        <source>current transunit <x id="INTERPOLATION" equiv-text="{{translationFileView?.currentTransUnitIndex()}}"/> of <x id="INTERPOLATION_1" equiv-text="{{translationFileView?.scrollabeTransUnitsLength()}}"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\translation-file-status\translation-file-status.component.ts</context>
+          <context context-type="linenumber">28</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="d04085c5069d49c88f924e788121d4161ffc5bc8" datatype="html">
+        <source>{VAR_PLURAL, plural, =0 {Currently there is no open project.} =1 {Currently there is <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/>1<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/> open project.} other {Currently there are <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/><x id="INTERPOLATION" equiv-text="{{projects().length}}"/><x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/> open projects.} }</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\home-page\home-page.component.ts</context>
+          <context context-type="linenumber">2</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="f540f05dc71be88e226a3920dbf1140b2658e5ea" datatype="html">
+        <source>Create a new project</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\home-page\home-page.component.ts</context>
+          <context context-type="linenumber">3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="231b7122d4d3178ad7261f7900388fb3be2a5a05" datatype="html">
+        <source>There are problems with the translation</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\translate-unit-warning-confirm-dialog\translate-unit-warning-confirm-dialog.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5bc8d6c6cf0621dd7884c1206dbc1c72b22955fe" datatype="html">
+        <source>Accept, I know what I do</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\translate-unit-warning-confirm-dialog\translate-unit-warning-confirm-dialog.component.ts</context>
+          <context context-type="linenumber">7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b4b9d2e75328589d6f50655d26d370b8a8168365" datatype="html">
+        <source>Discard changes</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\translate-unit-warning-confirm-dialog\translate-unit-warning-confirm-dialog.component.ts</context>
+          <context context-type="linenumber">8</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="d7b35c384aecd25a516200d6921836374613dfe7" datatype="html">
+        <source>Cancel</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\translate-unit-warning-confirm-dialog\translate-unit-warning-confirm-dialog.component.ts</context>
+          <context context-type="linenumber">9</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9d306bade90ca878105dfc2772851c5d0fa5fcf2" datatype="html">
+        <source>No Translation Unit</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\translate-unit\translate-unit.component.ts</context>
+          <context context-type="linenumber">3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4fed4d6e136107910939242db3d4c0f98e800116" datatype="html">
+        <source>no content</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\translate-unit\translate-unit.component.ts</context>
+          <context context-type="linenumber">6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="95f5a0d1979da3f0b092ffa96e7307e02cc4baee" datatype="html">
+        <source>State <x id="INTERPOLATION" equiv-text="{{targetState()}}"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\translate-unit\translate-unit.component.ts</context>
+          <context context-type="linenumber">12</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="eec715de352a6b114713b30b640d319fa78207a0" datatype="html">
+        <source>Description</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\translate-unit\translate-unit.component.ts</context>
+          <context context-type="linenumber">25</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="f2081dbd0b230b2e61d03f870d85af5b54aed1ba" datatype="html">
+        <source>Meaning</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\translate-unit\translate-unit.component.ts</context>
+          <context context-type="linenumber">26</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c4a05f0fcb307b9203be9ad5ebc6e37f726801d1" datatype="html">
+        <source>Your translation to</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\translate-unit\translate-unit.component.ts</context>
+          <context context-type="linenumber">30</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="0d4e42ed6009feb7b837cf078afdc4cef5dc9699" datatype="html">
+        <source>Normalization mode
+          </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\translate-unit\translate-unit.component.ts</context>
+          <context context-type="linenumber">35</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5ca62f8d7b9cfe1b70df406e02fb5402cda34782" datatype="html">
+        <source>In normalization mode all markup contained in the messsages is shown in a simplified, format neutral way.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\translate-unit\translate-unit.component.ts</context>
+          <context context-type="linenumber">34</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="68de8fa5b0301ea69e1aa3c3b6d28ebf1fcb3c3d" datatype="html">
+        <source>(switch off to show native message)</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\translate-unit\translate-unit.component.ts</context>
+          <context context-type="linenumber">37</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4c01cbb1c1da5adc5cee1eb82df786180ba61892" datatype="html">
+        <source>(switch on to use normalization)</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\translate-unit\translate-unit.component.ts</context>
+          <context context-type="linenumber">38</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6a0b35deb3beb0a1c24cd9a1d652f78bd751e851" datatype="html">
+        <source>undo changes</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\translate-unit\translate-unit.component.ts</context>
+          <context context-type="linenumber">45</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="84fde7a04ebc8c588e3ff102e614ae5e1ff76b86" datatype="html">
+        <source>press to get a translation suggestion from Google Translate</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\translate-unit\translate-unit.component.ts</context>
+          <context context-type="linenumber">53</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8fef9621af4e75f6004de0ec95ba7d6b003db416" datatype="html">
+        <source>
+          mark as translated
+        </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\translate-unit\translate-unit.component.ts</context>
+          <context context-type="linenumber">69</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c1ac90520acbce71ffbf35f3b693ae5119944726" datatype="html">
+        <source>press to accept the given translation</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\translate-unit\translate-unit.component.ts</context>
+          <context context-type="linenumber">69</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c5cf65546dcaf2698e122492511c14bf57b3b68e" datatype="html">
+        <source>
+          mark as reviewed
+        </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\translate-unit\translate-unit.component.ts</context>
+          <context context-type="linenumber">77</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="60bb386dc9e8c4a8dbffd7449cac73088f4e5a77" datatype="html">
+        <source>press to accept the given translation as reviewed</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\translate-unit\translate-unit.component.ts</context>
+          <context context-type="linenumber">77</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b9c64e1452739d7ef2fd47990bb6d73601e78f09" datatype="html">
+        <source>
+          mark as translated, but not reviewed
+        </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\translate-unit\translate-unit.component.ts</context>
+          <context context-type="linenumber">85</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="eb65966a3dcb1f030925b8b8f630c8a9aa40cadd" datatype="html">
+        <source>press to reset the reviewed translation to &apos;translated&apos;</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\translate-unit\translate-unit.component.ts</context>
+          <context context-type="linenumber">85</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5b117cf9fb2eb651ee9e22bc57a141005f3212ab" datatype="html">
+        <source>
+      Previous
+    </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\translate-unit\translate-unit.component.ts</context>
+          <context context-type="linenumber">94</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c6c07b1fd57546f8305009fa1b518dfc0d4415c9" datatype="html">
+        <source>accept translation and go to previous unit</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\translate-unit\translate-unit.component.ts</context>
+          <context context-type="linenumber">94</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c9702419b173fe7ab2aeee4ec1f5857fca1135a1" datatype="html">
+        <source>
+      Next
+    </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\translate-unit\translate-unit.component.ts</context>
+          <context context-type="linenumber">99</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="97255f8742f6646db3afa3ad100a5fd01ecd2e9f" datatype="html">
+        <source>accept translation and go to next unit (Keyboard shortcut &apos;Ctrl Enter&apos;)</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\translate-unit\translate-unit.component.ts</context>
+          <context context-type="linenumber">99</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2aba1e87039819aca3b70faa9aa848c12bf139ca" datatype="html">
+        <source>Show</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\translate-unit-list\translate-unit-list.component.ts</context>
+          <context context-type="linenumber">3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7a7631b3b2eb2c15755552f86ceaa17d1a85a55b" datatype="html">
+        <source>All units</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\translate-unit-list\translate-unit-list.component.ts</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\filter-status\filter-status.component.ts</context>
+          <context context-type="linenumber">4</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="50947a36dc35b04f2f8cef573952d0f2fb69c92e" datatype="html">
+        <source>Autotranslated units</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\translate-unit-list\translate-unit-list.component.ts</context>
+          <context context-type="linenumber">7</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\filter-status\filter-status.component.ts</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="92afa05208be85e6b6aa721b8e72ee59318aed6b" datatype="html">
+        <source>failed Autotranslated</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\translate-unit-list\translate-unit-list.component.ts</context>
+          <context context-type="linenumber">8</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\filter-status\filter-status.component.ts</context>
+          <context context-type="linenumber">6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="f4231e3f4bf66af59f31bd007ab099b6e4cf1bfb" datatype="html">
+        <source>ignored Autotranslated</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\translate-unit-list\translate-unit-list.component.ts</context>
+          <context context-type="linenumber">9</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\filter-status\filter-status.component.ts</context>
+          <context context-type="linenumber">7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="241c6acffa51499f0c35686c02ead21abae22d76" datatype="html">
+        <source>Untranslated units</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\translate-unit-list\translate-unit-list.component.ts</context>
+          <context context-type="linenumber">11</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\filter-status\filter-status.component.ts</context>
+          <context context-type="linenumber">8</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cb6007dc11cb4f5a331524a560711fadfc03cb3e" datatype="html">
+        <source>Review needed</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\translate-unit-list\translate-unit-list.component.ts</context>
+          <context context-type="linenumber">12</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\filter-status\filter-status.component.ts</context>
+          <context context-type="linenumber">9</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7e892ba15f2c6c17e83510e273b3e10fc32ea016" datatype="html">
+        <source>Search</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\translate-unit-list\translate-unit-list.component.ts</context>
+          <context context-type="linenumber">14</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="f748aef5326fdae92685f7a92f5330db624cf431" datatype="html">
+        <source>Substring</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\translate-unit-list\translate-unit-list.component.ts</context>
+          <context context-type="linenumber">16</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="53f473744534bc153bce1f04cd8c5b32c9ef1650" datatype="html">
+        <source>Translation Units</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\translate-unit-list\translate-unit-list.component.ts</context>
+          <context context-type="linenumber">23</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c6b1933d51bc90ad9e1380949873bb09932d448b" datatype="html">
+        <source><x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/>Project <x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/> <x id="INTERPOLATION" equiv-text="{{project?.name}}"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\project\project.component.ts</context>
+          <context context-type="linenumber">4</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\project-status\project-status.component.ts</context>
+          <context context-type="linenumber">2</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="d9d8be77cf88cf6bfb0cd5bdfdd3290c58380422" datatype="html">
+        <source>Delete Project</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\project\project.component.ts</context>
+          <context context-type="linenumber">11</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="a482c047b860aa5b83f81d46390c3357925d8e8a" datatype="html">
+        <source>Start Translation</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\project\project.component.ts</context>
+          <context context-type="linenumber">12</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="bc1dd546b5bf6ce79f355319167889865afa6be2" datatype="html">
+        <source>As a reviewer translation is disabled. You can only mark translated units as reviewed</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\project-status\project-status.component.ts</context>
+          <context context-type="linenumber">15</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ae4d2eddd04f46aa7790a4dbbd4ae79761bd95ae" datatype="html">
+        <source>You are currently working as reviewer!</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\project-status\project-status.component.ts</context>
+          <context context-type="linenumber">16</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b50b492392bbd579b8b38f3833b1ed18e1c6bd7d" datatype="html">
+        <source>Edit project</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\project-editor\project-editor.component.ts</context>
+          <context context-type="linenumber">2</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4d29dc8d589ef19d5cb9fe7d2cf34d2f9f0b2fd3" datatype="html">
+        <source>Save project changes</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\project-editor\project-editor.component.ts</context>
+          <context context-type="linenumber">43</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ddea8979810454a56742090a2e62c957ee2f4735" datatype="html">
+        <source>commit changes and continue working</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\project-editor\project-editor.component.ts</context>
+          <context context-type="linenumber">42</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2f0d96acbeea1301bcaf29c5b31e1fc9f3ac2d4a" datatype="html">
+        <source>Google Translate status for current project</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\configure-auto-translate-page\configure-auto-translate-page.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cacc6e51c2558b899a376b42969ac104a97c2cdf" datatype="html">
+        <source>Google Translate is currently disabled due to the following reason:</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\configure-auto-translate-page\configure-auto-translate-page.component.ts</context>
+          <context context-type="linenumber">3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="50916de5246890bf2d310c08825546c83749f8ac" datatype="html">
+        <source>Google Translate is ready to translate from <x id="INTERPOLATION" equiv-text="{{sourceLanguage()}}"/> to <x id="INTERPOLATION_1" equiv-text="{{targetLanguage()}}"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\configure-auto-translate-page\configure-auto-translate-page.component.ts</context>
+          <context context-type="linenumber">8</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3beb2efd0ff3b845b1a98156562509e7488a737f" datatype="html">
+        <source>Google Translate Settings</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\configure-auto-translate-page\configure-auto-translate-page.component.ts</context>
+          <context context-type="linenumber">11</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="afd3ae467f544794a545ef4db4a6f6536736a2dc" datatype="html">
+        <source>To use Google Translate you need an account on <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>Google Cloud Platform<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\configure-auto-translate-page\configure-auto-translate-page.component.ts</context>
+          <context context-type="linenumber">13</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="00405112badd2766d84d9e01ed7f2c002d975d63" datatype="html">
+        <source>Then you have to create an API Key.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\configure-auto-translate-page\configure-auto-translate-page.component.ts</context>
+          <context context-type="linenumber">14</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7d83e028d709cb79a27f1168114080a8ab264b41" datatype="html">
+        <source>For details follow:</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\configure-auto-translate-page\configure-auto-translate-page.component.ts</context>
+          <context context-type="linenumber">15</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="14fb15f0b42400411216ad432ebdb517490fc158" datatype="html">
+        <source>API key</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\configure-auto-translate-page\configure-auto-translate-page.component.ts</context>
+          <context context-type="linenumber">19</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="a73457552e2e981887e5aceba1982d4ca4414ebf" datatype="html">
+        <source>API Key will be stored in the local storage of your browser. It will not be sent to anywhere but the Google Translate Service.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\configure-auto-translate-page\configure-auto-translate-page.component.ts</context>
+          <context context-type="linenumber">20</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\configure-auto-translate-page\configure-auto-translate-page.component.ts</context>
+          <context context-type="linenumber">23</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cae4febf91df322d64c1ba1655ed294c13ee3350" datatype="html">
+        <source>
+    Store API Key
+  </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\configure-auto-translate-page\configure-auto-translate-page.component.ts</context>
+          <context context-type="linenumber">23</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b77205e34fa53f427b86358baa0a39a582a77d6d" datatype="html">
+        <source>Google Translate Test</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\configure-auto-translate-page\configure-auto-translate-page.component.ts</context>
+          <context context-type="linenumber">27</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c4af0949d56b2c8c6ff7747ddea1dab88d4ab221" datatype="html">
+        <source>Google Translate cannot translate from <x id="INTERPOLATION" equiv-text="{{sourceLanguageTest()}}"/> to <x id="INTERPOLATION_1" equiv-text="{{targetLanguageTest()}}"/> due to the following reason:</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\configure-auto-translate-page\configure-auto-translate-page.component.ts</context>
+          <context context-type="linenumber">29</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="14d3c10f8e6d51106aae905f1f5bf17406661af7" datatype="html">
+        <source>Google Translate is ready to translate from <x id="INTERPOLATION" equiv-text="{{sourceLanguageTest()}}"/> to <x id="INTERPOLATION_1" equiv-text="{{targetLanguageTest()}}"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\configure-auto-translate-page\configure-auto-translate-page.component.ts</context>
+          <context context-type="linenumber">34</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6d3cc7575e90a220bf3e28868846f9b003ad0c8f" datatype="html">
+        <source>Source language code</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\configure-auto-translate-page\configure-auto-translate-page.component.ts</context>
+          <context context-type="linenumber">41</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e9296c63f79a6653a6e88929f2eaf810584dc99c" datatype="html">
+        <source>Target language code</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\configure-auto-translate-page\configure-auto-translate-page.component.ts</context>
+          <context context-type="linenumber">44</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="80d3aafb9834631af0bdee4b919e8d34fc01ef36" datatype="html">
+        <source>
+    Test
+  </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\configure-auto-translate-page\configure-auto-translate-page.component.ts</context>
+          <context context-type="linenumber">47</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="0d0268e272dc7947e005e0f8b8e2da54337f1412" datatype="html">
+        <source>Test a call</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\configure-auto-translate-page\configure-auto-translate-page.component.ts</context>
+          <context context-type="linenumber">47</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="860553e954e6ab29671885c3ea589593657d06ca" datatype="html">
+        <source>Autotranslate Run Result</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\auto-translate-summary-page\auto-translate-summary-page.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="f0a200f0bdcfd0947efcaac1f7a442ed4d17f8bf" datatype="html">
+        <source>No Autotranslate run result available.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\auto-translate-summary-page\auto-translate-summary-page.component.ts</context>
+          <context context-type="linenumber">3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1722d5b9b296cfbc68126199692aac5851a1eab6" datatype="html">
+        <source>Ignored</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\auto-translate-summary-page\auto-translate-summary-page.component.ts</context>
+          <context context-type="linenumber">9</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e7b11a3879d38e60799103dfd461d71d6e595f20" datatype="html">
+        <source>navigate to ignored units</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\auto-translate-summary-page\auto-translate-summary-page.component.ts</context>
+          <context context-type="linenumber">11</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="66a4e64e763b88fec604241bd953924fb21310df" datatype="html">
+        <source>show all untranslated that were ignored by auto translation</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\auto-translate-summary-page\auto-translate-summary-page.component.ts</context>
+          <context context-type="linenumber">11</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="64b582e0d8e3a28331a14d2a1017fa5d6ffb8d93" datatype="html">
+        <source>Failed</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\auto-translate-summary-page\auto-translate-summary-page.component.ts</context>
+          <context context-type="linenumber">22</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="17fa8a96276576a5f8f06d080dd24ac91530912c" datatype="html">
+        <source>navigate to failed units</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\auto-translate-summary-page\auto-translate-summary-page.component.ts</context>
+          <context context-type="linenumber">24</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="44743b67870986d588da2254ffcccc3c7ef738ae" datatype="html">
+        <source>show all untranslated where auto translation failed</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\auto-translate-summary-page\auto-translate-summary-page.component.ts</context>
+          <context context-type="linenumber">24</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="0b6e58c9821f3fd3955f0175dd7d0a20c2c43c43" datatype="html">
+        <source>navigate to translated units</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\auto-translate-summary-page\auto-translate-summary-page.component.ts</context>
+          <context context-type="linenumber">39</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8b91c2c969bfc388e649eff5ad4604c9c896cf93" datatype="html">
+        <source>show overview of auto translated units</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\auto-translate-summary-page\auto-translate-summary-page.component.ts</context>
+          <context context-type="linenumber">39</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ac92738c50ac18bab774600d8358ff7082b747b8" datatype="html">
+        <source>continue</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\auto-translate-summary-page\auto-translate-summary-page.component.ts</context>
+          <context context-type="linenumber">45</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1cd8aab033d0fc35b8273e731584c0c7c7a6438e" datatype="html">
+        <source>continue translation</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\auto-translate-summary-page\auto-translate-summary-page.component.ts</context>
+          <context context-type="linenumber">45</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="a2c383156fcb90b775ade03de5dd5f02fef96ba2" datatype="html">
+        <source>Substring <x id="INTERPOLATION" equiv-text="{{substringFilterPattern()}}"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\filter-status\filter-status.component.ts</context>
+          <context context-type="linenumber">10</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="686d9c1ac5d9d25f430071ccbafb76029834f20b" datatype="html">
+        <source><x id="INTERPOLATION" equiv-text="{{translationFileView?.currentTransUnitIndex()}}"/> of <x id="INTERPOLATION_1" equiv-text="{{translationFileView?.scrollabeTransUnitsLength()}}"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app\filter-status\filter-status.component.ts</context>
+          <context context-type="linenumber">15</context>
+        </context-group>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

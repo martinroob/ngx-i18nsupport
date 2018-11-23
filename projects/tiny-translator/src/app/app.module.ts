@@ -77,7 +77,7 @@ import { UpdateAvailableComponent } from './update-available/update-available.co
     HttpClientModule,
     AppMaterialModule,
     routing,
-    environment.production ? ServiceWorkerModule.register(environment.base_href + 'ngsw-worker.js') : []
+    ServiceWorkerModule.register(environment.base_href + 'ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [
     {provide: APP_CONFIG, useValue: APP_CONFIG_VALUE},

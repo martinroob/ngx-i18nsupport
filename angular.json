@@ -244,7 +244,8 @@
             "tsConfig": "projects/tiny-translator/tsconfig.app.json",
             "assets": [
               "projects/tiny-translator/src/favicon.ico",
-              "projects/tiny-translator/src/assets"
+              "projects/tiny-translator/src/assets",
+			  "projects/tiny-translator/src/manifest.json"
             ],
             "styles": [
               "projects/tiny-translator/src/styles.scss"
@@ -274,7 +275,40 @@
                   "maximumWarning": "2mb",
                   "maximumError": "5mb"
                 }
-              ]
+              ],
+			  "serviceWorker": true
+            },
+            "en": {
+              "aot": true,
+              "baseHref": "/tiny-translator/en",
+              "outputPath": "dist/tiny-translator/en",
+              "i18nFile": "projects/tiny-translator/src/i18n/messages.en.xlf",
+              "i18nFormat": "xlf",
+              "i18nLocale": "en"
+            },
+            "de": {
+              "aot": true,
+              "baseHref": "/tiny-translator/de",
+              "outputPath": "dist/tiny-translator/de",
+              "i18nFile": "projects/tiny-translator/src/i18n/messages.de.xlf",
+              "i18nFormat": "xlf",
+              "i18nLocale": "de"
+            },
+            "fr": {
+              "aot": true,
+              "baseHref": "/tiny-translator/fr",
+              "outputPath": "dist/tiny-translator/fr",
+              "i18nFile": "projects/tiny-translator/src/i18n/messages.fr-google.xlf",
+              "i18nFormat": "xlf",
+              "i18nLocale": "fr"
+            },
+            "ru": {
+              "aot": true,
+              "baseHref": "/tiny-translator/ru",
+              "outputPath": "dist/tiny-translator/ru",
+              "i18nFile": "projects/tiny-translator/src/i18n/messages.ru-google.xlf",
+              "i18nFormat": "xlf",
+              "i18nLocale": "ru"
             }
           }
         },
@@ -286,6 +320,18 @@
           "configurations": {
             "production": {
               "browserTarget": "tiny-translator:build:production"
+            },
+            "en": {
+              "browserTarget": "tiny-translator:build:en"
+            },
+            "de": {
+              "browserTarget": "tiny-translator:build:de"
+            },
+            "fr": {
+              "browserTarget": "tiny-translator:build:fr"
+            },
+            "ru": {
+              "browserTarget": "tiny-translator:build:ru"
             }
           }
         },
@@ -308,7 +354,8 @@
             "scripts": [],
             "assets": [
               "projects/tiny-translator/src/favicon.ico",
-              "projects/tiny-translator/src/assets"
+              "projects/tiny-translator/src/assets",
+			  "projects/tiny-translator/src/manifest.json"
             ]
           }
         },

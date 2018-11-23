@@ -1,8 +1,6 @@
 import {Component, Inject, OnInit, Optional} from '@angular/core';
 import {AppConfig, APP_CONFIG} from './app.config';
 import {TinyTranslatorService} from './model/tiny-translator.service';
-import {isNullOrUndefined} from 'util';
-import {Observable} from 'rxjs';
 import {Router} from '@angular/router';
 import {SwUpdate} from '@angular/service-worker';
 import {MatSnackBar} from '@angular/material';
@@ -18,7 +16,7 @@ export class AppComponent implements OnInit {
   title = 'app works!';
 
   constructor(
-    @Inject(APP_CONFIG) private APP_CONFIG: AppConfig,
+    @Inject(APP_CONFIG) private appConfig: AppConfig,
     private translatorService: TinyTranslatorService,
     private router: Router,
     @Optional() private swUpdate: SwUpdate,
@@ -30,18 +28,18 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     if (this.swUpdate) {
       this.swUpdate.available.subscribe((event: UpdateAvailableEvent) => {
-        console.log('[App] Update available: current version is', event.current, 'available version is', event.available);
-        this.matSnackBar.openFromComponent(UpdateAvailableComponent, {duration: 3000})
+        console.log('[App] Update available: current version is ', event.current, ', available version is', event.available);
+        this.matSnackBar.openFromComponent(UpdateAvailableComponent, {duration: 3000});
       });
     }
   }
 
   buildtime() {
-    return this.APP_CONFIG.BUILDTIME;
+    return this.appConfig.BUILDTIME;
   }
 
   buildversion() {
-    return this.APP_CONFIG.BUILDVERSION;
+    return this.appConfig.BUILDVERSION;
   }
 
   currentProjectName(): string {

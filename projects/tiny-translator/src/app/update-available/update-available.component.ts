@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, Optional} from '@angular/core';
 import {MatSnackBarRef} from '@angular/material';
+import {SwUpdate, UpdateAvailableEvent} from '@angular/service-worker';
+import {take} from 'rxjs/operators';
 
 @Component({
   selector: 'app-update-available',
@@ -8,13 +10,30 @@ import {MatSnackBarRef} from '@angular/material';
 })
 export class UpdateAvailableComponent implements OnInit {
 
-  constructor(private snackBarRef: MatSnackBarRef<any>) { }
+  actualVersion: string;
+  availableVersion: string;
+
+  constructor(private snackBarRef: MatSnackBarRef<any>, @Optional() private updates: SwUpdate) { }
 
   ngOnInit() {
+    this.actualVersion = 'unknown';
+    this.availableVersion = 'unknown';
+    if (this.updates) {
+      this.updates.available.pipe(take(1)).subscribe((availableEvent: UpdateAvailableEvent) => {
+        if (availableEvent.current.appData) {
+          this.actualVersion = (<any> availableEvent.current.appData).version;
+        }
+        if (availableEvent.available.appData) {
+            this.availableVersion = (<any> availableEvent.available.appData).version;
+        }
+      });
+    }
   }
 
   updateApplication() {
-    window.location.reload()
+    if (this.updates) {
+        this.updates.activateUpdate().then(() => document.location.reload());
+    }
   }
 
   closeSnackbar() {
