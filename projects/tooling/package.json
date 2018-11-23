@@ -9,10 +9,10 @@
     "build:schematics": "tsc -p src/schematics/tsconfig.json",
     "copy:schematics": "cpx \"./src/schematics/**\" ../../dist/tooling/schematics",
     "pretest": "npm run build",
-    "test": "jasmine ../../dist/tooling/**/*spec.js",
-    "debugtest": "node %NODE_DEBUG_OPTION% ../../node_modules/jasmine/bin/jasmine.js ../../dist/tooling/**/*spec.js",
+    "test": "jasmine ../../dist/tooling/schematics/**/*spec.js",
+    "debugtest": "node %NODE_DEBUG_OPTION% ../../node_modules/jasmine/bin/jasmine.js ../../dist/tooling/schematics/**/*spec.js",
     "precover": "npm run build",
-    "cover": "istanbul cover --dir ../../coverage/tooling --root ../../dist/tooling/schematics --include-all-sources ../../node_modules/jasmine-node/bin/jasmine-node -- ../../dist/tooling/schematics"
+    "cover": "istanbul cover --dir ../../coverage/tooling --root ../../dist/tooling/schematics --include-all-sources ../../node_modules/jasmine/bin/jasmine.js -- ../../dist/tooling/schematics/**/*spec.js"
   },
   "repository": {
     "type": "git",
