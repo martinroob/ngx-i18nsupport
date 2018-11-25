@@ -16,7 +16,8 @@
   "workspaces": [
     "projects/xliffmerge",
     "projects/tooling",
-    "projects/ngx-i18nsupport-lib"
+    "projects/ngx-i18nsupport-lib",
+    "projects/tiny-translator"
   ],
   "dependencies": {
     "@angular-devkit/core": "~7.0.0",
