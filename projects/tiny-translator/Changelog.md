@@ -1,3 +1,12 @@
+<a name="0.13.0"></a>
+# 0.13.0 (2018-11-26)
+
+### Features
+
+* **Application** Technology update to Angular 7, no functionality changes.
+
+* **internal** Sources moved to monorepo [ngx-i18nsupport](https://github.com/martinroob/ngx-i18nsupport)
+
 <a name="0.12.0"></a>
 # [0.12.0](https://github.com/martinroob/tiny-translator/compare/v0.12.0...v0.11.0) (2017-12-08)
 

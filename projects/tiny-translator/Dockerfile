@@ -4,6 +4,6 @@ LABEL maintainer "martinroob65@gmail.com" \
 COPY Dockerhub/nginx.conf /etc/nginx/nginx.conf
 COPY Dockerhub/nginx.default.conf /etc/nginx/conf.d/default.conf
 RUN mkdir /usr/share/nginx/html/tiny-translator
-COPY dist/ /usr/share/nginx/html/tiny-translator
+COPY ../../dist/tiny-translator /usr/share/nginx/html/tiny-translator
 COPY Dockerhub/index.html /usr/share/nginx/html
 EXPOSE 80
