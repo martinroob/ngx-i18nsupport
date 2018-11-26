@@ -57,4 +57,5 @@ lib-cov
 test/work
 
 # Secrets
+githubtoken.secret
 googleTranslateApiKey.txt
