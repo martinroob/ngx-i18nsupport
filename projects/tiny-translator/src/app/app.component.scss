@@ -1,0 +1,34 @@
+@import '~@angular/material/theming';
+
+@import '../styles.scss';
+
+mat-toolbar .mat-toolbar-layout mat-toolbar-row {
+  flex-direction: column;
+  align-content: flex-start;
+  align-items: flex-start;
+  min-height: 40px;
+}
+
+.content {
+  margin-top: 40px;
+}
+
+#container {
+  min-height: 100vh;
+}
+
+#header {
+}
+
+#main {
+  overflow: auto;
+  margin: 8px;
+  /* 164px = Height of toolbar (128) plus footer (20) + 2*margin */
+  max-height: calc(100vh - 164px);
+  max-width: calc(1000vw);
+}
+
+#footer {
+  background-color: mat-color($dit-app-primary);
+  height: 20px;
+}

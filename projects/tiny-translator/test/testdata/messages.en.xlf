@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file source-language="de" datatype="plaintext" original="ng2.template" target-language="en">
+    <body>
+      <trans-unit id="a8f10794864e49b16224b22faaf4a86229b6c53d" datatype="html">
+        <source>Meine erste I18N-Anwendung</source>
+        <target state="translated">My first I18N application</target>
+      </trans-unit>
+      <trans-unit id="1189e6770476cd4eef2d4462a98add152b80961e" datatype="html">
+        <source>Anwendung läuft!</source>
+        <target state="translated">app works!</target>
+      </trans-unit>
+    <trans-unit id="fb74bbbdf6190dc80f48622910221fd07ae0c70d" datatype="html">
+        <source>Diese Anwendung ist eine reine Demonstration und hat keine wirklich nutzbare Funktion.</source>
+        <target state="translated">This application is just for demonstration purposes. It really has no value.</target>
+        <note priority="1" from="description">Beschreibung der Anwendung</note>
+      </trans-unit><trans-unit id="457801bfcdbafa44158dab45d339ddfe89b7e919" datatype="html">
+        <source>Diese Anwendung ist eine reine Demonstration und hat keine wirklich nutzbare Funktion.</source>
+        <target state="new">Diese Anwendung ist eine reine Demonstration und hat keine wirklich nutzbare Funktion.</target>
+        <note priority="1" from="description">sampleapp.appdescription</note>
+        <note priority="1" from="meaning">ngx-translate</note>
+      </trans-unit><trans-unit id="af0819ea4a5db68737ebcabde2f5e432b66352e8" datatype="html">
+        <source>Eintrag <x id="INTERPOLATION"/> von <x id="INTERPOLATION_1"/> hinzugefügt.</source>
+        <target state="translated">Item <x id="INTERPOLATION"/> of <x id="INTERPOLATION_1"/> added.</target>
+        <note priority="1" from="description">placeholder sample</note>
+      </trans-unit><trans-unit id="e4e521770b592e6fca431a4a131efcfd13f35634" datatype="html">
+        <source>Dieser Text
+  enthält einen Zeilenumbruch.</source>
+        <target state="translated">This text
+  contains a linebreak.</target>
+        <note priority="1" from="description">linebreak sample</note>
+      </trans-unit><trans-unit id="7e8dd1fd1c57afafc38550ce80b5bcc1ced49f85" datatype="html">
+        <source>Dieser Text enthält <x id="START_BOLD_TEXT" ctype="x-b"/>eingebettetes html<x id="CLOSE_BOLD_TEXT" ctype="x-b"/></source>
+        <target state="translated">This text contains <x id="START_BOLD_TEXT" ctype="x-b"/>embedded html<x id="CLOSE_BOLD_TEXT" ctype="x-b"/></target>
+        <note priority="1" from="description">embedded html sample</note>
+      </trans-unit><trans-unit id="0d160794c22f24a9538d26c6db79edf979415f56" datatype="html">
+        <source>Sample App Title</source>
+        <target state="new">Sample App Title</target>
+        <note priority="1" from="description">ngx-translate</note>
+        <note priority="1" from="meaning">appTitle</note>
+      </trans-unit><trans-unit id="b622b73728c7d7b5cf663c278330b661c12e0e3e" datatype="html">
+        <source><x id="INTERPOLATION"/>: A message from a service</source>
+        <target state="new"><x id="INTERPOLATION"/>: A message from a service</target>
+        <note priority="1" from="description">ngx-translate</note>
+        <note priority="1" from="meaning">messages.example</note>
+      </trans-unit><trans-unit id="c9b7317aaed32be01b0aed1affb0c786c68e3b8a" datatype="html">
+        <source>Meine Anwendung</source>
+        <target state="translated">My Application</target>
+        <note priority="1" from="description">ngx-translate</note>
+        <note priority="1" from="meaning">myapp</note>
+      </trans-unit><trans-unit id="84e8cd8ba480129d90f512cc3462bb43efcf389f" datatype="html">
+        <source>Montag</source>
+        <target state="translated">Monday</target>
+        <note priority="1" from="description">ngx-translate</note>
+        <note priority="1" from="meaning">dateservice.monday</note>
+      </trans-unit><trans-unit id="17c1cd6502939b16dc845405188851cf43de95c2" datatype="html">
+        <source>Dienstag</source>
+        <target state="translated">Tuesday</target>
+        <note priority="1" from="description">ngx-translate</note>
+        <note priority="1" from="meaning">dateservice.tuesday</note>
+      </trans-unit><trans-unit id="3921ef1cef5993d6c144ab3d4e83fcd41a646996" datatype="html">
+        <source>Mittwoch</source>
+        <target state="translated">Wednesday</target>
+        <note priority="1" from="description">ngx-translate</note>
+        <note priority="1" from="meaning">dateservice.wednesday</note>
+      </trans-unit><trans-unit id="01c0b7afc2c360d3b758c837ed5346cf0e0d42f0" datatype="html">
+        <source>Donnerstag</source>
+        <target state="translated">Thursday</target>
+        <note priority="1" from="description">ngx-translate</note>
+        <note priority="1" from="meaning">dateservice.thursday</note>
+      </trans-unit><trans-unit id="a029f04be594f3ab3ce07bbdf86273e8e64b90dd" datatype="html">
+        <source>Freitag</source>
+        <target state="translated">Friday</target>
+        <note priority="1" from="description">ngx-translate</note>
+        <note priority="1" from="meaning">dateservice.friday</note>
+      </trans-unit><trans-unit id="65c668dc94b23a178ac19a24d15e974968178c82" datatype="html">
+        <source>Samstag</source>
+        <target state="translated">Saturday</target>
+        <note priority="1" from="description">ngx-translate</note>
+        <note priority="1" from="meaning">dateservice.saturday</note>
+      </trans-unit><trans-unit id="73651d190597b45ba4217e313c4d2b8b6f548d25" datatype="html">
+        <source>Sonntag</source>
+        <target state="translated">Sunday</target>
+        <note priority="1" from="description">ngx-translate</note>
+        <note priority="1" from="meaning">dateservice.sunday</note>
+      </trans-unit><trans-unit id="ace25ed235d50c49e55bdbe3f05eed9841c5c868" datatype="html">
+        <source><x id="INTERPOLATION"/>: Eine Nachricht mit einem Platzhalter</source>
+        <target state="translated"><x id="INTERPOLATION"/>: a message with a placeholder</target>
+        <note priority="1" from="description">ngx-translate</note>
+        <note priority="1" from="meaning">placeholders.test1placeholder</note>
+      </trans-unit><trans-unit id="51fb50a55e02c81fe3dda08acae315c023a4ec7f" datatype="html">
+        <source><x id="INTERPOLATION"/>: Eine Nachricht mit 2 Platzhaltern: <x id="INTERPOLATION_1"/></source>
+        <target state="translated"><x id="INTERPOLATION"/>: a message with 2 placeholders: <x id="INTERPOLATION_1"/></target>
+        <note priority="1" from="description">ngx-translate</note>
+        <note priority="1" from="meaning">placeholders.test2placeholder</note>
+      </trans-unit><trans-unit id="a8329fa76f592156c75bc7c28252b0e3b5be8be4" datatype="html">
+        <source><x id="INTERPOLATION"/>: Eine Nachricht mit 2 Platzhaltern: <x id="INTERPOLATION"/> <x id="INTERPOLATION_1"/></source>
+        <target state="translated"><x id="INTERPOLATION"/>: a message with 2 placeholders: <x id="INTERPOLATION"/> <x id="INTERPOLATION_1"/></target>
+        <note priority="1" from="description">ngx-translate</note>
+        <note priority="1" from="meaning">placeholders.test2placeholderRepeated</note>
+      </trans-unit><trans-unit id="09ad017365cccd622927c2fc561338e20a50ba1f" datatype="html">
+        <source>Diese Nachricht ist <x id="START_BOLD_TEXT" ctype="x-b"/>WICHTIG<x id="CLOSE_BOLD_TEXT" ctype="x-b"/></source>
+        <target state="translated">This message is <x id="START_BOLD_TEXT" ctype="x-b"/>IMPORTANT<x id="CLOSE_BOLD_TEXT" ctype="x-b"/></target>
+        <note priority="1" from="description">ngx-translate</note>
+        <note priority="1" from="meaning">embeddedhtml.bold</note>
+      </trans-unit><trans-unit id="0999372407913995c73849412ff26cf8a67ebbea" datatype="html">
+        <source>Diese Nachricht ist <x id="START_BOLD_TEXT" ctype="x-b"/><x id="START_TAG_STRONG" ctype="x-strong"/>SEHR WICHTIG<x id="CLOSE_TAG_STRONG" ctype="x-strong"/><x id="CLOSE_BOLD_TEXT" ctype="x-b"/></source>
+        <target state="translated">This message is <x id="START_BOLD_TEXT" ctype="x-b"/><x id="START_TAG_STRONG" ctype="x-strong"/>VERY IMPORTANT<x id="CLOSE_TAG_STRONG" ctype="x-strong"/><x id="CLOSE_BOLD_TEXT" ctype="x-b"/></target>
+        <note priority="1" from="description">ngx-translate</note>
+        <note priority="1" from="meaning">embeddedhtml.boldstrong</note>
+      </trans-unit><trans-unit id="c466dca00414aa81d71e3ef0c9709bc65bd888c4" datatype="html">
+        <source>Diese Nachricht ist <x id="START_TAG_STRANGE" ctype="x-strange"/><x id="INTERPOLATION"/><x id="CLOSE_TAG_STRANGE" ctype="x-strange"/></source>
+        <target state="translated">This message is <x id="START_TAG_STRANGE" ctype="x-strange"/><x id="INTERPOLATION"/><x id="CLOSE_TAG_STRANGE" ctype="x-strange"/></target>
+        <note priority="1" from="description">ngx-translate</note>
+        <note priority="1" from="meaning">embeddedhtml.strange</note>
+      </trans-unit><trans-unit id="e2c512e1c3193d45384cebf85d1f6d22a6d41755" datatype="html">
+        <source>Eine Nachricht per ngx-translate</source>
+        <target state="new">Eine Nachricht per ngx-translate</target>
+      </trans-unit></body>
+  </file>
+</xliff>

@@ -1,0 +1,103 @@
+<mat-card *ngIf="!translationUnit">
+  <mat-card-header>
+    <mat-card-title i18n>No Translation Unit</mat-card-title>
+  </mat-card-header>
+  <mat-card-content style="overflow: hidden">
+    <p i18n>no content</p>
+  </mat-card-content>
+</mat-card>
+<mat-card *ngIf="translationUnit">
+  <mat-card-header>
+    <mat-card-title fxLayout="row" fxLayoutAlign="start center">
+      <ng-container i18n>State {{targetState()}}</ng-container>
+      <mat-icon *ngIf="targetState() === 'final'">done</mat-icon>
+      <mat-icon *ngIf="targetState() === 'translated'">label_outline</mat-icon>
+      <mat-icon *ngIf="targetState() === 'new'">translate</mat-icon>
+      <button mat-icon-button (click)="showTransUnitID()" matTooltip="ID {{transUnitID()}}"><mat-icon>info</mat-icon></button>
+      <button mat-icon-button *ngIf="sourceRef()" (click)="showSourceRefInfo()" matTooltip="{{sourceRef()}}"><mat-icon>location_on</mat-icon></button>
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content fxLayout="column" fxLayoutGap="5px" [ngClass.gt-sm]="'mdcardcontent_gt'" [ngClass.lt-md]="'mdcardcontent_sm'">
+    <div>
+      <div id="sourcemessage">
+        <app-language [code]="sourceLanguage()"></app-language>
+        <app-normalized-message-input [readonly]="true" [normalized]="showNormalized" [message]="sourceContentNormalized()"></app-normalized-message-input>
+        <p *ngIf="sourceDescription()"><b i18n>Description</b> {{sourceDescription()}}</p>
+        <p *ngIf="sourceMeaning()"><b i18n>Meaning</b> {{sourceMeaning()}}</p>
+      </div>
+    </div>
+    <form id="translation" fxLayout="column" [formGroup]="form">
+      <p fxLayout="row"><span i18n>Your translation to</span>&nbsp;<app-language [code]="targetLanguage()"></app-language></p>
+      <div fxLayout="row" fxLayoutGap="30px" fxFlex="noshrink">
+        <div fxLayout="column">
+          <mat-slide-toggle formControlName="showNormalized" color="accent"
+                           matTooltip="In normalization mode all markup contained in the messsages is shown in a simplified, format neutral way."
+                           i18n-matTooltip i18n>Normalization mode
+          </mat-slide-toggle>
+          <p class="normalizationhint" *ngIf="showNormalized" i18n>(switch off to show native message)</p>
+          <p class="normalizationhint" *ngIf="!showNormalized" i18n>(switch on to use normalization)</p>
+        </div>
+        <button *ngIf="!reviewMode" mat-icon-button
+                fxFlexAlign="start"
+                mat-button color="accent"
+                (click)="undo()"
+                [disabled]="!isTranslationChanged()"
+                matTooltip="undo changes" i18n-matTooltip>
+          <mat-icon>undo</mat-icon>
+        </button>
+        <button *ngIf="!reviewMode" mat-mini-fab
+                fxFlexAlign="start"
+                mat-button color="accent"
+                (click)="autoTranslate()"
+                [disabled]="autoTranslateDisabled() | async"
+                matTooltip="press to get a translation suggestion from Google Translate" i18n-matTooltip>
+          <mat-icon>g_translate</mat-icon>
+        </button>
+      </div>
+      <app-normalized-message-input id="translationinput" [readonly]="reviewMode" [normalized]="showNormalized"
+                                    [message]="editedTargetContentNormalized()"
+                                    formControlName="_editedTargetMessage"
+                                    (accept)="next()"></app-normalized-message-input>
+      <p *ngFor="let w of warnings()" class="warn"><mat-icon>warning</mat-icon>&nbsp;{{w}}</p>
+      <p *ngFor="let e of errors()" class="error"><mat-icon>error</mat-icon>&nbsp;{{e}}</p>
+      <div fxLayout="row">
+        <button *ngIf="!reviewMode"
+                fxFlexAlign="start"
+                mat-button color="primary"
+                (click)="markTranslated()"
+                i18n
+                matTooltip="press to accept the given translation" i18n-matTooltip>
+          mark as translated
+        </button>
+        <button *ngIf="reviewMode && targetState() === 'translated'"
+                fxFlexAlign="start"
+                mat-button color="primary"
+                (click)="markReviewed()"
+                i18n
+                matTooltip="press to accept the given translation as reviewed" i18n-matTooltip>
+          mark as reviewed
+        </button>
+        <button *ngIf="reviewMode && targetState() === 'final'"
+                fxFlexAlign="start"
+                mat-button color="primary"
+                (click)="markTranslated()"
+                i18n
+                matTooltip="press to reset the reviewed translation to 'translated'" i18n-matTooltip>
+          mark as translated, but not reviewed
+        </button>
+      </div>
+    </form>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-button i18n (click)="prev()"
+            [disabled]="!hasPrev()"
+            matTooltip="accept translation and go to previous unit" i18n-matTooltip>
+      Previous
+    </button>
+    <button mat-button i18n (click)="next()"
+            [disabled]="!hasNext()"
+            matTooltip="accept translation and go to next unit (Keyboard shortcut 'Ctrl Enter')" i18n-matTooltip>
+      Next
+    </button>
+  </mat-card-actions>
+</mat-card>

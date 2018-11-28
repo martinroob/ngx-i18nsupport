@@ -17,12 +17,14 @@ This is a **monorepo** containing projects
 * [tooling](projects/tooling) Schematics for adding @ngx-i18nsupport to your projects
 * [xliffmerge](projects/xliffmerge) The command line tool that does all the magic
 * [ngx-i18nsupport-lib](projects/ngx-i18nsupport-lib) A library to support working with xliff 1.2, xliff 2.0 and xmb/xtb file
+* [tiny-translator](projects/tiny-translator) An application to translate xliff 1.2, xliff 2.0 and xmb/xtb file to other languages
 
 | Project | Package | Version |
 |---|---|---|
 **[tooling](projects/tooling)** | [`@ngx-i18nsupport/tooling`](https://npmjs.com/package/@ngx-i18nsupport/tooling) | [![npm][npm-badge-tooling]][npm-badge-url-tooling]
 **[xliffmerge](projects/xliffmerge)** | [`@ngx-i18nsupport/xliffmerge`](https://npmjs.com/package/@ngx-i18nsupport/xliffmerge) | [![npm][npm-badge-xliffmerge]][npm-badge-url-xliffmerge]
 **[ngx-i18nsupport-lib](projects/ngx-i18nsupport-lib)** | [`@ngx-i18nsupport/ngx-i18nsupport-lib`](https://npmjs.com/package/@ngx-i18nsupport/ngx-i18nsupport-lib) | [![npm][npm-badge-ngx-i18nsupport-lib]][npm-badge-url-ngx-i18nsupport-lib]
+**[tiny-translator](projects/tiny-translator)** | [`https://martinroob.github.io/tiny-translator`](https://martinroob.github.io/tiny-translator) | v0.13
 
 [travis-badge]: https://travis-ci.org/martinroob/ngx-i18nsupport.svg?branch=master
 [travis-badge-url]: https://travis-ci.org/martinroob/ngx-i18nsupport

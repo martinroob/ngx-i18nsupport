@@ -3,29 +3,44 @@
  * Will be called when you call 'ng add @ngx-i18nsupport/tooling'.
  */
 
-import {apply, branchAndMerge, chain, mergeWith, move,
-    Rule, SchematicContext, SchematicsException,
-    template, Tree, url} from '@angular-devkit/schematics';
+import {
+    apply,
+    branchAndMerge,
+    chain,
+    mergeWith,
+    move,
+    Rule,
+    SchematicContext,
+    SchematicsException,
+    template,
+    Tree,
+    url
+} from '@angular-devkit/schematics';
 import {NodePackageInstallTask} from '@angular-devkit/schematics/tasks';
 import {NgAddOptions} from './schema';
-import {addPackageToPackageJson, addScriptToPackageJson, stringUtils} from '../../schematics-core';
+import {addPackageJsonDependency, addScriptToPackageJson, NodeDependency, NodeDependencyType, stringUtils} from '../../schematics-core';
 import {
     addLanguageConfigurationToProject,
-    isValidLanguageSyntax,
     addStartScriptToPackageJson,
+    defaultI18nLocale,
+    extractScriptName,
     fullExtractScript,
-    OptionsAfterSetup, setupCommonOptions,
-    xliffmergeVersion, extractScriptName, defaultI18nLocale, xliffmergePackage
+    isValidLanguageSyntax,
+    OptionsAfterSetup,
+    setupCommonOptions,
+    xliffmergePackage,
+    xliffmergeVersion
 } from '../common';
 
 function addXliffmergeDependencyToPackageJson() {
     return (host: Tree, context: SchematicContext) => {
-        addPackageToPackageJson(
-            host,
-            'devDependencies',
-            xliffmergePackage,
-            xliffmergeVersion
-        );
+        const dependencyToXliffmerge: NodeDependency = {
+            type: NodeDependencyType.Dev,
+            name: xliffmergePackage,
+            version: xliffmergeVersion,
+            overwrite: true
+        };
+        addPackageJsonDependency(host, dependencyToXliffmerge);
         context.addTask(new NodePackageInstallTask());
         return host;
     };

@@ -506,7 +506,7 @@ describe('ngx-i18nsupport-lib xliff 1.2 test spec', () => {
             expect(tu2.targetContent()).toBeTruthy();
             // check the xml of file that target directly follows source
             const document: Document = new DOMParser().parseFromString(file2.editedContent(), 'text/xml');
-            const targetList: NodeList = document.getElementsByTagName('target');
+            const targetList = document.getElementsByTagName('target');
             for (let i = 0; i < targetList.length; i++) {
                 const targetNode = targetList.item(i);
                 const sibling: Element = DOMUtilities.getPreviousElementSibling(targetNode);

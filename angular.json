@@ -9,7 +9,7 @@
       "projectType": "application",
       "prefix": "app",
       "schematics": {},
-      "targets": {
+      "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
@@ -98,7 +98,7 @@
     "ngx-i18nsupport-e2e": {
       "root": "e2e/",
       "projectType": "application",
-      "targets": {
+      "architect": {
         "e2e": {
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
@@ -185,6 +185,219 @@
               "projects/ngx-i18nsupport-lib/tsconfig.lib.json",
               "projects/ngx-i18nsupport-lib/tsconfig.spec.json"
             ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "xliffmerge": {
+      "root": "projects/xliffmerge",
+      "sourceRoot": "projects/xliffmerge/src",
+      "projectType": "library",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/xliffmerge/tsconfig.lib.json",
+            "project": "projects/xliffmerge/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/xliffmerge/src/test.ts",
+            "tsConfig": "projects/xliffmerge/tsconfig.spec.json",
+            "karmaConfig": "projects/xliffmerge/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/xliffmerge/tsconfig.lib.json",
+              "projects/xliffmerge/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "tiny-translator": {
+      "root": "projects/tiny-translator/",
+      "sourceRoot": "projects/tiny-translator/src",
+      "projectType": "application",
+      "prefix": "app",
+      "schematics": {},
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/tiny-translator",
+            "index": "projects/tiny-translator/src/index.html",
+            "main": "projects/tiny-translator/src/main.ts",
+            "polyfills": "projects/tiny-translator/src/polyfills.ts",
+            "tsConfig": "projects/tiny-translator/tsconfig.app.json",
+            "assets": [
+              "projects/tiny-translator/src/favicon.ico",
+              "projects/tiny-translator/src/assets",
+			  "projects/tiny-translator/src/manifest.json"
+            ],
+            "styles": [
+              "projects/tiny-translator/src/styles.scss"
+            ],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "projects/tiny-translator/src/environments/environment.ts",
+                  "with": "projects/tiny-translator/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                }
+              ],
+			  "serviceWorker": true
+            },
+            "en": {
+              "aot": true,
+              "baseHref": "/tiny-translator/en/",
+              "outputPath": "dist/tiny-translator/en",
+              "i18nFile": "projects/tiny-translator/src/i18n/messages.en.xlf",
+              "i18nFormat": "xlf",
+              "i18nLocale": "en",
+              "serviceWorker": true
+            },
+            "de": {
+              "aot": true,
+              "baseHref": "/tiny-translator/de/",
+              "outputPath": "dist/tiny-translator/de",
+              "i18nFile": "projects/tiny-translator/src/i18n/messages.de.xlf",
+              "i18nFormat": "xlf",
+              "i18nLocale": "de",
+              "serviceWorker": true
+            },
+            "fr": {
+              "aot": true,
+              "baseHref": "/tiny-translator/fr/",
+              "outputPath": "dist/tiny-translator/fr",
+              "i18nFile": "projects/tiny-translator/src/i18n/messages.fr-google.xlf",
+              "i18nFormat": "xlf",
+              "i18nLocale": "fr",
+              "serviceWorker": true
+            },
+            "ru": {
+              "aot": true,
+              "baseHref": "/tiny-translator/ru/",
+              "outputPath": "dist/tiny-translator/ru",
+              "i18nFile": "projects/tiny-translator/src/i18n/messages.ru-google.xlf",
+              "i18nFormat": "xlf",
+              "i18nLocale": "ru",
+              "serviceWorker": true
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "tiny-translator:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "tiny-translator:build:production"
+            },
+            "en": {
+              "browserTarget": "tiny-translator:build:en"
+            },
+            "de": {
+              "browserTarget": "tiny-translator:build:de"
+            },
+            "fr": {
+              "browserTarget": "tiny-translator:build:fr"
+            },
+            "ru": {
+              "browserTarget": "tiny-translator:build:ru"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "tiny-translator:build"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/tiny-translator/src/test.ts",
+            "polyfills": "projects/tiny-translator/src/polyfills.ts",
+            "tsConfig": "projects/tiny-translator/tsconfig.spec.json",
+            "karmaConfig": "projects/tiny-translator/karma.conf.js",
+            "styles": [
+              "projects/tiny-translator/src/styles.scss"
+            ],
+            "scripts": [],
+            "assets": [
+              "projects/tiny-translator/src/favicon.ico",
+              "projects/tiny-translator/src/assets",
+			  "projects/tiny-translator/src/manifest.json"
+            ]
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/tiny-translator/tsconfig.app.json",
+              "projects/tiny-translator/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "tiny-translator-e2e": {
+      "root": "projects/tiny-translator-e2e/",
+      "projectType": "application",
+      "prefix": "",
+      "architect": {
+        "e2e": {
+          "builder": "@angular-devkit/build-angular:protractor",
+          "options": {
+            "protractorConfig": "projects/tiny-translator-e2e/protractor.conf.js",
+            "devServerTarget": "tiny-translator:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "tiny-translator:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": "projects/tiny-translator-e2e/tsconfig.e2e.json",
             "exclude": [
               "**/node_modules/**"
             ]

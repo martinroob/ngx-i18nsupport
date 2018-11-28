@@ -1,0 +1,12 @@
+.error {
+  color: red;
+}
+
+.warn {
+  color: orange;
+}
+
+mat-progress-spinner {
+  width: 40px;
+  height: 40px;
+}

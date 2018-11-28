@@ -1,0 +1,32 @@
+<div id="list" fxLayout="column">
+  <div id="selectfilter">
+    <p i18n>Show</p>
+    <mat-radio-group (change)="filterChanged($event)" [(ngModel)]="_selectedFilterName" fxLayout="column">
+      <mat-radio-button value="all" i18n>All units</mat-radio-button>
+      <ng-container *ngIf="hasAutotranslatedUnits">
+        <mat-radio-button value="autotranslated" i18n>Autotranslated units</mat-radio-button>
+        <mat-radio-button value="autotranslatedFailed" i18n>failed Autotranslated</mat-radio-button>
+        <mat-radio-button value="autotranslatedIgnored" i18n>ignored Autotranslated</mat-radio-button>
+      </ng-container>
+      <mat-radio-button value="untranslated" i18n>Untranslated units</mat-radio-button>
+      <mat-radio-button *ngIf="isWorkflowWithReview()" value="needsReview" i18n>Review needed</mat-radio-button>
+      <mat-radio-button value="bySubstring">
+        <span i18n>Search</span>&nbsp;
+        <mat-form-field>
+          <input matInput type="text" placeholder="Substring" i18n-placeholder [(ngModel)]="substringToSearch"
+                 (keyup)="substringToSearchChange()" [disabled]="_selectedFilterName !== 'bySubstring'">
+        </mat-form-field>
+      </mat-radio-button>
+    </mat-radio-group>
+  </div>
+  <mat-list>
+    <h3 matSubheader i18n>Translation Units</h3>
+    <mat-list-item *ngFor="let tu of transUnits()" (click)="selectTransUnit(tu)">
+      <mat-icon matListAvatar *ngIf="tu.targetState() === 'final'">done</mat-icon>
+      <mat-icon matListAvatar *ngIf="tu.targetState() === 'translated'">label_outline</mat-icon>
+      <mat-icon matListAvatar *ngIf="!tu.isTranslated()">translate</mat-icon>
+      <h4 matLine [ngClass]="{'selected': isSelected(tu)}">{{tu.sourceContentNormalized().dislayText(true) | abbreviate}}</h4>
+      <h4 matLine [ngClass]="{'selected': isSelected(tu)}">{{tu.targetContentNormalized().dislayText(true) | abbreviate}}</h4>
+    </mat-list-item>
+  </mat-list>
+</div>

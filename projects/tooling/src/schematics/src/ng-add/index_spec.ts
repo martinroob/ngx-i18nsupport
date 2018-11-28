@@ -1,12 +1,13 @@
 import { Tree} from '@angular-devkit/schematics';
 import {Schema as ApplicationOptions} from '@schematics/angular/application/schema';
+import {Schema as LibraryOptions} from '@schematics/angular/application/schema';
 import { SchematicTestRunner, UnitTestTree } from '@angular-devkit/schematics/testing';
-import {IXliffMergeOptions} from '@ngx-i18nsupport/ngx-i18nsupport/src/xliffmerge/i-xliff-merge-options';
+import {IXliffMergeOptions} from '@ngx-i18nsupport/ngx-i18nsupport';
 import * as pathUtils from 'path';
 import {extractScriptName, xliffmergePackage, xliffmergeVersion} from '../common';
 import {NgAddOptions} from './schema';
-import {readAngularJson, readAsJson, readPackageJson, workspaceOptions} from '../common/common-testing_spec';
-import {WorkspaceSchema} from '../../schematics-core/utility/config';
+import {readAngularJson, readAsJson, readPackageJson, workspaceOptions, appOptions, libOptions} from '../common/common-testing_spec';
+import {WorkspaceSchema} from '../../schematics-core/utility/workspace-models';
 
 const collectionPath = pathUtils.join(__dirname, '../collection.json');
 
@@ -29,20 +30,10 @@ describe('ng-add', () => {
 
   describe('with one project', () => {
 
-      const appOptions: ApplicationOptions = {
-          name: 'bar',
-          inlineStyle: false,
-          inlineTemplate: false,
-          routing: false,
-          style: 'css',
-          skipTests: false,
-          skipPackageJson: false,
-      };
-
       let appTree: UnitTestTree;
-      beforeEach(() => {
-          appTree = testRunner.runExternalSchematic('@schematics/angular', 'workspace', workspaceOptions);
-          appTree = testRunner.runExternalSchematic('@schematics/angular', 'application', appOptions, appTree);
+      beforeEach(async () => {
+          appTree = await testRunner.runExternalSchematicAsync('@schematics/angular', 'workspace', workspaceOptions).toPromise();
+          appTree = await testRunner.runExternalSchematicAsync('@schematics/angular', 'application', appOptions, appTree).toPromise();
       });
 
       it('should throw an exception when called with no existing project', () => {
@@ -136,7 +127,7 @@ describe('ng-add', () => {
           // @ts-ignore
           expect(angularJson.projects.bar.architect.build.configurations.de).toBeTruthy();
           // @ts-ignore
-          expect(angularJson.projects.bar.architect.build.configurations.de).toEqual({
+          expect(angularJson.projects.bar.architect.build.configurations.de as any).toEqual({
               aot: true,
               outputPath: 'dist/bar-de',
               i18nFile: 'src/i18n/messages.de.xlf',
@@ -199,42 +190,18 @@ describe('ng-add', () => {
 
     describe('with multiple projects', () => {
 
-        const appOptions1: ApplicationOptions = {
-            name: 'bar',
-            inlineStyle: false,
-            inlineTemplate: false,
-            routing: false,
-            style: 'css',
-            skipTests: false,
-            skipPackageJson: false,
-        };
+        const appOptions1: ApplicationOptions = Object.assign({}, appOptions, {name: 'bar'});
 
-        const appOptions2: ApplicationOptions = {
-            name: 'foo',
-            inlineStyle: false,
-            inlineTemplate: false,
-            routing: false,
-            style: 'css',
-            skipTests: false,
-            skipPackageJson: false,
-        };
+        const appOptions2: ApplicationOptions = Object.assign({}, appOptions, {name: 'foo'});
 
-        const appOptions3: ApplicationOptions = {
-            name: 'foolib',
-            inlineStyle: false,
-            inlineTemplate: false,
-            routing: false,
-            style: 'css',
-            skipTests: false,
-            skipPackageJson: false,
-        };
+        const libOptions1: LibraryOptions = Object.assign({}, libOptions, {name: 'foolib'});
 
         let appTree: UnitTestTree;
-        beforeEach(() => {
-            appTree = testRunner.runExternalSchematic('@schematics/angular', 'workspace', workspaceOptions);
-            appTree = testRunner.runExternalSchematic('@schematics/angular', 'application', appOptions1, appTree);
-            appTree = testRunner.runExternalSchematic('@schematics/angular', 'application', appOptions2, appTree);
-            appTree = testRunner.runExternalSchematic('@schematics/angular', 'library', appOptions3, appTree);
+        beforeEach(async () => {
+            appTree = await testRunner.runExternalSchematicAsync('@schematics/angular', 'workspace', workspaceOptions).toPromise();
+            appTree = await testRunner.runExternalSchematicAsync('@schematics/angular', 'application', appOptions1, appTree).toPromise();
+            appTree = await testRunner.runExternalSchematicAsync('@schematics/angular', 'application', appOptions2, appTree).toPromise();
+            appTree = await testRunner.runExternalSchematicAsync('@schematics/angular', 'library', libOptions1, appTree).toPromise();
         });
 
         it('should throw an exception when called with a library project', () => {

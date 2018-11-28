@@ -1,0 +1,76 @@
+<div fxLayout="column" style="min-width: calc(100vw-16px);"><!-- 16px = 2xmargin of container page -->
+  <h1 i18n>Open a new project</h1>
+  <form id="createProjectForm" fxLayout="column" [formGroup]="form">
+    <div fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="start center">
+      <mat-form-field fxFlex="90%">
+        <input type="text" placeholder="Project name" i18n-placeholder matInput formControlName="projectName" name="projectName"/>
+      </mat-form-field>
+    </div>
+    <div fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="start center">
+      <p fxFlex="50%" i18n>Select the file you want to translate.<br>
+        The file can be of format XLIFF 1.2, XLIFF 2.0 or XMB.<br>
+        The file will be stored in your browser local storage until you export the translated version.</p>
+      <div fxLayout="column" fxFlexAlign="end" fxFlex="40%">
+        <input type="file" id="fileupload" (change)="fileSelectionChange(input)" formControlName="selectedFiles" name="selectedFiles" class="inputfile" #input/>
+        <label for="fileupload">
+          <mat-icon>open_in_browser</mat-icon>&nbsp;<span i18n>Upload a translation file (xlf, xtb)</span></label>
+        <div><span i18n>selected: </span>{{selectedFilesFormatted()}}</div>
+      </div>
+    </div>
+    <div *ngIf="isMasterXmbFileNeeded()" fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="start center">
+      <p fxFlex="50%" i18n>You selected an xtb file.<br>
+        This file type only contains one language, the target language.<br>
+        To show you the original source texts, you should also select the master xmb file.</p>
+      <div fxFlex="50%" fxLayout="column">
+        <input type="file" id="masterfileupload" (change)="masterXmlFileSelectionChange(masterinput)" formControlName="selectedMasterXmbFiles" name="selectedMasterXmbFiles" class="inputfile"
+               #masterinput/>
+        <label for="masterfileupload">
+          <mat-icon>open_in_browser</mat-icon>&nbsp;<span i18n>Upload master xmb file</span></label>
+        <div><span i18n>selected: </span>{{selectedMasterFilesFormatted()}}</div>
+      </div>
+    </div>
+    <p><b i18n>Selected translation file:</b></p>
+    <app-translation-file-status *ngIf="isFileSelected()"
+                                 [translationFileView]="createdProject?.translationFileView"
+                                 [translationFile]="createdProject?.translationFile">
+    </app-translation-file-status>
+    <p></p>
+    <div fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="start center">
+      <mat-form-field *ngIf="needsExplicitSourceLanguage()" fxFlex="50%"
+                          matTooltip="Your selected file contains no information about the language used. You can set it here explicitly." i18n-matTooltip>
+        <input placeholder="Explicitly set source language" i18n-placeholder matInput formControlName="sourceLanguage" name="sourceLanguage"/>
+      </mat-form-field>
+    </div>
+    <div fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="start center">
+      <div fxFlex="50%">
+        <p i18n>Workflow type you are using</p>
+        <mat-radio-group formControlName="workflowType" name="workflowType">
+          <mat-radio-button value="singleuser" i18n
+                           matTooltip="Single user workflow. You are translator and reviewer in one person. Every translated unit will directly get the state 'final'"
+                           matTooltipPosition="after" i18n-matTooltip>Single User</mat-radio-button>
+          <mat-radio-button value="withReview" i18n
+                           matTooltip="Workflow with explicit translator and reviewer. Translation get te state 'translated'. The reviewer must mark them as 'final' later."
+                           matTooltipPosition="after" i18n-matTooltip>Translator/Reviewer</mat-radio-button>
+        </mat-radio-group>
+      </div>
+      <div>
+        <div *ngIf="isWorkflowWithReview()">
+          <p i18n>Your role</p>
+          <mat-radio-group name="userRole" formControlName="userRole">
+            <mat-radio-button value="translator" i18n>Translator</mat-radio-button>
+            <mat-radio-button value="reviewer" i18n>Reviewer</mat-radio-button>
+          </mat-radio-group>
+        </div>
+      </div>
+    </div>
+    <p></p>
+    <button fxFlexAlign="center"
+            mat-raised-button
+            color="primary"
+            (click)="emitAddProject()"
+            matTooltip="add as new project and start working" i18n-matTooltip
+            [disabled]="!isInputComplete()">
+      <mat-icon>add</mat-icon>&nbsp;<span i18n>Add project</span>
+    </button>
+  </form>
+</div>
