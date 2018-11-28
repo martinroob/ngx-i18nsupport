@@ -280,35 +280,39 @@
             },
             "en": {
               "aot": true,
-              "baseHref": "/tiny-translator/en",
+              "baseHref": "/tiny-translator/en/",
               "outputPath": "dist/tiny-translator/en",
               "i18nFile": "projects/tiny-translator/src/i18n/messages.en.xlf",
               "i18nFormat": "xlf",
-              "i18nLocale": "en"
+              "i18nLocale": "en",
+              "serviceWorker": true
             },
             "de": {
               "aot": true,
-              "baseHref": "/tiny-translator/de",
+              "baseHref": "/tiny-translator/de/",
               "outputPath": "dist/tiny-translator/de",
               "i18nFile": "projects/tiny-translator/src/i18n/messages.de.xlf",
               "i18nFormat": "xlf",
-              "i18nLocale": "de"
+              "i18nLocale": "de",
+              "serviceWorker": true
             },
             "fr": {
               "aot": true,
-              "baseHref": "/tiny-translator/fr",
+              "baseHref": "/tiny-translator/fr/",
               "outputPath": "dist/tiny-translator/fr",
               "i18nFile": "projects/tiny-translator/src/i18n/messages.fr-google.xlf",
               "i18nFormat": "xlf",
-              "i18nLocale": "fr"
+              "i18nLocale": "fr",
+              "serviceWorker": true
             },
             "ru": {
               "aot": true,
-              "baseHref": "/tiny-translator/ru",
+              "baseHref": "/tiny-translator/ru/",
               "outputPath": "dist/tiny-translator/ru",
               "i18nFile": "projects/tiny-translator/src/i18n/messages.ru-google.xlf",
               "i18nFormat": "xlf",
-              "i18nLocale": "ru"
+              "i18nLocale": "ru",
+              "serviceWorker": true
             }
           }
         },
