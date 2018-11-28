@@ -28,7 +28,7 @@
     "build-prod-lang": "cross-env-shell ng build tiny-translator --configuration=$LANG",
     "postbuild-prod-lang": "cross-env-shell replace /tiny-translator/$LANG/ %BASE_HREF% src/environments/environment.prod.ts",
 
-    "publish2githubpages": "angular-cli-ghpages --dir=../../dist/tiny-translator --no-silent",
+    "publish2githubpages": "angular-cli-ghpages --dir=../../dist/tiny-translator --repo=https://GH_TOKEN@github.com/martinroob/tiny-translator.git --no-silent",
     "dockerbuild": "docker build -t tiny-translator:0.13 .",
     "publish2dockerhub": "docker push $DOCKER_ID_USER/tiny-translator:0.13"
   },
