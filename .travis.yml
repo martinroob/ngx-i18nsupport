@@ -10,7 +10,7 @@ script:
   - npm run coverall
 
 # Send coverage data to Coveralls
-after_script: "cat coverage/xliffmerge/lcov.info >coverage/xliffmerge.lcov\
+after_script: "cat coverage/ngx-i18nsupport/lcov.info >coverage/ngx-i18nsupport.lcov\
  && cat coverage/tooling/lcov.info >coverage/tooling.lcov\
  && cat coverage/ngx-i18nsupport-lib/lcov.info >coverage/ngx-i18nsupport-lib.lcov\
  && node_modules/.bin/lcov-result-merger coverage/*.lcov | node_modules/.bin/coveralls"

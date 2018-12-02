@@ -19,7 +19,7 @@
     ],
     "paths": {
       "@ngx-i18nsupport/ngx-i18nsupport": [
-        "dist/xliffmerge"
+        "dist/ngx-i18nsupport"
       ],
       "@ngx-i18nsupport/tooling": [
         "dist/tooling"

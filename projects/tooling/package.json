@@ -4,10 +4,13 @@
   "private": false,
   "description": "Schematics to add the tooling to be used with the Angular 2 i18n workflow",
   "schematics": "./schematics/src/collection.json",
+  "builders": "./builders/src/builders.json",
   "scripts": {
-    "build": "ng build tooling && npm run build:schematics && npm run copy:schematics",
+    "build": "ng build tooling && npm run build:schematics && npm run copy:schematics && npm run build:builders && npm run copy:builders",
     "build:schematics": "tsc -p src/schematics/tsconfig.json",
     "copy:schematics": "cpx \"./src/schematics/**\" ../../dist/tooling/schematics",
+    "build:builders": "tsc -p src/builders/tsconfig.json",
+    "copy:builders": "cpx \"./src/builders/**\" ../../dist/tooling/builders",
     "pretest": "npm run build",
     "test": "jasmine ../../dist/tooling/schematics/**/*spec.js",
     "debugtest": "node %NODE_DEBUG_OPTION% ../../node_modules/jasmine/bin/jasmine.js ../../dist/tooling/schematics/**/*spec.js",
@@ -31,12 +34,15 @@
     "url": "https://github.com/martinroob/ngx-i18nsupport/issues"
   },
   "homepage": "https://github.com/martinroob/ngx-i18nsupport#readme",
+  "dependencies": {
+    "@ngx-i18nsupport/ngx-i18nsupport": "^1.1.0"
+  },
   "devDependencies": {
   },
   "peerDependencies": {
-    "@angular-devkit/core": "^0.8.6",
-    "@angular-devkit/schematics": "^0.8.6",
-    "@angular/common": "^6.0.0",
-    "@angular/core": "^6.0.0"
+    "@angular-devkit/core": "~7.0.0",
+    "@angular-devkit/schematics": "~7.0.0",
+    "@angular/common": "^7.0.0",
+    "@angular/core": "^7.0.0"
   }
 }
