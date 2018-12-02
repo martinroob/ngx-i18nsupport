@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {FileSaver} from 'file-saver';
+import {saveAs} from 'file-saver';
 
 @Injectable()
 export class DownloaderService {
@@ -8,7 +8,7 @@ export class DownloaderService {
 
   downloadFile(filename: string, content: string, filetype: string) {
     const blob = new Blob([content], {type: filetype});
-    FileSaver.saveAs(blob, filename);
+    saveAs(blob, filename);
   }
 
   downloadXliffFile(filename: string, content: string) {
