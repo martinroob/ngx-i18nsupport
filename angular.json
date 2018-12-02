@@ -296,19 +296,19 @@
               "i18nLocale": "de",
               "serviceWorker": true
             },
-            "fr": {
+            "fr-google": {
               "aot": true,
-              "baseHref": "/tiny-translator/fr/",
-              "outputPath": "dist/tiny-translator/fr",
+              "baseHref": "/tiny-translator/fr-google/",
+              "outputPath": "dist/tiny-translator/fr-google",
               "i18nFile": "projects/tiny-translator/src/i18n/messages.fr-google.xlf",
               "i18nFormat": "xlf",
               "i18nLocale": "fr",
               "serviceWorker": true
             },
-            "ru": {
+            "ru-google": {
               "aot": true,
-              "baseHref": "/tiny-translator/ru/",
-              "outputPath": "dist/tiny-translator/ru",
+              "baseHref": "/tiny-translator/ru-google/",
+              "outputPath": "dist/tiny-translator/ru-google",
               "i18nFile": "projects/tiny-translator/src/i18n/messages.ru-google.xlf",
               "i18nFormat": "xlf",
               "i18nLocale": "ru",
@@ -332,10 +332,10 @@
               "browserTarget": "tiny-translator:build:de"
             },
             "fr": {
-              "browserTarget": "tiny-translator:build:fr"
+              "browserTarget": "tiny-translator:build:fr-google"
             },
             "ru": {
-              "browserTarget": "tiny-translator:build:ru"
+              "browserTarget": "tiny-translator:build:ru-google"
             }
           }
         },

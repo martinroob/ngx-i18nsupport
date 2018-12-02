@@ -21,8 +21,8 @@
     "build-prod": "npm run build-prod-en && npm run build-prod-de && npm run build-prod-fr && npm run build-prod-ru && cpx ./src/ghpages/* ../../dist/tiny-translator",
     "build-prod-en": "cross-env-shell LANG=\"en\" npm run build-prod-lang",
     "build-prod-de": "cross-env-shell LANG=\"de\" npm run build-prod-lang",
-    "build-prod-fr": "cross-env-shell LANG=\"fr\" npm run build-prod-lang",
-    "build-prod-ru": "cross-env-shell LANG=\"ru\" npm run build-prod-lang",
+    "build-prod-fr": "cross-env-shell LANG=\"fr-google\" npm run build-prod-lang",
+    "build-prod-ru": "cross-env-shell LANG=\"ru-google\" npm run build-prod-lang",
 
     "prebuild-prod-lang": "cross-env-shell replace %BASE_HREF% /tiny-translator/$LANG/ src/environments/environment.prod.ts",
     "build-prod-lang": "cross-env-shell ng build tiny-translator --configuration=$LANG",
