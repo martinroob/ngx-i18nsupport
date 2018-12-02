@@ -116,7 +116,7 @@ export class XliffMerge {
      * @param errorFunction callbackFunction for error handling
      */
     public run(callbackFunction?: ((retcode: number) => any), errorFunction?: ((error: any) => any)) {
-        this.doRun()
+        this.runAsync()
             .subscribe((retcode: number) => {
                 if (!isNullOrUndefined(callbackFunction)) {
                     callbackFunction(retcode);
@@ -132,7 +132,7 @@ export class XliffMerge {
      * Execute merge-Process.
      * @return Async operation, on completion returns retcode 0=ok, other = error.
      */
-    private doRun(): Observable<number> {
+    public runAsync(): Observable<number> {
         if (this.options && this.options.quiet) {
             this.commandOutput.setQuiet();
         }

@@ -1,7 +1,7 @@
 {
   "extends": "../tsconfig.lib.json",
   "compilerOptions": {
-    "outDir": "../../../dist/xliffmerge/src",
+    "outDir": "../../../dist/ngx-i18nsupport/src",
     "lib": [
       "es2017",
       "dom"

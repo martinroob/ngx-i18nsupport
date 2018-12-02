@@ -1,6 +1,6 @@
 {
   "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
-  "dest": "../../dist/xliffmerge",
+  "dest": "../../dist/ngx-i18nsupport",
   "lib": {
     "entryFile": "src/public_api.ts",
     "umdModuleIds": {

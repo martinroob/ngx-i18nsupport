@@ -1,6 +1,6 @@
 {
   "name": "@ngx-i18nsupport/ngx-i18nsupport",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Some tooling to be used with the Angular 2 i18n workflow",
   "private": false,
   "bin": {
@@ -12,13 +12,13 @@
   "scripts": {
     "build": "ng build xliffmerge && npm run build:apiAndLib && npm run build:copy",
     "build:apiAndLib": "tsc -p src/tsconfig.json",
-    "build:copy": "cpx ./README.md ../../dist/xliffmerge && cpx ./src/xliffmerge/xliffmerge ../../dist/xliffmerge/xliffmerge && cpx ./src/xliffmerge/configuration-schema.json ../../dist/xliffmerge/xliffmerge/configuration-schema.json",
+    "build:copy": "cpx ./README.md ../../dist/ngx-i18nsupport && cpx ./src/xliffmerge/xliffmerge ../../dist/ngx-i18nsupport/xliffmerge && cpx ./src/xliffmerge/configuration-schema.json ../../dist/ngx-i18nsupport/xliffmerge/configuration-schema.json",
     "xliffmerge": "npm link && xliffmerge",
     "pretest": "npm run build",
-    "test": "jasmine ../../dist/xliffmerge/**/*spec.js",
+    "test": "jasmine ../../dist/ngx-i18nsupport/**/*spec.js",
     "testintern": "set API_KEY_FILE=s:\\experimente\\ngx-i18nsupport\\projects\\xliffmerge\\googleTranslateApiKey.txt&& npm run test",
     "precover": "npm run build",
-    "cover": "istanbul cover --dir ../../coverage/xliffmerge --root ../../dist/xliffmerge/src --include-all-sources ../../node_modules/jasmine-node/bin/jasmine-node -- ../../dist/xliffmerge/src",
+    "cover": "istanbul cover --dir ../../coverage/ngx-i18nsupport --root ../../dist/ngx-i18nsupport/src --include-all-sources ../../node_modules/jasmine-node/bin/jasmine-node -- ../../dist/ngx-i18nsupport/src",
     "prepublish": "npm run build"
   },
   "repository": {
