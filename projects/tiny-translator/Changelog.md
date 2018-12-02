@@ -1,3 +1,10 @@
+<a name="0.14.0"></a>
+# 0.14.0 (2018-12-02)
+
+### Bugfixes
+
+* **Application** savAs was broken, so download did not work any more.([#51](https://github.com/martinroob/tiny-translator/issues/51))
+
 <a name="0.13.0"></a>
 # 0.13.0 (2018-11-26)
 
