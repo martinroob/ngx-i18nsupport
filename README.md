@@ -24,7 +24,7 @@ This is a **monorepo** containing projects
 **[tooling](projects/tooling)** | [`@ngx-i18nsupport/tooling`](https://npmjs.com/package/@ngx-i18nsupport/tooling) | [![npm][npm-badge-tooling]][npm-badge-url-tooling]
 **[xliffmerge](projects/xliffmerge)** | [`@ngx-i18nsupport/xliffmerge`](https://npmjs.com/package/@ngx-i18nsupport/xliffmerge) | [![npm][npm-badge-xliffmerge]][npm-badge-url-xliffmerge]
 **[ngx-i18nsupport-lib](projects/ngx-i18nsupport-lib)** | [`@ngx-i18nsupport/ngx-i18nsupport-lib`](https://npmjs.com/package/@ngx-i18nsupport/ngx-i18nsupport-lib) | [![npm][npm-badge-ngx-i18nsupport-lib]][npm-badge-url-ngx-i18nsupport-lib]
-**[tiny-translator](projects/tiny-translator)** | [`https://martinroob.github.io/tiny-translator`](https://martinroob.github.io/tiny-translator) | v0.13
+**[tiny-translator](projects/tiny-translator)** | [`https://martinroob.github.io/tiny-translator`](https://martinroob.github.io/tiny-translator) | v0.14
 
 [travis-badge]: https://travis-ci.org/martinroob/ngx-i18nsupport.svg?branch=master
 [travis-badge-url]: https://travis-ci.org/martinroob/ngx-i18nsupport
