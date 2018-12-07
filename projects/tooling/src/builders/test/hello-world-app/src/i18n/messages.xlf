@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file source-language="en" datatype="plaintext" original="ng2.template">
+    <body>
+      <trans-unit id="1e9a15da9ecb3574be8b466c285ed4aca1d89e4b" datatype="html">
+        <source>
+    Welcome to <x id="INTERPOLATION" equiv-text="{{ title }}"/>!
+  </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/app.component.html</context>
+          <context context-type="linenumber">3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="54f29f9a6da150fc7c4fcd0b7e6d9a1b0314fd35" datatype="html">
+        <source>Here are some links to help you start: </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/app.component.html</context>
+          <context context-type="linenumber">8</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="170b2bb80cfeeaf71c71cd4b56d240fdda4dfc0b" datatype="html">
+        <source>Tour of Heroes</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/app.component.html</context>
+          <context context-type="linenumber">11</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4446b939821a1c94d99d8f88ebf5c67844d48d08" datatype="html">
+        <source>CLI Documentation</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/app.component.html</context>
+          <context context-type="linenumber">14</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="f7b003c76057ba9ff6d99232971f826d015eaf54" datatype="html">
+        <source>Angular blog</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/app.component.html</context>
+          <context context-type="linenumber">17</context>
+        </context-group>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

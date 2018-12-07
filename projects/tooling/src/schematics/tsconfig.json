@@ -2,7 +2,7 @@
   "extends": "../../tsconfig.lib.json",
   "compilerOptions": {
     "rootDir": ".",
-    "outDir": "../../../../dist/tooling/schematics",
+    "outDir": "../../../../dist/tooling/src/schematics",
     "lib": [
       "es2017",
       "dom"

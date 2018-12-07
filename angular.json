@@ -75,7 +75,7 @@
           }
         },
         "xliffmerge": {
-          "builder": "./dist/tooling:xliffmerge",
+          "builder": "@ngx-i18nsupport/tooling:xliffmerge",
           "options": {
             "profile": "lmaa"
           }

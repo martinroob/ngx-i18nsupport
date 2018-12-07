@@ -1,21 +1,21 @@
 {
   "name": "@ngx-i18nsupport/tooling",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "private": false,
   "description": "Schematics to add the tooling to be used with the Angular 2 i18n workflow",
-  "schematics": "./schematics/src/collection.json",
-  "builders": "./builders/src/builders.json",
+  "schematics": "./src/schematics/src/collection.json",
+  "builders": "./src/builders/src/builders.json",
   "scripts": {
     "build": "ng build tooling && npm run build:schematics && npm run copy:schematics && npm run build:builders && npm run copy:builders",
     "build:schematics": "tsc -p src/schematics/tsconfig.json",
-    "copy:schematics": "cpx \"./src/schematics/**\" ../../dist/tooling/schematics",
+    "copy:schematics": "cpx \"./src/schematics/**\" ../../dist/tooling/src/schematics",
     "build:builders": "tsc -p src/builders/tsconfig.json",
-    "copy:builders": "cpx \"./src/builders/**\" ../../dist/tooling/builders",
+    "copy:builders": "cpx \"./src/builders/**\" ../../dist/tooling/src/builders",
     "pretest": "npm run build",
-    "test": "jasmine ../../dist/tooling/schematics/**/*spec.js",
-    "debugtest": "node %NODE_DEBUG_OPTION% ../../node_modules/jasmine/bin/jasmine.js ../../dist/tooling/schematics/**/*spec.js",
+    "test": "jasmine ../../dist/tooling/src/**/*spec.js",
+    "debugtest": "node %NODE_DEBUG_OPTION% ../../node_modules/jasmine/bin/jasmine.js ../../dist/tooling/src/**/*spec.js",
     "precover": "npm run build",
-    "cover": "istanbul cover --dir ../../coverage/tooling --root ../../dist/tooling/schematics --include-all-sources ../../node_modules/jasmine/bin/jasmine.js -- ../../dist/tooling/schematics/**/*spec.js"
+    "cover": "istanbul cover --dir ../../coverage/tooling --root ../../dist/tooling/src --include-all-sources ../../node_modules/jasmine/bin/jasmine.js -- ../../dist/tooling/src/**/*spec.js"
   },
   "repository": {
     "type": "git",
@@ -42,6 +42,7 @@
   "peerDependencies": {
     "@angular-devkit/core": "~7.0.0",
     "@angular-devkit/schematics": "~7.0.0",
+    "@angular-devkit/architect": "~0.11.0",
     "@angular/common": "^7.0.0",
     "@angular/core": "^7.0.0"
   }

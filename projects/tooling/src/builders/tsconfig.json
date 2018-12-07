@@ -2,7 +2,7 @@
   "extends": "../../tsconfig.lib.json",
   "compilerOptions": {
     "rootDir": ".",
-    "outDir": "../../../../dist/tooling/builders",
+    "outDir": "../../../../dist/tooling/src/builders",
     "lib": [
       "es2017",
       "dom"
