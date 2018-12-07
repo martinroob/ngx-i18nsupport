@@ -90,7 +90,9 @@ describe('XliffMerge test spec', () => {
                 {profilePath: './test/testdata/xliffmergeconfig.json', verbose: true},
                 null);
             xliffMergeCmd.run();
-            expect(ws.writtenData()).toContain('languages:	de,en');
+            expect(ws.writtenData()).toContain('languages:\tde,en');
+            expect(ws.writtenData()).toContain('srcDir:\t"test');
+            expect(ws.writtenData()).toContain('genDir:\t"test');
             done();
         });
 
@@ -344,9 +346,9 @@ describe('XliffMerge test spec', () => {
             const xliffMergeCmd = XliffMerge.createFromOptions(commandOut, {verbose: true}, profileContent);
             xliffMergeCmd.run();
             expect(ws.writtenData()).toContain('languages:	de,en,fr');
-            expect(ws.writtenData()).toContain('outputFile[de]:	./messages.de.xlf');
-            expect(ws.writtenData()).toContain('outputFile[en]:	./messages.en.xlf');
-            expect(ws.writtenData()).toContain('outputFile[fr]:	./messages.fr.xlf');
+            expect(ws.writtenData()).toContain('outputFile[de]:	messages.de.xlf');
+            expect(ws.writtenData()).toContain('outputFile[en]:	messages.en.xlf');
+            expect(ws.writtenData()).toContain('outputFile[fr]:	messages.fr.xlf');
             done();
         });
 
@@ -362,11 +364,11 @@ describe('XliffMerge test spec', () => {
             const xliffMergeCmd = XliffMerge.createFromOptions(commandOut, {verbose: true}, profileContent);
             xliffMergeCmd.run();
             expect(ws.writtenData()).toContain('i18nBaseFile:	"custom_file"');
-            expect(ws.writtenData()).toContain('i18nFile:	"./custom_file.xlf"');
-            expect(ws.writtenData()).toContain('outputFile[de]:	./custom_file.de.xlf');
-            expect(ws.writtenData()).toContain('outputFile[en]:	./custom_file.en.xlf');
-            expect(ws.writtenData()).toContain('outputFile[fr]:	./custom_file.fr.xlf');
-            expect(ws.writtenData()).toContain('i18nFile "./custom_file.xlf" is not readable');
+            expect(ws.writtenData()).toContain('i18nFile:	"custom_file.xlf"');
+            expect(ws.writtenData()).toContain('outputFile[de]:	custom_file.de.xlf');
+            expect(ws.writtenData()).toContain('outputFile[en]:	custom_file.en.xlf');
+            expect(ws.writtenData()).toContain('outputFile[fr]:	custom_file.fr.xlf');
+            expect(ws.writtenData()).toContain('i18nFile "custom_file.xlf" is not readable');
             done();
         });
 

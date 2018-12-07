@@ -3,6 +3,7 @@
     "defaultLanguage": "de",
     "srcDir": "i18n",
     "genDir": "i18n",
+    "i18nFile": "nonExistingMaster1.xlf",
     "angularCompilerOptions": { "genDir": "i18n" },
     "lmaa": "not used",
     "languages": ["de", "en"]

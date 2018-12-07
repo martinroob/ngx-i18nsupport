@@ -1,4 +1,4 @@
-import { join, normalize } from '@angular-devkit/core';
+import {join, normalize, virtualFs} from '@angular-devkit/core';
 import {BuildEvent, TargetSpecifier} from '@angular-devkit/architect';
 import {TestProjectHost, runTargetSpec, TestLogger, DefaultTimeout} from '@angular-devkit/architect/testing';
 import {tap} from 'rxjs/operators';
@@ -70,15 +70,42 @@ describe('xliffmerge.builder', () => {
         ).toPromise().then(done, done.fail);
     });
 
-    it('should run successfully', (done) => {
+    it('should run successfully with given xliffmergeOptions', (done) => {
         const logger = new TestLogger('logger');
-        logger.subscribe(logentry => console.log('xliffmerge:', logentry.message));
         const configuration: IConfigFile = {
             xliffmergeOptions: {
                 'srcDir': 'src/i18n',
                 'genDir': 'src/i18nout',
                 languages: ['en', 'de']
             }
+        };
+        const generatedFileEN = join(normalize('src'),  'i18nout', 'messages.en.xlf');
+        const generatedFileDE = join(normalize('src'),  'i18nout', 'messages.de.xlf');
+        runXliffmergeBuilderOnTestWorkspace(configuration, logger).pipe(
+            tap((buildEvent) => expect(buildEvent.success).toBe(true)),
+            tap(() => {
+                const msg = 'WARNING: please translate file';
+                expect(logger.includes(msg)).toBe(true, `msg "${msg}" not found in log`);
+                expect(host.scopedSync().exists(generatedFileEN)).toBe(true, `file ${generatedFileEN} not generated`);
+                expect(host.scopedSync().exists(generatedFileDE)).toBe(true, `file ${generatedFileDE} not generated`);
+            })
+        ).toPromise().then(done, done.fail);
+    });
+
+    it('should run successfully with options from profile', (done) => {
+        const logger = new TestLogger('logger');
+        const profileContent: IConfigFile = {
+            xliffmergeOptions: {
+                'srcDir': 'src/i18n',
+                'genDir': 'src/i18nout',
+                languages: ['en', 'de']
+            }
+        };
+        host.scopedSync().write(
+            join(normalize('.'), 'xliffmergeconfig.json'),
+            virtualFs.stringToFileBuffer(JSON.stringify(profileContent)));
+        const configuration: XliffmergeBuilderSchema = {
+            profile: 'xliffmergeconfig.json'
         };
         const generatedFileEN = join(normalize('src'),  'i18nout', 'messages.en.xlf');
         const generatedFileDE = join(normalize('src'),  'i18nout', 'messages.de.xlf');
