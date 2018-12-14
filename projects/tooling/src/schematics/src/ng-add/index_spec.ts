@@ -63,8 +63,8 @@ describe('ng-add', () => {
           }
       });
 
-      it('should create xliffmerge configuration file when called without any options', () => {
-          const tree = runSchematic({}, appTree);
+      it('should create xliffmerge configuration file when called with doNotUserBuilder option', () => {
+          const tree = runSchematic({useXliffmergeBuilder: false}, appTree);
           expect(tree.files).toContain('/projects/bar/xliffmerge.json');
           const configFile = readAsJson<{xliffmergeOptions: IXliffMergeOptions}>(tree, '/projects/bar/xliffmerge.json');
           expect(configFile.xliffmergeOptions).toBeTruthy();
@@ -76,7 +76,7 @@ describe('ng-add', () => {
       });
 
       it('should create xliffmerge configuration file with first given language as default', () => {
-          const tree = runSchematic({languages: 'de'}, appTree);
+          const tree = runSchematic({useXliffmergeBuilder: false, languages: 'de'}, appTree);
           expect(tree.files).toContain('/projects/bar/xliffmerge.json');
           const configFile = readAsJson<{xliffmergeOptions: IXliffMergeOptions}>(tree, '/projects/bar/xliffmerge.json');
           expect(configFile.xliffmergeOptions).toBeTruthy();
@@ -86,7 +86,7 @@ describe('ng-add', () => {
       });
 
       it('should create xliffmerge configuration file containing all given languages', () => {
-          const tree = runSchematic({languages: 'de,fr,ru'}, appTree);
+          const tree = runSchematic({useXliffmergeBuilder: false, languages: 'de,fr,ru'}, appTree);
           expect(tree.files).toContain('/projects/bar/xliffmerge.json');
           const configFile = readAsJson<{xliffmergeOptions: IXliffMergeOptions}>(tree, '/projects/bar/xliffmerge.json');
           expect(configFile.xliffmergeOptions).toBeTruthy();
@@ -96,7 +96,7 @@ describe('ng-add', () => {
       });
 
       it('should create xliffmerge configuration file containing all given languages and default language', () => {
-          const tree = runSchematic({i18nLocale: 'en', languages: 'de,fr,ru'}, appTree);
+          const tree = runSchematic({useXliffmergeBuilder: false, i18nLocale: 'en', languages: 'de,fr,ru'}, appTree);
           expect(tree.files).toContain('/projects/bar/xliffmerge.json');
           const configFile = readAsJson<{xliffmergeOptions: IXliffMergeOptions}>(tree, '/projects/bar/xliffmerge.json');
           expect(configFile.xliffmergeOptions).toBeTruthy();
@@ -106,7 +106,7 @@ describe('ng-add', () => {
       });
 
       it('should create xliffmerge configuration with specified xlf format', () => {
-          const tree = runSchematic({i18nLocale: 'en', i18nFormat: 'xlf2'}, appTree);
+          const tree = runSchematic({useXliffmergeBuilder: false, i18nLocale: 'en', i18nFormat: 'xlf2'}, appTree);
           expect(tree.files).toContain('/projects/bar/xliffmerge.json');
           const configFile = readAsJson<{xliffmergeOptions: IXliffMergeOptions}>(tree, '/projects/bar/xliffmerge.json');
           expect(configFile.xliffmergeOptions).toBeTruthy();
@@ -142,22 +142,31 @@ describe('ng-add', () => {
           });
       });
 
-      it('should add npm script "extract-i18n" to package.json', () => {
+      it('should add npm script "extract-i18n" to package.json using command line xliffmerge', () => {
+          const tree = runSchematic({useXliffmergeBuilder: false}, appTree);
+          const packageJson = readPackageJson(tree);
+          const extractScript = packageJson.scripts[extractScriptName];
+          expect(extractScript).toBeTruthy();
+          expect(extractScript).toBe(
+              'ng xi18n bar --i18n-format xlf --output-path i18n --i18n-locale en && xliffmerge --profile xliffmerge.json');
+      });
+
+      it('should add npm script "extract-i18n" to package.json including language list as command line parameter', () => {
+          const tree = runSchematic({useXliffmergeBuilder: false, useComandlineForLanguages: true, languages: 'en,de'}, appTree);
+          const packageJson = readPackageJson(tree);
+          const extractScript = packageJson.scripts['extract-i18n'];
+          expect(extractScript).toBeTruthy();
+          expect(extractScript).toBe(
+              'ng xi18n bar --i18n-format xlf --output-path i18n --i18n-locale en && xliffmerge --profile xliffmerge.json en de');
+      });
+
+      it('should add npm script "extract-i18n" to package.json using builder xliffmerge', () => {
           const tree = runSchematic({}, appTree);
           const packageJson = readPackageJson(tree);
           const extractScript = packageJson.scripts[extractScriptName];
           expect(extractScript).toBeTruthy();
           expect(extractScript).toBe(
-              'ng xi18n --i18n-format xlf --output-path i18n --i18n-locale en && xliffmerge --profile xliffmerge.json');
-      });
-
-      it('should add npm script "extract-i18n" to package.json including language list as command line parameter', () => {
-          const tree = runSchematic({useComandlineForLanguages: true, languages: 'en,de'}, appTree);
-          const packageJson = readPackageJson(tree);
-          const extractScript = packageJson.scripts['extract-i18n'];
-          expect(extractScript).toBeTruthy();
-          expect(extractScript).toBe(
-              'ng xi18n --i18n-format xlf --output-path i18n --i18n-locale en && xliffmerge --profile xliffmerge.json en de');
+              'ng xi18n bar --i18n-format xlf --output-path i18n --i18n-locale en && ng run bar:xliffmerge');
       });
 
       it('should add npm script "start-xyz" to package.json when called with language xyz', () => {

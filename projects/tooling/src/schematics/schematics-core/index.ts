@@ -21,8 +21,12 @@ export { addPackageJsonDependency, getPackageJsonDependency, NodeDependency, Nod
 export {readPackageJson, getScriptFromPackageJson, addScriptToPackageJson, IPackageJson} from './utility/special-package';
 export {getAngularJson,
     getProjectByName,
+    startChangingWorkspace,
+    WorkspaceToChange,
+    commitWorkspaceChanges,
     addArchitectBuildConfigurationToProject,
-    addArchitectServeConfigurationToProject} from './utility/special-project';
+    addArchitectServeConfigurationToProject,
+    addArchitectBuilderToProject} from './utility/special-project';
 
 export const stringUtils = {
     dasherize,

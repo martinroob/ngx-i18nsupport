@@ -28,3 +28,13 @@ export const defaultI18nFormat = 'xlf';
  * Name of extract script.
  */
 export const extractScriptName = 'extract-i18n';
+
+/**
+ * Name of xliffmerge builder.
+ */
+export const xliffmergeBuilderName = 'xliffmerge';
+
+/**
+ * Spec of xliffmerge builder.
+ */
+export const xliffmergeBuilderSpec = '@ngx-i18nsupport/tooling:' + xliffmergeBuilderName;

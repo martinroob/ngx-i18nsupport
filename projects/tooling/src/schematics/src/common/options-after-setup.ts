@@ -26,6 +26,9 @@ export interface OptionsAfterSetup {
     configuredLanguages: string[]; // languages that are already in the workspace
     useComandlineForLanguages: boolean; // if set, all languages are given as command line argument to xliffmerge
                                         // if not, they are configured in xliffmerge.json (preferred variant)
+    skipInstall?: boolean; // When true, does not install dependency packages.
+    useXliffmergeBuilder?: boolean; // use builder if true
+    profileUsedByBuilder?: string; // if builder is used and the builder is using a profile, the path of the profile
 }
 
 export function setupCommonOptions(optionsFromCommandline: CommonOptions, host: Tree, context: SchematicContext): OptionsAfterSetup {

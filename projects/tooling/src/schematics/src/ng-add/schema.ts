@@ -10,4 +10,6 @@ export interface NgAddOptions extends CommonOptions {
     languages?: string; // comma separared list of languages
     useComandlineForLanguages?: boolean; // if set, all languages are given as command line argument to xliffmerge
                                         // if not, they are configured in xliffmerge.json (preferred variant)
+    skipInstall?: boolean; // When true, does not install dependency packages.
+    useXliffmergeBuilder?: boolean; // use builder if true
 }

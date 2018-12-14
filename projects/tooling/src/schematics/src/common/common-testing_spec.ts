@@ -6,9 +6,10 @@ import {UnitTestTree} from '@angular-devkit/schematics/testing';
 import {Schema as WorkspaceOptions} from '@schematics/angular/workspace/schema';
 import {Schema as ApplicationOptions} from '@schematics/angular/application/schema';
 import {Schema as LibraryOptions} from '@schematics/angular/library/schema';
-import {IPackageJson} from '../../schematics-core';
+import {IPackageJson, startChangingWorkspace} from '../../schematics-core';
 import {WorkspaceSchema} from '../../schematics-core/utility/workspace-models';
 import {IXliffMergeOptions} from '@ngx-i18nsupport/ngx-i18nsupport';
+import {getActualXliffmergeConfigFromWorkspace} from './common-functions';
 
 export const workspaceOptions: WorkspaceOptions = {
     name: 'workspace',
@@ -56,9 +57,18 @@ export function readAngularJson(tree: UnitTestTree): WorkspaceSchema {
     return readAsJson<WorkspaceSchema>(tree, '/angular.json');
 }
 
-export function readXliffmergeJson(projectName: string, tree: UnitTestTree): {xliffmergeOptions: IXliffMergeOptions} {
+export function readXliffmergeJson(tree: UnitTestTree, projectName: string): {xliffmergeOptions: IXliffMergeOptions} {
     const path = projectName ? `/projects/${projectName}/xliffmerge.json` : '/xliffmerge.json';
     expect(tree.files).toContain(path);
     return readAsJson<{xliffmergeOptions: IXliffMergeOptions}>(tree, path);
 }
 
+/**
+ * Read the xliffmerge configuration form the builder options.
+ * @param tree Tree
+ * @param projectName name of project
+ */
+export function readXliffmergeConfigFromWorkspace(tree: UnitTestTree, projectName: string): {xliffmergeOptions: IXliffMergeOptions}|null {
+    const ws = startChangingWorkspace(tree);
+    return getActualXliffmergeConfigFromWorkspace(ws, projectName);
+}
