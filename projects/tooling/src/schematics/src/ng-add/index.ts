@@ -20,21 +20,17 @@ import {NodePackageInstallTask} from '@angular-devkit/schematics/tasks';
 import {NgAddOptions} from './schema';
 import {
     addPackageJsonDependency,
-    addScriptToPackageJson,
     NodeDependency,
     NodeDependencyType,
     stringUtils
 } from '../../schematics-core';
 import {
-    addStartScriptToPackageJson,
     defaultI18nLocale,
-    extractScriptName,
-    fullExtractScript,
     isValidLanguageSyntax,
     OptionsAfterSetup,
     setupCommonOptions,
     xliffmergePackage,
-    xliffmergeVersion, WorkspaceSnaphot
+    xliffmergeVersion, WorkspaceSnaphot, PackageJsonSnapshot
 } from '../common';
 
 function addXliffmergeDependencyToPackageJson(options: OptionsAfterSetup) {
@@ -49,18 +45,6 @@ function addXliffmergeDependencyToPackageJson(options: OptionsAfterSetup) {
         if (!options.skipInstall) {
             context.addTask(new NodePackageInstallTask());
         }
-        return host;
-    };
-}
-
-function addExtractScriptToPackageJson(options: OptionsAfterSetup) {
-    return (host: Tree, context: SchematicContext) => {
-        addScriptToPackageJson(
-            host,
-            extractScriptName,
-            fullExtractScript(options)
-        );
-        context.logger.info(`added npm script to extract i18n message, run "npm run ${extractScriptName}" for extraction`);
         return host;
     };
 }
@@ -121,8 +105,7 @@ export function ngAdd(optionsFromCommandline: NgAddOptions): Rule {
           move(options.path ? options.path : ''),
       ]);
 
-      const changesToDo: Rule[] = [];
-      changesToDo.push((tree: Tree, context2: SchematicContext) => {
+      const angularJsonChanges: Rule = (tree: Tree, context2: SchematicContext) => {
           const ws: WorkspaceSnaphot = new WorkspaceSnaphot(tree, context2);
           options.parsedLanguages
               .filter(lang => lang !== options.i18nLocale)
@@ -131,16 +114,20 @@ export function ngAdd(optionsFromCommandline: NgAddOptions): Rule {
               ws.addBuilderConfigurationToProject(options);
           }
           ws.commit();
-      });
-      const startScriptAdditions = options.parsedLanguages
-          .filter(lang => lang !== options.i18nLocale)
-          .map(lang => addStartScriptToPackageJson(options, lang));
+      };
+      const packageJsonChanges: Rule = (tree: Tree, context2: SchematicContext) => {
+          const packageJson: PackageJsonSnapshot = new PackageJsonSnapshot(tree, context2);
+          packageJson.addExtractScriptToPackageJson(options);
+          options.parsedLanguages
+              .filter(lang => lang !== options.i18nLocale)
+              .forEach(lang => packageJson.addStartScriptToPackageJson(options, lang));
+          packageJson.commit();
+      };
       return chain([
           branchAndMerge(
               chain([
-                  addExtractScriptToPackageJson(options),
-                  ...changesToDo,
-                  ...startScriptAdditions,
+                  packageJsonChanges,
+                  angularJsonChanges,
                   (options.useXliffmergeBuilder) ? noop() : mergeWith(templateSource)]
               )
           ),

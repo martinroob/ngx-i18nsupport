@@ -6,7 +6,7 @@ import {UnitTestTree} from '@angular-devkit/schematics/testing';
 import {Schema as WorkspaceOptions} from '@schematics/angular/workspace/schema';
 import {Schema as ApplicationOptions} from '@schematics/angular/application/schema';
 import {Schema as LibraryOptions} from '@schematics/angular/library/schema';
-import {IPackageJson} from '../../schematics-core';
+import {IPackageJson} from './package-json-snapshot';
 import {WorkspaceSchema} from '../../schematics-core/utility/workspace-models';
 import {IXliffMergeOptions} from '@ngx-i18nsupport/ngx-i18nsupport';
 import {WorkspaceSnaphot} from './workspace-snapshot';

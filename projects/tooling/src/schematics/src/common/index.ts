@@ -4,9 +4,9 @@ export {xliffmergeVersion, xliffmergePackage,
     xliffmergeBuilderName,
     xliffmergeBuilderSpec} from './constants';
 export {isValidLanguageSyntax,
-    addStartScriptToPackageJson,
     buildConfigurationForLanguage,
     serveConfigurationForLanguage,
     fullExtractScript} from './common-functions';
 export * from './options-after-setup';
 export * from './workspace-snapshot';
+export * from './package-json-snapshot';

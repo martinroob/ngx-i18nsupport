@@ -3,8 +3,6 @@
  **/
 
 import {OptionsAfterSetup} from './options-after-setup';
-import {SchematicContext, Tree} from '@angular-devkit/schematics';
-import {addScriptToPackageJson} from '../../schematics-core';
 
 /**
  * Check syntax of language code.
@@ -56,35 +54,5 @@ export function serveConfigurationForLanguage(options: OptionsAfterSetup, langua
     return {
         browserTarget: `${options.project}:build:${language}`
     };
-}
-
-/**
- * Add a start script.
- * Script will be named 'start-<language>' or 'start-<project>-<language'.
- * @param options options options containing project etc.
- * @param language language to be added.
- */
-export function addStartScriptToPackageJson(options: OptionsAfterSetup, language: string) {
-    return (host: Tree, context: SchematicContext) => {
-        const scriptName = (options.isDefaultProject) ? `start-${language}` : `start-${options.project}-${language}`;
-        addScriptToPackageJson(
-            host,
-            scriptName,
-            startScript(options, language)
-        );
-        context.logger.info(`added npm script to start app for language ${language}, run "npm run ${scriptName}"`);
-        return host;
-    };
-}
-
-/**
- * returns the start script to be added.
- */
-function startScript(options: OptionsAfterSetup, language: string): string {
-    if (options.isDefaultProject) {
-        return `ng serve --configuration=${language}`;
-    } else {
-        return `ng serve ${options.project} --configuration=${language}`;
-    }
 }
 

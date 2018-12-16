@@ -2,88 +2,19 @@
  * Schematic to add one or more additional languages to a project using @ngx-i18nsupport.
  */
 
-import {branchAndMerge, chain, Rule, SchematicContext, SchematicsException, Tree, noop} from '@angular-devkit/schematics';
+import {branchAndMerge, chain, noop, Rule, SchematicContext, SchematicsException, Tree} from '@angular-devkit/schematics';
 import {AddLanguageOptions} from './schema';
 import {
-    addScriptToPackageJson,
-    getScriptFromPackageJson
-} from '../../schematics-core';
-import {
-    CommonOptions,
-    extractScriptName,
     OptionsAfterSetup,
     setupCommonOptions,
-    xliffmergeBuilderName, xliffmergeBuilderSpec, WorkspaceSnaphot
+    xliffmergeBuilderName, xliffmergeBuilderSpec, WorkspaceSnaphot, PackageJsonSnapshot
 } from '../common';
 import {IXliffMergeOptions, IConfigFile} from '@ngx-i18nsupport/ngx-i18nsupport';
 import {
-    addStartScriptToPackageJson, defaultI18nFormat, defaultI18nLocale,
-    fullExtractScript,
+    defaultI18nFormat, defaultI18nLocale,
     isValidLanguageSyntax
 } from '../common';
-
-/*
-return rule to change extract script "extract-i18n" to contain newly added languages.
- */
-function changeExtractScriptInPackageJson(options: OptionsAfterSetup, host: Tree): Rule {
-    // check wether it is changed
-    const existingScript = getScriptFromPackageJson(host, extractScriptName);
-    const changedScript = fullExtractScript(options);
-    if (existingScript !== changedScript) {
-        return (_host: Tree, context: SchematicContext) => {
-            addScriptToPackageJson(
-                _host,
-                extractScriptName,
-                fullExtractScript(options)
-            );
-            context.logger.info(`changed npm script to extract i18n message, run "npm run ${extractScriptName}" for extraction`);
-            return _host;
-        };
-    } else {
-        return noop();
-    }
-}
-
-/*
-Add language configuration of newly added languages.
-This adds the new language to the xliffmerge.json config file.
-Returns the changed config file content.
- */
-function addLanguagesToXliffmergeConfiguration(
-    options: OptionsAfterSetup,
-    host: Tree,
-    context: SchematicContext,
-    languagesToAdd: string[]): IConfigFile {
-
-    const xliffmergeConf: {xliffmergeOptions: IXliffMergeOptions}|null = readXliffmergeJson(options, host);
-    if (!xliffmergeConf) {
-            const msg = 'did not find any configuration information (xliffmerge.conf)';
-            context.logger.fatal(msg);
-            throw new SchematicsException(msg);
-    }
-    const foundConfiguration = {
-        xliffmergeOptions: xliffmergeConf.xliffmergeOptions
-    };
-    const newLanguagesArray: string[] = [];
-    const languages = foundConfiguration.xliffmergeOptions.languages;
-    if (languages) {
-        newLanguagesArray.push(...languages);
-    }
-    newLanguagesArray.push(...languagesToAdd);
-    foundConfiguration.xliffmergeOptions.languages = newLanguagesArray;
-    context.logger.info('changed xliffmerge.json, added languages');
-    return foundConfiguration;
-}
-
-function readXliffmergeJson(options: OptionsAfterSetup, host: Tree): {xliffmergeOptions: IXliffMergeOptions}|null {
-    const path = `${options.path}/xliffmerge.json`;
-    const content = host.read(path);
-    if (!content) {
-        return null;
-    }
-    const contentString = content.toString('UTF-8');
-    return JSON.parse(contentString);
-}
+import {XliffmergeConfigJsonSnapshot} from '../common/xliffmerge-config-json-snapshot';
 
 /*
 Add language configuration of newly added languages.
@@ -116,14 +47,6 @@ function addLanguagesToBuilderConfiguration(workspaceToChange: WorkspaceSnaphot,
                 xliffmergeBuilderName, xliffmergeBuilderSpec, foundConfiguration);
 }
 
-function changeXliffmergeJson(options: CommonOptions, host: Tree, xliffmergeJson: IConfigFile): Tree {
-    const configPath = options.path ? `/${options.path}/xliffmerge.json` : '/xliffmerge.json';
-    if (host.exists(configPath)) {
-        host.overwrite(configPath, JSON.stringify(xliffmergeJson, null, 2));
-    }
-    return host;
-}
-
 /**
  * Sets all options given by commandline or defaults.
  * It also checks values for correctness.
@@ -134,7 +57,7 @@ function changeXliffmergeJson(options: CommonOptions, host: Tree, xliffmergeJson
  */
 function setupOptions(optionsFromCommandline: AddLanguageOptions, host: Tree, context: SchematicContext): OptionsAfterSetup {
     const options: OptionsAfterSetup = setupCommonOptions(optionsFromCommandline, host, context);
-    let  xliffmergeOptions: {xliffmergeOptions: IXliffMergeOptions}|null;
+    let  xliffmergeOptions: IConfigFile|null;
     const ws = new WorkspaceSnaphot(host, context);
     const optionsFromBuilder = ws.getActualXliffmergeConfigFromWorkspace(options.project);
     if (optionsFromBuilder) {
@@ -145,7 +68,12 @@ function setupOptions(optionsFromCommandline: AddLanguageOptions, host: Tree, co
         xliffmergeOptions = optionsFromBuilder;
     } else {
         // read xliffmerge.json
-        xliffmergeOptions = readXliffmergeJson(options, host);
+        try {
+            const snapshot = new XliffmergeConfigJsonSnapshot(options, host, context);
+            xliffmergeOptions = snapshot.getXliffmergeConfigJson();
+        } catch (e) {
+            xliffmergeOptions = null;
+        }
         if (!xliffmergeOptions) {
             const msg = 'No builder configuration and also no config file "xliffmerge.json" could be found. ' +
                 'Please install @ngx-i18nsupport via "ng add @ngx-i18nsupport/tooling" to create it';
@@ -153,6 +81,9 @@ function setupOptions(optionsFromCommandline: AddLanguageOptions, host: Tree, co
             throw new SchematicsException(msg);
         }
         options.useXliffmergeBuilder = false;
+    }
+    if (!xliffmergeOptions.xliffmergeOptions) {
+        xliffmergeOptions.xliffmergeOptions = {};
     }
     if (xliffmergeOptions.xliffmergeOptions.i18nFormat) {
         options.i18nFormat = xliffmergeOptions.xliffmergeOptions.i18nFormat;
@@ -220,16 +151,14 @@ function setupOptions(optionsFromCommandline: AddLanguageOptions, host: Tree, co
 export function addLanguage(optionsFromCommandline: AddLanguageOptions): Rule {
     return (host: Tree, context: SchematicContext) => {
         const options: OptionsAfterSetup = setupOptions(optionsFromCommandline, host, context);
+        const xliffmergeConfigChanges: Rule = (options.useXliffmergeBuilder) ? noop() : (tree: Tree, context2: SchematicContext) => {
+            const xliffmergeConfigSnapshot = new XliffmergeConfigJsonSnapshot(options, tree, context2);
+            xliffmergeConfigSnapshot.addLanguagesToXliffmergeConfiguration(languagesToAdd);
+            xliffmergeConfigSnapshot.commit();
+        };
         const languagesToAdd = options.parsedLanguages
             .filter(lang => lang !== options.i18nLocale);
-        const changesToDo: Rule[] = [];
-        if (!options.useXliffmergeBuilder) {
-            changesToDo.push((tree: Tree, context2: SchematicContext) => {
-                const changedConfig = addLanguagesToXliffmergeConfiguration(options, tree, context2, languagesToAdd);
-                changeXliffmergeJson(options, tree, changedConfig);
-            });
-        }
-        changesToDo.push((tree: Tree, context2: SchematicContext) => {
+        const angularJsonChanges = (tree: Tree, context2: SchematicContext) => {
             const ws: WorkspaceSnaphot = new WorkspaceSnaphot(tree, context2);
             languagesToAdd
                 .forEach(lang => ws.addLanguageConfigurationToProject(options, lang));
@@ -237,15 +166,20 @@ export function addLanguage(optionsFromCommandline: AddLanguageOptions): Rule {
                 addLanguagesToBuilderConfiguration(ws, options, languagesToAdd);
             }
             ws.commit();
-        });
-        const startScriptAdditions = languagesToAdd
-            .map(lang => addStartScriptToPackageJson(options, lang));
+        };
+        const packageJsonChanges: Rule = (tree: Tree, context2: SchematicContext) => {
+            const packageJson: PackageJsonSnapshot = new PackageJsonSnapshot(tree, context2);
+            packageJson.changeExtractScriptInPackageJson(options);
+            languagesToAdd
+                .forEach(lang => packageJson.addStartScriptToPackageJson(options, lang));
+            packageJson.commit();
+        };
         return chain([
             branchAndMerge(
                 chain([
-                    ...changesToDo,
-                    changeExtractScriptInPackageJson(options, host),
-                    ...startScriptAdditions]
+                    angularJsonChanges,
+                    packageJsonChanges,
+                    xliffmergeConfigChanges]
                 )
             )
         ])(host, context);

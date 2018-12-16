@@ -13,15 +13,19 @@ import {IXliffMergeOptions} from '@ngx-i18nsupport/ngx-i18nsupport';
  * Read and edit functionality on angular.json
  * It allows multiple changes on angular.json file.
  * At the end we call commit() to write angular.json.
- * @param host host tree
- * @param context context (used for logging)
- * @throws SchematicsException when angular.json does not exists.
  */
 export class WorkspaceSnaphot {
-    workspace: WorkspaceSchema;
+    private readonly workspace: WorkspaceSchema;
 
+    /**
+     * Create it.
+     * Read the file angular.json
+     * @param host host tree
+     * @param context context (used for logging)
+     * @throws SchematicsException when angular.json does not exists.
+     */
     constructor(private host: Tree, private context?: SchematicContext) {
-        this.workspace = this.readAngularJson(host);
+        this.workspace = this.readAngularJson();
     }
 
     /**
@@ -260,12 +264,10 @@ export class WorkspaceSnaphot {
     /*
     private helper function to read angular.json
      */
-    private readAngularJson(
-        host: Tree
-    ): WorkspaceSchema  {
+    private readAngularJson(): WorkspaceSchema  {
         const noAngularJsonMsg = 'file angular.json not found';
-        if (host.exists('/angular.json')) {
-            const content = host.read('/angular.json');
+        if (this.host.exists('/angular.json')) {
+            const content = this.host.read('/angular.json');
             if (!content) {
                 throw new SchematicsException(noAngularJsonMsg);
             }
