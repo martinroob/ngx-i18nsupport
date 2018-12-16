@@ -20,15 +20,12 @@ import {NodePackageInstallTask} from '@angular-devkit/schematics/tasks';
 import {NgAddOptions} from './schema';
 import {
     addPackageJsonDependency,
-    addScriptToPackageJson, commitWorkspaceChanges,
+    addScriptToPackageJson,
     NodeDependency,
-    NodeDependencyType, startChangingWorkspace,
-    stringUtils,
-    WorkspaceToChange
+    NodeDependencyType,
+    stringUtils
 } from '../../schematics-core';
 import {
-    addLanguageConfigurationToProject,
-    addBuilderConfigurationToProject,
     addStartScriptToPackageJson,
     defaultI18nLocale,
     extractScriptName,
@@ -37,7 +34,7 @@ import {
     OptionsAfterSetup,
     setupCommonOptions,
     xliffmergePackage,
-    xliffmergeVersion
+    xliffmergeVersion, WorkspaceSnaphot
 } from '../common';
 
 function addXliffmergeDependencyToPackageJson(options: OptionsAfterSetup) {
@@ -126,14 +123,14 @@ export function ngAdd(optionsFromCommandline: NgAddOptions): Rule {
 
       const changesToDo: Rule[] = [];
       changesToDo.push((tree: Tree, context2: SchematicContext) => {
-          const ws: WorkspaceToChange = startChangingWorkspace(tree, context2);
+          const ws: WorkspaceSnaphot = new WorkspaceSnaphot(tree, context2);
           options.parsedLanguages
               .filter(lang => lang !== options.i18nLocale)
-              .forEach(lang => addLanguageConfigurationToProject(ws, options, lang));
+              .forEach(lang => ws.addLanguageConfigurationToProject(options, lang));
           if (options.useXliffmergeBuilder) {
-              addBuilderConfigurationToProject(ws, options);
+              ws.addBuilderConfigurationToProject(options);
           }
-          commitWorkspaceChanges(tree, ws);
+          ws.commit();
       });
       const startScriptAdditions = options.parsedLanguages
           .filter(lang => lang !== options.i18nLocale)

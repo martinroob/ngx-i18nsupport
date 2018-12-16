@@ -5,22 +5,18 @@
 import {branchAndMerge, chain, Rule, SchematicContext, SchematicsException, Tree, noop} from '@angular-devkit/schematics';
 import {AddLanguageOptions} from './schema';
 import {
-    addArchitectBuilderToProject,
-    addScriptToPackageJson, commitWorkspaceChanges,
-    getScriptFromPackageJson,
-    startChangingWorkspace, WorkspaceToChange
+    addScriptToPackageJson,
+    getScriptFromPackageJson
 } from '../../schematics-core';
 import {
     CommonOptions,
     extractScriptName,
     OptionsAfterSetup,
-    getActualXliffmergeConfigFromWorkspace,
     setupCommonOptions,
-    xliffmergeBuilderName, xliffmergeBuilderSpec
+    xliffmergeBuilderName, xliffmergeBuilderSpec, WorkspaceSnaphot
 } from '../common';
 import {IXliffMergeOptions, IConfigFile} from '@ngx-i18nsupport/ngx-i18nsupport';
 import {
-    addLanguageConfigurationToProject,
     addStartScriptToPackageJson, defaultI18nFormat, defaultI18nLocale,
     fullExtractScript,
     isValidLanguageSyntax
@@ -96,9 +92,9 @@ This adds the new language
 - or to the config file mentioned in the builder configuration
 depending on what is used.
  */
-function addLanguagesToBuilderConfiguration(workspaceToChange: WorkspaceToChange, options: OptionsAfterSetup, languagesToAdd: string[]) {
+function addLanguagesToBuilderConfiguration(workspaceToChange: WorkspaceSnaphot, options: OptionsAfterSetup, languagesToAdd: string[]) {
     const xliffmergeConf: {xliffmergeOptions: IXliffMergeOptions}|null
-        = getActualXliffmergeConfigFromWorkspace(workspaceToChange, options.project);
+        = workspaceToChange.getActualXliffmergeConfigFromWorkspace(options.project);
     if (!xliffmergeConf) {
         return (_host: Tree, context: SchematicContext) => {
             const msg = 'did not find any configuration information in xliffmerge builder configuration';
@@ -116,7 +112,7 @@ function addLanguagesToBuilderConfiguration(workspaceToChange: WorkspaceToChange
     }
     newLanguagesArray.push(...languagesToAdd);
     foundConfiguration.xliffmergeOptions.languages = newLanguagesArray;
-    addArchitectBuilderToProject(workspaceToChange, options.project,
+    workspaceToChange.addArchitectBuilderToProject(options.project,
                 xliffmergeBuilderName, xliffmergeBuilderSpec, foundConfiguration);
 }
 
@@ -139,8 +135,8 @@ function changeXliffmergeJson(options: CommonOptions, host: Tree, xliffmergeJson
 function setupOptions(optionsFromCommandline: AddLanguageOptions, host: Tree, context: SchematicContext): OptionsAfterSetup {
     const options: OptionsAfterSetup = setupCommonOptions(optionsFromCommandline, host, context);
     let  xliffmergeOptions: {xliffmergeOptions: IXliffMergeOptions}|null;
-    const ws = startChangingWorkspace(host, context);
-    const optionsFromBuilder = getActualXliffmergeConfigFromWorkspace(ws, options.project);
+    const ws = new WorkspaceSnaphot(host, context);
+    const optionsFromBuilder = ws.getActualXliffmergeConfigFromWorkspace(options.project);
     if (optionsFromBuilder) {
         options.useXliffmergeBuilder = true;
         if (optionsFromBuilder.profile) {
@@ -234,13 +230,13 @@ export function addLanguage(optionsFromCommandline: AddLanguageOptions): Rule {
             });
         }
         changesToDo.push((tree: Tree, context2: SchematicContext) => {
-            const ws: WorkspaceToChange = startChangingWorkspace(tree, context2);
+            const ws: WorkspaceSnaphot = new WorkspaceSnaphot(tree, context2);
             languagesToAdd
-                .forEach(lang => addLanguageConfigurationToProject(ws, options, lang));
+                .forEach(lang => ws.addLanguageConfigurationToProject(options, lang));
             if (options.useXliffmergeBuilder) {
                 addLanguagesToBuilderConfiguration(ws, options, languagesToAdd);
             }
-            commitWorkspaceChanges(tree, ws);
+            ws.commit();
         });
         const startScriptAdditions = languagesToAdd
             .map(lang => addStartScriptToPackageJson(options, lang));

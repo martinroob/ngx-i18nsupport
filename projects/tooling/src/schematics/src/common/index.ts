@@ -4,11 +4,9 @@ export {xliffmergeVersion, xliffmergePackage,
     xliffmergeBuilderName,
     xliffmergeBuilderSpec} from './constants';
 export {isValidLanguageSyntax,
-    addLanguageConfigurationToProject,
-    addBuilderConfigurationToProject,
     addStartScriptToPackageJson,
     buildConfigurationForLanguage,
     serveConfigurationForLanguage,
-    getActualXliffmergeConfigFromWorkspace,
     fullExtractScript} from './common-functions';
 export * from './options-after-setup';
+export * from './workspace-snapshot';

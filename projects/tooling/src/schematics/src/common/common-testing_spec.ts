@@ -6,10 +6,10 @@ import {UnitTestTree} from '@angular-devkit/schematics/testing';
 import {Schema as WorkspaceOptions} from '@schematics/angular/workspace/schema';
 import {Schema as ApplicationOptions} from '@schematics/angular/application/schema';
 import {Schema as LibraryOptions} from '@schematics/angular/library/schema';
-import {IPackageJson, startChangingWorkspace} from '../../schematics-core';
+import {IPackageJson} from '../../schematics-core';
 import {WorkspaceSchema} from '../../schematics-core/utility/workspace-models';
 import {IXliffMergeOptions} from '@ngx-i18nsupport/ngx-i18nsupport';
-import {getActualXliffmergeConfigFromWorkspace} from './common-functions';
+import {WorkspaceSnaphot} from './workspace-snapshot';
 
 export const workspaceOptions: WorkspaceOptions = {
     name: 'workspace',
@@ -69,6 +69,6 @@ export function readXliffmergeJson(tree: UnitTestTree, projectName: string): {xl
  * @param projectName name of project
  */
 export function readXliffmergeConfigFromWorkspace(tree: UnitTestTree, projectName: string): {xliffmergeOptions: IXliffMergeOptions}|null {
-    const ws = startChangingWorkspace(tree);
-    return getActualXliffmergeConfigFromWorkspace(ws, projectName);
+    const ws = new WorkspaceSnaphot(tree);
+    return ws.getActualXliffmergeConfigFromWorkspace(projectName);
 }

@@ -4,14 +4,7 @@
 
 import {OptionsAfterSetup} from './options-after-setup';
 import {SchematicContext, Tree} from '@angular-devkit/schematics';
-import {
-    addArchitectBuildConfigurationToProject, addArchitectBuilderToProject,
-    addArchitectServeConfigurationToProject,
-    addScriptToPackageJson, getProjectByName, WorkspaceToChange
-} from '../../schematics-core';
-import {xliffmergeBuilderName, xliffmergeBuilderSpec} from './constants';
-import {ProjectType, WorkspaceProject} from '../../schematics-core/utility/workspace-models';
-import {IXliffMergeOptions} from '@ngx-i18nsupport/ngx-i18nsupport';
+import {addScriptToPackageJson} from '../../schematics-core';
 
 /**
  * Check syntax of language code.
@@ -95,96 +88,3 @@ function startScript(options: OptionsAfterSetup, language: string): string {
     }
 }
 
-/**
- * Add the build and serve configuration for a given language to angular.json.
- * @param workspace the workspace to change
- * @param options options containing project etc.
- * @param language the language to be added.
- */
-export function addLanguageConfigurationToProject(workspace: WorkspaceToChange,
-                                                  options: OptionsAfterSetup,
-                                                  language: string) {
-        addArchitectBuildConfigurationToProject(
-            workspace,
-            options.project,
-            language,
-            buildConfigurationForLanguage(options, language)
-        );
-        if (workspace.context) {
-            workspace.context.logger.info(`added build configuration for language "${language}" to project "${options.project}"`);
-        }
-        addArchitectServeConfigurationToProject(
-            workspace,
-            options.project,
-            language,
-            serveConfigurationForLanguage(options, language)
-        );
-        if (workspace.context) {
-            workspace.context.logger.info(`added serve configuration for language "${language}" to project "${options.project}"`);
-        }
-}
-
-/**
- * Add the builder configuration for xliffmerge builder to angular.json.
- * @param workspace the workspace to change
- * @param options options containing project etc.
- */
-export function addBuilderConfigurationToProject(workspace: WorkspaceToChange,
-                                                 options: OptionsAfterSetup) {
-        const builderOptions = {
-            xliffmergeOptions: {
-                i18nFormat: options.i18nFormat,
-                srcDir: options.srcDir,
-                genDir: options.genDir,
-                defaultLanguage: options.parsedLanguages[0],
-                languages: options.parsedLanguages
-            }
-        };
-        addArchitectBuilderToProject(
-            workspace,
-            options.project,
-            xliffmergeBuilderName,
-            xliffmergeBuilderSpec,
-            builderOptions
-        );
-        if (workspace.context) {
-            workspace.context.logger.info(`added builder xliffmerge to project "${options.project}"`);
-        }
-}
-
-/**
- * Read the xliffmerge configuration form the builder options.
- * @param workspaceToChange the workspace returned by startChangingWorkspace
- * @param projectName name of project
- */
-export function getActualXliffmergeConfigFromWorkspace(workspaceToChange: WorkspaceToChange, projectName: string)
-    : {xliffmergeOptions: IXliffMergeOptions, profile?: string} | null {
-    if (!projectName) {
-        return null;
-    }
-    const project: WorkspaceProject<ProjectType>|null = getProjectByName(workspaceToChange, projectName);
-    if (!project || !project.architect) {
-        return null;
-    }
-    const xliffmergeBuilder = project.architect['xliffmerge'];
-    if (!xliffmergeBuilder || !xliffmergeBuilder.options) {
-        return null;
-    }
-    if (xliffmergeBuilder.options && xliffmergeBuilder.options.xliffmergeOptions) {
-        return xliffmergeBuilder.options;
-    } else if (xliffmergeBuilder.options.profile) {
-        // read profile
-        const content = workspaceToChange.host.read(xliffmergeBuilder.options.profile);
-        if (!content) {
-            return null;
-        }
-        const contentString = content.toString('UTF-8');
-        const profileContent = JSON.parse(contentString) as {xliffmergeOptions: IXliffMergeOptions};
-        return {
-            xliffmergeOptions: profileContent.xliffmergeOptions,
-            profile: xliffmergeBuilder.options.profile
-        };
-    } else {
-        return null;
-    }
-}

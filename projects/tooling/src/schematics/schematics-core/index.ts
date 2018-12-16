@@ -19,14 +19,6 @@ export { getProject} from './utility/project';
 export { AppConfig, getWorkspace, getWorkspacePath } from './utility/config';
 export { addPackageJsonDependency, getPackageJsonDependency, NodeDependency, NodeDependencyType } from './utility/dependencies';
 export {readPackageJson, getScriptFromPackageJson, addScriptToPackageJson, IPackageJson} from './utility/special-package';
-export {getAngularJson,
-    getProjectByName,
-    startChangingWorkspace,
-    WorkspaceToChange,
-    commitWorkspaceChanges,
-    addArchitectBuildConfigurationToProject,
-    addArchitectServeConfigurationToProject,
-    addArchitectBuilderToProject} from './utility/special-project';
 
 export const stringUtils = {
     dasherize,
