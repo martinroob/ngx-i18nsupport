@@ -5,8 +5,7 @@ export {xliffmergeVersion, xliffmergePackage,
     xliffmergeBuilderSpec} from './constants';
 export {isValidLanguageSyntax,
     buildConfigurationForLanguage,
-    serveConfigurationForLanguage,
-    fullExtractScript} from './common-functions';
+    serveConfigurationForLanguage} from './common-functions';
 export * from './options-after-setup';
 export * from './workspace-snapshot';
 export * from './package-json-snapshot';

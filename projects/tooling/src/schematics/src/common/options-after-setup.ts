@@ -67,8 +67,12 @@ export function setupCommonOptions(optionsFromCommandline: CommonOptions, host: 
     }
     const parsedPath: Location = parseName(options.path, 'anyfile');
     options.path = parsedPath.path;
-    options.srcDir = 'src' + '/' + options.localePath;
-    options.genDir = 'src' + '/' + options.localePath;
+    options.srcDir = 'src';
+    options.genDir = 'src';
+    if (options.localePath) {
+        options.srcDir = options.srcDir + '/' + options.localePath;
+        options.genDir = options.genDir + '/' + options.localePath;
+    }
     options.configuredLanguages = [];
     options.useComandlineForLanguages = false;
     return options;

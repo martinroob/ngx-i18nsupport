@@ -69,7 +69,7 @@ function setupOptions(optionsFromCommandline: AddLanguageOptions, host: Tree, co
     } else {
         // read xliffmerge.json
         try {
-            const snapshot = new XliffmergeConfigJsonSnapshot(options, host, context);
+            const snapshot = new XliffmergeConfigJsonSnapshot(`${options.path}/xliffmerge.json`, host, context);
             xliffmergeOptions = snapshot.getXliffmergeConfigJson();
         } catch (e) {
             xliffmergeOptions = null;
@@ -152,7 +152,7 @@ export function addLanguage(optionsFromCommandline: AddLanguageOptions): Rule {
     return (host: Tree, context: SchematicContext) => {
         const options: OptionsAfterSetup = setupOptions(optionsFromCommandline, host, context);
         const xliffmergeConfigChanges: Rule = (options.useXliffmergeBuilder) ? noop() : (tree: Tree, context2: SchematicContext) => {
-            const xliffmergeConfigSnapshot = new XliffmergeConfigJsonSnapshot(options, tree, context2);
+            const xliffmergeConfigSnapshot = new XliffmergeConfigJsonSnapshot(`${options.path}/xliffmerge.json`, tree, context2);
             xliffmergeConfigSnapshot.addLanguagesToXliffmergeConfiguration(languagesToAdd);
             xliffmergeConfigSnapshot.commit();
         };
@@ -168,7 +168,7 @@ export function addLanguage(optionsFromCommandline: AddLanguageOptions): Rule {
             ws.commit();
         };
         const packageJsonChanges: Rule = (tree: Tree, context2: SchematicContext) => {
-            const packageJson: PackageJsonSnapshot = new PackageJsonSnapshot(tree, context2);
+            const packageJson: PackageJsonSnapshot = new PackageJsonSnapshot('/', tree, context2);
             packageJson.changeExtractScriptInPackageJson(options);
             languagesToAdd
                 .forEach(lang => packageJson.addStartScriptToPackageJson(options, lang));

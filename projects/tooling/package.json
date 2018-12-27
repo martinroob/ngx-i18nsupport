@@ -4,6 +4,9 @@
   "private": false,
   "description": "Schematics to add the tooling to be used with the Angular 2 i18n workflow",
   "schematics": "./src/schematics/src/collection.json",
+  "ng-update": {
+    "migrations": "./src/schematics/src/migration-collection.json"
+  },
   "builders": "./src/builders/src/builders.json",
   "scripts": {
     "build": "ng build tooling && npm run build:schematics && npm run copy:schematics && npm run build:builders && npm run copy:builders",

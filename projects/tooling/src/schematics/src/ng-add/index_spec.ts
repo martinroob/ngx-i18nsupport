@@ -153,7 +153,7 @@ describe('ng-add', () => {
       });
 
       it('should add npm script "extract-i18n" to package.json including language list as command line parameter', () => {
-          const tree = runSchematic({useXliffmergeBuilder: false, useComandlineForLanguages: true, languages: 'en,de'}, appTree);
+          const tree = runSchematic({useXliffmergeBuilder: false, useCommandlineForLanguages: true, languages: 'en,de'}, appTree);
           const packageJson = readPackageJson(tree);
           const extractScript = packageJson.scripts['extract-i18n'];
           expect(extractScript).toBeTruthy();

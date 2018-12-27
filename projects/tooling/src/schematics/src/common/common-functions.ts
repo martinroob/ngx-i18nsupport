@@ -17,23 +17,6 @@ export function isValidLanguageSyntax(lang: string): boolean {
     return pattern.test(lang);
 }
 
-export function fullExtractScript(options: OptionsAfterSetup): string {
-    const defaultLanguage = options.i18nLocale;
-    const i18nFormat = options.i18nFormat;
-    const languagesBlankSeparated = options.languages ? options.languages.replace(/,/g, ' ') : '';
-    const languagesCommandLineArgument = (options.useComandlineForLanguages) ? ' ' + languagesBlankSeparated : '';
-    const localeDir = options.localePath;
-    if (options.useXliffmergeBuilder) {
-        return `ng xi18n ${options.project} --i18n-format ${i18nFormat} --output-path ${localeDir} --i18n-locale ${defaultLanguage}\
- && ng run ${options.project}:xliffmerge`;
-    } else {
-        // old style before builder
-        const configFilePath = 'xliffmerge.json';
-        return `ng xi18n ${options.project} --i18n-format ${i18nFormat} --output-path ${localeDir} --i18n-locale ${defaultLanguage}\
- && xliffmerge --profile ${configFilePath}${languagesCommandLineArgument}`;
-    }
-}
-
 /**
  * returns the build configuration to be set.
  */

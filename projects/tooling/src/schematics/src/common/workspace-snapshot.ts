@@ -3,7 +3,7 @@
  */
 
 import {SchematicContext, SchematicsException, Tree} from '@angular-devkit/schematics';
-import {WorkspaceSchema, WorkspaceProject, ProjectType} from '../../schematics-core/utility/workspace-models';
+import {ProjectType, WorkspaceProject, WorkspaceSchema} from '../../schematics-core/utility/workspace-models';
 import {OptionsAfterSetup} from './options-after-setup';
 import {xliffmergeBuilderName, xliffmergeBuilderSpec} from './constants';
 import {buildConfigurationForLanguage, serveConfigurationForLanguage} from './common-functions';
@@ -54,6 +54,18 @@ export class WorkspaceSnaphot {
             throw new SchematicsException('angular.json does not contain project ' + projectName);
         }
         return project;
+    }
+
+    /**
+     * Return all projects.
+     */
+    public getAllProjects(): {name: string, project: WorkspaceProject<ProjectType>}[] {
+        return Object.keys(this.workspace.projects).map(projectName => {
+            return {
+                name: projectName,
+                project: this.workspace.projects[projectName]
+            };
+        });
     }
 
     /**

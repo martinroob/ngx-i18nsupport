@@ -5,7 +5,7 @@
 import {SchematicContext, SchematicsException, Tree} from '@angular-devkit/schematics';
 import {OptionsAfterSetup} from './options-after-setup';
 import {extractScriptName} from './constants';
-import {fullExtractScript} from './common-functions';
+import {ExtractScript} from './extract-script';
 
 /**
  * rudimentary interface of package.json (only what is used here).
@@ -27,12 +27,27 @@ export class PackageJsonSnapshot {
     /**
      * Create it.
      * Read the file package.json
+     * @param _path path where package.json is expected.
      * @param host host tree
      * @param context context (used for logging)
      * @throws SchematicsException when package.json does not exists.
      */
-    constructor(private host: Tree, private context?: SchematicContext) {
+    constructor(private _path: string, private host: Tree, private context?: SchematicContext) {
         this.packageJson = this.readPackageJson();
+    }
+
+    /**
+     * Patht of package json.
+     */
+    public path(): string {
+        return this._path;
+    }
+
+    /**
+     * Actual content of package json.
+     */
+    public content(): string {
+        return JSON.stringify(this.packageJson, null, 2);
     }
 
     /**
@@ -40,13 +55,13 @@ export class PackageJsonSnapshot {
      * (writes angular.json)
      */
     public commit() {
-        const newPackageJsonContent = JSON.stringify(this.packageJson, null, 2);
-        this.host.overwrite('/package.json', newPackageJsonContent);
+        this.host.overwrite(`${this._path}/package.json`, this.content());
     }
 
     /**
      * Get a script with given name or null, if not existing.
      * @param scriptName name of script
+     * @return content of script
      */
     public getScriptFromPackageJson(
         scriptName: string
@@ -55,11 +70,23 @@ export class PackageJsonSnapshot {
     }
 
     /**
+     * Get the extract script, if contained in package.json.
+     */
+    public getExtractScriptFromPackageJson(): ExtractScript|null {
+        const content = this.getScriptFromPackageJson(extractScriptName);
+        if (content) {
+            return new ExtractScript(extractScriptName, content);
+        } else {
+            return null;
+        }
+    }
+
+    /**
      * Add a script to package.json
      * @param scriptName name of script to be added.
      * @param content content of script
      */
-    public addScriptToPackageJson(
+    public addOrReplaceScriptToPackageJson(
         scriptName: string,
         content: string
     ) {
@@ -67,18 +94,22 @@ export class PackageJsonSnapshot {
         if (!this.packageJson[scriptsSection]) {
             this.packageJson[scriptsSection] = {};
         }
-        if (!this.packageJson[scriptsSection][scriptName]) {
-            this.packageJson[scriptsSection][scriptName] = content;
-            if (this.context) {
-                this.context.logger.info(`added script ${scriptName} to package.json`);
+        const isOverride = !!this.packageJson[scriptsSection][scriptName];
+        this.packageJson[scriptsSection][scriptName] = content;
+        if (this.context) {
+            if (isOverride) {
+                this.context.logger.info(`changed script ${scriptName} in ${this._path}/package.json`);
+            } else {
+                this.context.logger.info(`added script ${scriptName} to ${this._path}/package.json`);
             }
        }
     }
 
     public addExtractScriptToPackageJson(options: OptionsAfterSetup) {
-        this.addScriptToPackageJson(
-            extractScriptName,
-            fullExtractScript(options)
+        const extractScript = ExtractScript.createExtractScript(options);
+        this.addOrReplaceScriptToPackageJson(
+            extractScript.name,
+            extractScript.content
         );
         if (this.context) {
             this.context.logger.info(`added npm script to extract i18n message, run "npm run ${extractScriptName}" for extraction`);
@@ -90,12 +121,12 @@ export class PackageJsonSnapshot {
      */
     public changeExtractScriptInPackageJson(options: OptionsAfterSetup) {
         // check wether it is changed
-        const existingScript = this.getScriptFromPackageJson(extractScriptName);
-        const changedScript = fullExtractScript(options);
-        if (existingScript !== changedScript) {
-            this.addScriptToPackageJson(
-                extractScriptName,
-                fullExtractScript(options)
+        const existingScriptContent = this.getScriptFromPackageJson(extractScriptName);
+        const extractScript = ExtractScript.createExtractScript(options);
+        if (existingScriptContent !== extractScript.content) {
+            this.addOrReplaceScriptToPackageJson(
+                extractScript.name,
+                extractScript.content
             );
             if (this.context) {
                 this.context.logger.info(`changed npm script to extract i18n message, run "npm run ${extractScriptName}" for extraction`);
@@ -111,7 +142,7 @@ export class PackageJsonSnapshot {
      */
     public addStartScriptToPackageJson(options: OptionsAfterSetup, language: string) {
         const scriptName = (options.isDefaultProject) ? `start-${language}` : `start-${options.project}-${language}`;
-        this.addScriptToPackageJson(
+        this.addOrReplaceScriptToPackageJson(
             scriptName,
             this.startScript(options, language)
         );
@@ -137,10 +168,10 @@ export class PackageJsonSnapshot {
      * @return content or null, if file does not exist.
      */
     private readPackageJson(): IPackageJson {
-        const path = `/package.json`;
-        const content = this.host.read(path);
+        const packageJsonPath = `${this._path}/package.json`;
+        const content = this.host.read(packageJsonPath);
         if (!content) {
-            throw new SchematicsException('package.json does not exist');
+            throw new SchematicsException(`${packageJsonPath} does not exist`);
         }
         const contentString = content.toString('UTF-8');
         return JSON.parse(contentString) as IPackageJson;

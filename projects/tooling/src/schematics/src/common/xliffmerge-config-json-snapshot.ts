@@ -1,5 +1,4 @@
 import {SchematicContext, SchematicsException, Tree} from '@angular-devkit/schematics';
-import {OptionsAfterSetup} from './options-after-setup';
 import {IConfigFile} from '@ngx-i18nsupport/ngx-i18nsupport';
 
 /**
@@ -15,13 +14,13 @@ export class XliffmergeConfigJsonSnapshot {
     /**
      * Create it.
      * Read the file xliffmerge.json
-     * @param options used to find the project
+     * @param filename filename to config file (including name)
      * @param host host tree
      * @param context context (used for logging)
      * @throws SchematicsException when package.json does not exists.
      */
-    constructor(options: OptionsAfterSetup, private host: Tree, private context?: SchematicContext) {
-        this.configPath = `${options.path}/xliffmerge.json`;
+    constructor(filename: string, private host: Tree, private context?: SchematicContext) {
+        this.configPath = filename;
         this.xliffmergeConfigJson = this.readXliffmergeConfigJson();
     }
 
@@ -57,7 +56,7 @@ export class XliffmergeConfigJsonSnapshot {
         newLanguagesArray.push(...languagesToAdd);
         this.xliffmergeConfigJson.xliffmergeOptions.languages = newLanguagesArray;
         if (this.context) {
-            this.context.logger.info('changed xliffmerge.json, added languages');
+            this.context.logger.info(`changed ${this.configPath}, added languages`);
         }
     }
 
@@ -68,7 +67,7 @@ export class XliffmergeConfigJsonSnapshot {
     private readXliffmergeConfigJson(): IConfigFile {
         const content = this.host.read(this.configPath);
         if (!content) {
-            const msg = 'did not find any configuration information (xliffmerge.json)';
+            const msg = `Did not find any configuration information (${this.configPath})`;
             if (this.context) {
                 this.context.logger.fatal(msg);
             }

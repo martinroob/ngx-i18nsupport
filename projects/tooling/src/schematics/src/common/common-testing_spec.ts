@@ -47,9 +47,10 @@ export function readAsJson<T>(tree: UnitTestTree, path: string): T {
     return JSON.parse(contentString) as T;
 }
 
-export function readPackageJson(tree: UnitTestTree): IPackageJson {
-    expect(tree.files).toContain('/package.json');
-    return readAsJson<IPackageJson>(tree, '/package.json');
+export function readPackageJson(tree: UnitTestTree, projectName?: string): IPackageJson {
+    const path = (projectName === undefined) ? '' : '/' + projectName;
+    expect(tree.files).toContain(`${path}/package.json`);
+    return readAsJson<IPackageJson>(tree, `${path}/package.json`);
 }
 
 export function readAngularJson(tree: UnitTestTree): WorkspaceSchema {

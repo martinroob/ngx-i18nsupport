@@ -62,8 +62,8 @@ function setupOptions(optionsFromCommandline: NgAddOptions, host: Tree, context:
     if (options.useXliffmergeBuilder) {
         options.profileUsedByBuilder = undefined;
     }
-    options.useComandlineForLanguages = optionsFromCommandline.useComandlineForLanguages ?
-        optionsFromCommandline.useComandlineForLanguages
+    options.useComandlineForLanguages = optionsFromCommandline.useCommandlineForLanguages ?
+        optionsFromCommandline.useCommandlineForLanguages
         : false;
     const languagesFromCommandline = (optionsFromCommandline.languages) ? optionsFromCommandline.languages.split(',') : [];
     if (!optionsFromCommandline.i18nLocale) {
@@ -116,7 +116,7 @@ export function ngAdd(optionsFromCommandline: NgAddOptions): Rule {
           ws.commit();
       };
       const packageJsonChanges: Rule = (tree: Tree, context2: SchematicContext) => {
-          const packageJson: PackageJsonSnapshot = new PackageJsonSnapshot(tree, context2);
+          const packageJson: PackageJsonSnapshot = new PackageJsonSnapshot('/', tree, context2);
           packageJson.addExtractScriptToPackageJson(options);
           options.parsedLanguages
               .filter(lang => lang !== options.i18nLocale)
