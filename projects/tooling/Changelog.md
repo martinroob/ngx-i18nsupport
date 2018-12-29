@@ -1,11 +1,13 @@
 <a name="1.1.0"></a>
-# 1.1.0 (2018-12-07)
+# 1.1.0 (2018-12-29)
 
 ### Features
 
 * **tooling** Upgrade to Angular 7
 
 * **builders** New Angular Architect Builder to run xliffmerge. ([#107](https://github.com/martinroob/ngx-i18nsupport/issues/107))
+
+* **ng-update** New schematic to update from version 1.0 to 1.1 using `ng update @ngx-i18nsupport/tooling`
 
 <a name="1.0.1"></a>
 # 1.0.1 (2018-11-09)

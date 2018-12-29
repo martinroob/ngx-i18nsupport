@@ -114,6 +114,14 @@ As an alternative to referencing the profile you can directly specify all allowe
         },
 ```
 
+# ng-update
+Beginning with version 1.1.0 the tooling package contains an `ng-update`-Schematics.
+You can update from version 1.0 to 1.1 using `ng update`
+
+``ng update @ngx-i18nsupport/tooling``
+
+This will update the old xliffmerge commandline usage with the new builder.
+
 
 [travis-badge]: https://travis-ci.org/martinroob/ngx-i18nsupport.svg?branch=master
 [travis-badge-url]: https://travis-ci.org/martinroob/ngx-i18nsupport
