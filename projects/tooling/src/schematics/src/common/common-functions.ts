@@ -4,11 +4,9 @@
 
 import {OptionsAfterSetup} from './options-after-setup';
 import {SchematicContext, Tree} from '@angular-devkit/schematics';
-import {
-    addArchitectBuildConfigurationToProject,
-    addArchitectServeConfigurationToProject,
-    addScriptToPackageJson
-} from '../../schematics-core';
+import {addPackageJsonDependency, NodeDependency, NodeDependencyType} from '../../schematics-core';
+import {xliffmergePackage, xliffmergeVersion} from './constants';
+import {NodePackageInstallTask} from '@angular-devkit/schematics/tasks';
 
 /**
  * Check syntax of language code.
@@ -21,17 +19,6 @@ import {
 export function isValidLanguageSyntax(lang: string): boolean {
     const pattern = /^[a-zA-Z]{1,8}([-_][a-zA-Z0-9]{1,8})*$/;
     return pattern.test(lang);
-}
-
-export function fullExtractScript(options: OptionsAfterSetup): string {
-    const defaultLanguage = options.i18nLocale;
-    const i18nFormat = options.i18nFormat;
-    const languagesBlankSeparated = options.languages ? options.languages.replace(/,/g, ' ') : '';
-    const languagesCommandLineArgument = (options.useComandlineForLanguages) ? ' ' + languagesBlankSeparated : '';
-    const localeDir = options.localePath;
-    const configFilePath = 'xliffmerge.json';
-    return `ng xi18n --i18n-format ${i18nFormat} --output-path ${localeDir} --i18n-locale ${defaultLanguage}\
- && xliffmerge --profile ${configFilePath}${languagesCommandLineArgument}`;
 }
 
 /**
@@ -57,58 +44,22 @@ export function serveConfigurationForLanguage(options: OptionsAfterSetup, langua
 }
 
 /**
- * Add a start script.
- * Script will be named 'start-<language>' or 'start-<project>-<language'.
- * @param options options options containing project etc.
- * @param language language to be added.
+ * Add dev dependencies to actual xliffmerge version to package.json
+ * @param skipInstall wether install should be skipped
  */
-export function addStartScriptToPackageJson(options: OptionsAfterSetup, language: string) {
+export function addXliffmergeDependencyToPackageJson(skipInstall: boolean|undefined) {
     return (host: Tree, context: SchematicContext) => {
-        const scriptName = (options.isDefaultProject) ? `start-${language}` : `start-${options.project}-${language}`;
-        addScriptToPackageJson(
-            host,
-            scriptName,
-            startScript(options, language)
-        );
-        context.logger.info(`added npm script to start app for language ${language}, run "npm run ${scriptName}"`);
+        const dependencyToXliffmerge: NodeDependency = {
+            type: NodeDependencyType.Dev,
+            name: xliffmergePackage,
+            version: xliffmergeVersion,
+            overwrite: true
+        };
+        addPackageJsonDependency(host, dependencyToXliffmerge);
+        if (!skipInstall) {
+            context.addTask(new NodePackageInstallTask());
+        }
         return host;
     };
 }
 
-/**
- * returns the start script to be added.
- */
-function startScript(options: OptionsAfterSetup, language: string): string {
-    if (options.isDefaultProject) {
-        return `ng serve --configuration=${language}`;
-    } else {
-        return `ng serve ${options.project} --configuration=${language}`;
-    }
-}
-
-/**
- * Add the build and serve configuration for a given language to angular.json.
- * @param options options containing project etc.
- * @param language the language to be added.
- */
-export function addLanguageConfigurationToProject(options: OptionsAfterSetup, language: string) {
-    return (host: Tree, context: SchematicContext) => {
-        addArchitectBuildConfigurationToProject(
-            host,
-            context,
-            options.project,
-            language,
-            buildConfigurationForLanguage(options, language)
-        );
-        context.logger.info(`added build configuration for language "${language}" to project "${options.project}"`);
-        addArchitectServeConfigurationToProject(
-            host,
-            context,
-            options.project,
-            language,
-            serveConfigurationForLanguage(options, language)
-        );
-        context.logger.info(`added serve configuration for language "${language}" to project "${options.project}"`);
-        return host;
-    };
-}

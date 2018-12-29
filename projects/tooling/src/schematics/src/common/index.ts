@@ -1,8 +1,12 @@
-export {xliffmergeVersion, xliffmergePackage, defaultI18nFormat, defaultI18nLocale, extractScriptName} from './constants';
+export {xliffmergeVersion, xliffmergePackage,
+    defaultI18nFormat, defaultI18nLocale,
+    extractScriptName,
+    xliffmergeBuilderName,
+    xliffmergeBuilderSpec} from './constants';
 export {isValidLanguageSyntax,
-    addLanguageConfigurationToProject,
-    addStartScriptToPackageJson,
     buildConfigurationForLanguage,
     serveConfigurationForLanguage,
-    fullExtractScript} from './common-functions';
+    addXliffmergeDependencyToPackageJson} from './common-functions';
 export * from './options-after-setup';
+export * from './workspace-snapshot';
+export * from './package-json-snapshot';

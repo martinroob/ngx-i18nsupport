@@ -3,5 +3,8 @@
   "dest": "../../dist/tooling",
   "lib": {
     "entryFile": "src/public_api.ts"
-  }
+  },
+  "whitelistedNonPeerDependencies": [
+    "@ngx-i18nsupport/ngx-i18nsupport"
+  ]
 }

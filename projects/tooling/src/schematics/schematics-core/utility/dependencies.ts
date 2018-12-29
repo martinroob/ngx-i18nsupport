@@ -99,7 +99,7 @@ function _readPackageJson(tree: Tree): JsonAstObject {
   const content = buffer.toString();
 
   const packageJson = parseJsonAst(content, JsonParseMode.Strict);
-  if (packageJson.kind != 'object') {
+  if (packageJson.kind !== 'object') {
     throw new SchematicsException('Invalid package.json. Was expecting an object');
   }
 

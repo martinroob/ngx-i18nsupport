@@ -13,6 +13,7 @@ import {isArray, isNullOrUndefined} from '../common/util';
 import {ProgramOptions, IConfigFile} from './i-xliff-merge-options';
 import {FileUtil} from '../common/file-util';
 import {NgxTranslateExtractor} from './ngx-translate-extractor';
+import {dirname, isAbsolute, join, normalize} from 'path';
 
 const PROFILE_CANDIDATES = ['package.json', '.angular-cli.json'];
 
@@ -139,7 +140,20 @@ export class XliffMergeParameters {
             return null;
         }
         this.usedProfilePath = profilePath;
-        return JSON.parse(content);
+        const profileContent: IConfigFile = JSON.parse(content);
+        // replace all pathes in options by absolute paths
+        const xliffmergeOptions = profileContent.xliffmergeOptions;
+        xliffmergeOptions.srcDir = this.adjustPathToProfilePath(profilePath, xliffmergeOptions.srcDir);
+        xliffmergeOptions.genDir = this.adjustPathToProfilePath(profilePath, xliffmergeOptions.genDir);
+        xliffmergeOptions.apikeyfile = this.adjustPathToProfilePath(profilePath, xliffmergeOptions.apikeyfile);
+        return profileContent;
+    }
+
+    private adjustPathToProfilePath(profilePath: string, pathToAdjust: string | undefined): string | undefined {
+        if (!pathToAdjust || isAbsolute(pathToAdjust)) {
+            return pathToAdjust;
+        }
+        return join(dirname(profilePath), pathToAdjust).replace(/\\/g, '/');
     }
 
     private initializeFromConfig(profileContent: IConfigFile) {
@@ -402,9 +416,9 @@ export class XliffMergeParameters {
      * @return master file
      */
     public i18nFile(): string {
-        return this.srcDir() + '/' + (
-            this._i18nFile ? this._i18nFile : this.i18nBaseFile() + '.' + this.i18nFormat()
-        );
+        return join(this.srcDir(),
+            (this._i18nFile ? this._i18nFile : this.i18nBaseFile() + '.' + this.i18nFormat())
+        ).replace(/\\/g, '/');
     }
 
     /**
@@ -422,7 +436,7 @@ export class XliffMergeParameters {
      * @return Path of file
      */
     public generatedI18nFile(lang: string): string {
-        return this.genDir() + '/' + this.i18nBaseFile() + '.' + lang + '.' + this.suffixForGeneratedI18nFile();
+        return join(this.genDir(), this.i18nBaseFile() + '.' + lang + '.' + this.suffixForGeneratedI18nFile()).replace(/\\/g, '/');
     }
 
     private suffixForGeneratedI18nFile(): string {
@@ -442,7 +456,7 @@ export class XliffMergeParameters {
      * @return Path of file
      */
     public generatedNgxTranslateFile(lang: string): string {
-        return this.genDir() + '/' + this.i18nBaseFile() + '.' + lang + '.' + 'json';
+        return join(this.genDir(), this.i18nBaseFile() + '.' + lang + '.' + 'json').replace(/\\/g, '/');
     }
 
     /**

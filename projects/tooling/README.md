@@ -6,9 +6,17 @@
 @ngx-i18nsupport/tooling
 =========
 
-Schematics for adding @ngx-i18nsupport to your projects.
+Schematics and architect builders for adding @ngx-i18nsupport to your projects.
 
-# Usage
+# Installation
+After creation of an angular workspace (via `ng new ..`) you can add this package to your workspace using
+
+`ng add @ngx-i18nsupport/tooling`
+
+This will add the needed rpm packages and will configure usage of the tooling too.
+For further details have a look at the following chapter describing the schematics.
+
+# Schematics Usage
 ## Add the tooling to your workspace (ng-add)
 
 After creation of an angular workspace (via `ng new ..`) you can add this package to your workspace
@@ -44,6 +52,76 @@ For example you can use the following
 `ng generate @ngx-i18nsupport/tooling:addLanguage --project=myproject --languages=de,ru`
 
 This will add `de` and `ru` as additional languages.
+
+# Builders
+Beginning with version 1.1.0 the tooling package contains an Angular Architect Builder (see for example the nice overview [Builders demystified](https://medium.com/dailyjs/angular-cli-6-under-the-hood-builders-demystified-f0690ebcf01)) that can replace the xliffmerge command line tool.
+
+Old style calling `xliffmerge` after running `ng xi18n` via script in `package.json`:
+```
+{// DEPRECATED USAGE in package.json
+..  "scripts": {
+    [...]
+    "extract-i18n": "ng xi18n <project> --output-path i18n --i18n-locale de && xliffmerge --profile xliffmerge.json de en"
+  }
+..
+}
+```
+
+New style using the builder:
+```
+{// package.json
+..  "scripts": {
+    [...]
+    "extract-i18n": "ng xi18n <project> --output-path src/i18n --i18n-locale de && ng run <project>>:xliffmerge"
+  }
+..
+}
+```
+
+The builder and its configuration is configured in the `angular.json` workspace file:
+```
+{// angular.json
+  "projects": {
+    "<project>": {
+      "architect": {
+        ..
+        "xliffmerge": {
+           "builder": "@ngx-i18nsupport/tooling:xliffmerge",
+           "options": {
+             // profile used by xliffmerge
+             "profile": "xliffmerge.json"
+           }
+        },
+```
+
+As an alternative to referencing the profile you can directly specify all allowed options of xliffmerge:
+```
+{// angular.json
+  "projects": {
+    "<project>": {
+      "architect": {
+        ..
+        "xliffmerge": {
+           "builder": "@ngx-i18nsupport/tooling:xliffmerge",
+           "options": {
+             // direct options
+             "xliffmergeOptions": {
+               "srcDir": "src/i18n",
+               "languages": ["en", "de"],
+                ..
+             }
+           }
+        },
+```
+
+# ng-update
+Beginning with version 1.1.0 the tooling package contains an `ng-update`-Schematics.
+You can update from version 1.0 to 1.1 using `ng update`
+
+``ng update @ngx-i18nsupport/tooling``
+
+This will update the old xliffmerge commandline usage with the new builder.
+
 
 [travis-badge]: https://travis-ci.org/martinroob/ngx-i18nsupport.svg?branch=master
 [travis-badge-url]: https://travis-ci.org/martinroob/ngx-i18nsupport

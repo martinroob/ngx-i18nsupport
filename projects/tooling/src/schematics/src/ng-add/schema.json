@@ -31,20 +31,33 @@
         "xmb"
       ],
       "type": "string",
-      "default": "xlf"
+      "default": "xlf",
+      "x-prompt": "Which translation file format would you like to use?"
     },
     "i18nLocale": {
       "type": "string",
-      "description": "The default language used in your ng template files (local name like 'en' or 'de'). If not given, first language in list of languages is assumed, if even that is not given, 'en' is assumed"
+      "description": "The default language used in your ng template files (local name like 'en' or 'de'). If not given, first language in list of languages is assumed, if even that is not given, 'en' is assumed",
+      "x-prompt": "Which default language do you use in your templates?"
     },
     "languages": {
       "type": "string",
-      "description": "Target languages that you want to support (comma separated list like 'en,de,fr')."
+      "description": "Target languages that you want to support (comma separated list like 'en,de,fr').",
+      "x-prompt": "Which languages would you like to configure? (comma separated list like en,de,fr)"
     },
     "useComandlineForLanguages": {
       "type": "boolean",
       "default": false,
       "description": "If set, all languages are given as command line argument to xliffmerge, otherwise they are configured in 'xliffmerge.json'"
+    },
+    "skipInstall": {
+      "description": "When true, does not install dependency packages.",
+      "type": "boolean",
+      "default": false
+    },
+    "useXliffmergeBuilder": {
+      "description": "When true, configure everything to use the architect builder for xliffmerge, otherwise the old style command line tool will be used.",
+      "type": "boolean",
+      "default": true
     }
   }
 }

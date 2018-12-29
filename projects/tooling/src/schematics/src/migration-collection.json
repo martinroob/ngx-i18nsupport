@@ -1,0 +1,16 @@
+{
+  "$schema": "../node_modules/@angular-devkit/schematics/collection-schema.json",
+  "schematics": {
+    "update-1": {
+      "version": "1.1",
+      "factory": "./ng-update/index#updateToV11",
+      "description": "Update @ngx-i18nsupport to version 1.1",
+      "schema": "./ng-update/schema.json"
+    }
+  },
+  "ng-post-update": {
+    "description": "Prints out results after ng-update.",
+    "factory": "./ng-update/index#postUpdate",
+    "private": true
+  }
+}

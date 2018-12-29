@@ -11,19 +11,26 @@
 >This page contains just a very short description about the installation process and usage.
 For details have a look at the [Tutorial for using xliffmerge](https://github.com/martinroob/ngx-i18nsupport/wiki/Tutorial-for-using-xliffmerge-with-angular-cli) contained in the Wiki pages.
 
-# Packages
+# Projects in this repo
 
 This is a **monorepo** containing projects
-* [tooling](projects/tooling) Schematics for adding @ngx-i18nsupport to your projects
+* [tooling](projects/tooling) Schematics for adding @ngx-i18nsupport to your projects, for updating to current version, and builder support.
 * [xliffmerge](projects/xliffmerge) The command line tool that does all the magic
 * [ngx-i18nsupport-lib](projects/ngx-i18nsupport-lib) A library to support working with xliff 1.2, xliff 2.0 and xmb/xtb file
-* [tiny-translator](projects/tiny-translator) An application to translate xliff 1.2, xliff 2.0 and xmb/xtb file to other languages
+* [tiny-translator](projects/tiny-translator) A web application to translate xliff 1.2, xliff 2.0 and xmb/xtb files to other languages
+
+# npm Packages
 
 | Project | Package | Version |
 |---|---|---|
 **[tooling](projects/tooling)** | [`@ngx-i18nsupport/tooling`](https://npmjs.com/package/@ngx-i18nsupport/tooling) | [![npm][npm-badge-tooling]][npm-badge-url-tooling]
-**[xliffmerge](projects/xliffmerge)** | [`@ngx-i18nsupport/xliffmerge`](https://npmjs.com/package/@ngx-i18nsupport/xliffmerge) | [![npm][npm-badge-xliffmerge]][npm-badge-url-xliffmerge]
+**[xliffmerge](projects/xliffmerge)** | [`@ngx-i18nsupport/xliffmerge`](https://npmjs.com/package/@ngx-i18nsupport/ngx-i18nsupport) | [![npm][npm-badge-xliffmerge]][npm-badge-url-xliffmerge]
 **[ngx-i18nsupport-lib](projects/ngx-i18nsupport-lib)** | [`@ngx-i18nsupport/ngx-i18nsupport-lib`](https://npmjs.com/package/@ngx-i18nsupport/ngx-i18nsupport-lib) | [![npm][npm-badge-ngx-i18nsupport-lib]][npm-badge-url-ngx-i18nsupport-lib]
+
+# Tools
+
+| Project | Tool | Version |
+|---|---|---|
 **[tiny-translator](projects/tiny-translator)** | [`https://martinroob.github.io/tiny-translator`](https://martinroob.github.io/tiny-translator) | v0.14
 
 [travis-badge]: https://travis-ci.org/martinroob/ngx-i18nsupport.svg?branch=master

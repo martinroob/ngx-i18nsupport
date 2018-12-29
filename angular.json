@@ -2,6 +2,7 @@
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "version": 1,
   "newProjectRoot": "projects",
+  "newProjectRoot": "projects",
   "projects": {
     "ngx-i18nsupport": {
       "root": "",
@@ -44,6 +45,13 @@
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true
+            },
+            "de": {
+              "aot": true,
+              "outputPath": "dist/ngx-i18nsupport",
+              "i18nFile": "src/i18n/messages.de.xlf",
+              "i18nFormat": "xlf",
+              "i18nLocale": "de"
             }
           }
         },
@@ -55,6 +63,9 @@
           "configurations": {
             "production": {
               "browserTarget": "ngx-i18nsupport:build:production"
+            },
+            "de": {
+              "browserTarget": "ngx-i18nsupport:build:de"
             }
           }
         },
@@ -62,6 +73,12 @@
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
             "browserTarget": "ngx-i18nsupport:build"
+          }
+        },
+        "xliffmerge": {
+          "builder": "@ngx-i18nsupport/tooling:xliffmerge",
+          "options": {
+            "profile": "lmaa"
           }
         },
         "test": {

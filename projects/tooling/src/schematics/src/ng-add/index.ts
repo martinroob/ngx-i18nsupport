@@ -8,7 +8,7 @@ import {
     branchAndMerge,
     chain,
     mergeWith,
-    move,
+    move, noop,
     Rule,
     SchematicContext,
     SchematicsException,
@@ -16,47 +16,17 @@ import {
     Tree,
     url
 } from '@angular-devkit/schematics';
-import {NodePackageInstallTask} from '@angular-devkit/schematics/tasks';
 import {NgAddOptions} from './schema';
-import {addPackageJsonDependency, addScriptToPackageJson, NodeDependency, NodeDependencyType, stringUtils} from '../../schematics-core';
 import {
-    addLanguageConfigurationToProject,
-    addStartScriptToPackageJson,
+    stringUtils
+} from '../../schematics-core';
+import {
     defaultI18nLocale,
-    extractScriptName,
-    fullExtractScript,
     isValidLanguageSyntax,
     OptionsAfterSetup,
     setupCommonOptions,
-    xliffmergePackage,
-    xliffmergeVersion
+    WorkspaceSnaphot, PackageJsonSnapshot, addXliffmergeDependencyToPackageJson
 } from '../common';
-
-function addXliffmergeDependencyToPackageJson() {
-    return (host: Tree, context: SchematicContext) => {
-        const dependencyToXliffmerge: NodeDependency = {
-            type: NodeDependencyType.Dev,
-            name: xliffmergePackage,
-            version: xliffmergeVersion,
-            overwrite: true
-        };
-        addPackageJsonDependency(host, dependencyToXliffmerge);
-        context.addTask(new NodePackageInstallTask());
-        return host;
-    };
-}
-
-function addExtractScriptToPackageJson(options: OptionsAfterSetup) {
-    return (host: Tree, context: SchematicContext) => {
-        addScriptToPackageJson(
-            host,
-            extractScriptName,
-            fullExtractScript(options)
-        );
-        context.logger.info(`added npm script to extract i18n message, run "npm run ${extractScriptName}" for extraction`);
-        return host;
-    };
-}
 
 /**
  * Sets all options given by commandline or defaults.
@@ -68,8 +38,11 @@ function addExtractScriptToPackageJson(options: OptionsAfterSetup) {
  */
 function setupOptions(optionsFromCommandline: NgAddOptions, host: Tree, context: SchematicContext): OptionsAfterSetup {
     const options: OptionsAfterSetup = setupCommonOptions(optionsFromCommandline, host, context);
-    options.useComandlineForLanguages = optionsFromCommandline.useComandlineForLanguages ?
-        optionsFromCommandline.useComandlineForLanguages
+    if (options.useXliffmergeBuilder) {
+        options.profileUsedByBuilder = undefined;
+    }
+    options.useComandlineForLanguages = optionsFromCommandline.useCommandlineForLanguages ?
+        optionsFromCommandline.useCommandlineForLanguages
         : false;
     const languagesFromCommandline = (optionsFromCommandline.languages) ? optionsFromCommandline.languages.split(',') : [];
     if (!optionsFromCommandline.i18nLocale) {
@@ -111,22 +84,33 @@ export function ngAdd(optionsFromCommandline: NgAddOptions): Rule {
           move(options.path ? options.path : ''),
       ]);
 
-      const configurationAdditions = options.parsedLanguages
-          .filter(lang => lang !== options.i18nLocale)
-          .map(lang => addLanguageConfigurationToProject(options, lang));
-      const startScriptAdditions = options.parsedLanguages
-          .filter(lang => lang !== options.i18nLocale)
-          .map(lang => addStartScriptToPackageJson(options, lang));
+      const angularJsonChanges: Rule = (tree: Tree, context2: SchematicContext) => {
+          const ws: WorkspaceSnaphot = new WorkspaceSnaphot(tree, context2);
+          options.parsedLanguages
+              .filter(lang => lang !== options.i18nLocale)
+              .forEach(lang => ws.addLanguageConfigurationToProject(options, lang));
+          if (options.useXliffmergeBuilder) {
+              ws.addBuilderConfigurationToProject(options);
+          }
+          ws.commit();
+      };
+      const packageJsonChanges: Rule = (tree: Tree, context2: SchematicContext) => {
+          const packageJson: PackageJsonSnapshot = new PackageJsonSnapshot('/', tree, context2);
+          packageJson.addExtractScriptToPackageJson(options);
+          options.parsedLanguages
+              .filter(lang => lang !== options.i18nLocale)
+              .forEach(lang => packageJson.addStartScriptToPackageJson(options, lang));
+          packageJson.commit();
+      };
       return chain([
           branchAndMerge(
               chain([
-                  addExtractScriptToPackageJson(options),
-                  ...configurationAdditions,
-                  ...startScriptAdditions,
-                  mergeWith(templateSource)]
+                  packageJsonChanges,
+                  angularJsonChanges,
+                  (options.useXliffmergeBuilder) ? noop() : mergeWith(templateSource)]
               )
           ),
-          addXliffmergeDependencyToPackageJson(),
+          addXliffmergeDependencyToPackageJson(options.skipInstall),
       ])(host, context);
   };
 }

@@ -59,7 +59,7 @@ You can then integrate the script in your angular i18n workflow, typically in th
 <pre>
 "scripts": [
   ...
-  "extract-i18n": "ng xi18n --output-path i18n && xliffmerge --profile xliffmerge.json en de"
+  "extract-i18n": "ng xi18n --output-path src/i18n && xliffmerge --profile xliffmerge.json en de"
  ]
 </pre>
 

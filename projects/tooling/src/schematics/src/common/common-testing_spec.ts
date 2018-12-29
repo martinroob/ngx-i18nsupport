@@ -6,9 +6,10 @@ import {UnitTestTree} from '@angular-devkit/schematics/testing';
 import {Schema as WorkspaceOptions} from '@schematics/angular/workspace/schema';
 import {Schema as ApplicationOptions} from '@schematics/angular/application/schema';
 import {Schema as LibraryOptions} from '@schematics/angular/library/schema';
-import {IPackageJson} from '../../schematics-core';
+import {IPackageJson} from './package-json-snapshot';
 import {WorkspaceSchema} from '../../schematics-core/utility/workspace-models';
 import {IXliffMergeOptions} from '@ngx-i18nsupport/ngx-i18nsupport';
+import {WorkspaceSnaphot} from './workspace-snapshot';
 
 export const workspaceOptions: WorkspaceOptions = {
     name: 'workspace',
@@ -46,9 +47,10 @@ export function readAsJson<T>(tree: UnitTestTree, path: string): T {
     return JSON.parse(contentString) as T;
 }
 
-export function readPackageJson(tree: UnitTestTree): IPackageJson {
-    expect(tree.files).toContain('/package.json');
-    return readAsJson<IPackageJson>(tree, '/package.json');
+export function readPackageJson(tree: UnitTestTree, projectName?: string): IPackageJson {
+    const path = (!projectName) ? '' : '/' + projectName;
+    expect(tree.files).toContain(`${path}/package.json`);
+    return readAsJson<IPackageJson>(tree, `${path}/package.json`);
 }
 
 export function readAngularJson(tree: UnitTestTree): WorkspaceSchema {
@@ -56,9 +58,18 @@ export function readAngularJson(tree: UnitTestTree): WorkspaceSchema {
     return readAsJson<WorkspaceSchema>(tree, '/angular.json');
 }
 
-export function readXliffmergeJson(projectName: string, tree: UnitTestTree): {xliffmergeOptions: IXliffMergeOptions} {
+export function readXliffmergeJson(tree: UnitTestTree, projectName: string): {xliffmergeOptions: IXliffMergeOptions} {
     const path = projectName ? `/projects/${projectName}/xliffmerge.json` : '/xliffmerge.json';
     expect(tree.files).toContain(path);
     return readAsJson<{xliffmergeOptions: IXliffMergeOptions}>(tree, path);
 }
 
+/**
+ * Read the xliffmerge configuration form the builder options.
+ * @param tree Tree
+ * @param projectName name of project
+ */
+export function readXliffmergeConfigFromWorkspace(tree: UnitTestTree, projectName: string): {xliffmergeOptions: IXliffMergeOptions}|null {
+    const ws = new WorkspaceSnaphot(tree);
+    return ws.getActualXliffmergeConfigFromWorkspace(projectName);
+}

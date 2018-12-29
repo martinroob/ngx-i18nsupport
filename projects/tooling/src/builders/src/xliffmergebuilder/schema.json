@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+  "id": "https://github.com/martinroob/ngx-i18nsupport/configuration-schema.json",
+  "title": "ngx-i18nsupport-configuration",
+  "description": "config file for ngx-i18nsupport xliffmerge",
+  "type": "object",
+  "properties": {
+    "xliffmergeOptions": {
+      "description": "configuration options for xliffmerge, same schema as xliffmerge, see documentation for details",
+      "type": "object",
+      "properties": {
+      },
+      "required": [],
+      "additionalProperties": true
+    },
+    "profile": {
+      "description": "profile for xliffmerge (a file containing the options)",
+      "type": "string"
+    }
+  },
+  "required": []
+}
