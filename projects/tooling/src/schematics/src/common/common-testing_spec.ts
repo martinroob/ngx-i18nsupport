@@ -48,7 +48,7 @@ export function readAsJson<T>(tree: UnitTestTree, path: string): T {
 }
 
 export function readPackageJson(tree: UnitTestTree, projectName?: string): IPackageJson {
-    const path = (projectName === undefined) ? '' : '/' + projectName;
+    const path = (!projectName) ? '' : '/' + projectName;
     expect(tree.files).toContain(`${path}/package.json`);
     return readAsJson<IPackageJson>(tree, `${path}/package.json`);
 }

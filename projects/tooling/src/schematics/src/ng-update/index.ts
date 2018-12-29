@@ -1,6 +1,7 @@
 import {Rule, SchematicContext, SchematicsException, Tree} from '@angular-devkit/schematics';
 import chalk from 'chalk';
 import {
+    addXliffmergeDependencyToPackageJson,
     defaultI18nFormat, defaultI18nLocale,
     extractScriptName,
     OptionsAfterSetup,
@@ -83,7 +84,7 @@ function getProfileContent(extractScript: ExtractScript,
 
 export function updateToV11(options: NgUpdateOptions): Rule {
     return (host: Tree, context: SchematicContext) => {
-        context.logger.info('Update to v1.1');
+        context.logger.info('Update @ngx-i18nsupport to version 1.1');
         // find all projects that are using xliffmerge
         const angularJson = new WorkspaceSnaphot(host, context);
         const projects = angularJson.getAllProjects();
@@ -137,6 +138,7 @@ export function updateToV11(options: NgUpdateOptions): Rule {
             context.logger.warn('Did not find any projects using xliffmerge in angular.json');
         } else {
             angularJson.commit();
+            addXliffmergeDependencyToPackageJson(false)(host, context);
         }
     };
 }

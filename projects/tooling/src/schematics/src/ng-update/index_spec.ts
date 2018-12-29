@@ -12,7 +12,7 @@ import {
 } from '../../schematics-core/utility/workspace-models';
 import {IConfigFile, IXliffMergeOptions} from '@ngx-i18nsupport/ngx-i18nsupport';
 import {readAngularJson, readPackageJson} from '../common/common-testing_spec';
-import {extractScriptName, IPackageJson, xliffmergeBuilderName} from '../common';
+import {extractScriptName, IPackageJson, xliffmergeBuilderName, xliffmergePackage, xliffmergeVersion} from '../common';
 
 interface ProjectOptions {
     name: string;
@@ -111,7 +111,8 @@ describe('Migration to v1.1', () => {
         const map: {[path: string]: string} = {};
         map['/angular.json'] = JSON.stringify(angularJson(projects), null, 2);
         packageJsons.forEach(option => {
-            map[`/${option.project}/package.json`] = JSON.stringify(packageJson(option), null, 2);
+            const packageJsonPath = (option.project) ? `/${option.project}/package.json` : '/package.json';
+            map[packageJsonPath] = JSON.stringify(packageJson(option), null, 2);
         });
         configs.forEach(option => {
             map[`/${option.project}/${option.file}`] = JSON.stringify(xliffmergeJson(option), null, 2);
@@ -290,7 +291,7 @@ describe('Migration to v1.1', () => {
             expect(loggerOutput).toContain('Could not find config file "/projectWithXliffmerge/test/xliffmerge.config"');
         });
 
-        it('should migrate extraction via command line to builder', () => {
+        it('should migrate extraction via command line to extarction via builder', () => {
             const xliffmergeProject: ProjectOptions = {
                 name: 'projectWithXliffmerge'
             };
@@ -302,6 +303,9 @@ describe('Migration to v1.1', () => {
                     autotranslate: ['fr']
                 }
             };
+            const globalPackageOptions: PackageJsonOptions = {
+                project: ''
+            };
             const packageOptions: PackageJsonOptions = {
                 project: xliffmergeProject.name,
                 createExtractScriptCommandline: true,
@@ -309,7 +313,7 @@ describe('Migration to v1.1', () => {
                 languages: ['en', 'de'],
                 useCommandlineForLanguages: true
             };
-            host = createHost([xliffmergeProject], [packageOptions], [xliffmergeConfigOptions]);
+            host = createHost([xliffmergeProject], [globalPackageOptions, packageOptions], [xliffmergeConfigOptions]);
             appTree = new UnitTestTree(new HostTree(host));
             let loggerOutput = '';
             testRunner.logger.subscribe(entry => {
@@ -335,6 +339,11 @@ describe('Migration to v1.1', () => {
             expect(packageJsonAfterMigration).toBeTruthy();
             expect(packageJsonAfterMigration.scripts[extractScriptName])
                 .toContain(`ng run ${xliffmergeProject.name}:${xliffmergeBuilderName}`);
+
+            // Check global package.json changes
+            const globalPackageJsonAfterMigration: IPackageJson = readPackageJson(appTree, undefined);
+            expect(globalPackageJsonAfterMigration).toBeTruthy();
+            expect(globalPackageJsonAfterMigration.devDependencies[xliffmergePackage]).toBe(xliffmergeVersion);
 
             // Check config file changes
             // config file should have been deleted

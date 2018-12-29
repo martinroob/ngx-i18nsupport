@@ -72,7 +72,7 @@ New style using the builder:
 {// package.json
 ..  "scripts": {
     [...]
-    "extract-i18n": "ng xi18n <project> --output-path i18n --i18n-locale de && ng run <project>>:xliffmerge"
+    "extract-i18n": "ng xi18n <project> --output-path src/i18n --i18n-locale de && ng run <project>>:xliffmerge"
   }
 ..
 }

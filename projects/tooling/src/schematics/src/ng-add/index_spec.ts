@@ -149,7 +149,7 @@ describe('ng-add', () => {
           const extractScript = packageJson.scripts[extractScriptName];
           expect(extractScript).toBeTruthy();
           expect(extractScript).toBe(
-              'ng xi18n bar --i18n-format xlf --output-path i18n --i18n-locale en && xliffmerge --profile xliffmerge.json');
+              'ng xi18n bar --i18n-format xlf --output-path src/i18n --i18n-locale en && xliffmerge --profile xliffmerge.json');
       });
 
       it('should add npm script "extract-i18n" to package.json including language list as command line parameter', () => {
@@ -158,7 +158,7 @@ describe('ng-add', () => {
           const extractScript = packageJson.scripts['extract-i18n'];
           expect(extractScript).toBeTruthy();
           expect(extractScript).toBe(
-              'ng xi18n bar --i18n-format xlf --output-path i18n --i18n-locale en && xliffmerge --profile xliffmerge.json en de');
+              'ng xi18n bar --i18n-format xlf --output-path src/i18n --i18n-locale en && xliffmerge --profile xliffmerge.json en de');
       });
 
       it('should add npm script "start-xyz" to package.json when called with language xyz', () => {
@@ -232,7 +232,7 @@ describe('ng-add', () => {
           const extractScript = packageJson.scripts[extractScriptName];
           expect(extractScript).toBeTruthy();
           expect(extractScript).toBe(
-              'ng xi18n bar --i18n-format xlf --output-path i18n --i18n-locale en && ng run bar:xliffmerge');
+              'ng xi18n bar --i18n-format xlf --output-path src/i18n --i18n-locale en && ng run bar:xliffmerge');
       });
 
       it('should add npm script "start-xyz" to package.json when called with language xyz', () => {

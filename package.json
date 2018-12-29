@@ -4,7 +4,6 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "extract-i18n": "ng xi18n --output-path i18n --i18n-locale en && ng run ngx-i18nsupport:xliffmerge",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",

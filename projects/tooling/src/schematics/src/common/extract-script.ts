@@ -12,7 +12,7 @@ export class ExtractScript {
         const i18nFormat = options.i18nFormat;
         const languagesBlankSeparated = options.languages ? options.languages.replace(/,/g, ' ') : '';
         const languagesCommandLineArgument = (options.useComandlineForLanguages) ? ' ' + languagesBlankSeparated : '';
-        const localeDir = options.localePath;
+        const localeDir = options.localePath ? `src/${options.localePath}` : 'src';
         if (options.useXliffmergeBuilder) {
             return `ng xi18n ${options.project} --i18n-format ${i18nFormat} --output-path ${localeDir} --i18n-locale ${defaultLanguage}\
  && ng run ${options.project}:xliffmerge`;

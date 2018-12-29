@@ -16,12 +16,8 @@ import {
     Tree,
     url
 } from '@angular-devkit/schematics';
-import {NodePackageInstallTask} from '@angular-devkit/schematics/tasks';
 import {NgAddOptions} from './schema';
 import {
-    addPackageJsonDependency,
-    NodeDependency,
-    NodeDependencyType,
     stringUtils
 } from '../../schematics-core';
 import {
@@ -29,25 +25,8 @@ import {
     isValidLanguageSyntax,
     OptionsAfterSetup,
     setupCommonOptions,
-    xliffmergePackage,
-    xliffmergeVersion, WorkspaceSnaphot, PackageJsonSnapshot
+    WorkspaceSnaphot, PackageJsonSnapshot, addXliffmergeDependencyToPackageJson
 } from '../common';
-
-function addXliffmergeDependencyToPackageJson(options: OptionsAfterSetup) {
-    return (host: Tree, context: SchematicContext) => {
-        const dependencyToXliffmerge: NodeDependency = {
-            type: NodeDependencyType.Dev,
-            name: xliffmergePackage,
-            version: xliffmergeVersion,
-            overwrite: true
-        };
-        addPackageJsonDependency(host, dependencyToXliffmerge);
-        if (!options.skipInstall) {
-            context.addTask(new NodePackageInstallTask());
-        }
-        return host;
-    };
-}
 
 /**
  * Sets all options given by commandline or defaults.
@@ -131,7 +110,7 @@ export function ngAdd(optionsFromCommandline: NgAddOptions): Rule {
                   (options.useXliffmergeBuilder) ? noop() : mergeWith(templateSource)]
               )
           ),
-          addXliffmergeDependencyToPackageJson(options),
+          addXliffmergeDependencyToPackageJson(options.skipInstall),
       ])(host, context);
   };
 }

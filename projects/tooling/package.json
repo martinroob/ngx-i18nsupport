@@ -41,11 +41,11 @@
     "@ngx-i18nsupport/ngx-i18nsupport": "^1.1.0"
   },
   "devDependencies": {
+    "@angular-devkit/core": "^7.0.0",
+    "@angular-devkit/schematics": "^7.0.0",
+    "@angular-devkit/architect": "^0.11.0"
   },
   "peerDependencies": {
-    "@angular-devkit/core": "~7.0.0",
-    "@angular-devkit/schematics": "~7.0.0",
-    "@angular-devkit/architect": "~0.11.0",
     "@angular/common": "^7.0.0",
     "@angular/core": "^7.0.0"
   }
