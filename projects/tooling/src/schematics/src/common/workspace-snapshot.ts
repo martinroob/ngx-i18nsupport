@@ -163,11 +163,12 @@ export class WorkspaceSnaphot {
      * @param options options containing project etc.
      */
     public addBuilderConfigurationToProject(options: OptionsAfterSetup) {
+        const baseDir = (options.isDefaultProject) ? '' : `projects/${options.project}/`;
         const builderOptions = {
             xliffmergeOptions: {
                 i18nFormat: options.i18nFormat,
-                srcDir: options.srcDir,
-                genDir: options.genDir,
+                srcDir: `${baseDir}${options.srcDir}`,
+                genDir: `${baseDir}${options.genDir}`,
                 defaultLanguage: options.parsedLanguages[0],
                 languages: options.parsedLanguages
             }
