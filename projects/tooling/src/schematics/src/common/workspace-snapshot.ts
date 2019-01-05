@@ -69,6 +69,13 @@ export class WorkspaceSnaphot {
     }
 
     /**
+     * Return name of default project.
+     */
+    public getDefaultProjectName(): string|undefined {
+        return this.workspace.defaultProject;
+    }
+
+    /**
      * Add a build configuration to angular.json.
      * Configuration is stored under architect.build.configurations
      * @param projectName Name of project

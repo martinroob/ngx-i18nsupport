@@ -169,9 +169,9 @@ export function addLanguage(optionsFromCommandline: AddLanguageOptions): Rule {
         };
         const packageJsonChanges: Rule = (tree: Tree, context2: SchematicContext) => {
             const packageJson: PackageJsonSnapshot = new PackageJsonSnapshot('/', tree, context2);
-            packageJson.changeExtractScriptInPackageJson(options);
+            packageJson.changeExtractScript(options);
             languagesToAdd
-                .forEach(lang => packageJson.addStartScriptToPackageJson(options, lang));
+                .forEach(lang => packageJson.addStartScript(options, lang));
             packageJson.commit();
         };
         return chain([

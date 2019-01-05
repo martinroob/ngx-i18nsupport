@@ -2,8 +2,7 @@ import {Rule, SchematicContext, SchematicsException, Tree} from '@angular-devkit
 import chalk from 'chalk';
 import {
     addXliffmergeDependencyToPackageJson,
-    defaultI18nFormat, defaultI18nLocale,
-    extractScriptName,
+    defaultI18nFormat, defaultI18nLocale, extractScriptName,
     OptionsAfterSetup,
     PackageJsonSnapshot,
     setupCommonOptions,
@@ -16,6 +15,7 @@ import {IConfigFile} from '@ngx-i18nsupport/ngx-i18nsupport';
 
 function setupOptions(optionsFromCommandline: NgUpdateOptions,
                       extractScript: ExtractScript,
+                      extractScriptPath: string,
                       host: Tree,
                       context: SchematicContext): OptionsAfterSetup {
     const options = setupCommonOptions(optionsFromCommandline, host, context);
@@ -30,7 +30,7 @@ function setupOptions(optionsFromCommandline: NgUpdateOptions,
         xliffmergeOptions = optionsFromBuilder;
     } else {
         // read xliffmerge.json used in extract script
-        xliffmergeOptions = getProfileContent(extractScript, options.path, host, context).content;
+        xliffmergeOptions = getProfileContent(extractScript, extractScriptPath, host, context).content;
     }
     if (!xliffmergeOptions) {
         const msg = 'No builder configuration and also no config file "xliffmerge.json" could be found. ' +
@@ -87,51 +87,66 @@ export function updateToV11(options: NgUpdateOptions): Rule {
         context.logger.info('Update @ngx-i18nsupport to version 1.1');
         // find all projects that are using xliffmerge
         const angularJson = new WorkspaceSnaphot(host, context);
+        const defaultProjectName = angularJson.getDefaultProjectName();
         const projects = angularJson.getAllProjects();
         if (projects.length === 0) {
             context.logger.warn('Did not find any projects in angular.json');
             return;
         }
+        let packageJson: PackageJsonSnapshot;
+        try {
+            packageJson = new PackageJsonSnapshot('/', host, context);
+        } catch (e) {
+            context.logger.error('Did not find package.json');
+            return;
+        }
         let migrationCount = 0;
         projects.forEach(project => {
-            let packageJson: PackageJsonSnapshot|null;
-            try {
-                packageJson = new PackageJsonSnapshot(project.project.root, host, context);
-            } catch (e) {
-                packageJson = null;
+            const isDefaultProject = (defaultProjectName === project.name);
+            let extractScript: ExtractScript | null =
+                packageJson.getExtractScriptForProject(project.name, isDefaultProject);
+            if (!extractScript && !isDefaultProject) {
+                const extractScriptForDefaultProject = packageJson.getExtractScriptForProject(null, true);
+                if (extractScriptForDefaultProject && extractScriptForDefaultProject.projectName() === project.name) {
+                    // this script has old name extract-i18n, but should be extract-i18n-<projectname>
+                    packageJson.removeScript(extractScriptForDefaultProject.name);
+                    extractScript = new ExtractScript(
+                        extractScriptName(project.name, isDefaultProject),
+                        extractScriptForDefaultProject.content);
+                }
             }
-            if (packageJson) {
-                const extractScript: ExtractScript|null = packageJson.getExtractScriptFromPackageJson();
-                if (extractScript) {
-                    if (extractScript.usesXliffmergeCommandline()) {
-                        options.project = project.name;
-                        try {
-                            const optionsAfterSetup: OptionsAfterSetup = setupOptions(options, extractScript, host, context);
-                            const {profile, content} = getProfileContent(extractScript, project.project.root, host, context);
-                            const languagesFromCommandline = extractScript.languages();
-                            if (content && languagesFromCommandline.length > 0) {
-                                if (!content.xliffmergeOptions) {
-                                    content.xliffmergeOptions = {};
-                                }
-                                content.xliffmergeOptions.languages = languagesFromCommandline;
+            if (extractScript) {
+                if (extractScript.usesXliffmergeCommandline()) {
+                    options.project = project.name;
+                    try {
+                        const optionsAfterSetup: OptionsAfterSetup = setupOptions(options, extractScript, '/', host, context);
+                        optionsAfterSetup.isDefaultProject = isDefaultProject;
+                        optionsAfterSetup.project = project.name;
+                        const {profile, content} = getProfileContent(extractScript, '/', host, context);
+                        const languagesFromCommandline = extractScript.languages();
+                        if (content && languagesFromCommandline.length > 0) {
+                            if (!content.xliffmergeOptions) {
+                                content.xliffmergeOptions = {};
                             }
-                            optionsAfterSetup.useXliffmergeBuilder = true;
-                            packageJson.addExtractScriptToPackageJson(optionsAfterSetup);
-                            packageJson.commit();
-                            angularJson.addArchitectBuilderToProject(project.name,
-                                xliffmergeBuilderName, xliffmergeBuilderSpec, content);
-                            host.delete(profile);
-                            migrationCount++;
-                            // TODO config script etc...
-                        } catch (e) {
-                            context.logger.warn(`Could not migrate project ${project.name}: ${e.toString()}`);
+                            content.xliffmergeOptions.languages = languagesFromCommandline;
                         }
-                    } else {
-                        context.logger.info(`project ${project.name} does not use xliffmerge command line`);
+                        optionsAfterSetup.useXliffmergeBuilder = true;
+                        packageJson.addExtractScript(optionsAfterSetup);
+                        packageJson.commit();
+                        angularJson.addArchitectBuilderToProject(project.name,
+                            xliffmergeBuilderName, xliffmergeBuilderSpec, content);
+                        host.delete(profile);
+                        migrationCount++;
+                        // TODO config script etc...
+                    } catch (e) {
+                        context.logger.warn(`Could not migrate project ${project.name}: ${e.toString()}`);
                     }
                 } else {
-                    context.logger.info(`project ${project.name} does not use i18n (no ${extractScriptName} script found)`);
+                    context.logger.info(`project ${project.name} does not use xliffmerge command line`);
                 }
+            } else {
+                const scriptName = extractScriptName(project.name, defaultProjectName === project.name);
+                context.logger.info(`project ${project.name} does not use i18n (no ${scriptName} script found)`);
             }
         });
         if (migrationCount === 0) {

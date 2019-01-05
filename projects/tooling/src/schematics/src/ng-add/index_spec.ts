@@ -146,7 +146,7 @@ describe('ng-add', () => {
       it('should add npm script "extract-i18n" to package.json using command line xliffmerge', () => {
           const tree = runSchematic({useXliffmergeBuilder: false}, appTree);
           const packageJson = readPackageJson(tree);
-          const extractScript = packageJson.scripts[extractScriptName];
+          const extractScript = packageJson.scripts[extractScriptName('bar', true)];
           expect(extractScript).toBeTruthy();
           expect(extractScript).toBe(
               'ng xi18n bar --i18n-format xlf --output-path i18n --i18n-locale en && xliffmerge --profile xliffmerge.json');
@@ -229,7 +229,7 @@ describe('ng-add', () => {
       it('should add npm script "extract-i18n" to package.json using builder xliffmerge', () => {
           const tree = runSchematic({}, appTree);
           const packageJson = readPackageJson(tree);
-          const extractScript = packageJson.scripts[extractScriptName];
+          const extractScript = packageJson.scripts[extractScriptName('bar', true)];
           expect(extractScript).toBeTruthy();
           expect(extractScript).toBe(
               'ng xi18n bar --i18n-format xlf --output-path i18n --i18n-locale en && ng run bar:xliffmerge');
@@ -304,7 +304,7 @@ describe('ng-add', () => {
         it('should add npm script "extract-i18n" to package.json using command line xliffmerge', () => {
             const tree = runSchematic({project: 'foo', useXliffmergeBuilder: false}, appTree);
             const packageJson = readPackageJson(tree);
-            const extractScript = packageJson.scripts[extractScriptName];
+            const extractScript = packageJson.scripts[extractScriptName('foo', false)];
             expect(extractScript).toBeTruthy();
             // here output-path should be src/i18n, because it is relative to project root for non default projects
             expect(extractScript).toBe(

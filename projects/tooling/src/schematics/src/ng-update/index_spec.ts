@@ -23,7 +23,9 @@ interface ProjectOptions {
 }
 
 interface PackageJsonOptions {
-    project: string;
+    isLocalPackageJson?: boolean; // false for /package.json, true for /projects/<project>/package.json
+    project: string; // projectname for extract script
+    isDefaultProject?: boolean;
     createExtractScriptCommandline?: boolean;
     createExtractScriptBuilder?: boolean;
     xliffmergeConfigFilePath?: string;
@@ -40,7 +42,7 @@ interface XlifmergeConfigOptions {
 describe('Migration to v1.1', () => {
 
     function angularJsonProjectConfig(options: ProjectOptions): WorkspaceProject<ProjectType> {
-        const config = Object.assign({}, projectWithoutXliffmerge);
+        const config = JSON.parse(JSON.stringify(projectWithoutXliffmerge));
         config.root = options.isDefaultProject ? '' : `/${options.name}`;
         if (options.useXliffmerge) {
             if (options.useXliffmergeBuilder) {
@@ -65,7 +67,7 @@ describe('Migration to v1.1', () => {
     }
 
     function angularJson(projects: ProjectOptions[]): Object {
-        const angularJsonContent = Object.assign({}, angularJsonBaseConfig);
+        const angularJsonContent = JSON.parse(JSON.stringify(angularJsonBaseConfig));
         projects.forEach(options => {
             angularJsonContent.projects[options.name] = angularJsonProjectConfig(options);
         });
@@ -73,7 +75,7 @@ describe('Migration to v1.1', () => {
     }
 
     function packageJson(options: PackageJsonOptions): Object {
-        const packageJsonContent = Object.assign({}, packageJsonWithoutXliffmerge);
+        const packageJsonContent = JSON.parse(JSON.stringify(packageJsonWithoutXliffmerge));
         if (options.createExtractScriptCommandline) {
             let languages = '';
             if (options.useCommandlineForLanguages && options.languages) {
@@ -87,8 +89,9 @@ describe('Migration to v1.1', () => {
             const i18nFormat = 'xlf';
             const localeDir = 'src/i18n';
             const defaultLanguage = 'en';
+            const scriptName = extractScriptName(options.project, !!options.isDefaultProject);
             // @ts-ignore
-            packageJsonContent.scripts['extract-i18n'] =
+            packageJsonContent.scripts[scriptName] =
                 `ng xi18n ${options.project} --i18n-format ${i18nFormat} --output-path ${localeDir} --i18n-locale ${defaultLanguage}\
  && xliffmerge --profile ${options.xliffmergeConfigFilePath} ${languages}`;
         }
@@ -111,11 +114,11 @@ describe('Migration to v1.1', () => {
         const map: {[path: string]: string} = {};
         map['/angular.json'] = JSON.stringify(angularJson(projects), null, 2);
         packageJsons.forEach(option => {
-            const packageJsonPath = (option.project) ? `/${option.project}/package.json` : '/package.json';
+            const packageJsonPath = (option.isLocalPackageJson) ? `/${option.project}/package.json` : '/package.json';
             map[packageJsonPath] = JSON.stringify(packageJson(option), null, 2);
         });
         configs.forEach(option => {
-            map[`/${option.project}/${option.file}`] = JSON.stringify(xliffmergeJson(option), null, 2);
+            map[`/projects/${option.project}/${option.file}`] = JSON.stringify(xliffmergeJson(option), null, 2);
         });
         return new virtualFs.test.TestHost(map);
     }
@@ -261,7 +264,10 @@ describe('Migration to v1.1', () => {
             const noXliffmergeProject: ProjectOptions = {
                 name: 'projectwithoutxlifmerge'
             };
-            host = createHost([noXliffmergeProject], [], []);
+            const packageOptions: PackageJsonOptions = {
+                project: ''
+            };
+            host = createHost([noXliffmergeProject], [packageOptions], []);
             appTree = new UnitTestTree(new HostTree(host));
             let loggerOutput = '';
             testRunner.logger.subscribe(entry => {
@@ -288,10 +294,10 @@ describe('Migration to v1.1', () => {
                 loggerOutput = loggerOutput + entry.message;
             });
             appTree = testRunner.runSchematic('update-1', defaultOptions, appTree);
-            expect(loggerOutput).toContain('Could not find config file "/projectWithXliffmerge/test/xliffmerge.config"');
+            expect(loggerOutput).toContain('Could not find config file "//test/xliffmerge.config"');
         });
 
-        it('should migrate extraction via command line to extarction via builder', () => {
+        it('should migrate extraction via command line to extraction via builder', () => {
             const xliffmergeProject: ProjectOptions = {
                 name: 'projectWithXliffmerge'
             };
@@ -304,25 +310,24 @@ describe('Migration to v1.1', () => {
                 }
             };
             const globalPackageOptions: PackageJsonOptions = {
-                project: ''
-            };
-            const packageOptions: PackageJsonOptions = {
                 project: xliffmergeProject.name,
                 createExtractScriptCommandline: true,
-                xliffmergeConfigFilePath: xliffmergeConfigOptions.file,
+                xliffmergeConfigFilePath: `projects/${xliffmergeProject.name}/${xliffmergeConfigOptions.file}`,
                 languages: ['en', 'de'],
                 useCommandlineForLanguages: true
             };
-            host = createHost([xliffmergeProject], [globalPackageOptions, packageOptions], [xliffmergeConfigOptions]);
+            host = createHost([xliffmergeProject], [globalPackageOptions], [xliffmergeConfigOptions]);
             appTree = new UnitTestTree(new HostTree(host));
             let loggerOutput = '';
             testRunner.logger.subscribe(entry => {
                 loggerOutput = loggerOutput + entry.message;
             });
+            expect(appTree.exists('/projects/projectWithXliffmerge/xliffmerge.json')).toBeTruthy('config file not found');
             appTree = testRunner.runSchematic('update-1', defaultOptions, appTree);
 
             // Check angular.json changes
             expect(loggerOutput).toContain('added architect builder xliffmerge to project projectWithXliffmerge');
+            console.log('output', loggerOutput);
             const angularJsonAfterMigration: WorkspaceSchema = readAngularJson(appTree);
             expect(angularJsonAfterMigration).toBeTruthy();
             // @ts-ignore
@@ -335,19 +340,72 @@ describe('Migration to v1.1', () => {
 
             // Check package.json changes
             expect(loggerOutput).toContain('added npm script to extract i18n message');
-            const packageJsonAfterMigration: IPackageJson = readPackageJson(appTree, xliffmergeProject.name);
+            const packageJsonAfterMigration: IPackageJson = readPackageJson(appTree, undefined);
             expect(packageJsonAfterMigration).toBeTruthy();
-            expect(packageJsonAfterMigration.scripts[extractScriptName])
+            expect(packageJsonAfterMigration.scripts[extractScriptName(xliffmergeProject.name, false)])
                 .toContain(`ng run ${xliffmergeProject.name}:${xliffmergeBuilderName}`);
 
-            // Check global package.json changes
-            const globalPackageJsonAfterMigration: IPackageJson = readPackageJson(appTree, undefined);
-            expect(globalPackageJsonAfterMigration).toBeTruthy();
-            expect(globalPackageJsonAfterMigration.devDependencies[xliffmergePackage]).toBe(xliffmergeVersion);
+            expect(packageJsonAfterMigration.devDependencies[xliffmergePackage]).toBe(xliffmergeVersion);
 
             // Check config file changes
             // config file should have been deleted
-            expect(appTree.exists('/projectWithXliffmerge/xliffmerge.json')).toBeFalsy();
+            expect(appTree.exists('/projects/projectWithXliffmerge/xliffmerge.json')).toBeFalsy();
+        });
+
+        it('should migrate extraction script without project name to script with project name', () => {
+            const xliffmergeProject: ProjectOptions = {
+                name: 'projectWithXliffmerge',
+                isDefaultProject: false,
+            };
+            const xliffmergeConfigOptions: XlifmergeConfigOptions = {
+                project: xliffmergeProject.name,
+                file: 'xliffmerge.json',
+                xliffmergeOptions: {
+                    i18nFormat: 'xlf2',
+                    autotranslate: ['fr']
+                }
+            };
+            const globalPackageOptions: PackageJsonOptions = {
+                project: xliffmergeProject.name,
+                isDefaultProject: true,
+                createExtractScriptCommandline: true,
+                xliffmergeConfigFilePath: `projects/${xliffmergeProject.name}/${xliffmergeConfigOptions.file}`,
+                languages: ['en', 'de'],
+                useCommandlineForLanguages: true
+            };
+            host = createHost([xliffmergeProject], [globalPackageOptions], [xliffmergeConfigOptions]);
+            appTree = new UnitTestTree(new HostTree(host));
+            let loggerOutput = '';
+            testRunner.logger.subscribe(entry => {
+                loggerOutput = loggerOutput + entry.message;
+            });
+            expect(appTree.exists('/projects/projectWithXliffmerge/xliffmerge.json')).toBeTruthy('config file not found');
+            appTree = testRunner.runSchematic('update-1', defaultOptions, appTree);
+
+            // Check angular.json changes
+            expect(loggerOutput).toContain('removed script extract-i18n ');
+            const angularJsonAfterMigration: WorkspaceSchema = readAngularJson(appTree);
+            expect(angularJsonAfterMigration).toBeTruthy();
+            // @ts-ignore
+            const builderSpec = angularJsonAfterMigration.projects['projectWithXliffmerge'].architect[xliffmergeBuilderName];
+            expect(builderSpec.builder).toBe('@ngx-i18nsupport/tooling:xliffmerge');
+            // configuration should be transferred to builder spec
+            expect(builderSpec.options.xliffmergeOptions.i18nFormat).toEqual('xlf2');
+            expect(builderSpec.options.xliffmergeOptions.autotranslate).toEqual(['fr']);
+            expect(builderSpec.options.xliffmergeOptions.languages).toEqual(['en', 'de']);
+
+            // Check package.json changes
+            expect(loggerOutput).toContain('added npm script to extract i18n message');
+            const packageJsonAfterMigration: IPackageJson = readPackageJson(appTree, undefined);
+            expect(packageJsonAfterMigration).toBeTruthy();
+            expect(packageJsonAfterMigration.scripts[extractScriptName(xliffmergeProject.name, false)])
+                .toContain(`ng run ${xliffmergeProject.name}:${xliffmergeBuilderName}`);
+
+            expect(packageJsonAfterMigration.devDependencies[xliffmergePackage]).toBe(xliffmergeVersion);
+
+            // Check config file changes
+            // config file should have been deleted
+            expect(appTree.exists('/projects/projectWithXliffmerge/xliffmerge.json')).toBeFalsy();
         });
 
     });
