@@ -63,7 +63,7 @@ export class PackageJsonSnapshot {
      * @param scriptName name of script
      * @return content of script
      */
-    public getScriptFromPackageJson(
+    public getScript(
         scriptName: string
     ): string | null {
         return this.packageJson.scripts[scriptName];
@@ -72,10 +72,11 @@ export class PackageJsonSnapshot {
     /**
      * Get the extract script, if contained in package.json.
      */
-    public getExtractScriptFromPackageJson(): ExtractScript|null {
-        const content = this.getScriptFromPackageJson(extractScriptName);
+    public getExtractScriptForProject(project: string|null, isDefaultProject: boolean): ExtractScript|null {
+        const scriptname = extractScriptName(project, isDefaultProject);
+        const content = this.getScript(scriptname);
         if (content) {
-            return new ExtractScript(extractScriptName, content);
+            return new ExtractScript(scriptname, content);
         } else {
             return null;
         }
@@ -86,7 +87,7 @@ export class PackageJsonSnapshot {
      * @param scriptName name of script to be added.
      * @param content content of script
      */
-    public addOrReplaceScriptToPackageJson(
+    public addOrReplaceScript(
         scriptName: string,
         content: string
     ) {
@@ -105,31 +106,52 @@ export class PackageJsonSnapshot {
        }
     }
 
-    public addExtractScriptToPackageJson(options: OptionsAfterSetup) {
+    /**
+     * Remove a script from package.json
+     * @param scriptName name of script to be removed.
+     */
+    public removeScript(scriptName: string) {
+        const scriptsSection = 'scripts';
+        if (!this.packageJson[scriptsSection]) {
+            return;
+        }
+        const exists = !!this.packageJson[scriptsSection][scriptName];
+        if (exists) {
+            delete this.packageJson[scriptsSection][scriptName];
+        }
+        if (this.context) {
+            if (exists) {
+                this.context.logger.info(`removed script ${scriptName} from ${this._path}/package.json`);
+            }
+        }
+    }
+
+    public addExtractScript(options: OptionsAfterSetup) {
         const extractScript = ExtractScript.createExtractScript(options);
-        this.addOrReplaceScriptToPackageJson(
+        this.addOrReplaceScript(
             extractScript.name,
             extractScript.content
         );
         if (this.context) {
-            this.context.logger.info(`added npm script to extract i18n message, run "npm run ${extractScriptName}" for extraction`);
+            this.context.logger.info(`added npm script to extract i18n message, run "npm run ${extractScript.name}" for extraction`);
         }
     }
 
     /*
     change extract script "extract-i18n" to contain newly added languages.
      */
-    public changeExtractScriptInPackageJson(options: OptionsAfterSetup) {
+    public changeExtractScript(options: OptionsAfterSetup) {
         // check wether it is changed
-        const existingScriptContent = this.getScriptFromPackageJson(extractScriptName);
+        const existingScriptContent = this.getScript(extractScriptName(options.project, options.isDefaultProject));
         const extractScript = ExtractScript.createExtractScript(options);
         if (existingScriptContent !== extractScript.content) {
-            this.addOrReplaceScriptToPackageJson(
+            this.addOrReplaceScript(
                 extractScript.name,
                 extractScript.content
             );
             if (this.context) {
-                this.context.logger.info(`changed npm script to extract i18n message, run "npm run ${extractScriptName}" for extraction`);
+                this.context.logger.info(
+                    `changed npm script to extract i18n message, run "npm run ${extractScript.name}" for extraction`);
             }
         }
     }
@@ -140,9 +162,9 @@ export class PackageJsonSnapshot {
      * @param options options options containing project etc.
      * @param language language to be added.
      */
-    public addStartScriptToPackageJson(options: OptionsAfterSetup, language: string) {
+    public addStartScript(options: OptionsAfterSetup, language: string) {
         const scriptName = (options.isDefaultProject) ? `start-${language}` : `start-${options.project}-${language}`;
-        this.addOrReplaceScriptToPackageJson(
+        this.addOrReplaceScript(
             scriptName,
             this.startScript(options, language)
         );

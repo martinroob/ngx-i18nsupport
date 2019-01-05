@@ -12,7 +12,8 @@ export class ExtractScript {
         const i18nFormat = options.i18nFormat;
         const languagesBlankSeparated = options.languages ? options.languages.replace(/,/g, ' ') : '';
         const languagesCommandLineArgument = (options.useComandlineForLanguages) ? ' ' + languagesBlankSeparated : '';
-        const localeDir = options.localePath ? `src/${options.localePath}` : 'src';
+        const baseOutputPath = (options.isDefaultProject) ? '' : 'src/';
+        const localeDir = options.localePath ? `${baseOutputPath}${options.localePath}` : baseOutputPath;
         if (options.useXliffmergeBuilder) {
             return `ng xi18n ${options.project} --i18n-format ${i18nFormat} --output-path ${localeDir} --i18n-locale ${defaultLanguage}\
  && ng run ${options.project}:xliffmerge`;
@@ -28,7 +29,7 @@ export class ExtractScript {
      * Create the script.
      */
     static createExtractScript(options: OptionsAfterSetup): ExtractScript {
-        return new ExtractScript(extractScriptName, ExtractScript.fullExtractScript(options));
+        return new ExtractScript(extractScriptName(options.project, options.isDefaultProject), ExtractScript.fullExtractScript(options));
     }
 
     constructor(private _name: string, private _content: string) {
@@ -54,6 +55,16 @@ export class ExtractScript {
         const match = /&& xliffmerge.*(--profile|-p) ([^ ]*)/.exec(this.content);
         if (match) {
             return match[2];
+        } else {
+            return null;
+        }
+    }
+
+    public projectName(): string|null {
+        // Syntax ng xi18n <project>
+        const match = /ng xi18n *([^ ]*)/.exec(this.content);
+        if (match) {
+            return match[1];
         } else {
             return null;
         }

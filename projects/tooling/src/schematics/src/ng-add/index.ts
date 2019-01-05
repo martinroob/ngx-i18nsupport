@@ -96,10 +96,10 @@ export function ngAdd(optionsFromCommandline: NgAddOptions): Rule {
       };
       const packageJsonChanges: Rule = (tree: Tree, context2: SchematicContext) => {
           const packageJson: PackageJsonSnapshot = new PackageJsonSnapshot('/', tree, context2);
-          packageJson.addExtractScriptToPackageJson(options);
+          packageJson.addExtractScript(options);
           options.parsedLanguages
               .filter(lang => lang !== options.i18nLocale)
-              .forEach(lang => packageJson.addStartScriptToPackageJson(options, lang));
+              .forEach(lang => packageJson.addStartScript(options, lang));
           packageJson.commit();
       };
       return chain([

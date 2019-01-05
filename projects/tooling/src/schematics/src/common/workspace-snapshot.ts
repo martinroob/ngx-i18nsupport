@@ -69,6 +69,13 @@ export class WorkspaceSnaphot {
     }
 
     /**
+     * Return name of default project.
+     */
+    public getDefaultProjectName(): string|undefined {
+        return this.workspace.defaultProject;
+    }
+
+    /**
      * Add a build configuration to angular.json.
      * Configuration is stored under architect.build.configurations
      * @param projectName Name of project
@@ -163,11 +170,12 @@ export class WorkspaceSnaphot {
      * @param options options containing project etc.
      */
     public addBuilderConfigurationToProject(options: OptionsAfterSetup) {
+        const baseDir = (options.isDefaultProject) ? '' : `projects/${options.project}/`;
         const builderOptions = {
             xliffmergeOptions: {
                 i18nFormat: options.i18nFormat,
-                srcDir: options.srcDir,
-                genDir: options.genDir,
+                srcDir: `${baseDir}${options.srcDir}`,
+                genDir: `${baseDir}${options.genDir}`,
                 defaultLanguage: options.parsedLanguages[0],
                 languages: options.parsedLanguages
             }

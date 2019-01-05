@@ -26,8 +26,23 @@ export const defaultI18nFormat = 'xlf';
 
 /**
  * Name of extract script.
+ * The script for default project is named this way.
+ * The script for other projects is named `${extractScriptNameSuffix}-${project}`
  */
-export const extractScriptName = 'extract-i18n';
+const extractScriptNameSuffix = 'extract-i18n';
+
+/**
+ * Name of extract script for a project
+ * @param project name of project
+ * @param isDefaultProject flag, wethe it is the default project.
+ */
+export function extractScriptName(project: string|null, isDefaultProject: boolean) {
+    if (!project || isDefaultProject) {
+        return extractScriptNameSuffix;
+    } else {
+        return `${extractScriptNameSuffix}-${project}`;
+    }
+}
 
 /**
  * Name of xliffmerge builder.

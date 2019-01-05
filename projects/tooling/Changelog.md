@@ -1,9 +1,19 @@
+<a name="1.1.1"></a>
+# 1.1.1 (2019-01-05)
+
+### Bug fixes
+* **tooling** output-path in generated extract script is wrong.
+([#118](https://github.com/martinroob/ngx-i18nsupport/issues/118)).
+
+* **tooling** There should be different extract-scripts for different projects in one workspace.
+([#119](https://github.com/martinroob/ngx-i18nsupport/issues/119)).
+
 <a name="1.1.0"></a>
 # 1.1.0 (2018-12-29)
 
 ### Features
 
-* **tooling** Upgrade to Angular 7
+* **tooling** Upgrade to Angular 7 including usage of `x-prompt` for schematics.
 
 * **builders** New Angular Architect Builder to run xliffmerge. ([#107](https://github.com/martinroob/ngx-i18nsupport/issues/107))
 
