@@ -10,7 +10,7 @@
     "test": "ng test tiny-translator",
     "lint": "ng lint tiny-translator",
     "e2e": "ng e2e tiny-translator",
-    "extract-i18n": "ng xi18n tiny-translator --output-path src/i18n --i18n-locale en && xliffmerge --profile xliffmerge.json en de fr-google ru-google",
+    "extract-i18n": "ng xi18n tiny-translator --output-path src/i18n --i18n-locale en && ng run tiny-translator:xliffmerge",
     "start-en": "ng serve tiny-translator --configuration=en",
     "start-de": "ng serve tiny-translator --configuration=de",
     "start-fr": "ng serve tiny-translator --configuration=fr",

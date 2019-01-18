@@ -10,7 +10,7 @@ import {
   EventEmitter
 } from '@angular/core';
 import {NormalizedMessage} from '../model/normalized-message';
-import {isNullOrUndefined} from 'util';
+import {isNullOrUndefined} from '../common/util';
 import {ControlValueAccessor, FormBuilder, FormGroup, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {IICUMessageCategory, IICUMessageTranslation} from '@ngx-i18nsupport/ngx-i18nsupport-lib';
 import {Subscription} from 'rxjs';

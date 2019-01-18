@@ -2,8 +2,9 @@ import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {TinyTranslatorService} from '../model/tiny-translator.service';
 import {TranslationProject, UserRole, WorkflowType} from '../model/translation-project';
 import {FILETYPE_XTB} from '@ngx-i18nsupport/ngx-i18nsupport-lib';
-import {isNullOrUndefined} from 'util';
+import {isNullOrUndefined} from '../common/util';
 import {FormBuilder, FormGroup} from '@angular/forms';
+import {IFileDescription} from '../file-accessors/common/i-file-description';
 
 /**
  * The ProjectStarter is an upload component.
@@ -18,11 +19,11 @@ export class ProjectStarterComponent implements OnInit {
 
   @Output() addProject: EventEmitter<TranslationProject> = new EventEmitter();
 
-  private createdProject: TranslationProject;
+  createdProject: TranslationProject;
 
   form: FormGroup;
-  private selectedFiles: FileList;
-  private selectedMasterXmbFiles: FileList;
+  private selectedFile: IFileDescription;
+  private selectedMasterXmbFile: IFileDescription;
 
   constructor(private formBuilder: FormBuilder, private translatorService: TinyTranslatorService) { }
 
@@ -46,19 +47,19 @@ export class ProjectStarterComponent implements OnInit {
     }
   }
 
-  fileSelectionChange(input: HTMLInputElement) {
-    this.selectedFiles = input.files;
+  fileSelectionChange(file: IFileDescription) {
+    this.selectedFile = file;
     this.valueChanged(this.form.value);
   }
 
-  masterXmlFileSelectionChange(input: HTMLInputElement) {
-    this.selectedMasterXmbFiles = input.files;
+  masterXmlFileSelectionChange(file: IFileDescription) {
+    this.selectedMasterXmbFile = file;
     this.valueChanged(this.form.value);
   }
 
   valueChanged(formValue) {
-    const translationFile = (this.selectedFiles) ? this.selectedFiles.item(0) : null;
-    const masterXmbFile = (this.selectedMasterXmbFiles) ? this.selectedMasterXmbFiles.item(0) : null;
+    const translationFile = this.selectedFile;
+    const masterXmbFile = this.selectedMasterXmbFile;
     this.translatorService.createProject(
       formValue.projectName,
       translationFile,
@@ -111,40 +112,6 @@ export class ProjectStarterComponent implements OnInit {
       this.addProject.emit(this.createdProject);
   }
 
-  selectedFilesFormatted(): string {
-    return this.fileListFormatted(this.selectedFiles);
-  }
-
-  selectedMasterFilesFormatted(): string {
-    return this.fileListFormatted(this.selectedMasterXmbFiles);
-  }
-
-  private fileListFormatted(fileList: FileList): string {
-    if (fileList) {
-      let result = '';
-      for (let i = 0; i < fileList.length; i++) {
-        if (i > 0) {
-          result = result + ', ';
-        }
-        result = result + fileList.item(i).name;
-      }
-      return result;
-    } else {
-      return '';
-    }
-  }
-
-  /**
-   * If the first file was a xmb file, master is needed.
-   * Enables the input for a second file, the master xmb.
-   */
-  isMasterXmbFileNeeded(): boolean {
-    return this.isFileSelected() &&
-      this.createdProject &&
-      this.createdProject.translationFile &&
-      this.createdProject.translationFile.fileType() === FILETYPE_XTB;
-  }
-
   /**
    * Check, wether all needed is typed in.
    * Enables the add button.
@@ -154,7 +121,7 @@ export class ProjectStarterComponent implements OnInit {
   }
 
   isFileSelected(): boolean {
-    return this.selectedFiles && this.selectedFiles.length > 0 && !!this.createdProject;
+    return this.selectedFile && !!this.createdProject;
   }
 
   needsExplicitSourceLanguage(): boolean {

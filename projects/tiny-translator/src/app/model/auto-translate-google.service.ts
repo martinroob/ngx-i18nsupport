@@ -7,7 +7,7 @@ import {
 } from './auto-translate-service-api';
 import {APP_CONFIG, AppConfig} from '../app.config';
 import {HttpClient} from '@angular/common/http';
-import {isNullOrUndefined} from 'util';
+import {isNullOrUndefined} from '../common/util';
 import {catchError, map} from 'rxjs/operators';
 
 /**

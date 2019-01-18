@@ -391,6 +391,23 @@
               "**/node_modules/**"
             ]
           }
+        },
+        "xliffmerge": {
+          "builder": "./dist/tooling:xliffmerge",
+          "options": {
+            "xliffmergeOptions": {
+              "srcDir": "projects/tiny-translator/src/i18n",
+              "genDir": "projects/tiny-translator/src/i18n",
+              "autotranslate": ["fr-google"],
+              "apikeyfile": "projects/tiny-translator/googleTranslateApiKey.txt",
+              "languages": [
+                "en",
+                "de",
+                "fr-google",
+                "ru-google"
+              ]
+            }
+          }
         }
       }
     },

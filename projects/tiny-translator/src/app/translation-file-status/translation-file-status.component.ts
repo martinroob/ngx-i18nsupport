@@ -17,7 +17,7 @@ export class TranslationFileStatusComponent implements OnInit {
   @Input() translationFileView: TranslationFileView;
   @Input() shortInfo = false;
 
-  @Output() onSave: EventEmitter<TranslationFile> = new EventEmitter();
+  @Output() saved: EventEmitter<TranslationFile> = new EventEmitter();
 
   constructor() { }
 
@@ -26,11 +26,11 @@ export class TranslationFileStatusComponent implements OnInit {
 
   /**
    * percentage translated rounded to 0 digits.
-   * @return {any}
+   * @return percentage number
    */
   public percentageTranslated(): string {
     if (this.translationFile) {
-      let result: number = this.translationFile.percentageTranslated();
+      const result: number = this.translationFile.percentageTranslated();
       return result.toFixed(0);
     } else {
       return '0';
@@ -42,7 +42,7 @@ export class TranslationFileStatusComponent implements OnInit {
    */
   public save() {
     if (this.translationFile) {
-      this.onSave.emit(this.translationFile);
+      this.saved.emit(this.translationFile);
     }
   }
 }

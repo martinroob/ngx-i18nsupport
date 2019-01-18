@@ -1,8 +1,0 @@
-{
-  "xliffmergeOptions": {
-    "srcDir": "src/i18n",
-    "genDir": "src/i18n",
-    "autotranslate": ["fr-google"],
-    "apikeyfile": "googleTranslateApiKey.txt"
-  }
-}

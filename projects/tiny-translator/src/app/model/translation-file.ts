@@ -1,14 +1,16 @@
-import {combineLatest, forkJoin, Observable, of} from 'rxjs';
-import {isNullOrUndefined} from 'util';
+import {forkJoin, Observable, of} from 'rxjs';
+import {isNullOrUndefined} from '../common/util';
 import {catchError, map} from 'rxjs/operators';
 import {TranslationMessagesFileFactory, ITranslationMessagesFile, ITransUnit,
     FILETYPE_XTB, FORMAT_XMB,
     IICUMessage, IICUMessageTranslation} from '@ngx-i18nsupport/ngx-i18nsupport-lib';
 import {TranslationUnit} from './translation-unit';
-import {AsynchronousFileReaderResult} from './asynchronous-file-reader.service';
 import {AutoTranslateServiceAPI} from './auto-translate-service-api';
 import {AutoTranslateSummaryReport} from './auto-translate-summary-report';
 import {AutoTranslateResult} from './auto-translate-result';
+import {IFileDescription} from '../file-accessors/common/i-file-description';
+import {DownloadedFile} from '../file-accessors/download-upload/downloaded-file';
+import {IFile} from '../file-accessors/common/i-file';
 
 /**
  * A single xlf or xmb file ready for work.
@@ -51,43 +53,40 @@ export class TranslationFile {
    */
   private _allTransUnits: TranslationUnit[];
 
-  static fromUploadedFile(readingUploadedFile: Observable<AsynchronousFileReaderResult>,
-          readingMasterXmbFile?: Observable<AsynchronousFileReaderResult>): Observable<TranslationFile> {
-    return combineLatest(readingUploadedFile, readingMasterXmbFile)
-      .pipe(
-          map((contentArray) => {
-            const fileContent: AsynchronousFileReaderResult = contentArray[0];
-            const newInstance = new TranslationFile();
-            newInstance._name = fileContent.name;
-            newInstance._size = fileContent.size;
-            if (fileContent.content) {
-              const masterXmbContent: AsynchronousFileReaderResult = contentArray[1];
-              try {
-                newInstance.fileContent = fileContent.content;
-                let optionalMaster: any = null;
-                if (masterXmbContent && masterXmbContent.content) {
-                  optionalMaster = {
-                    path: masterXmbContent.name,
-                    xmlContent: masterXmbContent.content,
-                    encoding: null
-                  };
-                  newInstance.masterContent = masterXmbContent.content;
-                  newInstance._masterName = masterXmbContent.name;
-                }
-                newInstance._translationFile =
-                  TranslationMessagesFileFactory.fromUnknownFormatFileContent(
-                    fileContent.content, fileContent.name, null, optionalMaster);
-                if (newInstance._translationFile.i18nFormat() === FORMAT_XMB) {
-                  newInstance._error = 'xmb files cannot be translated, use xtb instead'; // TODO i18n
-                }
-                newInstance.readTransUnits();
-              } catch (err) {
-                newInstance._error = err.toString();
-              }
-            }
-            return newInstance;
-          }
-      ));
+  /**
+   * Create a TranslationFile from the read file.
+   * @param loadedFile read in translation file (xliff, xmb)
+   * @param loadedMasterXmbFile optional master for xmb file
+   */
+  static fromFile(loadedFile: IFile, loadedMasterXmbFile?: IFile): TranslationFile {
+    const newInstance = new TranslationFile();
+    newInstance._name = loadedFile.name;
+    newInstance._size = loadedFile.size;
+    if (loadedFile.content) {
+      try {
+        newInstance.fileContent = loadedFile.content;
+        let optionalMaster: any = null;
+        if (loadedMasterXmbFile && loadedMasterXmbFile.content) {
+          optionalMaster = {
+            path: loadedMasterXmbFile.name,
+            xmlContent: loadedMasterXmbFile.content,
+            encoding: null
+          };
+          newInstance.masterContent = loadedMasterXmbFile.content;
+          newInstance._masterName = loadedMasterXmbFile.name;
+        }
+        newInstance._translationFile =
+            TranslationMessagesFileFactory.fromUnknownFormatFileContent(
+                loadedFile.content, loadedFile.name, null, optionalMaster);
+        if (newInstance._translationFile.i18nFormat() === FORMAT_XMB) {
+          newInstance._error = 'xmb files cannot be translated, use xtb instead'; // TODO i18n
+        }
+        newInstance.readTransUnits();
+      } catch (err) {
+        newInstance._error = err.toString();
+      }
+    }
+    return newInstance;
   }
 
   /**
@@ -162,6 +161,19 @@ export class TranslationFile {
     return (this._translationFile) ? this._translationFile.numberOfUntranslatedTransUnits() : 0;
   }
 
+  public fileDescription(): IFileDescription {
+    // TODO
+    return new DownloadedFile(null);
+  }
+
+  public editedFile(): IFile {
+    // TODO
+    const content = this.editedContent();
+    return {
+      name: this.name, size: content.length, content: content
+    };
+  }
+
   /**
    * Type of file.
    * Currently 'xlf', 'xlf2', 'xmb' or or 'xtb'
@@ -220,7 +232,7 @@ export class TranslationFile {
 
   public percentageUntranslated(): number {
     if (this.numberOfTransUnits === 0) {
-      return 0;
+      return 100;
     }
     return 100 * this.numberOfUntranslatedTransUnits / this.numberOfTransUnits;
   }

@@ -17,7 +17,7 @@ import { TranslationFileStatusComponent } from './translation-file-status/transl
 import { HomePageComponent } from './home-page/home-page.component';
 import { TranslatePageComponent } from './translate-page/translate-page.component';
 import { TranslateUnitComponent } from './translate-unit/translate-unit.component';
-import {DownloaderService} from './model/downloader.service';
+import {DownloaderService} from './file-accessors/download-upload/downloader.service';
 import { TranslateUnitListComponent } from './translate-unit-list/translate-unit-list.component';
 import { AbbreviatePipe } from './common/abbreviate.pipe';
 import { LanguageComponent } from './language/language.component';
@@ -31,7 +31,7 @@ import { ProjectListComponent } from './project-list/project-list.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { CreateProjectPageComponent } from './create-project-page/create-project-page.component';
 import { ProjectStatusComponent } from './project-status/project-status.component';
-import {AsynchronousFileReaderService} from './model/asynchronous-file-reader.service';
+import {AsynchronousFileReaderService} from './file-accessors/download-upload/asynchronous-file-reader.service';
 import { NormalizedMessageInputComponent } from './normalized-message-input/normalized-message-input.component';
 import {TranslateUnitWarningConfirmDialogComponent} from './translate-unit-warning-confirm-dialog/translate-unit-warning-confirm-dialog.component';
 import {AppMaterialModule} from './app-material.module';
@@ -43,6 +43,8 @@ import { TranslationUnitFilterService } from './model/filters/translation-unit-f
 import { FilterStatusComponent } from './filter-status/filter-status.component';
 import { FilterPageComponent } from './filter-page/filter-page.component';
 import { UpdateAvailableComponent } from './update-available/update-available.component';
+import {TranslationFileUploadComponent} from './file-accessors/download-upload/translation-file-upload/translation-file-upload.component';
+import {DownloadUploadService} from './file-accessors/download-upload/download-upload.service';
 
 @NgModule({
   declarations: [
@@ -53,6 +55,7 @@ import { UpdateAvailableComponent } from './update-available/update-available.co
     TranslatePageComponent,
     TranslateUnitComponent,
     TranslateUnitListComponent,
+      TranslationFileUploadComponent,
     LanguageComponent,
     AbbreviatePipe,
     ProjectComponent,
@@ -85,6 +88,7 @@ import { UpdateAvailableComponent } from './update-available/update-available.co
     TinyTranslatorService,
     AsynchronousFileReaderService,
     DownloaderService,
+    DownloadUploadService,
     ActiveProjectGuard,
     {provide: BackendServiceAPI, useClass: BackendLocalStorageService},
     {provide: AutoTranslateServiceAPI, useClass: AutoTranslateGoogleService},

@@ -3,7 +3,7 @@ import {TranslationFile} from '../model/translation-file';
 
 import { TranslationFileStatusComponent } from './translation-file-status.component';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
-import {DownloaderService} from '../model/downloader.service';
+import {DownloaderService} from '../file-accessors/download-upload/downloader.service';
 
 describe('TranslationFileStatusComponent', () => {
   let component: TranslationFileStatusComponent;

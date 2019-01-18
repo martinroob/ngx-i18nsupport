@@ -1,17 +1,12 @@
 import { Injectable } from '@angular/core';
 import {Observable, ReplaySubject} from 'rxjs';
+import {IFile} from '../common/i-file';
 
 /**
  * Service to read a file.
  * (File means an uploaded Blob file object)
  * It gives an observable based API instead of just using basic FileReader.
  */
-
-export interface AsynchronousFileReaderResult {
-  name: string; // name of file
-  size: number; // size in bytes
-  content: string; // content of file
-}
 
 @Injectable()
 export class AsynchronousFileReaderService {
@@ -23,8 +18,8 @@ export class AsynchronousFileReaderService {
    * @param file the file to (may be null, then the Observable will return result with name and content null)
    * @return Observable of file name and content.
    */
-  public readFile(file: File): Observable<AsynchronousFileReaderResult> {
-    const subject = new ReplaySubject<AsynchronousFileReaderResult>();
+  public readFile(file: File): Observable<IFile> {
+    const subject = new ReplaySubject<IFile>();
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {

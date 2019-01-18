@@ -1,7 +1,10 @@
 import {TranslationFile} from './translation-file';
 import {TranslationFileView} from './translation-file-view';
-import {isNullOrUndefined} from 'util';
+import {isNullOrUndefined} from '../common/util';
 import {AutoTranslateSummaryReport} from './auto-translate-summary-report';
+import {IFile} from '../file-accessors/common/i-file';
+import {IFileDescription} from '../file-accessors/common/i-file-description';
+import {DownloadedFile} from '../file-accessors/download-upload/downloaded-file';
 
 /**
  * Workflow type determines, how you work with the tool.
@@ -45,8 +48,8 @@ export class TranslationProject {
 
   /**
    * Create a project from the serialization.
-   * @param serializationString
-   * @return {TranslationProject}
+   * @param serializationString string returned from serialize()
+   * @return deserialized project
    */
   static deserialize(serializationString: string): TranslationProject {
     const deserializedObject: any = JSON.parse(serializationString);
@@ -126,8 +129,8 @@ export class TranslationProject {
   }
 
   /**
-   * Return Report about last executed Autotranslate run.
-   * @return {AutoTranslateSummaryReport}
+   * Return report about last executed Autotranslate run.
+   * @return report about last executed Autotranslate run.
    */
   public autoTranslateSummaryReport(): AutoTranslateSummaryReport {
     return this._autoTranslateSummaryReport;
@@ -135,7 +138,7 @@ export class TranslationProject {
 
   /**
    * Store summary of last executed AutoTranslate run.
-   * @param summary
+   * @param summary summary of last executed AutoTranslate run
    */
   public setAutoTranslateSummaryReport(summary: AutoTranslateSummaryReport) {
     this._autoTranslateSummaryReport = summary;

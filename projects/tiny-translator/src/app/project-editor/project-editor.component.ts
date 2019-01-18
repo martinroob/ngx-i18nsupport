@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {TranslationProject, UserRole, WorkflowType} from '../model/translation-project';
 import {FormBuilder, FormGroup} from '@angular/forms';
-import {isNullOrUndefined} from 'util';
+import {isNullOrUndefined} from '../common/util';
 
 /**
  * Component to edit some properties of the current project.

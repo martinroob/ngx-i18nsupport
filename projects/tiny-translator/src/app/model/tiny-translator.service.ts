@@ -1,11 +1,9 @@
 import {Injectable} from '@angular/core';
 import {TranslationFile} from './translation-file';
-import {isNullOrUndefined} from 'util';
+import {isNullOrUndefined} from '../common/util';
 import {BackendServiceAPI} from './backend-service-api';
 import {TranslationProject, WorkflowType} from './translation-project';
-import {Observable, of} from 'rxjs';
-import {DownloaderService} from './downloader.service';
-import {AsynchronousFileReaderService} from './asynchronous-file-reader.service';
+import {combineLatest, Observable, of} from 'rxjs';
 import {
   AutoTranslateDisabledReasonKey,
   AutoTranslateServiceAPI
@@ -13,6 +11,9 @@ import {
 import {AutoTranslateSummaryReport} from './auto-translate-summary-report';
 import {TranslationUnit} from './translation-unit';
 import {map} from 'rxjs/operators';
+import {IFileDescription} from '../file-accessors/common/i-file-description';
+import {IFileAccessService} from '../file-accessors/common/i-file-access-service';
+import {FileAccessServiceFactoryService} from './file-access-service-factory.service';
 
 @Injectable()
 export class TinyTranslatorService {
@@ -28,8 +29,7 @@ export class TinyTranslatorService {
   private _currentProject: TranslationProject;
 
   constructor(private backendService: BackendServiceAPI,
-              private fileReaderService: AsynchronousFileReaderService,
-              private downloaderService: DownloaderService,
+              private fileAccessServiceFactoryService: FileAccessServiceFactoryService,
               private autoTranslateService: AutoTranslateServiceAPI) {
     this._projects = this.backendService.projects();
     const currentProjectId = this.backendService.currentProjectId();
@@ -65,13 +65,21 @@ export class TinyTranslatorService {
    * @param workflowType Type of workflow used in project (singleUser versus withReview).
    * @return TranslationProject
    */
-  public createProject(projectName: string, file: File, masterXmbFile?: File, workflowType?: WorkflowType): Observable<TranslationProject> {
-    const uploadingFile = this.fileReaderService.readFile(file);
-    const readingMaster = this.fileReaderService.readFile(masterXmbFile);
-    return TranslationFile.fromUploadedFile(uploadingFile, readingMaster)
-      .pipe(map((translationfile: TranslationFile) => {
-        return new TranslationProject(projectName, translationfile, workflowType);
-      }));
+  public createProject(projectName: string,
+                       file: IFileDescription,
+                       masterXmbFile?: IFileDescription,
+                       workflowType?: WorkflowType): Observable<TranslationProject> {
+    const fileAccessService: IFileAccessService = this.fileAccessServiceFactoryService.getFileAccessService(file);
+    return combineLatest(fileAccessService.load(file), (masterXmbFile) ? fileAccessService.load(masterXmbFile) : of(null)).pipe(
+        map(contentArray => {
+          const loadedFile = contentArray[0];
+          const loadedMaster = contentArray[1];
+          return TranslationFile.fromFile(loadedFile, loadedMaster);
+        }),
+        map((translationFile: TranslationFile) => {
+          return new TranslationProject(projectName, translationFile, workflowType);
+        })
+    );
   }
 
   public setCurrentProject(project: TranslationProject) {
@@ -150,7 +158,8 @@ export class TinyTranslatorService {
   }
 
   public saveProject(project: TranslationProject) {
-    this.downloaderService.downloadXliffFile(project.translationFile.name, project.translationFile.editedContent());
+    this.fileAccessServiceFactoryService.getFileAccessService(
+        project.translationFile.fileDescription()).save(project.translationFile.editedFile());
     project.translationFile.markExported();
     this.commitChanges(project);
   }
