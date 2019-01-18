@@ -5,5 +5,5 @@
 import {FileAccessorType} from './file-accessor-type';
 
 export interface IFileDescription {
-    type(): FileAccessorType;
+    type: FileAccessorType;
 }

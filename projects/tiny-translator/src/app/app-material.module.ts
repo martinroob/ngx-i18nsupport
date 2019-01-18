@@ -1,9 +1,9 @@
 import {NgModule} from '@angular/core';
 import {
   MatButtonModule, MatCardModule, MatCheckboxModule, MatDialogModule, MatIconModule, MatInputModule, MatListModule,
-  MatMenuModule,
+  MatMenuModule, MatOptionModule,
   MatProgressSpinnerModule,
-  MatRadioModule, MatSlideToggleModule, MatSnackBarModule,
+  MatRadioModule, MatSelectModule, MatSlideToggleModule, MatSnackBarModule,
   MatToolbarModule, MatTooltipModule
 } from '@angular/material';
 import {OverlayModule} from '@angular/cdk/overlay';
@@ -22,8 +22,10 @@ import {FlexLayoutModule} from '@angular/flex-layout';
     MatInputModule,
     MatListModule,
     MatMenuModule,
+    MatOptionModule,
     MatProgressSpinnerModule,
     MatRadioModule,
+    MatSelectModule,
     MatSlideToggleModule,
     MatSnackBarModule,
     MatToolbarModule,
@@ -40,8 +42,10 @@ import {FlexLayoutModule} from '@angular/flex-layout';
     MatInputModule,
     MatListModule,
     MatMenuModule,
+    MatOptionModule,
     MatProgressSpinnerModule,
     MatRadioModule,
+    MatSelectModule,
     MatSlideToggleModule,
     MatSnackBarModule,
     MatToolbarModule,

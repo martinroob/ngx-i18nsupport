@@ -69,6 +69,9 @@ export class TinyTranslatorService {
                        file: IFileDescription,
                        masterXmbFile?: IFileDescription,
                        workflowType?: WorkflowType): Observable<TranslationProject> {
+    if (isNullOrUndefined(file)) {
+      return of(new TranslationProject(projectName, null, workflowType));
+    }
     const fileAccessService: IFileAccessService = this.fileAccessServiceFactoryService.getFileAccessService(file);
     return combineLatest(fileAccessService.load(file), (masterXmbFile) ? fileAccessService.load(masterXmbFile) : of(null)).pipe(
         map(contentArray => {

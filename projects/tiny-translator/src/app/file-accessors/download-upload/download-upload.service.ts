@@ -5,6 +5,7 @@ import {IFile} from '../common/i-file';
 import {DownloadedFile} from './downloaded-file';
 import {AsynchronousFileReaderService} from './asynchronous-file-reader.service';
 import {DownloaderService} from './downloader.service';
+import {map} from 'rxjs/operators';
 
 @Injectable()
 export class DownloadUploadService implements IFileAccessService {
@@ -14,12 +15,22 @@ export class DownloadUploadService implements IFileAccessService {
         private downloaderService: DownloaderService) {}
 
     load(description: DownloadedFile): Observable<IFile> {
-        const file = description.browserFile();
-        return this.fileReaderService.readFile(file);
+        const file = description.browserFile;
+        return this.fileReaderService.readFile(file).pipe(
+            map(result => {
+                return {
+                    description: description,
+                    name: result.name,
+                    size: result.size,
+                    content: result.content
+                };
+            })
+        );
     }
 
     save(file: IFile): Observable<any> {
         this.downloaderService.downloadXliffFile(file.name, file.content);
+        // TODO
         return of('ok');
     }
 }

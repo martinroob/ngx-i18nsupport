@@ -6,7 +6,14 @@
         <input type="text" placeholder="Project name" i18n-placeholder matInput formControlName="projectName" name="projectName"/>
       </mat-form-field>
     </div>
-    <app-translation-file-upload [createdProject]="createdProject" (fileSelected)="fileSelectionChange($event)" (masterXmlFileSelected)="masterXmlFileSelectionChange($event)"></app-translation-file-upload>
+    <mat-form-field>
+      <mat-select placeholder="file access type" i18n-placeholder formControlName="fileAccessorType" name="fileAccessorType">
+        <mat-option value="DOWNLOAD_UPLOAD" i18n>Browser Upload and Download</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <ng-container [ngSwitch]="form.value.fileAccessorType">
+      <app-translation-file-upload *ngSwitchCase="'DOWNLOAD_UPLOAD'" [createdProject]="createdProject" (fileSelected)="fileSelectionChange($event)" (masterXmlFileSelected)="masterXmlFileSelectionChange($event)"></app-translation-file-upload>
+    </ng-container>
     <p><b i18n>Selected translation file:</b></p>
     <app-translation-file-status *ngIf="isFileSelected()"
                                  [translationFileView]="createdProject?.translationFileView"

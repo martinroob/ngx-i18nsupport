@@ -1,9 +1,15 @@
 import {forkJoin, Observable, of} from 'rxjs';
 import {isNullOrUndefined} from '../common/util';
 import {catchError, map} from 'rxjs/operators';
-import {TranslationMessagesFileFactory, ITranslationMessagesFile, ITransUnit,
-    FILETYPE_XTB, FORMAT_XMB,
-    IICUMessage, IICUMessageTranslation} from '@ngx-i18nsupport/ngx-i18nsupport-lib';
+import {
+  FILETYPE_XTB,
+  FORMAT_XMB,
+  IICUMessage,
+  IICUMessageTranslation,
+  ITranslationMessagesFile,
+  ITransUnit,
+  TranslationMessagesFileFactory
+} from '@ngx-i18nsupport/ngx-i18nsupport-lib';
 import {TranslationUnit} from './translation-unit';
 import {AutoTranslateServiceAPI} from './auto-translate-service-api';
 import {AutoTranslateSummaryReport} from './auto-translate-summary-report';
@@ -11,6 +17,7 @@ import {AutoTranslateResult} from './auto-translate-result';
 import {IFileDescription} from '../file-accessors/common/i-file-description';
 import {DownloadedFile} from '../file-accessors/download-upload/downloaded-file';
 import {IFile} from '../file-accessors/common/i-file';
+import {FileAccessorType} from '../file-accessors/common/file-accessor-type';
 
 /**
  * A single xlf or xmb file ready for work.
@@ -20,6 +27,17 @@ import {IFile} from '../file-accessors/common/i-file';
  */
 
 // internal representation of serialized form.
+// format used since v0.15
+interface ISerializedTranslationFileV2 {
+  version: string;
+  file: IFile;
+  editedContent: string;
+  master?: IFile;
+  explicitSourceLanguage: string;
+}
+
+// elder internal representation of serialized form.
+// old format, used until v0.14
 interface ISerializedTranslationFile {
   name: string;
   size: number;
@@ -32,17 +50,11 @@ interface ISerializedTranslationFile {
 
 export class TranslationFile {
 
-  private _name: string;
-
-  private _size: number;
+  private _file: IFile;
 
   private _error: string = null;
 
-  private fileContent: string;
-
-  private masterContent: string;
-
-  private _masterName: string;
+  private _master?: IFile;
 
   private _translationFile: ITranslationMessagesFile;
 
@@ -60,11 +72,9 @@ export class TranslationFile {
    */
   static fromFile(loadedFile: IFile, loadedMasterXmbFile?: IFile): TranslationFile {
     const newInstance = new TranslationFile();
-    newInstance._name = loadedFile.name;
-    newInstance._size = loadedFile.size;
+    newInstance._file = loadedFile;
     if (loadedFile.content) {
       try {
-        newInstance.fileContent = loadedFile.content;
         let optionalMaster: any = null;
         if (loadedMasterXmbFile && loadedMasterXmbFile.content) {
           optionalMaster = {
@@ -72,8 +82,7 @@ export class TranslationFile {
             xmlContent: loadedMasterXmbFile.content,
             encoding: null
           };
-          newInstance.masterContent = loadedMasterXmbFile.content;
-          newInstance._masterName = loadedMasterXmbFile.name;
+          newInstance._master = loadedMasterXmbFile;
         }
         newInstance._translationFile =
             TranslationMessagesFileFactory.fromUnknownFormatFileContent(
@@ -95,26 +104,50 @@ export class TranslationFile {
    * @return TranslationFile
    */
   static deserialize(serializationString: string): TranslationFile {
-    const deserializedObject: ISerializedTranslationFile = <ISerializedTranslationFile> JSON.parse(serializationString);
+    const deserializedObject = <ISerializedTranslationFile> JSON.parse(serializationString);
     return TranslationFile.fromDeserializedObject(deserializedObject);
   }
 
-  static fromDeserializedObject(deserializedObject: ISerializedTranslationFile): TranslationFile {
+  static fromDeserializedObject(deserializedJsonObject: ISerializedTranslationFile|ISerializedTranslationFileV2|any): TranslationFile {
+    let deserializedObject: ISerializedTranslationFileV2;
+    if (deserializedJsonObject.version) {
+      deserializedObject = deserializedJsonObject as ISerializedTranslationFileV2;
+    } else {
+      // migration from old format
+      const v1Object = deserializedJsonObject as ISerializedTranslationFile;
+      deserializedObject = {
+        version: '1',
+        file: {
+          description: {type: FileAccessorType.DOWNLOAD_UPLOAD},
+          name: v1Object.name,
+          size: v1Object.size,
+          content: v1Object.fileContent
+        },
+        editedContent: v1Object.editedContent,
+        explicitSourceLanguage: v1Object.explicitSourceLanguage
+      };
+      if (v1Object.masterContent) {
+        deserializedObject.master = {
+          description: {type: FileAccessorType.DOWNLOAD_UPLOAD},
+          name: v1Object.masterName,
+          size: 0,
+          content: v1Object.masterContent
+        };
+      }
+    }
     const newInstance = new TranslationFile();
-    newInstance._name = deserializedObject.name;
-    newInstance._size = deserializedObject.size;
-    newInstance.fileContent = deserializedObject.fileContent;
+    newInstance._file = deserializedObject.file;
     newInstance._explicitSourceLanguage = deserializedObject.explicitSourceLanguage;
     try {
       const encoding = null; // unknown, lib can find it
       let optionalMaster: {xmlContent: string, path: string, encoding: string} = null;
-      if (deserializedObject.masterContent) {
-        optionalMaster = {xmlContent: deserializedObject.masterContent, path: deserializedObject.masterName, encoding: encoding};
-        newInstance._masterName = deserializedObject.masterName;
+      if (deserializedObject.master) {
+        optionalMaster = {xmlContent: deserializedObject.master.content, path: deserializedObject.master.name, encoding: encoding};
+        newInstance._master = deserializedObject.master;
       }
       newInstance._translationFile = TranslationMessagesFileFactory.fromUnknownFormatFileContent(
           deserializedObject.editedContent,
-          deserializedObject.name,
+          deserializedObject.file.name,
           encoding,
           optionalMaster);
       newInstance.readTransUnits();
@@ -138,19 +171,19 @@ export class TranslationFile {
   }
 
   get name(): string {
-    return this._name;
+    return this._file.name;
   }
 
   /**
    * In case of xmb/xtb the name of the master xmb file.
    * @return name of master file or null
    */
-  get masterName(): string {
-    return this._masterName;
+  get masterName(): string|null {
+    return (this._master) ? this._master.name : null;
   }
 
   get size(): number {
-    return this._size;
+    return this._file.size;
   }
 
   get numberOfTransUnits(): number {
@@ -170,7 +203,10 @@ export class TranslationFile {
     // TODO
     const content = this.editedContent();
     return {
-      name: this.name, size: content.length, content: content
+      description: this._file.description,
+      name: this.name,
+      size: content.length,
+      content: content
     };
   }
 
@@ -184,7 +220,7 @@ export class TranslationFile {
       return this._translationFile.fileType();
     } else {
       // try to get it by name
-      if (this._name && this._name.endsWith('xtb')) {
+      if (this.name && this.name.endsWith('xtb')) {
         return FILETYPE_XTB;
       } else {
         return null;
@@ -266,7 +302,7 @@ export class TranslationFile {
    * @return wether file is changed.
    */
   public isDirty(): boolean {
-    return this._translationFile && this.fileContent !== this.editedContent();
+    return this._translationFile && this._file.content !== this.editedContent();
   }
 
   /**
@@ -283,10 +319,10 @@ export class TranslationFile {
   /**
    * Mark file as "exported".
    * This means, that the file was downloaded.
-   * So the new fileConted is the edited one.
+   * So the new file content is the edited one.
    */
   public markExported() {
-    this.fileContent = this.editedContent();
+    this._file.content = this.editedContent();
   }
 
   /**
@@ -298,17 +334,15 @@ export class TranslationFile {
   }
 
   /**
-   * Return a string represenation of translation file content.
+   * Return a string representation of translation file content.
    * This will be stored in BackendService.
    */
   public serialize(): string {
-    const serializedObject: ISerializedTranslationFile = {
-      name: this.name,
-      size: this.size,
-      fileContent: this.fileContent,
+    const serializedObject: ISerializedTranslationFileV2 = {
+      version: '2',
+      file: this._file,
       editedContent: this.editedContent(),
-      masterContent: this.masterContent,
-      masterName: this._masterName,
+      master: this._master,
       explicitSourceLanguage: this._explicitSourceLanguage
     };
     return JSON.stringify(serializedObject);

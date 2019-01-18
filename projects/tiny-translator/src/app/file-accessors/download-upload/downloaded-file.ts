@@ -5,11 +5,11 @@ export class DownloadedFile implements IFileDescription {
 
     constructor(private _file: File) {}
 
-    type(): FileAccessorType {
+    get type(): FileAccessorType {
         return FileAccessorType.DOWNLOAD_UPLOAD;
     }
 
-    browserFile(): File {
+    get browserFile(): File {
         return this._file;
     }
 }

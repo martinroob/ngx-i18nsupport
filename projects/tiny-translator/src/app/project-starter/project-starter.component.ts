@@ -1,10 +1,10 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {TinyTranslatorService} from '../model/tiny-translator.service';
 import {TranslationProject, UserRole, WorkflowType} from '../model/translation-project';
-import {FILETYPE_XTB} from '@ngx-i18nsupport/ngx-i18nsupport-lib';
 import {isNullOrUndefined} from '../common/util';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {IFileDescription} from '../file-accessors/common/i-file-description';
+import {FileAccessorType} from '../file-accessors/common/file-accessor-type';
 
 /**
  * The ProjectStarter is an upload component.
@@ -38,10 +38,9 @@ export class ProjectStarterComponent implements OnInit {
     if (!this.form) {
       this.form = this.formBuilder.group({
         projectName: [''],
+        fileAccessorType: "DOWNLOAD_UPLOAD",
         workflowType: ['singleuser'],
         userRole: ['translator'],
-        selectedFiles: [''],
-        selectedMasterXmbFiles: [''],
         sourceLanguage: [''],
       });
     }

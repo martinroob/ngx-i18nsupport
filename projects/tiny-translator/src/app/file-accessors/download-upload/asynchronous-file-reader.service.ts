@@ -8,6 +8,12 @@ import {IFile} from '../common/i-file';
  * It gives an observable based API instead of just using basic FileReader.
  */
 
+interface FileResult {
+  name: string;
+  size: number;
+  content: string;
+}
+
 @Injectable()
 export class AsynchronousFileReaderService {
 
@@ -18,8 +24,8 @@ export class AsynchronousFileReaderService {
    * @param file the file to (may be null, then the Observable will return result with name and content null)
    * @return Observable of file name and content.
    */
-  public readFile(file: File): Observable<IFile> {
-    const subject = new ReplaySubject<IFile>();
+  public readFile(file: File): Observable<FileResult> {
+    const subject = new ReplaySubject<FileResult>();
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
