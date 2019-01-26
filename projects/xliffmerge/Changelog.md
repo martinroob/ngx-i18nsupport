@@ -2,6 +2,9 @@
 # 1.1.2 (2019-01-26)
 
 ### Bug fixes
+* **xliffmerge** XliffMerge: Wrong path in local installation
+([#122](https://github.com/martinroob/ngx-i18nsupport/issues/122))
+
 * **xliffmerge xlf2 format** Error during reading xlf2 format, due to mismatch file extension
 ([#124](https://github.com/martinroob/ngx-i18nsupport/issues/124))
 
