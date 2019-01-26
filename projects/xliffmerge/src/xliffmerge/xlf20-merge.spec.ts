@@ -635,6 +635,30 @@ describe('XliffMerge XLIFF 2.0 format tests', () => {
             });
         });
 
+        it('should read xlf2 format file with expected extension xlf, not xlf2 (#124)', (done) => {
+            const masterWithXlfSuffix = WORKDIR + 'messages.xlf'; // expected suffix for XLIFF2 is also xlf
+            FileUtil.copy(MASTER1SRC, masterWithXlfSuffix);
+            const ws: WriterToString = new WriterToString();
+            const commandOut = new CommandOutput(ws);
+            // do not use i18nfile option here, so that the default will be used
+            const profileContent: IConfigFile = {
+                xliffmergeOptions: {
+                    defaultLanguage: 'de',
+                    srcDir: WORKDIR,
+                    genDir: WORKDIR,
+                    i18nFormat: 'xlf2',
+                    useSourceAsTarget: false
+                }
+            };
+            const xliffMergeCmd = XliffMerge.createFromOptions(commandOut, {languages: ['de']}, profileContent);
+            xliffMergeCmd.run();
+            expect(ws.writtenData()).not.toContain('ERROR');
+            const langFile: ITranslationMessagesFile = readXliff2(xliffMergeCmd.generatedI18nFile('de'));
+            expect(langFile.sourceLanguage()).toBe('de');
+            expect(langFile.targetLanguage()).toBe('de');
+            done();
+        });
+
     });
 
     describe('ngx-translate processing for format XLIFF 2.0', () => {
