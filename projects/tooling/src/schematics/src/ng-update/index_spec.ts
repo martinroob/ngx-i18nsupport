@@ -1,7 +1,6 @@
 import {SchematicTestRunner, UnitTestTree} from '@angular-devkit/schematics/testing';
 import {HostTree} from '@angular-devkit/schematics';
 import {virtualFs} from '@angular-devkit/core';
-import {TestHost} from '@angular-devkit/core/src/virtual-fs/host/test';
 import {NgUpdateOptions} from './schema';
 import {
     BrowserBuilderOptions,
@@ -110,7 +109,7 @@ describe('Migration to v1.1', () => {
 
     function createHost(projects: ProjectOptions[],
                         packageJsons: PackageJsonOptions[],
-                        configs: XlifmergeConfigOptions[]): TestHost {
+                        configs: XlifmergeConfigOptions[]): virtualFs.test.TestHost {
         const map: {[path: string]: string} = {};
         map['/angular.json'] = JSON.stringify(angularJson(projects), null, 2);
         packageJsons.forEach(option => {

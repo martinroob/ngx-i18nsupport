@@ -1,3 +1,9 @@
+<a name="1.1.2"></a>
+# 1.1.2 (2019-01-26)
+
+### Features
+* **tooling** installs the newest version 1.1.2 of xliffmerge now.
+
 <a name="1.1.1"></a>
 # 1.1.1 (2019-01-05)
 
