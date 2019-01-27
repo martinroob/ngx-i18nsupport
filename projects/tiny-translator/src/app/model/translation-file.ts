@@ -18,6 +18,7 @@ import {IFileDescription} from '../file-accessors/common/i-file-description';
 import {DownloadedFile} from '../file-accessors/download-upload/downloaded-file';
 import {IFile} from '../file-accessors/common/i-file';
 import {FileAccessorType} from '../file-accessors/common/file-accessor-type';
+import {DownloadUploadConfiguration} from '../file-accessors/download-upload/download-upload-configuration';
 
 /**
  * A single xlf or xmb file ready for work.
@@ -118,7 +119,7 @@ export class TranslationFile {
       deserializedObject = {
         version: '1',
         file: {
-          description: {type: FileAccessorType.DOWNLOAD_UPLOAD},
+          description: {type: FileAccessorType.DOWNLOAD_UPLOAD, configuration: DownloadUploadConfiguration.singleInstance()},
           name: v1Object.name,
           size: v1Object.size,
           content: v1Object.fileContent
@@ -128,7 +129,7 @@ export class TranslationFile {
       };
       if (v1Object.masterContent) {
         deserializedObject.master = {
-          description: {type: FileAccessorType.DOWNLOAD_UPLOAD},
+          description: {type: FileAccessorType.DOWNLOAD_UPLOAD, configuration: DownloadUploadConfiguration.singleInstance()},
           name: v1Object.masterName,
           size: 0,
           content: v1Object.masterContent

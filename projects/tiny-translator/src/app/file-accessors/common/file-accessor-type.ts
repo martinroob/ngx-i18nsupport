@@ -1,3 +1,4 @@
 export enum FileAccessorType {
-    DOWNLOAD_UPLOAD
+    DOWNLOAD_UPLOAD = 'Browser Upload and Download',
+    GITHUB = 'Github'
 }

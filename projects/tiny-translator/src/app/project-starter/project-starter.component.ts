@@ -5,6 +5,7 @@ import {isNullOrUndefined} from '../common/util';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {IFileDescription} from '../file-accessors/common/i-file-description';
 import {FileAccessorType} from '../file-accessors/common/file-accessor-type';
+import {FileAccessServiceFactoryService} from '../file-accessors/common/file-access-service-factory.service';
 
 /**
  * The ProjectStarter is an upload component.
@@ -24,11 +25,15 @@ export class ProjectStarterComponent implements OnInit {
   form: FormGroup;
   private selectedFile: IFileDescription;
   private selectedMasterXmbFile: IFileDescription;
+  private _fileAccessors;
 
-  constructor(private formBuilder: FormBuilder, private translatorService: TinyTranslatorService) { }
+  constructor(private formBuilder: FormBuilder,
+              private translatorService: TinyTranslatorService,
+              private fileAccessServiceFactoryService: FileAccessServiceFactoryService) { }
 
   ngOnInit() {
     this.initForm();
+    this._fileAccessors = this.translatorService.getConfiguredFileAccessServices();
     this.form.valueChanges.subscribe(formValue => {
       this.valueChanged(formValue);
     });
@@ -38,12 +43,20 @@ export class ProjectStarterComponent implements OnInit {
     if (!this.form) {
       this.form = this.formBuilder.group({
         projectName: [''],
-        fileAccessorType: "DOWNLOAD_UPLOAD",
+        selectedFileAccessorIndex: 0,
         workflowType: ['singleuser'],
         userRole: ['translator'],
         sourceLanguage: [''],
       });
     }
+  }
+
+  fileAccessors() {
+    return this._fileAccessors;
+  }
+
+  selectedFileAccessor() {
+    return this._fileAccessors[this.form.value['selectedFileAccessorIndex']];
   }
 
   fileSelectionChange(file: IFileDescription) {

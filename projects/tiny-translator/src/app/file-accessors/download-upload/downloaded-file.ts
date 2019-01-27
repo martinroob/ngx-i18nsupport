@@ -1,13 +1,13 @@
 import {IFileDescription} from '../common/i-file-description';
 import {FileAccessorType} from '../common/file-accessor-type';
+import {DownloadUploadConfiguration} from './download-upload-configuration';
 
 export class DownloadedFile implements IFileDescription {
 
-    constructor(private _file: File) {}
+    readonly type = FileAccessorType.DOWNLOAD_UPLOAD;
+    readonly configuration = DownloadUploadConfiguration.singleInstance();
 
-    get type(): FileAccessorType {
-        return FileAccessorType.DOWNLOAD_UPLOAD;
-    }
+    constructor(private _file: File) {}
 
     get browserFile(): File {
         return this._file;

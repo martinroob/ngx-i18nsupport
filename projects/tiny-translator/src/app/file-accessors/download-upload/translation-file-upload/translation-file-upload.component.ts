@@ -4,6 +4,8 @@ import {TranslationProject} from '../../../model/translation-project';
 import {FILETYPE_XTB} from '@ngx-i18nsupport/ngx-i18nsupport-lib';
 import {IFileDescription} from '../../common/i-file-description';
 import {DownloadedFile} from '../downloaded-file';
+import {GithubConfiguration} from '../../github/github-configuration';
+import {DownloadUploadConfiguration} from '../download-upload-configuration';
 
 @Component({
   selector: 'app-translation-file-upload',
@@ -13,6 +15,7 @@ import {DownloadedFile} from '../downloaded-file';
 export class TranslationFileUploadComponent implements OnInit {
 
   @Input() createdProject?: TranslationProject;
+  @Input() configuration: DownloadUploadConfiguration;
   @Output() fileSelected: EventEmitter<IFileDescription> = new EventEmitter();
   @Output() masterXmlFileSelected: EventEmitter<IFileDescription> = new EventEmitter();
 

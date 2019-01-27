@@ -13,7 +13,9 @@ import {TranslationUnit} from './translation-unit';
 import {map} from 'rxjs/operators';
 import {IFileDescription} from '../file-accessors/common/i-file-description';
 import {IFileAccessService} from '../file-accessors/common/i-file-access-service';
-import {FileAccessServiceFactoryService} from './file-access-service-factory.service';
+import {FileAccessServiceFactoryService} from '../file-accessors/common/file-access-service-factory.service';
+import {IFileAccessConfiguration} from '../file-accessors/common/i-file-access-configuration';
+import {FileAccessorType} from '../file-accessors/common/file-accessor-type';
 
 @Injectable()
 export class TinyTranslatorService {
@@ -72,7 +74,7 @@ export class TinyTranslatorService {
     if (isNullOrUndefined(file)) {
       return of(new TranslationProject(projectName, null, workflowType));
     }
-    const fileAccessService: IFileAccessService = this.fileAccessServiceFactoryService.getFileAccessService(file);
+    const fileAccessService: IFileAccessService = this.fileAccessServiceFactoryService.getFileAccessService(file.type);
     return combineLatest(fileAccessService.load(file), (masterXmbFile) ? fileAccessService.load(masterXmbFile) : of(null)).pipe(
         map(contentArray => {
           const loadedFile = contentArray[0];
@@ -162,7 +164,7 @@ export class TinyTranslatorService {
 
   public saveProject(project: TranslationProject) {
     this.fileAccessServiceFactoryService.getFileAccessService(
-        project.translationFile.fileDescription()).save(project.translationFile.editedFile());
+        project.translationFile.fileDescription().type).save(project.translationFile.editedFile());
     project.translationFile.markExported();
     this.commitChanges(project);
   }
@@ -285,6 +287,13 @@ export class TinyTranslatorService {
     } else {
       return of(new AutoTranslateSummaryReport());
     }
+  }
+
+  /**
+   * Get all available accessor configurations from backend.
+   */
+  getConfiguredFileAccessServices(): IFileAccessConfiguration[] {
+    return [{type: FileAccessorType.DOWNLOAD_UPLOAD, label: ''}, ...this.backendService.fileAccessConfigurations()];
   }
 
 }

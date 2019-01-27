@@ -45,6 +45,9 @@ import { FilterPageComponent } from './filter-page/filter-page.component';
 import { UpdateAvailableComponent } from './update-available/update-available.component';
 import {TranslationFileUploadComponent} from './file-accessors/download-upload/translation-file-upload/translation-file-upload.component';
 import {DownloadUploadService} from './file-accessors/download-upload/download-upload.service';
+import {TranslationFileFromGithubComponent} from './file-accessors/github/translation-file-from-github/translation-file-from-github.component';
+import {GithubAccessorService} from './file-accessors/github/github-accessor.service';
+import {ConfigureGithubPageComponent} from './file-accessors/github/configure-github-page/configure-github-page.component';
 
 @NgModule({
   declarations: [
@@ -56,6 +59,8 @@ import {DownloadUploadService} from './file-accessors/download-upload/download-u
     TranslateUnitComponent,
     TranslateUnitListComponent,
       TranslationFileUploadComponent,
+      TranslationFileFromGithubComponent,
+      ConfigureGithubPageComponent,
     LanguageComponent,
     AbbreviatePipe,
     ProjectComponent,
@@ -89,6 +94,7 @@ import {DownloadUploadService} from './file-accessors/download-upload/download-u
     AsynchronousFileReaderService,
     DownloaderService,
     DownloadUploadService,
+    GithubAccessorService,
     ActiveProjectGuard,
     {provide: BackendServiceAPI, useClass: BackendLocalStorageService},
     {provide: AutoTranslateServiceAPI, useClass: AutoTranslateGoogleService},

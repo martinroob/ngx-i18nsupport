@@ -78,4 +78,8 @@ export class AppComponent implements OnInit {
     this.router.navigateByUrl('autotranslatesummary');
   }
 
+  configureGithub() {
+    this.router.navigateByUrl('configuregithub');
+  }
+
 }

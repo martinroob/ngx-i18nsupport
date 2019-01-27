@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
 import {BackendServiceAPI} from './backend-service-api';
 import {TranslationProject} from './translation-project';
+import {IFileAccessConfiguration} from '../file-accessors/common/i-file-access-configuration';
+import {FileAccessServiceFactoryService} from '../file-accessors/common/file-access-service-factory.service';
+import {FileAccessorType} from '../file-accessors/common/file-accessor-type';
 
 @Injectable()
 export class BackendLocalStorageService extends BackendServiceAPI {
@@ -10,8 +13,11 @@ export class BackendLocalStorageService extends BackendServiceAPI {
   private KEY_CURRENT_PROJECT_ID = this.PRAEFIX + 'currentproject.id';
   private KEY_CURRENT_TRANSUNIT_ID = this.PRAEFIX + 'currenttransunit.id';
   private KEY_APIKEY = this.PRAEFIX + 'googletranslate.apikey';
+  private PRAEFIX_FILE_ACCESS_CONFIGURATION = this.PRAEFIX + 'fileaccessconfiguration.';
 
-  constructor() {
+  constructor(
+      private fileAccessServiceFactoryService: FileAccessServiceFactoryService
+  ) {
     super();
     if (!localStorage) {
       throw new Error('oops, local storage not supported');
@@ -34,7 +40,7 @@ export class BackendLocalStorageService extends BackendServiceAPI {
   projects(): TranslationProject[] {
     const projectKeys = this.getProjectKeys();
     return projectKeys
-      .map(key => {return TranslationProject.deserialize(localStorage.getItem(key)); })
+      .map(key => TranslationProject.deserialize(localStorage.getItem(key)))
       .sort((p1, p2) => p1.name.localeCompare(p2.name));
   }
 
@@ -52,7 +58,7 @@ export class BackendLocalStorageService extends BackendServiceAPI {
 
   /**
    * ID if current project.
-   * @return {string} id of current project or null
+   * @return id of current project or null
    */
   currentProjectId(): string {
     return localStorage.getItem(this.KEY_CURRENT_PROJECT_ID);
@@ -72,7 +78,7 @@ export class BackendLocalStorageService extends BackendServiceAPI {
 
   /**
    * ID of last active TransUnit
-   * @return {string} active unit or null.
+   * @return active unit or null.
    */
   currentTransUnitId(): string {
     return localStorage.getItem(this.KEY_CURRENT_TRANSUNIT_ID);
@@ -87,7 +93,7 @@ export class BackendLocalStorageService extends BackendServiceAPI {
 
   /**
    * Save API Key in store.
-   * @param key
+   * @param key GoogleTranslate API Key
    */
   storeAutoTranslateApiKey(key: string) {
     if (!key) {
@@ -99,10 +105,65 @@ export class BackendLocalStorageService extends BackendServiceAPI {
 
   /**
    * Get API key from store.
-   * @return {null}
+   * @return GoogleTranslate API Key
    */
   autoTranslateApiKey(): string {
     return localStorage.getItem(this.KEY_APIKEY);
+  }
+
+  /**
+   * Store a file access configuration.
+   * @param configuration the configuration to store.
+   */
+  storeFileAccessConfiguration(configuration: IFileAccessConfiguration) {
+    if (!configuration.id) {
+      configuration.id = BackendServiceAPI.generateUUID();
+    }
+    const key = this.keyForFileAccessConfiguration(configuration);
+    const serialization = this.fileAccessServiceFactoryService.getFileAccessService(configuration.type).serialize(configuration);
+    localStorage.setItem(key, serialization);
+  }
+
+  deleteFileAccessConfiguration(configuration: IFileAccessConfiguration) {
+    if (configuration && configuration.id) {
+      const key = this.keyForFileAccessConfiguration(configuration);
+      localStorage.removeItem(key);
+    }
+  }
+
+  /**
+   * Return all saved file access configurations.
+   */
+  fileAccessConfigurations(): IFileAccessConfiguration[] {
+    const configKeys = this.getFileAccessConfigurationKeys();
+    return configKeys
+        .map(key => {
+          const fileAccessorType = this.getFileAccessorTypeFromKey(key);
+          const accessorService = this.fileAccessServiceFactoryService.getFileAccessService(fileAccessorType);
+          return accessorService.deserialize(localStorage.getItem(key));
+        })
+        .sort((cfg1, cfg2) => cfg1.label.localeCompare(cfg2.label));
+  }
+
+  private keyForFileAccessConfiguration(configuration: IFileAccessConfiguration): string {
+    return this.PRAEFIX_FILE_ACCESS_CONFIGURATION + configuration.type + '.' + configuration.id;
+  }
+
+  private getFileAccessorTypeFromKey(key: string): FileAccessorType {
+    const keyParts = key.split('.');
+    const type: string = keyParts[keyParts.length - 2];
+    return type as FileAccessorType;
+  }
+
+  private getFileAccessConfigurationKeys(): string[] {
+    const result = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key && key.startsWith(this.PRAEFIX_FILE_ACCESS_CONFIGURATION)) {
+        result.push(key);
+      }
+    }
+    return result;
   }
 
   private keyForProject(project: TranslationProject) {

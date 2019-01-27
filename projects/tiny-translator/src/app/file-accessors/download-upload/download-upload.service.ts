@@ -6,6 +6,8 @@ import {DownloadedFile} from './downloaded-file';
 import {AsynchronousFileReaderService} from './asynchronous-file-reader.service';
 import {DownloaderService} from './downloader.service';
 import {map} from 'rxjs/operators';
+import {IFileAccessConfiguration} from '../common/i-file-access-configuration';
+import {FileAccessorType} from '../common/file-accessor-type';
 
 @Injectable()
 export class DownloadUploadService implements IFileAccessService {
@@ -32,5 +34,13 @@ export class DownloadUploadService implements IFileAccessService {
         this.downloaderService.downloadXliffFile(file.name, file.content);
         // TODO
         return of('ok');
+    }
+
+    serialize(configuration: IFileAccessConfiguration): string {
+        return 'DOWNLOAD_UPLOAD';
+    }
+
+    deserialize(serialzedConfiguration: string): IFileAccessConfiguration {
+        return {type: FileAccessorType.DOWNLOAD_UPLOAD, label: ''};
     }
 }
