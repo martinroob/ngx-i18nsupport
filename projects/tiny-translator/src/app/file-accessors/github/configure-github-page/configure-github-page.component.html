@@ -6,54 +6,16 @@
   <p i18n>To use Github you need a <a href="https://github.blog/2013-05-16-personal-api-tokens/" target="_blank">Github Personal API token</a>.</p>
   <p>The link above describes its purpose and how to create it.</p>
 </div>
-<form fxLayout="column" [formGroup]="form">
-  <mat-form-field>
-    <input matInput formControlName="apiToken" name="apiToken" placeholder="API token" i18n-placeholder
-           matTooltip="The configuration including your API token will be stored in the local storage of your browser. It will not be sent to anywhere but the Github API Service." i18n-matTooltip>
-    <mat-error *ngIf="form.get('apiToken').hasError('tokenInvalid') && !form.get('apiToken').hasError('required')" i18n>
-      The token is not valid!
-    </mat-error>
-    <mat-error *ngIf="form.get('apiToken').hasError('required')" i18n>
-      Token is <strong>required</strong>
-    </mat-error>
-  </mat-form-field>
-  <mat-form-field>
-    <input matInput formControlName="repo" name="repo" placeholder="repository" i18n-placeholder [matAutocomplete]="repos">
-    <mat-autocomplete #repos="matAutocomplete">
-      <mat-option *ngFor="let option of availableRepos()" [value]="option">
-        {{ option }}
-      </mat-option>
-    </mat-autocomplete>
-    <mat-error *ngIf="form.get('repo').hasError('repoInvalid') && !form.get('repo').hasError('required')" i18n>
-      Repository does not exist!
-    </mat-error>
-    <mat-error *ngIf="form.get('repo').hasError('required')" i18n>
-      Repository is <strong>required</strong>
-    </mat-error>
-  </mat-form-field>
-  <mat-form-field>
-    <input matInput formControlName="branch" name="branch" placeholder="branch" i18n-placeholder [matAutocomplete]="branches">
-    <mat-autocomplete #branches="matAutocomplete">
-      <mat-option *ngFor="let option of availableBranches()" [value]="option">
-        {{ option }}
-      </mat-option>
-    </mat-autocomplete>
-    <mat-error *ngIf="form.get('branch').hasError('branchInvalid')" i18n>
-      Branch does not exist!
-    </mat-error>
-  </mat-form-field>
-  <mat-form-field>
-    <input matInput formControlName="path" name="path" placeholder="path" i18n-placeholder>
-    <mat-error *ngIf="form.get('path').hasError('pathInvalid')" i18n>
-      Path does not exist!
-    </mat-error>
-    <mat-error *ngIf="form.get('path').hasError('pathIsNoDir')" i18n>
-      Path is not a directory!
-    </mat-error>
-  </mat-form-field>
-  <button color="primary" mat-raised-button i18n (click)="store()"
-          [disabled]="form.invalid"
-          matTooltip="The configuration including your API token will be stored in the local storage of your browser. It will not be sent to anywhere but the Github API Service." i18n-matTooltip>
-    Store configuration
-  </button>
-</form>
+<mat-expansion-panel *ngFor="let configuration of githubConfigurations">
+  <mat-expansion-panel-header i18n>{{configuration.label}}</mat-expansion-panel-header>
+  <app-github-config-editor
+          [githubConfiguration]="configuration"
+          (storeConfiguration)="storeConfiguration($event)">
+  </app-github-config-editor>
+  <mat-action-row>
+    <button mat-button matTooltip="Delete this configuration" i18n-matTooltip (click)="deleteConfiguration(configuration)">
+      <mat-icon>delete</mat-icon>
+    </button>
+  </mat-action-row>
+</mat-expansion-panel>
+<button mat-fab (click)="addConfiguration()" matTooltip="Add another configuration" i18n-matTooltip><mat-icon>add</mat-icon></button>

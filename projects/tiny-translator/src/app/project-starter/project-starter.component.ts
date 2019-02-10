@@ -25,7 +25,7 @@ export class ProjectStarterComponent implements OnInit {
   form: FormGroup;
   private selectedFile: IFileDescription;
   private selectedMasterXmbFile: IFileDescription;
-  private _fileAccessors;
+  private _fileAccessConfigurations;
 
   constructor(private formBuilder: FormBuilder,
               private translatorService: TinyTranslatorService,
@@ -33,7 +33,7 @@ export class ProjectStarterComponent implements OnInit {
 
   ngOnInit() {
     this.initForm();
-    this._fileAccessors = this.translatorService.getConfiguredFileAccessServices();
+    this._fileAccessConfigurations = this.translatorService.getFileAccessConfigurations();
     this.form.valueChanges.subscribe(formValue => {
       this.valueChanged(formValue);
     });
@@ -43,7 +43,7 @@ export class ProjectStarterComponent implements OnInit {
     if (!this.form) {
       this.form = this.formBuilder.group({
         projectName: [''],
-        selectedFileAccessorIndex: 0,
+        selectedFileAccessConfigurationIndex: 0,
         workflowType: ['singleuser'],
         userRole: ['translator'],
         sourceLanguage: [''],
@@ -51,12 +51,12 @@ export class ProjectStarterComponent implements OnInit {
     }
   }
 
-  fileAccessors() {
-    return this._fileAccessors;
+  fileAccessConfigurations() {
+    return this._fileAccessConfigurations;
   }
 
-  selectedFileAccessor() {
-    return this._fileAccessors[this.form.value['selectedFileAccessorIndex']];
+  selectedFileAccessConfiguration() {
+    return this._fileAccessConfigurations[this.form.value['selectedFileAccessConfigurationIndex']];
   }
 
   fileSelectionChange(file: IFileDescription) {

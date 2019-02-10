@@ -1,3 +1,6 @@
-<p>
-  translation-file-from-github works!
-</p>
+<div fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="start center">
+    <p fxFlex="50%" i18n>Select the file you want to translate.<br>
+    The file can be of format XLIFF 1.2, XLIFF 2.0 or XMB.<br>
+    The file will be stored in your browser local storage until you export the translated version.</p>
+    <button mat-icon-button color="accent" (click)="openDialog()"><mat-icon>explore</mat-icon><span i18n>Open Github Browser...</span></button>
+</div>

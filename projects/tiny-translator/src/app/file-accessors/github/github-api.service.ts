@@ -15,37 +15,37 @@ import {format} from 'util';
 /**
  * Representation of a repository.
  */
-export interface Repo {
-  name: string;
+export interface GithubRepo {
   owner: string;
+  name: string;
 }
 
 /**
  * Representation of a branch in a repository.
  */
-export interface Branch {
-  repo: Repo; // the repo containing the branch
+export interface GithubBranch {
+  repo: GithubRepo; // the repo containing the branch
   name: string; // name of branch
 }
 
 /**
  * A file.
  */
-export interface FileContents {
+export interface GithubFileContents {
   type: 'file';
-  branch: Branch;
+  branch: GithubBranch;
   path: string; // path including name
   name: string; // only name
   size: number;
   content?: string; // decoded content, as part of a directory response this is not filled
 }
 
-export interface Directory {
+export interface GithubDirectory {
   type: 'dir';
-  branch: Branch;
+  branch: GithubBranch;
   path: string; // path including name
   name: string; // only name
-  entries?: (FileContents|Directory)[]; // absent if directory is not read until now
+  entries?: (GithubFileContents|GithubDirectory)[]; // absent if directory is not read until now
 }
 
 // subset of the data returned from the GitHub API v3
@@ -160,7 +160,7 @@ export class GithubApiService {
    * Get a list of repos of the authenticated user.
    * @param apiKey OAuth token of user.
    */
-  public repos(apiKey?: string): Observable<Repo[]> {
+  public repos(apiKey?: string): Observable<GithubRepo[]> {
     return this.get<RepoFromAPI[]>('user/repos', apiKey).pipe(
       map(response => response.map((repo: RepoFromAPI) => {
         return {
@@ -176,7 +176,7 @@ export class GithubApiService {
    * @param repo the repository to be accessed
    * @param apiKey OAuth token of user.
    */
-  public branches(repo: Repo, apiKey?: string): Observable<Branch[]> {
+  public branches(repo: GithubRepo, apiKey?: string): Observable<GithubBranch[]> {
     return this.get<BranchFromAPI[]>(format('repos/%s/%s/branches', repo.owner, repo.name), apiKey).pipe(
         map(response => response.map((branch: BranchFromAPI) => {
           return {
@@ -187,7 +187,7 @@ export class GithubApiService {
     );
   }
 
-  public content(branch: Branch, path: string, apiKey?: string): Observable<FileContents|Directory> {
+  public content(branch: GithubBranch, path: string, apiKey?: string): Observable<GithubFileContents|GithubDirectory> {
     const repo = branch.repo;
     return this.get<FileOrDirectoryContentsFromAPI>(
         format('repos/%s/%s/contents/%s', repo.owner, repo.name, path),
@@ -212,7 +212,7 @@ export class GithubApiService {
     );
   }
 
-  private toFileContents(branch: Branch, path: string, contentApiResponse: FileContentsFromAPI): FileContents {
+  private toFileContents(branch: GithubBranch, path: string, contentApiResponse: FileContentsFromAPI): GithubFileContents {
     const content = contentApiResponse.content;
     let decodedContent: string|undefined;
     if (!isNullOrUndefined(content) && !isNullOrUndefined(contentApiResponse.encoding)) {
@@ -234,8 +234,8 @@ export class GithubApiService {
     };
   }
 
-  private toDirectory(branch: Branch, path: string, contentApiResponse: AnyContentsFromAPI[]): Directory {
-    const entries: (Directory|FileContents|null)[] = contentApiResponse.map((entry: AnyContentsFromAPI) => {
+  private toDirectory(branch: GithubBranch, path: string, contentApiResponse: AnyContentsFromAPI[]): GithubDirectory {
+    const entries: (GithubDirectory|GithubFileContents|null)[] = contentApiResponse.map((entry: AnyContentsFromAPI) => {
       switch (entry.type) {
         case 'file':
           return this.toFileContents(branch, entry.path, entry);
@@ -249,7 +249,7 @@ export class GithubApiService {
             branch: branch,
             path: path,
             name: entry.name
-          } as Directory;
+          } as GithubDirectory;
         default:
           return null;
       }

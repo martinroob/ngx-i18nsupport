@@ -7,20 +7,20 @@
       </mat-form-field>
     </div>
     <mat-form-field>
-      <mat-select placeholder="file access type" i18n-placeholder formControlName="selectedFileAccessorIndex" name="selectedFileAccessorIndex">
-        <mat-option *ngFor="let accessor of fileAccessors(); let i = index" [value]="i" i18n>{{accessor.type}} {{accessor.label}}</mat-option>
+      <mat-select placeholder="load translation file from.." i18n-placeholder formControlName="selectedFileAccessConfigurationIndex" name="selectedFileAccessConfigurationIndex">
+        <mat-option *ngFor="let accessor of fileAccessConfigurations(); let i = index" [value]="i" i18n>{{accessor.type}} {{accessor.label}}</mat-option>
       </mat-select>
     </mat-form-field>
-    <ng-container [ngSwitch]="selectedFileAccessor().type">
+    <ng-container [ngSwitch]="selectedFileAccessConfiguration().type">
       <app-translation-file-upload *ngSwitchCase="'Browser Upload and Download'"
                                    [createdProject]="createdProject"
-                                   [configuration]="selectedFileAccessor().configuration"
+                                   [configuration]="selectedFileAccessConfiguration()"
                                    (fileSelected)="fileSelectionChange($event)"
                                    (masterXmlFileSelected)="masterXmlFileSelectionChange($event)">
       </app-translation-file-upload>
       <app-translation-file-from-github *ngSwitchCase="'Github'"
                                         [createdProject]="createdProject"
-                                        [configuration]="selectedFileAccessor().configuration"
+                                        [configuration]="selectedFileAccessConfiguration()"
                                         (fileSelected)="fileSelectionChange($event)"
                                         (masterXmlFileSelected)="masterXmlFileSelectionChange($event)">
       </app-translation-file-from-github>

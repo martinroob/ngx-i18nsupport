@@ -1,10 +1,12 @@
 import {IFileAccessConfiguration} from '../common/i-file-access-configuration';
 import {FileAccessorType} from '../common/file-accessor-type';
+import {IFileDescriptionDirectory} from '../common/i-file-description-directory';
 
 interface SerializedFormV1 {
     version: '1';
     id: string;
     apiToken: string;
+    owner: string;
     repo: string;
     branch: string;
     path: string;
@@ -16,12 +18,13 @@ export class GithubConfiguration implements IFileAccessConfiguration {
 
     static deserialize(serializedForm: string): GithubConfiguration {
         const v1 = JSON.parse(serializedForm) as SerializedFormV1;
-        return new GithubConfiguration(v1.id, v1.apiToken, v1.repo, v1.branch, v1.path);
+        return new GithubConfiguration(v1.id, v1.apiToken, v1.owner, v1.repo, v1.branch, v1.path);
     }
 
     constructor(
         private _id: string|null,
         private _apiToken: string,
+        private _owner: string,
         private _repo: string,
         private _branch: string|null,
         private _path: string|null
@@ -32,6 +35,7 @@ export class GithubConfiguration implements IFileAccessConfiguration {
            version: '1',
            id: this._id,
            apiToken: this._apiToken,
+           owner: this._owner,
            repo: this._repo,
            branch: this._branch,
            path: this._path
@@ -55,6 +59,10 @@ export class GithubConfiguration implements IFileAccessConfiguration {
         return this._apiToken;
     }
 
+    get owner(): string {
+        return this._owner;
+    }
+
     get repo(): string {
         return this._repo;
     }
@@ -65,5 +73,13 @@ export class GithubConfiguration implements IFileAccessConfiguration {
 
     get path(): string {
         return this._path;
+    }
+
+    public rootDescription(): IFileDescriptionDirectory {
+        return {
+            type: 'dir',
+            configuration: this,
+            name: ''
+        } as IFileDescriptionDirectory;
     }
 }

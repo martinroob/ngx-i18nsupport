@@ -16,6 +16,8 @@ import {IFileAccessService} from '../file-accessors/common/i-file-access-service
 import {FileAccessServiceFactoryService} from '../file-accessors/common/file-access-service-factory.service';
 import {IFileAccessConfiguration} from '../file-accessors/common/i-file-access-configuration';
 import {FileAccessorType} from '../file-accessors/common/file-accessor-type';
+import {IFile} from '../file-accessors/common/i-file';
+import {DownloadUploadConfiguration} from '../file-accessors/download-upload/download-upload-configuration';
 
 @Injectable()
 export class TinyTranslatorService {
@@ -74,12 +76,12 @@ export class TinyTranslatorService {
     if (isNullOrUndefined(file)) {
       return of(new TranslationProject(projectName, null, workflowType));
     }
-    const fileAccessService: IFileAccessService = this.fileAccessServiceFactoryService.getFileAccessService(file.type);
+    const fileAccessService: IFileAccessService = this.fileAccessServiceFactoryService.getFileAccessService(file.configuration.type);
     return combineLatest(fileAccessService.load(file), (masterXmbFile) ? fileAccessService.load(masterXmbFile) : of(null)).pipe(
         map(contentArray => {
           const loadedFile = contentArray[0];
           const loadedMaster = contentArray[1];
-          return TranslationFile.fromFile(loadedFile, loadedMaster);
+          return TranslationFile.fromFile(loadedFile as IFile, loadedMaster);
         }),
         map((translationFile: TranslationFile) => {
           return new TranslationProject(projectName, translationFile, workflowType);
@@ -164,7 +166,7 @@ export class TinyTranslatorService {
 
   public saveProject(project: TranslationProject) {
     this.fileAccessServiceFactoryService.getFileAccessService(
-        project.translationFile.fileDescription().type).save(project.translationFile.editedFile());
+        project.translationFile.fileDescription().configuration.type).save(project.translationFile.editedFile());
     project.translationFile.markExported();
     this.commitChanges(project);
   }
@@ -292,8 +294,8 @@ export class TinyTranslatorService {
   /**
    * Get all available accessor configurations from backend.
    */
-  getConfiguredFileAccessServices(): IFileAccessConfiguration[] {
-    return [{type: FileAccessorType.DOWNLOAD_UPLOAD, label: ''}, ...this.backendService.fileAccessConfigurations()];
+  getFileAccessConfigurations(): IFileAccessConfiguration[] {
+    return [DownloadUploadConfiguration.singleInstance(), ...this.backendService.fileAccessConfigurations()];
   }
 
 }

@@ -1,0 +1,65 @@
+<form fxLayout="column" fxLayoutGap="10px" [formGroup]="form">
+  <mat-form-field>
+    <input matInput formControlName="apiToken" name="apiToken" placeholder="API token" i18n-placeholder
+           matTooltip="The configuration including your API token will be stored in the local storage of your browser. It will not be sent to anywhere but the Github API Service." i18n-matTooltip>
+    <mat-error *ngIf="form.get('apiToken').hasError('tokenInvalid')" i18n>
+      The token is not valid!
+    </mat-error>
+    <mat-error *ngIf="form.get('apiToken').hasError('required')" i18n>
+      Token is <strong>required</strong>
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput formControlName="repo" name="repo" placeholder="repository" i18n-placeholder [matAutocomplete]="repos">
+    <mat-autocomplete #repos="matAutocomplete">
+      <mat-option *ngFor="let option of availableRepos()" [value]="option">
+        {{ option }}
+      </mat-option>
+    </mat-autocomplete>
+    <mat-error *ngIf="form.get('repo').hasError('repoInvalid')" i18n>
+      Repository does not exist!
+    </mat-error>
+    <mat-error *ngIf="form.get('repo').hasError('repoUncheckable')" i18n>
+      Repository cannot be checked (invalid API token)!
+    </mat-error>
+    <mat-error *ngIf="form.get('repo').hasError('required')" i18n>
+      Repository is <strong>required</strong>
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput formControlName="branch" name="branch" placeholder="branch" i18n-placeholder [matAutocomplete]="branches">
+    <mat-autocomplete #branches="matAutocomplete">
+      <mat-option *ngFor="let option of availableBranches()" [value]="option">
+        {{ option }}
+      </mat-option>
+    </mat-autocomplete>
+    <mat-error *ngIf="form.get('branch').hasError('branchInvalid')" i18n>
+      Branch does not exist!
+    </mat-error>
+    <mat-error *ngIf="form.get('branch').hasError('branchUncheckable')" i18n>
+      Branch cannot be checked (invalid API token)!
+    </mat-error>
+  </mat-form-field>
+  <div fxLayout="row" fxLayoutGap="10px">
+    <mat-form-field fxFlex>
+      <input matInput formControlName="path" name="path" placeholder="path" i18n-placeholder>
+      <mat-error *ngIf="form.get('path').hasError('pathInvalid')" i18n>
+        Path does not exist!
+      </mat-error>
+      <mat-error *ngIf="form.get('path').hasError('pathIsNoDir')" i18n>
+        Path is not a directory!
+      </mat-error>
+    </mat-form-field>
+    <button color="accent" mat-icon-button i18n (click)="openPathBrowser()"
+        matTooltip="Open a browser to select the path" i18n-matTooltip>
+      <mat-icon>explore</mat-icon>
+      <span i18n>Browse...</span>
+    </button>
+  </div>
+  <button color="primary" mat-icon-button i18n (click)="store()"
+          [disabled]="form.invalid"
+          matTooltip="The configuration including your API token will be stored in the local storage of your browser. It will not be sent to anywhere but the Github API Service." i18n-matTooltip>
+    <mat-icon>save</mat-icon>
+    <span i18n>Store configuration</span>
+  </button>
+</form>

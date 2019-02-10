@@ -29,21 +29,21 @@
         <button mat-menu-item (click)="save()"
                 matTooltip="export current translation state to file (download)" i18n-matTooltip>
           <mat-icon>save</mat-icon>
-          <span i18n>Save..</span>
+          <span i18n>Save...</span>
         </button>
         <button mat-menu-item [matMenuTriggerFor]="configMenu">
           <mat-icon>settings</mat-icon>
-          <span i18n>Settings..</span>
+          <span i18n>Settings...</span>
         </button>
         <button mat-menu-item (click)="autoTranslate()"
           matTooltip="Translate all untranslated units with Google Translate" i18n-matTooltip>
           <mat-icon>g_translate</mat-icon>
-          <span i18n>Google Translate units..</span>
+          <span i18n>Google Translate units...</span>
         </button>
         <button mat-menu-item (click)="navigateToAutoTranslateSummary()"
                 matTooltip="Open summary page of last autotranslate run" i18n-matTooltip>
           <mat-icon>g_translate</mat-icon>
-          <span i18n>Last results..</span>
+          <span i18n>Last results...</span>
         </button>
       </mat-menu>
       <!-- config menu -->
@@ -51,7 +51,7 @@
         <button mat-menu-item (click)="configureAutoTranslate()"
                 matTooltip="configure Google Translate API Key" i18n-matTooltip>
           <mat-icon>g_translate</mat-icon>
-          <span i18n>Google Translate settings..</span>
+          <span i18n>Google Translate settings...</span>
         </button>
         <button mat-menu-item (click)="configureGithub()"
                 matTooltip="configure Github API access" i18n-matTooltip>

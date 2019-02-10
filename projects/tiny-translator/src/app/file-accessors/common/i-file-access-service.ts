@@ -3,8 +3,9 @@
  */
 import {Observable} from 'rxjs';
 import {IFile} from './i-file';
-import {IFileDescription} from './i-file-description';
 import {IFileAccessConfiguration} from './i-file-access-configuration';
+import {IFileDescriptionDirectory} from './i-file-description-directory';
+import {IFileDescription} from './i-file-description';
 
 export interface IFileAccessService {
 
@@ -13,7 +14,7 @@ export interface IFileAccessService {
      * @param description backend dependent description of the file to load.
      * @return Observable of the loaded file.
      */
-    load(description: IFileDescription): Observable<IFile>;
+    load(description: IFileDescription): Observable<IFile|IFileDescriptionDirectory>;
 
     /**
      * Save a file in the backend.

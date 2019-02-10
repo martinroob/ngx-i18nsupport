@@ -1,5 +1,6 @@
 import {IFileAccessConfiguration} from '../common/i-file-access-configuration';
 import {FileAccessorType} from '../common/file-accessor-type';
+import {IFileDescriptionDirectory} from '../common/i-file-description-directory';
 
 export class DownloadUploadConfiguration implements IFileAccessConfiguration {
 
@@ -15,4 +16,7 @@ export class DownloadUploadConfiguration implements IFileAccessConfiguration {
         return this._instance;
     }
 
+    public rootDescription(): IFileDescriptionDirectory {
+        return null;
+    }
 }

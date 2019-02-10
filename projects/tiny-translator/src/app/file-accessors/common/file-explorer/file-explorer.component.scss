@@ -1,0 +1,10 @@
+@import '~@angular/material/theming';
+@import '../../../../styles.scss';
+
+.background-highlight {
+    background-color: mat-color($dit-app-accent);
+}
+
+tree-progress-bar {
+    margin-left: 30px;
+}

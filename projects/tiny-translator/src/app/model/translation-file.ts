@@ -79,7 +79,7 @@ export class TranslationFile {
         let optionalMaster: any = null;
         if (loadedMasterXmbFile && loadedMasterXmbFile.content) {
           optionalMaster = {
-            path: loadedMasterXmbFile.name,
+            path: loadedMasterXmbFile.description.name,
             xmlContent: loadedMasterXmbFile.content,
             encoding: null
           };
@@ -87,7 +87,7 @@ export class TranslationFile {
         }
         newInstance._translationFile =
             TranslationMessagesFileFactory.fromUnknownFormatFileContent(
-                loadedFile.content, loadedFile.name, null, optionalMaster);
+                loadedFile.content, loadedFile.description.name, null, optionalMaster);
         if (newInstance._translationFile.i18nFormat() === FORMAT_XMB) {
           newInstance._error = 'xmb files cannot be translated, use xtb instead'; // TODO i18n
         }
@@ -119,8 +119,11 @@ export class TranslationFile {
       deserializedObject = {
         version: '1',
         file: {
-          description: {type: FileAccessorType.DOWNLOAD_UPLOAD, configuration: DownloadUploadConfiguration.singleInstance()},
-          name: v1Object.name,
+          description: {
+            type: 'file',
+            configuration: DownloadUploadConfiguration.singleInstance(),
+            name: v1Object.name
+          },
           size: v1Object.size,
           content: v1Object.fileContent
         },
@@ -129,8 +132,11 @@ export class TranslationFile {
       };
       if (v1Object.masterContent) {
         deserializedObject.master = {
-          description: {type: FileAccessorType.DOWNLOAD_UPLOAD, configuration: DownloadUploadConfiguration.singleInstance()},
-          name: v1Object.masterName,
+          description: {
+            type: 'file',
+            configuration: DownloadUploadConfiguration.singleInstance(),
+            name: v1Object.masterName
+          },
           size: 0,
           content: v1Object.masterContent
         };
@@ -143,12 +149,16 @@ export class TranslationFile {
       const encoding = null; // unknown, lib can find it
       let optionalMaster: {xmlContent: string, path: string, encoding: string} = null;
       if (deserializedObject.master) {
-        optionalMaster = {xmlContent: deserializedObject.master.content, path: deserializedObject.master.name, encoding: encoding};
+        optionalMaster = {
+          xmlContent: deserializedObject.master.content,
+          path: deserializedObject.master.description.name,
+          encoding: encoding
+        };
         newInstance._master = deserializedObject.master;
       }
       newInstance._translationFile = TranslationMessagesFileFactory.fromUnknownFormatFileContent(
           deserializedObject.editedContent,
-          deserializedObject.file.name,
+          deserializedObject.file.description.name,
           encoding,
           optionalMaster);
       newInstance.readTransUnits();
@@ -172,7 +182,7 @@ export class TranslationFile {
   }
 
   get name(): string {
-    return this._file.name;
+    return this._file.description.name;
   }
 
   /**
@@ -180,7 +190,7 @@ export class TranslationFile {
    * @return name of master file or null
    */
   get masterName(): string|null {
-    return (this._master) ? this._master.name : null;
+    return (this._master) ? this._master.description.name : null;
   }
 
   get size(): number {
@@ -205,7 +215,6 @@ export class TranslationFile {
     const content = this.editedContent();
     return {
       description: this._file.description,
-      name: this.name,
       size: content.length,
       content: content
     };

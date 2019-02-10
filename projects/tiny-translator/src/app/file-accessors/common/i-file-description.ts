@@ -1,11 +1,7 @@
 /**
- * A generic description of a "file".
- * It contains enough information to load and save it.
+ * A generic entry in a file system.
  */
-import {FileAccessorType} from './file-accessor-type';
-import {IFileAccessConfiguration} from './i-file-access-configuration';
+import {IFileDescriptionFile} from './i-file-description-file';
+import {IFileDescriptionDirectory} from './i-file-description-directory';
 
-export interface IFileDescription {
-    type: FileAccessorType;
-    configuration: IFileAccessConfiguration;
-}
+export type IFileDescription = IFileDescriptionFile | IFileDescriptionDirectory;

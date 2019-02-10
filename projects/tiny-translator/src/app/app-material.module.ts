@@ -1,11 +1,12 @@
 import {NgModule} from '@angular/core';
 import {
+  MAT_FORM_FIELD_DEFAULT_OPTIONS,
   MatAutocompleteModule,
-  MatButtonModule, MatCardModule, MatCheckboxModule, MatDialogModule, MatIconModule, MatInputModule, MatListModule,
-  MatMenuModule, MatOptionModule,
+  MatButtonModule, MatCardModule, MatCheckboxModule, MatDialogModule, MatExpansionModule, MatIconModule, MatInputModule, MatListModule,
+  MatMenuModule, MatOptionModule, MatProgressBarModule,
   MatProgressSpinnerModule,
   MatRadioModule, MatSelectModule, MatSlideToggleModule, MatSnackBarModule,
-  MatToolbarModule, MatTooltipModule
+  MatToolbarModule, MatTooltipModule, MatTreeModule
 } from '@angular/material';
 import {OverlayModule} from '@angular/cdk/overlay';
 import {FlexLayoutModule} from '@angular/flex-layout';
@@ -20,18 +21,21 @@ import {FlexLayoutModule} from '@angular/flex-layout';
     MatCardModule,
     MatCheckboxModule,
     MatDialogModule,
+    MatExpansionModule,
     MatIconModule,
     MatInputModule,
     MatListModule,
     MatMenuModule,
     MatOptionModule,
     MatProgressSpinnerModule,
+      MatProgressBarModule,
     MatRadioModule,
     MatSelectModule,
     MatSlideToggleModule,
     MatSnackBarModule,
     MatToolbarModule,
     MatTooltipModule,
+    MatTreeModule,
     OverlayModule,
     FlexLayoutModule
   ],
@@ -41,21 +45,26 @@ import {FlexLayoutModule} from '@angular/flex-layout';
     MatCardModule,
     MatCheckboxModule,
     MatDialogModule,
+    MatExpansionModule,
     MatIconModule,
     MatInputModule,
     MatListModule,
     MatMenuModule,
     MatOptionModule,
     MatProgressSpinnerModule,
+      MatProgressBarModule,
     MatRadioModule,
     MatSelectModule,
     MatSlideToggleModule,
     MatSnackBarModule,
     MatToolbarModule,
     MatTooltipModule,
+    MatTreeModule,
     OverlayModule,
     FlexLayoutModule
   ],
-  providers: [],
+  providers: [
+    { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'fill' }}
+  ],
 })
 export class AppMaterialModule { }

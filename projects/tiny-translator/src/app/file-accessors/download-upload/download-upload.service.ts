@@ -8,6 +8,7 @@ import {DownloaderService} from './downloader.service';
 import {map} from 'rxjs/operators';
 import {IFileAccessConfiguration} from '../common/i-file-access-configuration';
 import {FileAccessorType} from '../common/file-accessor-type';
+import {DownloadUploadConfiguration} from './download-upload-configuration';
 
 @Injectable()
 export class DownloadUploadService implements IFileAccessService {
@@ -31,7 +32,7 @@ export class DownloadUploadService implements IFileAccessService {
     }
 
     save(file: IFile): Observable<any> {
-        this.downloaderService.downloadXliffFile(file.name, file.content);
+        this.downloaderService.downloadXliffFile(file.description.name, file.content);
         // TODO
         return of('ok');
     }
@@ -41,6 +42,6 @@ export class DownloadUploadService implements IFileAccessService {
     }
 
     deserialize(serialzedConfiguration: string): IFileAccessConfiguration {
-        return {type: FileAccessorType.DOWNLOAD_UPLOAD, label: ''};
+        return DownloadUploadConfiguration.singleInstance();
     }
 }

@@ -47,7 +47,10 @@ import {TranslationFileUploadComponent} from './file-accessors/download-upload/t
 import {DownloadUploadService} from './file-accessors/download-upload/download-upload.service';
 import {TranslationFileFromGithubComponent} from './file-accessors/github/translation-file-from-github/translation-file-from-github.component';
 import {GithubAccessorService} from './file-accessors/github/github-accessor.service';
+import {GithubConfigEditorComponent} from './file-accessors/github/github-config-editor/github-config-editor.component';
 import {ConfigureGithubPageComponent} from './file-accessors/github/configure-github-page/configure-github-page.component';
+import {FileExplorerComponent} from './file-accessors/common/file-explorer/file-explorer.component';
+import {FileExplorerDialogComponent} from './file-accessors/common/file-explorer-dialog/file-explorer-dialog.component';
 
 @NgModule({
   declarations: [
@@ -60,6 +63,7 @@ import {ConfigureGithubPageComponent} from './file-accessors/github/configure-gi
     TranslateUnitListComponent,
       TranslationFileUploadComponent,
       TranslationFileFromGithubComponent,
+      GithubConfigEditorComponent,
       ConfigureGithubPageComponent,
     LanguageComponent,
     AbbreviatePipe,
@@ -73,6 +77,8 @@ import {ConfigureGithubPageComponent} from './file-accessors/github/configure-gi
     ProjectEditorComponent,
     ConfigureAutoTranslatePageComponent,
     AutoTranslateSummaryPageComponent,
+      FileExplorerComponent,
+      FileExplorerDialogComponent,
     FilterStatusComponent,
     FilterPageComponent,
     UpdateAvailableComponent
@@ -100,7 +106,11 @@ import {ConfigureGithubPageComponent} from './file-accessors/github/configure-gi
     {provide: AutoTranslateServiceAPI, useClass: AutoTranslateGoogleService},
     TranslationUnitFilterService,
   ],
-  entryComponents: [TranslateUnitWarningConfirmDialogComponent, UpdateAvailableComponent],
+  entryComponents: [
+    TranslateUnitWarningConfirmDialogComponent,
+    UpdateAvailableComponent,
+    FileExplorerDialogComponent
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
