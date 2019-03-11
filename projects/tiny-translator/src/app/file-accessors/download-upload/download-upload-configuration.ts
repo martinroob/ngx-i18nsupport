@@ -1,6 +1,12 @@
 import {IFileAccessConfiguration} from '../common/i-file-access-configuration';
 import {FileAccessorType} from '../common/file-accessor-type';
-import {IFileDescriptionDirectory} from '../common/i-file-description-directory';
+import {SerializationService} from '../../model/serialization.service';
+import {IFileDescription} from '../common/i-file-description';
+
+interface SerializedFormV1 {
+    accessorType: FileAccessorType.DOWNLOAD_UPLOAD;
+    version: '1';
+}
 
 export class DownloadUploadConfiguration implements IFileAccessConfiguration {
 
@@ -8,15 +14,53 @@ export class DownloadUploadConfiguration implements IFileAccessConfiguration {
 
     readonly type = FileAccessorType.DOWNLOAD_UPLOAD;
 
-    readonly label = '';
-
     readonly id = '0';
 
     public static singleInstance() {
         return this._instance;
     }
 
-    public rootDescription(): IFileDescriptionDirectory {
+    static deserialize(): DownloadUploadConfiguration {
+        return this._instance;
+    }
+
+    public serialize(serializationService: SerializationService): string {
+        const v1Object: SerializedFormV1 = {
+            accessorType: FileAccessorType.DOWNLOAD_UPLOAD,
+            version: '1'
+        };
+        return JSON.stringify(v1Object);
+    }
+
+    public shortLabel(): string {
+        return '';
+    }
+
+    public fullLabel(): { maticon?: string; icon?: string; label: string } {
+        return {
+            label: ''
+        };
+    }
+
+    public rootDescription(): IFileDescription {
         return null;
+    }
+
+    /**
+     * Return a directory with the given path
+     */
+    public directoryDescription(dirPath: string): IFileDescription {
+        return null;
+    }
+
+    /**
+     * Check, wether a publish is possible.
+     */
+    public canPublish(): boolean {
+        return false;
+    }
+
+    public copy() {
+        return this;
     }
 }

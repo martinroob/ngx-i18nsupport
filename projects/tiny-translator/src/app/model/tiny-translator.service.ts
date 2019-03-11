@@ -4,15 +4,12 @@ import {isNullOrUndefined} from '../common/util';
 import {BackendServiceAPI} from './backend-service-api';
 import {TranslationProject, WorkflowType} from './translation-project';
 import {combineLatest, Observable, of} from 'rxjs';
-import {
-  AutoTranslateDisabledReasonKey,
-  AutoTranslateServiceAPI
-} from './auto-translate-service-api';
+import {AutoTranslateDisabledReasonKey, AutoTranslateServiceAPI} from './auto-translate-service-api';
 import {AutoTranslateSummaryReport} from './auto-translate-summary-report';
 import {TranslationUnit} from './translation-unit';
-import {map} from 'rxjs/operators';
+import {map, switchMap, tap} from 'rxjs/operators';
 import {IFileDescription} from '../file-accessors/common/i-file-description';
-import {IFileAccessService} from '../file-accessors/common/i-file-access-service';
+import {FileStatus, ICommitData, IFileAccessService, IFileStats} from '../file-accessors/common/i-file-access-service';
 import {FileAccessServiceFactoryService} from '../file-accessors/common/file-access-service-factory.service';
 import {IFileAccessConfiguration} from '../file-accessors/common/i-file-access-configuration';
 import {FileAccessorType} from '../file-accessors/common/file-accessor-type';
@@ -164,11 +161,58 @@ export class TinyTranslatorService {
     this.backendService.store(project);
   }
 
-  public saveProject(project: TranslationProject) {
-    this.fileAccessServiceFactoryService.getFileAccessService(
-        project.translationFile.fileDescription().configuration.type).save(project.translationFile.editedFile());
+  public downloadProject(project: TranslationProject) {
+    this.fileAccessServiceFactoryService.getFileAccessService(FileAccessorType.DOWNLOAD_UPLOAD)
+        .save(project.translationFile.editedFile());
     project.translationFile.markExported();
     this.commitChanges(project);
+  }
+
+  public publishProject(
+    project: TranslationProject,
+    saveAs: IFileDescription|null,
+    commitData: ICommitData,
+    confirmModifiedCallback: () => Observable<boolean>,
+    confirmOverrideCallback: () => Observable<boolean>): Observable<string> {
+    let fileToSave = project.translationFile.editedFile();
+    if (saveAs) {
+      fileToSave = fileToSave.copyForNewDescription(saveAs);
+    }
+    const fileAccessService =
+      this.fileAccessServiceFactoryService.getFileAccessService(project.translationFile.fileDescription().configuration.type);
+    return fileAccessService.stats(fileToSave).pipe(
+      switchMap((stats: IFileStats) => {
+        if (saveAs && stats.status !== FileStatus.EXISTS_NOT) {
+          return confirmOverrideCallback().pipe(
+            tap(doSave => {commitData.override = doSave; })
+          );
+        }
+        if (!saveAs && stats.status === FileStatus.CHANGED) {
+          return confirmModifiedCallback().pipe(
+            tap(doSave => {commitData.override = doSave; })
+          );
+        }
+        return of(false);
+      }),
+      switchMap((doSave: boolean) => {
+        if (doSave) {
+          return fileAccessService.save(fileToSave, commitData)
+            .pipe(
+              tap(() => {
+                if (!saveAs) {
+                  project.translationFile.markExported();
+                  this.commitChanges(project);
+                }
+              }),
+              map(() => {
+                return 'done';
+              })
+            );
+        } else {
+          return of('cancelled');
+        }
+      })
+    );
   }
 
   public deleteProject(project: TranslationProject) {

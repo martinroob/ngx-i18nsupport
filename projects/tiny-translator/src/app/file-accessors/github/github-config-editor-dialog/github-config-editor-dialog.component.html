@@ -1,0 +1,10 @@
+<h3 matDialogTitle i18n>edit config</h3>
+<div matDialogContent>
+  <app-github-config-editor [githubConfiguration]="activeConfiguration.configuration" (configurationChange)="changeActiveConfiguration($event)">
+  </app-github-config-editor>
+</div>
+<div mat-dialog-actions>
+  <button mat-button matDialogClose [mat-dialog-close]="result()" i18n [disabled]="!isActiveConfigurationValid()">OK</button>
+  <button mat-button matDialogClose (click)="cancel()" i18n>Cancel</button>
+</div>
+

@@ -1,14 +1,15 @@
 import {Observable, of} from 'rxjs';
 import {Injectable} from '@angular/core';
-import {IFileAccessService} from '../common/i-file-access-service';
+import {FileStatus, IFileAccessService, IFileStats} from '../common/i-file-access-service';
 import {IFile} from '../common/i-file';
-import {DownloadedFile} from './downloaded-file';
+import {DownloadUploadFileDescription} from './download-upload-file-description';
 import {AsynchronousFileReaderService} from './asynchronous-file-reader.service';
 import {DownloaderService} from './downloader.service';
 import {map} from 'rxjs/operators';
 import {IFileAccessConfiguration} from '../common/i-file-access-configuration';
-import {FileAccessorType} from '../common/file-accessor-type';
 import {DownloadUploadConfiguration} from './download-upload-configuration';
+import {SerializationService} from '../../model/serialization.service';
+import {GenericFile} from '../common/generic-file';
 
 @Injectable()
 export class DownloadUploadService implements IFileAccessService {
@@ -17,31 +18,29 @@ export class DownloadUploadService implements IFileAccessService {
         private fileReaderService: AsynchronousFileReaderService,
         private downloaderService: DownloaderService) {}
 
-    load(description: DownloadedFile): Observable<IFile> {
+    load(description: DownloadUploadFileDescription): Observable<IFile> {
         const file = description.browserFile;
         return this.fileReaderService.readFile(file).pipe(
             map(result => {
-                return {
-                    description: description,
-                    name: result.name,
-                    size: result.size,
-                    content: result.content
-                };
+                return new GenericFile(description, result.name, result.size, result.content);
             })
         );
     }
 
-    save(file: IFile): Observable<any> {
+    save(file: IFile): Observable<IFile> {
         this.downloaderService.downloadXliffFile(file.description.name, file.content);
-        // TODO
-        return of('ok');
+        return of(file);
     }
 
-    serialize(configuration: IFileAccessConfiguration): string {
+    stats(file: IFile): Observable<IFileStats> {
+        return of({status: FileStatus.EXISTS_NOT});
+    }
+
+    serialize(serializationService: SerializationService, configuration: IFileAccessConfiguration): string {
         return 'DOWNLOAD_UPLOAD';
     }
 
-    deserialize(serialzedConfiguration: string): IFileAccessConfiguration {
+    deserialize(serializationService: SerializationService, serialzedConfiguration: string): IFileAccessConfiguration {
         return DownloadUploadConfiguration.singleInstance();
     }
 }

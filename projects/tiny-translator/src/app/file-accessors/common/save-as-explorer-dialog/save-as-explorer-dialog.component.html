@@ -1,0 +1,12 @@
+<h1 mat-dialog-title i18n>Select a file to save</h1>
+<div mat-dialog-content>
+  <app-save-as-explorer
+          [configurations]="configurations"
+          [file]="file"
+          (selectedFile)="selectedFile($event)">
+  </app-save-as-explorer>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="cancel()" i18n>Cancel</button>
+  <button mat-button color="accent" [disabled]="!isFileSelected()" [mat-dialog-close]="result()" cdkFocusInitial i18n>Ok</button>
+</div>

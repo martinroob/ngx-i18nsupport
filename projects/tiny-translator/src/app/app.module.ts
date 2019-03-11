@@ -51,36 +51,50 @@ import {GithubConfigEditorComponent} from './file-accessors/github/github-config
 import {ConfigureGithubPageComponent} from './file-accessors/github/configure-github-page/configure-github-page.component';
 import {FileExplorerComponent} from './file-accessors/common/file-explorer/file-explorer.component';
 import {FileExplorerDialogComponent} from './file-accessors/common/file-explorer-dialog/file-explorer-dialog.component';
+import {PublishProjectPageComponent} from './publish-project-page/publish-project-page.component';
+import {GithubConfigEditorDialogComponent} from './file-accessors/github/github-config-editor-dialog/github-config-editor-dialog.component';
+import {ConfirmDialogComponent} from './confirm-dialog/confirm-dialog.component';
+import {FileAccessConfigurationEditorDialogComponent} from './file-accessors/common/file-access-configuration-editor-dialog/file-access-configuration-editor-dialog.component';
+import {SaveAsExplorerComponent} from './file-accessors/common/save-as-explorer/save-as-explorer.component';
+import {FileComponent} from './file-accessors/common/file/file.component';
+import {SaveAsExplorerDialogComponent} from './file-accessors/common/save-as-explorer-dialog/save-as-explorer-dialog.component';
 
 @NgModule({
   declarations: [
+    AbbreviatePipe,
     AppComponent,
-    ProjectStarterComponent,
-    TranslationFileStatusComponent,
+    AutoTranslateSummaryPageComponent,
+    ConfigureAutoTranslatePageComponent,
+    ConfigureGithubPageComponent,
+    ConfirmDialogComponent,
+    CreateProjectPageComponent,
+    EditProjectPageComponent,
+    FileAccessConfigurationEditorDialogComponent,
+    FileComponent,
+    FileExplorerComponent,
+    FileExplorerDialogComponent,
+    FilterStatusComponent,
+    FilterPageComponent,
+    GithubConfigEditorComponent,
+    GithubConfigEditorDialogComponent,
     HomePageComponent,
+    LanguageComponent,
+    NormalizedMessageInputComponent,
+    ProjectComponent,
+    ProjectEditorComponent,
+    ProjectListComponent,
+    ProjectStarterComponent,
+    ProjectStatusComponent,
+    PublishProjectPageComponent,
+    SaveAsExplorerComponent,
+    SaveAsExplorerDialogComponent,
+    TranslationFileStatusComponent,
     TranslatePageComponent,
     TranslateUnitComponent,
     TranslateUnitListComponent,
-      TranslationFileUploadComponent,
-      TranslationFileFromGithubComponent,
-      GithubConfigEditorComponent,
-      ConfigureGithubPageComponent,
-    LanguageComponent,
-    AbbreviatePipe,
-    ProjectComponent,
-    ProjectListComponent,
-    CreateProjectPageComponent,
-    ProjectStatusComponent,
-    NormalizedMessageInputComponent,
+    TranslationFileUploadComponent,
+    TranslationFileFromGithubComponent,
     TranslateUnitWarningConfirmDialogComponent,
-    EditProjectPageComponent,
-    ProjectEditorComponent,
-    ConfigureAutoTranslatePageComponent,
-    AutoTranslateSummaryPageComponent,
-      FileExplorerComponent,
-      FileExplorerDialogComponent,
-    FilterStatusComponent,
-    FilterPageComponent,
     UpdateAvailableComponent
   ],
   imports: [
@@ -107,9 +121,13 @@ import {FileExplorerDialogComponent} from './file-accessors/common/file-explorer
     TranslationUnitFilterService,
   ],
   entryComponents: [
+    ConfirmDialogComponent,
+    FileAccessConfigurationEditorDialogComponent,
+    FileExplorerDialogComponent,
+    GithubConfigEditorDialogComponent,
+    SaveAsExplorerDialogComponent,
     TranslateUnitWarningConfirmDialogComponent,
-    UpdateAvailableComponent,
-    FileExplorerDialogComponent
+    UpdateAvailableComponent
   ],
   bootstrap: [AppComponent]
 })

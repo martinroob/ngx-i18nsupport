@@ -29,6 +29,6 @@ export class HomePageComponent implements OnInit {
   }
 
   public saveProject(project: TranslationProject) {
-    this.translatorService.saveProject(project);
+    this.translatorService.downloadProject(project);
   }
 }

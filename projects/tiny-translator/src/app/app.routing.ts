@@ -9,6 +9,7 @@ import {EditProjectPageComponent} from './edit-project-page/edit-project-page.co
 import {AutoTranslateSummaryPageComponent} from './auto-translate-summary-page/auto-translate-summary-page.component';
 import {ConfigureAutoTranslatePageComponent} from './configure-auto-translate-page/configure-auto-translate-page.component';
 import {ConfigureGithubPageComponent} from './file-accessors/github/configure-github-page/configure-github-page.component';
+import {PublishProjectPageComponent} from './publish-project-page/publish-project-page.component';
 
 /**
  * Created by martin on 23.03.2017.
@@ -19,6 +20,7 @@ const appRoutes: Routes = [
   { path: 'home', component: HomePageComponent },
   { path: 'createproject', component: CreateProjectPageComponent },
   { path: 'editproject', component: EditProjectPageComponent, canActivate: [ActiveProjectGuard] },
+  { path: 'publishproject', component: PublishProjectPageComponent, canActivate: [ActiveProjectGuard]},
   { path: 'translate', component: TranslatePageComponent, canActivate: [ActiveProjectGuard] },
   { path: 'selectfilter', component: FilterPageComponent, canActivate: [ActiveProjectGuard] },
   { path: 'autotranslatesummary', component: AutoTranslateSummaryPageComponent},

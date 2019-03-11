@@ -1,0 +1,29 @@
+<div fxLayout="column" style="min-width: calc(100vw-16px);"><!-- 16px = 2xmargin of container page -->
+  <h3 i18n>Publish project</h3>
+  <form id="publishProjectForm" fxLayout="column" [formGroup]="form">
+    <p i18n>Publish it at the following location</p>
+    <div fxLayout="row" fxLayoutGap="10px">
+      <app-file
+              [file]="_saveAs"
+              [configurations]="configurations()"
+              (selectedFile)="setSaveAs($event)">
+      </app-file>
+    </div>
+    <mat-form-field fxFlex="90%">
+      <mat-label i18n>commit message</mat-label>
+      <input type="text" placeholder="commit message" i18n-placeholder matInput formControlName="commitMessage" name="commitMessage"/>
+    </mat-form-field>
+    <div fxLayout="row" fxLayoutGap="20px">
+      <button mat-raised-button color="primary" (click)="publish()" [disabled]="form.invalid"><mat-icon>publish</mat-icon><span i18n>Publish</span></button>
+    </div>
+    <div *ngIf="error">
+      {{error}}
+    </div>
+  </form>
+  <div [hidden]="true">
+    <span i18n #confirmSaveQuestion>Do you really want to override this file?</span>
+    <span i18n #confirmSaveInfo>File already exists.</span>
+    <span i18n #confirmModifyQuestion>Do you really want to override this file?</span>
+    <span i18n #confirmModifyInfo>The file has been modified after you loaded it.</span>
+  </div>
+</div>

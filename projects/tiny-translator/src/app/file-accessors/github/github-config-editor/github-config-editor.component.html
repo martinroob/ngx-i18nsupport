@@ -1,6 +1,7 @@
 <form fxLayout="column" fxLayoutGap="10px" [formGroup]="form">
   <mat-form-field>
-    <input matInput formControlName="apiToken" name="apiToken" placeholder="API token" i18n-placeholder
+    <mat-label i18n>Github API token</mat-label>
+    <input matInput formControlName="apiToken" name="apiToken" placeholder="Github API token" i18n-placeholder
            matTooltip="The configuration including your API token will be stored in the local storage of your browser. It will not be sent to anywhere but the Github API Service." i18n-matTooltip>
     <mat-error *ngIf="form.get('apiToken').hasError('tokenInvalid')" i18n>
       The token is not valid!
@@ -10,7 +11,8 @@
     </mat-error>
   </mat-form-field>
   <mat-form-field>
-    <input matInput formControlName="repo" name="repo" placeholder="repository" i18n-placeholder [matAutocomplete]="repos">
+    <mat-label i18n>Github repository</mat-label>
+    <input matInput formControlName="repo" name="repo" placeholder="Github repository" i18n-placeholder [matAutocomplete]="repos">
     <mat-autocomplete #repos="matAutocomplete">
       <mat-option *ngFor="let option of availableRepos()" [value]="option">
         {{ option }}
@@ -27,7 +29,8 @@
     </mat-error>
   </mat-form-field>
   <mat-form-field>
-    <input matInput formControlName="branch" name="branch" placeholder="branch" i18n-placeholder [matAutocomplete]="branches">
+    <mat-label i18n>Github branch</mat-label>
+    <input matInput formControlName="branch" name="branch" placeholder="Github branch" i18n-placeholder [matAutocomplete]="branches">
     <mat-autocomplete #branches="matAutocomplete">
       <mat-option *ngFor="let option of availableBranches()" [value]="option">
         {{ option }}
@@ -42,6 +45,7 @@
   </mat-form-field>
   <div fxLayout="row" fxLayoutGap="10px">
     <mat-form-field fxFlex>
+      <mat-label i18n>path</mat-label>
       <input matInput formControlName="path" name="path" placeholder="path" i18n-placeholder>
       <mat-error *ngIf="form.get('path').hasError('pathInvalid')" i18n>
         Path does not exist!
@@ -56,10 +60,4 @@
       <span i18n>Browse...</span>
     </button>
   </div>
-  <button color="primary" mat-icon-button i18n (click)="store()"
-          [disabled]="form.invalid"
-          matTooltip="The configuration including your API token will be stored in the local storage of your browser. It will not be sent to anywhere but the Github API Service." i18n-matTooltip>
-    <mat-icon>save</mat-icon>
-    <span i18n>Store configuration</span>
-  </button>
 </form>

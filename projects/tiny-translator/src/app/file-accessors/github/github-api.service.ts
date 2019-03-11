@@ -1,16 +1,14 @@
 /**
  * A service to access the github api v3.
- * It can read repositories and directories and files in the repositories.
+ * It can read and write repositories and directories and files in the repositories.
  * Access is authenticated via an OAuth access token.
  */
 import {Inject, Injectable} from '@angular/core';
-import {AutoTranslateDisabledReason, AutoTranslateDisabledReasonKey} from '../../model/auto-translate-service-api';
 import {APP_CONFIG, AppConfig} from '../../app.config';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {isArray, isNullOrUndefined} from '../../common/util';
-import {Observable, of} from 'rxjs';
+import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
-import {format} from 'util';
 
 /**
  * Representation of a repository.
@@ -36,6 +34,7 @@ export interface GithubFileContents {
   branch: GithubBranch;
   path: string; // path including name
   name: string; // only name
+  sha: string; // SHA1 of file (needed for update operations)
   size: number;
   content?: string; // decoded content, as part of a directory response this is not filled
 }
@@ -45,6 +44,7 @@ export interface GithubDirectory {
   branch: GithubBranch;
   path: string; // path including name
   name: string; // only name
+  sha: string; // SHA1 of file (needed for update operations)
   entries?: (GithubFileContents|GithubDirectory)[]; // absent if directory is not read until now
 }
 
@@ -70,6 +70,7 @@ interface FileContentsFromAPI {
   size: number;
   encoding?: 'base64'; // TODO can there be anything else?
   content?: string;
+  sha: string;
 }
 
 interface DirectoryEntryContentsFromAPI {
@@ -77,6 +78,7 @@ interface DirectoryEntryContentsFromAPI {
   name: string;
   path: string;
   size: number; // always 0 I guess
+  sha: string;
 }
 
 interface SymlinkContentsFromAPI {
@@ -85,6 +87,7 @@ interface SymlinkContentsFromAPI {
   path: string;
   size: number;
   target: string;
+  sha: string;
 }
 
 interface SubmoduleContentsFromAPI {
@@ -92,21 +95,45 @@ interface SubmoduleContentsFromAPI {
   name: string;
   path: string;
   size: number;
+  sha: string;
 }
 
-type AnyContentsFromAPI = FileContentsFromAPI | DirectoryEntryContentsFromAPI | SymlinkContentsFromAPI | SubmoduleContentsFromAPI;
+type ContentsFromAPI = FileContentsFromAPI | DirectoryEntryContentsFromAPI | SymlinkContentsFromAPI | SubmoduleContentsFromAPI;
+
+/**
+ * input type of content update call.
+ */
+interface ContentsUpdateInputAPI {
+  message: string; // Required. The commit message.
+  content: string; // Required. The new file content, using Base64 encoding.
+  sha: string; // Required. The blob SHA of the file being replaced.
+  branch?: string; // The branch name. Default: the repository’s default branch (usually master)
+  // committer and author not used here
+}
+
+/**
+ * return type of content update call.
+ */
+interface ContentsUpdateFromAPI {
+  content: {
+    name: string;
+    path: string;
+    sha: string;
+    size: number;
+  };
+}
 
 // subset of the data returned from the GitHub API v3
 // Contains only data that is used here.
 // if requested path is a directory, the answer is an array of the directory content, otherwise it is just the object (normally a file)
-type FileOrDirectoryContentsFromAPI = AnyContentsFromAPI | [AnyContentsFromAPI];
+type FileOrDirectoryContentsFromAPI = ContentsFromAPI | [ContentsFromAPI];
 
 @Injectable({
   providedIn: 'root'
 })
 export class GithubApiService {
 
-  private _rootUrl: string;
+  private readonly _rootUrl: string;
 
   private _apiKey: string;
 
@@ -121,10 +148,7 @@ export class GithubApiService {
     // it can be set interactively in the app
     // but in the karma tests it will be set. It is stored than in environment.secret.ts (not in Git)
     this.setApiKey(app_config.GITHUB_API_KEY); // must be set explicitly via setApiKey()
-    this.failByDesign = false;
-    if (app_config.GITHUB_PROVOKE_FAILURES === true) {
-      this.failByDesign = true;
-    }
+    this.failByDesign = app_config.GITHUB_PROVOKE_FAILURES;
   }
 
   /**
@@ -132,15 +156,36 @@ export class GithubApiService {
    */
   private headers(apiKey?: string): HttpHeaders {
     const key = (apiKey) ? apiKey : this.apiKey();
-    const _headers = new HttpHeaders()
+    return new HttpHeaders()
         .append('Accept', 'application/vnd.github.v3+json')
         .append('Authorization', 'token ' + key);
-    return _headers;
   }
 
+  /**
+   * Send GET request to API.
+   * @param relativeUrl URL relative to API root.
+   * @param apiKey OAuth-Token
+   * @param parameters additional HTTP Parameters.
+   * @return GET result of type T
+   */
   private get<T>(relativeUrl: string, apiKey: string, parameters?: HttpParams): Observable<T> {
     return this.httpClient.get(this.fullUrl(relativeUrl), {headers: this.headers(apiKey), params: parameters}).pipe(
       map(response => response as T)
+    );
+  }
+
+  /**
+   * Send PUT request to API.
+   * Put an Object of type T, return a result of type U.
+   * @param relativeUrl URL relative to API root.
+   * @param apiKey OAuth-Token
+   * @param body request body to send, will be send as a JSON object.
+   * @param parameters additional HTTP Parameters.
+   * @return PUT result of type U
+   */
+  private put<T, U>(relativeUrl: string, apiKey: string, body: T, parameters?: HttpParams): Observable<U> {
+    return this.httpClient.put(this.fullUrl(relativeUrl), body, {headers: this.headers(apiKey), params: parameters}).pipe(
+        map(response => response as U)
     );
   }
 
@@ -177,7 +222,7 @@ export class GithubApiService {
    * @param apiKey OAuth token of user.
    */
   public branches(repo: GithubRepo, apiKey?: string): Observable<GithubBranch[]> {
-    return this.get<BranchFromAPI[]>(format('repos/%s/%s/branches', repo.owner, repo.name), apiKey).pipe(
+    return this.get<BranchFromAPI[]>(`repos/${repo.owner}/${repo.name}/branches`, apiKey).pipe(
         map(response => response.map((branch: BranchFromAPI) => {
           return {
             name: branch.name,
@@ -187,22 +232,29 @@ export class GithubApiService {
     );
   }
 
+  /**
+   * Get content of a file or directory.
+   * @param branch branch
+   * @param path path
+   * @param apiKey OAuth token of user.
+   */
   public content(branch: GithubBranch, path: string, apiKey?: string): Observable<GithubFileContents|GithubDirectory> {
     const repo = branch.repo;
+    const url = `repos/${repo.owner}/${repo.name}/contents/${path}`;
     return this.get<FileOrDirectoryContentsFromAPI>(
-        format('repos/%s/%s/contents/%s', repo.owner, repo.name, path),
+        url,
         apiKey,
         new HttpParams().append('ref', branch.name)
     ).pipe(
         map((response: FileOrDirectoryContentsFromAPI) => {
           if (isArray(response)) {
             // it is a directory
-            return this.toDirectory(branch, path, response as AnyContentsFromAPI[]);
+            return this.toDirectory(branch, path, response as ContentsFromAPI[]);
           } else {
-            const singleResponse: AnyContentsFromAPI = response as AnyContentsFromAPI;
+            const singleResponse: ContentsFromAPI = response as ContentsFromAPI;
             switch (singleResponse.type) {
               case 'file':
-                return this.toFileContents(branch, path, response as FileContentsFromAPI);
+                return this.toFileContents(branch, response as FileContentsFromAPI);
               case 'symlink':
               default:
                 // TODO
@@ -212,7 +264,45 @@ export class GithubApiService {
     );
   }
 
-  private toFileContents(branch: GithubBranch, path: string, contentApiResponse: FileContentsFromAPI): GithubFileContents {
+  /**
+   * Update (or create) a file
+   * @param branch the branch
+   * @param newContents the updated content (path and content must be set, sha must be set, if it is an update)
+   * @param message the commit message
+   * @param apiKey OAuth token of user.
+   */
+  public updateContent(
+      branch: GithubBranch,
+      newContents: GithubFileContents,
+      message: string,
+      apiKey?: string): Observable<GithubFileContents> {
+    const repo = branch.repo;
+    const url = `repos/${repo.owner}/${repo.name}/contents/${newContents.path}`;
+    return this.put<ContentsUpdateInputAPI, ContentsUpdateFromAPI>(
+        url,
+        apiKey,
+        {
+          message: message,
+          content: btoa(newContents.content),
+          sha: newContents.sha,
+          branch: branch.name
+        } as ContentsUpdateInputAPI
+    ).pipe(
+        map((response: ContentsUpdateFromAPI) => {
+          return {
+            type: 'file',
+            branch: branch,
+            path: response.content.path,
+            name: response.content.name,
+            size: response.content.size,
+            content: newContents.content,
+            sha: response.content.sha
+          } as GithubFileContents;
+        })
+    );
+  }
+
+  private toFileContents(branch: GithubBranch, contentApiResponse: FileContentsFromAPI): GithubFileContents {
     const content = contentApiResponse.content;
     let decodedContent: string|undefined;
     if (!isNullOrUndefined(content) && !isNullOrUndefined(contentApiResponse.encoding)) {
@@ -230,15 +320,16 @@ export class GithubApiService {
       path: contentApiResponse.path,
       name: contentApiResponse.name,
       size: contentApiResponse.size,
-      content: decodedContent
+      content: decodedContent,
+      sha: contentApiResponse.sha
     };
   }
 
-  private toDirectory(branch: GithubBranch, path: string, contentApiResponse: AnyContentsFromAPI[]): GithubDirectory {
-    const entries: (GithubDirectory|GithubFileContents|null)[] = contentApiResponse.map((entry: AnyContentsFromAPI) => {
+  private toDirectory(branch: GithubBranch, path: string, contentApiResponse: ContentsFromAPI[]): GithubDirectory {
+    const entries: (GithubDirectory|GithubFileContents|null)[] = contentApiResponse.map((entry: ContentsFromAPI) => {
       switch (entry.type) {
         case 'file':
-          return this.toFileContents(branch, entry.path, entry);
+          return this.toFileContents(branch, entry);
         case 'symlink':
           return null;
         case 'submodule':
@@ -248,7 +339,8 @@ export class GithubApiService {
             type: 'dir',
             branch: branch,
             path: path,
-            name: entry.name
+            name: entry.name,
+            sha: entry.sha
           } as GithubDirectory;
         default:
           return null;
@@ -259,6 +351,7 @@ export class GithubApiService {
       branch: branch,
       path: path,
       name: this.basename(path),
+      sha: '',
       entries: entries
     };
   }

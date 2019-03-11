@@ -26,10 +26,15 @@
       </a>
       <!-- main menu -->
       <mat-menu #menu="matMenu">
-        <button mat-menu-item (click)="save()"
+        <button mat-menu-item (click)="download()"
                 matTooltip="export current translation state to file (download)" i18n-matTooltip>
           <mat-icon>save</mat-icon>
           <span i18n>Save...</span>
+        </button>
+        <button mat-menu-item (click)="publish()" [disabled]="!publishEnabled()"
+                matTooltip="publish translated state to Github..." i18n-matTooltip>
+          <mat-icon>publish</mat-icon>
+          <span i18n>Publish...</span>
         </button>
         <button mat-menu-item [matMenuTriggerFor]="configMenu">
           <mat-icon>settings</mat-icon>

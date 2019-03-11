@@ -11,6 +11,7 @@ import {BackendServiceAPI} from '../../../model/backend-service-api';
 export class ConfigureGithubPageComponent implements OnInit {
 
   githubConfigurations: GithubConfiguration[];
+  activeConfigurations: {[index: number]: {valid: boolean, configuration: GithubConfiguration}};
 
   constructor(
       private backendServiceAPI: BackendServiceAPI) {
@@ -21,6 +22,21 @@ export class ConfigureGithubPageComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.activeConfigurations = [];
+  }
+
+  changeActiveConfiguration(index: number, newValue: {valid: boolean, configuration: GithubConfiguration}) {
+    this.activeConfigurations[index] = newValue;
+  }
+
+  isActiveConfigurationValid(index: number): boolean {
+    return this.activeConfigurations[index] && this.activeConfigurations[index].valid;
+  }
+
+  storeActiveConfiguration(index: number) {
+    if (this.isActiveConfigurationValid(index)) {
+      this.storeConfiguration(this.activeConfigurations[index].configuration);
+    }
   }
 
   addConfiguration() {

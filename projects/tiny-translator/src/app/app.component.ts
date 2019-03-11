@@ -6,6 +6,7 @@ import {SwUpdate} from '@angular/service-worker';
 import {MatSnackBar} from '@angular/material';
 import {UpdateAvailableEvent} from '@angular/service-worker/src/low_level';
 import {UpdateAvailableComponent} from './update-available/update-available.component';
+import {ICommitData} from './file-accessors/common/i-file-access-service';
 
 @Component({
   selector: 'app-root',
@@ -47,10 +48,23 @@ export class AppComponent implements OnInit {
     return project ? project.name : '';
   }
 
-  save() {
-    this.translatorService.saveProject(this.translatorService.currentProject());
+  /**
+   * Download using Browser functionality..
+   */
+  download() {
+    this.translatorService.downloadProject(this.translatorService.currentProject());
   }
 
+  /**
+   * Publish to the configured backend (Github, ...)
+   */
+  publish() {
+    this.router.navigateByUrl('publishproject');
+  }
+
+  publishEnabled(): boolean {
+    return this.translatorService.currentProject() && this.translatorService.currentProject().canPublish();
+  }
   /**
    * Auto translate all untranslated units.
    * Redirects to a config page, if Google Translate is currently not available.

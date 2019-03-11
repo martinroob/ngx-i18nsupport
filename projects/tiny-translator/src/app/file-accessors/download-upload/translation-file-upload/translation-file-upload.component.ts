@@ -3,7 +3,7 @@ import {FormBuilder, FormGroup} from '@angular/forms';
 import {TranslationProject} from '../../../model/translation-project';
 import {FILETYPE_XTB} from '@ngx-i18nsupport/ngx-i18nsupport-lib';
 import {IFileDescription} from '../../common/i-file-description';
-import {DownloadedFile} from '../downloaded-file';
+import {DownloadUploadFileDescription} from '../download-upload-file-description';
 import {GithubConfiguration} from '../../github/github-configuration';
 import {DownloadUploadConfiguration} from '../download-upload-configuration';
 
@@ -44,7 +44,7 @@ export class TranslationFileUploadComponent implements OnInit {
     }
     if (input.files && input.files.length > 0) {
       const file: File = input.files.item(0);
-      this.fileSelected.emit(new DownloadedFile(file));
+      this.fileSelected.emit(new DownloadUploadFileDescription(file));
     }
   }
 
@@ -54,7 +54,7 @@ export class TranslationFileUploadComponent implements OnInit {
     }
     if (input.files && input.files.length > 0) {
       const file: File = input.files.item(0);
-      this.masterXmlFileSelected.emit(new DownloadedFile(file));
+      this.masterXmlFileSelected.emit(new DownloadUploadFileDescription(file));
     }
   }
 

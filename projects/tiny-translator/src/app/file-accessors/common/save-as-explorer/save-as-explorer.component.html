@@ -1,0 +1,15 @@
+<form [formGroup]="form">
+  <app-file-explorer
+          [configurations]="configurations"
+          [root]="configuration.rootDescription()"
+          [file]="file"
+          (selectedFile)="setSelectedFileFromExplorer($event)">
+  </app-file-explorer>
+  <div fxLayout="row" fxLayoutGap="10px">
+    <mat-form-field fxFlex="90%">
+      <mat-label i18n>name</mat-label>
+      <input type="text" placeholder="name" i18n-placeholder matInput formControlName="name" name="name"/>
+    </mat-form-field>
+  </div>
+</form>
+{{form.value | json}}

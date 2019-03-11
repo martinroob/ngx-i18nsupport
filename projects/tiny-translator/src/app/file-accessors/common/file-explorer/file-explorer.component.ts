@@ -1,22 +1,33 @@
-import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
-import {IFileDescriptionDirectory} from '../i-file-description-directory';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FlatTreeControl} from '@angular/cdk/tree';
 import {IFileDescription} from '../i-file-description';
-import {BehaviorSubject, merge, Observable, of} from 'rxjs';
+import {BehaviorSubject, EMPTY, merge, Observable, of} from 'rxjs';
 import {CollectionViewer, SelectionChange} from '@angular/cdk/collections';
-import {map} from 'rxjs/operators';
+import {expand, last, map, } from 'rxjs/operators';
 import {IFileAccessService} from '../i-file-access-service';
 import {FileAccessServiceFactoryService} from '../file-access-service-factory.service';
 import {isNullOrUndefined} from '../../../common/util';
+import {IFileAccessConfiguration} from '../i-file-access-configuration';
+import {FormBuilder, FormGroup} from '@angular/forms';
+import {DownloadUploadFileDescription} from '../../download-upload/download-upload-file-description';
 
 /** Flat node with expandable and level information */
 class DynamicFlatNode {
 
   item: string;
+  maticon?: string;
+  icon?: string;
 
   constructor(public node: IFileDescription, public level = 1, public expandable = false,
               public isLoading = false) {
-    this.item = node.name;
+    if (level === 0) {
+      const configLabel = node.configuration.fullLabel();
+      this.item = configLabel.label;
+      this.maticon = configLabel.maticon;
+      this.icon = configLabel.icon;
+    } else {
+      this.item = node.name;
+    }
   }
 }
 
@@ -26,9 +37,9 @@ class DynamicFlatNode {
  */
 class FileData {
 
-  private rootLevelNodes: IFileDescriptionDirectory[];
+  private rootLevelNodes: IFileDescription[];
 
-  constructor(root: IFileDescriptionDirectory, private accessService: IFileAccessService, private onlyDirectories: boolean) {
+  constructor(root: IFileDescription, private accessService: IFileAccessService, private onlyDirectories: boolean) {
     this.rootLevelNodes = [root];
   }
 
@@ -41,11 +52,11 @@ class FileData {
     if (node.type === 'file') {
       return of(undefined);
     } else {
-      const children = (node as IFileDescriptionDirectory).children;
+      const children = node.children;
       if (isNullOrUndefined(children)) {
         return this.accessService.load(node).pipe(
-            map(result => {
-                return (result as IFileDescriptionDirectory).children.filter(fd => !this.onlyDirectories || fd.type === 'dir');
+            map((result: IFileDescription) => {
+                return result.children.filter(fd => !this.onlyDirectories || fd.type === 'dir');
             })
         );
       } else {
@@ -79,7 +90,7 @@ class DynamicFileDataSource {
               private database: FileData) {}
 
   connect(collectionViewer: CollectionViewer): Observable<DynamicFlatNode[]> {
-    this.treeControl.expansionModel.onChange.subscribe(change => {
+    this.treeControl.expansionModel.changed.subscribe(change => {
       if ((change as SelectionChange<DynamicFlatNode>).added ||
           (change as SelectionChange<DynamicFlatNode>).removed) {
         this.handleTreeControl(change as SelectionChange<DynamicFlatNode>);
@@ -102,7 +113,7 @@ class DynamicFileDataSource {
   /**
    * Toggle the node, remove from display list
    */
-  toggleNode(node: DynamicFlatNode, expand: boolean) {
+  toggleNode(node: DynamicFlatNode, expandNode: boolean) {
     const children = this.database.getChildren(node.node);
     const index = this.data.indexOf(node);
     if (index < 0) { // If cannot find the node, no op
@@ -111,7 +122,7 @@ class DynamicFileDataSource {
 
     node.isLoading = true;
     children.subscribe(childrenDescr => {
-      if (expand) {
+      if (expandNode) {
         const nodes = childrenDescr.map(filedescr =>
             new DynamicFlatNode(filedescr, node.level + 1, this.database.isExpandable(filedescr)));
         this.data.splice(index + 1, 0, ...nodes);
@@ -126,8 +137,67 @@ class DynamicFileDataSource {
       this.dataChange.next(this.data);
       node.isLoading = false;
     }, (error) => {
-      console.log('oops loading children', error);
+      console.log('error loading children', error); // TODO
+      node.isLoading = false;
     });
+  }
+
+  /**
+   * Open the tree up to the given node.
+   * @param node node to be visible
+   * @param callBack called when node is contained in the tree.
+   */
+  openNode(node: IFileDescription, callBack: (node: DynamicFlatNode) => void) {
+    const start: {data: DynamicFlatNode[], index: number, path: string, pathIndex: number}
+      = {data: this.data, index: 0, path: node.path, pathIndex: 0};
+    of(start).pipe(
+      expand(current => {
+        if (current.index < 0 || current.pathIndex < 0) {
+          return EMPTY;
+        } else {
+          return this.openSubdir(current);
+        }
+      }),
+      last()
+    ).subscribe(current => {
+      this.dataChange.next(current.data);
+      if (current.index >= 0) {
+        callBack(current.data[current.index]);
+      }
+    });
+  }
+
+  openSubdir(current: {data: DynamicFlatNode[], index: number, path: string, pathIndex: number})
+    : Observable<{data: DynamicFlatNode[], index: number, path: string, pathIndex: number}> {
+    if (current.index < 0 || current.pathIndex < 0) {
+      return of(current);
+    }
+    const nodeToExpand = current.data[current.index];
+    const pathParts = current.path.split('/');
+    if (!nodeToExpand || current.pathIndex >= pathParts.length) {
+      return of({data: current.data, index: current.index, path: current.path, pathIndex: -1});
+    }
+    const dirNameToOpen = pathParts[current.pathIndex];
+    return this.database.getChildren(nodeToExpand.node).pipe(
+      map((childrenDescr: IFileDescription[]) => {
+        const nodes = childrenDescr.map(filedescr =>
+          new DynamicFlatNode(filedescr, nodeToExpand.level + 1, this.database.isExpandable(filedescr)));
+        const newData = current.data.slice();
+        newData.splice(current.index + 1, 0, ...nodes);
+        const indexInNewNodes = nodes.findIndex((node) => node.node.name === dirNameToOpen);
+        if (indexInNewNodes < 0) {
+          return {data: current.data, index: -1, path: current.path, pathIndex: current.pathIndex};
+        } else {
+          const newIndex = current.index + 1 + indexInNewNodes;
+          return {
+            data: newData,
+            index: newIndex,
+            path: current.path,
+            pathIndex: current.pathIndex + 1
+          };
+        }
+      })
+    );
   }
 }
 
@@ -136,12 +206,24 @@ class DynamicFileDataSource {
   templateUrl: './file-explorer.component.html',
   styleUrls: ['./file-explorer.component.scss']
 })
-export class FileExplorerComponent implements OnInit, OnChanges {
+export class FileExplorerComponent implements OnInit {
+
+  /**
+   * The selectable configurations.
+   * If null, there will be no selection.
+   */
+  @Input() configurations?: IFileAccessConfiguration[];
 
   /**
    * Root file (a directory) to be shown in the explorer.
    */
-  @Input() root: IFileDescriptionDirectory;
+  @Input() root: IFileDescription;
+
+  /**
+   * Selected file when starting the component.
+   */
+  @Input() file: IFileDescription;
+
   /**
    * Determine what sort of entries can be selected.
    * 'file': only files.
@@ -155,6 +237,8 @@ export class FileExplorerComponent implements OnInit, OnChanges {
    */
   @Output() selectedFile: EventEmitter<IFileDescription> = new EventEmitter<IFileDescription>();
 
+  form: FormGroup;
+  _currentRoot: IFileDescription;
   treeControl: FlatTreeControl<DynamicFlatNode>;
   dataSource: DynamicFileDataSource;
 
@@ -166,23 +250,56 @@ export class FileExplorerComponent implements OnInit, OnChanges {
 
   hasChild = (_: number, _nodeData: DynamicFlatNode) => _nodeData.expandable;
 
-  constructor(private fileAccessServiceFactoryService: FileAccessServiceFactoryService) {
+  constructor(private formBuilder: FormBuilder, private fileAccessServiceFactoryService: FileAccessServiceFactoryService) {
   }
 
   ngOnInit() {
+    this.currentRoot = this.root.configuration.rootDescription();
+    this.initForm();
+    this.form.valueChanges.subscribe((val) => {
+      this.currentRoot = this.configurations[val.selectedConfigurationIndex].rootDescription();
+    });
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-      if (changes['root']) {
-          if (this.root) {
-              const accessService = this.fileAccessServiceFactoryService.getFileAccessService(this.root.configuration.type);
-              const database = new FileData(this.root, accessService, (this.selectableFileType === 'dir'));
-              this.treeControl = new FlatTreeControl<DynamicFlatNode>(this.getLevel, this.isExpandable);
-              this.dataSource = new DynamicFileDataSource(this.treeControl, database);
+  initForm() {
+    if (!this.form) {
+      const index = (!this.root || !this.configurations) ?
+        0 :
+        this.configurations.findIndex(conf => conf.id === this.root.configuration.id);
+      this.form = this.formBuilder.group(
+        {
+          selectedConfigurationIndex: [index]
+        }
+      );
+    }
+  }
 
-              this.dataSource.data = database.initialData();
-          }
+  get currentRoot(): IFileDescription {
+    return this._currentRoot;
+  }
+
+  set currentRoot(newRoot: IFileDescription) {
+    console.log('new root', newRoot);
+    if (newRoot) {
+      const accessService = this.fileAccessServiceFactoryService.getFileAccessService(newRoot.configuration.type);
+      const database = new FileData(newRoot, accessService, (this.selectableFileType === 'dir'));
+      this.treeControl = new FlatTreeControl<DynamicFlatNode>(this.getLevel, this.isExpandable);
+      this.dataSource = new DynamicFileDataSource(this.treeControl, database);
+
+      this.dataSource.data = database.initialData();
+      if (this.file && !this._currentRoot) {
+        this.dataSource.openNode(this.file, (node) => { this.activeNode = node; });
+      } else {
+        this.dataSource.openNode(newRoot, (node) => {
+          this.activeNode = node;
+          this.selected(this.activeNode);
+        });
+        this.selectedFile.emit(newRoot);
       }
+    } else {
+      this.dataSource = null;
+    }
+    this._currentRoot = newRoot;
   }
 
   selected(node: DynamicFlatNode) {

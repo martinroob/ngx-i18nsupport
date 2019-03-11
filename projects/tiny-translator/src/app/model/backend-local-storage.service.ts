@@ -4,6 +4,7 @@ import {TranslationProject} from './translation-project';
 import {IFileAccessConfiguration} from '../file-accessors/common/i-file-access-configuration';
 import {FileAccessServiceFactoryService} from '../file-accessors/common/file-access-service-factory.service';
 import {FileAccessorType} from '../file-accessors/common/file-accessor-type';
+import {SerializationService} from './serialization.service';
 
 @Injectable()
 export class BackendLocalStorageService extends BackendServiceAPI {
@@ -16,7 +17,8 @@ export class BackendLocalStorageService extends BackendServiceAPI {
   private PRAEFIX_FILE_ACCESS_CONFIGURATION = this.PRAEFIX + 'fileaccessconfiguration.';
 
   constructor(
-      private fileAccessServiceFactoryService: FileAccessServiceFactoryService
+      private fileAccessServiceFactoryService: FileAccessServiceFactoryService,
+      private serializationService: SerializationService
   ) {
     super();
     if (!localStorage) {
@@ -31,7 +33,7 @@ export class BackendLocalStorageService extends BackendServiceAPI {
     if (!project.id) {
       project.id = BackendServiceAPI.generateUUID();
     }
-    localStorage.setItem(this.keyForProject(project), project.serialize());
+    localStorage.setItem(this.keyForProject(project), project.serialize(this.serializationService));
   }
 
   /**
@@ -40,7 +42,7 @@ export class BackendLocalStorageService extends BackendServiceAPI {
   projects(): TranslationProject[] {
     const projectKeys = this.getProjectKeys();
     return projectKeys
-      .map(key => TranslationProject.deserialize(localStorage.getItem(key)))
+      .map(key => TranslationProject.deserialize(this.serializationService, localStorage.getItem(key)))
       .sort((p1, p2) => p1.name.localeCompare(p2.name));
   }
 
@@ -120,7 +122,7 @@ export class BackendLocalStorageService extends BackendServiceAPI {
       configuration.id = BackendServiceAPI.generateUUID();
     }
     const key = this.keyForFileAccessConfiguration(configuration);
-    const serialization = this.fileAccessServiceFactoryService.getFileAccessService(configuration.type).serialize(configuration);
+    const serialization = this.fileAccessServiceFactoryService.getFileAccessService(configuration.type).serialize(this.serializationService, configuration);
     localStorage.setItem(key, serialization);
   }
 
@@ -140,9 +142,9 @@ export class BackendLocalStorageService extends BackendServiceAPI {
         .map(key => {
           const fileAccessorType = this.getFileAccessorTypeFromKey(key);
           const accessorService = this.fileAccessServiceFactoryService.getFileAccessService(fileAccessorType);
-          return accessorService.deserialize(localStorage.getItem(key));
+          return accessorService.deserialize(this.serializationService, localStorage.getItem(key));
         })
-        .sort((cfg1, cfg2) => cfg1.label.localeCompare(cfg2.label));
+        .sort((cfg1, cfg2) => cfg1.shortLabel().localeCompare(cfg2.shortLabel()));
   }
 
   private keyForFileAccessConfiguration(configuration: IFileAccessConfiguration): string {

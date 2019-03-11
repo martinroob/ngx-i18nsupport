@@ -1,0 +1,12 @@
+<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="20px">
+  <mat-icon *ngIf="configuration.fullLabel().maticon">{{configuration.fullLabel().maticon}}</mat-icon>
+  <img *ngIf="configuration.fullLabel().icon" class="mat-icon" src="../assets/{{configuration.fullLabel().icon}}">
+  <p>{{configuration.fullLabel().label}}/{{file.path}}</p>
+  <ng-container *ngIf="configurations">
+    <button color="accent" mat-icon-button i18n (click)="openSaveAsExplorer()"
+            matTooltip="Open a browser to select the path" i18n-matTooltip>
+      <mat-icon>explore</mat-icon>
+      <span i18n>Browse...</span>
+    </button>
+  </ng-container>
+</div>

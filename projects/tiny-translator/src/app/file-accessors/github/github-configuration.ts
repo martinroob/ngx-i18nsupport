@@ -1,8 +1,11 @@
 import {IFileAccessConfiguration} from '../common/i-file-access-configuration';
 import {FileAccessorType} from '../common/file-accessor-type';
-import {IFileDescriptionDirectory} from '../common/i-file-description-directory';
+import {SerializationService} from '../../model/serialization.service';
+import {IFileDescription} from '../common/i-file-description';
+import {GithubFileDescription} from './github-file-description';
 
 interface SerializedFormV1 {
+    accessorType: FileAccessorType.GITHUB;
     version: '1';
     id: string;
     apiToken: string;
@@ -16,7 +19,7 @@ export class GithubConfiguration implements IFileAccessConfiguration {
 
     readonly type = FileAccessorType.GITHUB;
 
-    static deserialize(serializedForm: string): GithubConfiguration {
+    static deserialize(serializationService: SerializationService, serializedForm: string): GithubConfiguration {
         const v1 = JSON.parse(serializedForm) as SerializedFormV1;
         return new GithubConfiguration(v1.id, v1.apiToken, v1.owner, v1.repo, v1.branch, v1.path);
     }
@@ -30,8 +33,9 @@ export class GithubConfiguration implements IFileAccessConfiguration {
         private _path: string|null
     ) {}
 
-    serialize(): string {
+    serialize(serializationService: SerializationService): string {
        const v1: SerializedFormV1 = {
+           accessorType: FileAccessorType.GITHUB,
            version: '1',
            id: this._id,
            apiToken: this._apiToken,
@@ -43,6 +47,10 @@ export class GithubConfiguration implements IFileAccessConfiguration {
        return JSON.stringify(v1);
     }
 
+    copy(): GithubConfiguration {
+        return new GithubConfiguration(this._id, this._apiToken, this._owner, this._repo, this._branch, this._path);
+    }
+
     get id(): string {
         return this._id;
     }
@@ -51,8 +59,16 @@ export class GithubConfiguration implements IFileAccessConfiguration {
         this._id = newId;
     }
 
-    get label(): string {
+    public shortLabel(): string {
         return 'repository ' + this._repo;
+    }
+
+    public fullLabel(): { maticon?: string; icon?: string; label: string } {
+        const branch = (this._branch) ? this._branch : 'master';
+        return {
+            icon: 'Octocat.jpg',
+            label: this._owner + '/' + this._repo + '@' + branch + ' /' + this.path
+        };
     }
 
     get apiToken(): string {
@@ -75,11 +91,21 @@ export class GithubConfiguration implements IFileAccessConfiguration {
         return this._path;
     }
 
-    public rootDescription(): IFileDescriptionDirectory {
-        return {
-            type: 'dir',
-            configuration: this,
-            name: ''
-        } as IFileDescriptionDirectory;
+    public rootDescription(): IFileDescription {
+        return new GithubFileDescription('dir', this, '', '');
     }
+
+    public directoryDescription(dirPath: string): IFileDescription {
+        const slashIndex = dirPath.lastIndexOf('/');
+        const newName = (slashIndex >= 0) ? dirPath.substr(slashIndex + 1) : dirPath;
+        return new GithubFileDescription('dir', this, dirPath, newName);
+    }
+
+    /**
+     * Check, wether a publish is possible.
+     */
+    public canPublish(): boolean {
+        return true;
+    }
+
 }

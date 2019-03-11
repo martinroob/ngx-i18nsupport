@@ -5,7 +5,9 @@
   <ng-container *ngIf="root | async; let currentRoot; else loadingOrError">
     <h2 mat-dialog-title>{{currentRoot?.configuration.label}}</h2>
     <app-file-explorer
+            [configurations]="configurations"
             [root]="currentRoot"
+            [file]="file"
             [selectableFileType] = "selectableFileType"
             (selectedFile)="selectedFile($event)" >
     </app-file-explorer>

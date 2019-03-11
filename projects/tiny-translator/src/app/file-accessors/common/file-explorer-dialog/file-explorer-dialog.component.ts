@@ -1,14 +1,15 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {Observable, of, Subject} from 'rxjs';
-import {IFileDescriptionDirectory} from '../i-file-description-directory';
 import {IFileDescription} from '../i-file-description';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 import {FileAccessServiceFactoryService} from '../file-access-service-factory.service';
-import {catchError, map} from 'rxjs/operators';
+import {catchError} from 'rxjs/operators';
 import {IFileAccessConfiguration} from '../i-file-access-configuration';
 
 export interface FileExplorerDialogData {
-  configuration: IFileAccessConfiguration;
+  configurations?: IFileAccessConfiguration[];
+  configuration?: IFileAccessConfiguration;
+  file?: IFileDescription;
   selectableFileType?: 'file'|'dir';
 }
 
@@ -22,9 +23,11 @@ export interface FileExplorerDialogData {
 })
 export class FileExplorerDialogComponent implements OnInit {
 
+  configurations?: IFileAccessConfiguration[];
   configuration: IFileAccessConfiguration;
+  file: IFileDescription;
   selectableFileType: 'file'|'dir';
-  root: Observable<IFileDescriptionDirectory>;
+  root: Observable<IFileDescription>;
   errorLoading$ = new Subject<string>();
   _selectedFile: IFileDescription;
 
@@ -32,7 +35,9 @@ export class FileExplorerDialogComponent implements OnInit {
       private dialogRef: MatDialogRef<FileExplorerDialogComponent>,
       @Inject(MAT_DIALOG_DATA) data: FileExplorerDialogData,
       private fileAccessServiceFactoryService: FileAccessServiceFactoryService) {
+    this.configurations = data.configurations;
     this.configuration = data.configuration;
+    this.file = data.file;
     this.selectableFileType = data.selectableFileType;
   }
 
@@ -40,7 +45,6 @@ export class FileExplorerDialogComponent implements OnInit {
     const accessService = this.fileAccessServiceFactoryService.getFileAccessService(this.configuration.type);
     const rootDir = this.configuration.rootDescription();
     this.root = accessService.load(rootDir).pipe(
-        map(file => file as IFileDescriptionDirectory),
         catchError((error) => {
           this.errorLoading$.next(error.message);
           return of(undefined);

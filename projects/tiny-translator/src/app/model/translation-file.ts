@@ -15,10 +15,10 @@ import {AutoTranslateServiceAPI} from './auto-translate-service-api';
 import {AutoTranslateSummaryReport} from './auto-translate-summary-report';
 import {AutoTranslateResult} from './auto-translate-result';
 import {IFileDescription} from '../file-accessors/common/i-file-description';
-import {DownloadedFile} from '../file-accessors/download-upload/downloaded-file';
+import {DownloadUploadFileDescription} from '../file-accessors/download-upload/download-upload-file-description';
 import {IFile} from '../file-accessors/common/i-file';
-import {FileAccessorType} from '../file-accessors/common/file-accessor-type';
-import {DownloadUploadConfiguration} from '../file-accessors/download-upload/download-upload-configuration';
+import {SerializationService} from './serialization.service';
+import {GenericFile} from '../file-accessors/common/generic-file';
 
 /**
  * A single xlf or xmb file ready for work.
@@ -31,9 +31,9 @@ import {DownloadUploadConfiguration} from '../file-accessors/download-upload/dow
 // format used since v0.15
 interface ISerializedTranslationFileV2 {
   version: string;
-  file: IFile;
+  file: string; // serialized
   editedContent: string;
-  master?: IFile;
+  master?: string; // serialized
   explicitSourceLanguage: string;
 }
 
@@ -101,15 +101,18 @@ export class TranslationFile {
 
   /**
    * Create a translation file from the serialization.
+   * @param serializationService serializationService
    * @param serializationString serializationString
    * @return TranslationFile
    */
-  static deserialize(serializationString: string): TranslationFile {
+  static deserialize(serializationService: SerializationService, serializationString: string): TranslationFile {
     const deserializedObject = <ISerializedTranslationFile> JSON.parse(serializationString);
-    return TranslationFile.fromDeserializedObject(deserializedObject);
+    return TranslationFile.fromDeserializedObject(serializationService, deserializedObject);
   }
 
-  static fromDeserializedObject(deserializedJsonObject: ISerializedTranslationFile|ISerializedTranslationFileV2|any): TranslationFile {
+  static fromDeserializedObject(
+      serializationService: SerializationService,
+      deserializedJsonObject: ISerializedTranslationFile|ISerializedTranslationFileV2|any): TranslationFile {
     let deserializedObject: ISerializedTranslationFileV2;
     if (deserializedJsonObject.version) {
       deserializedObject = deserializedJsonObject as ISerializedTranslationFileV2;
@@ -118,47 +121,34 @@ export class TranslationFile {
       const v1Object = deserializedJsonObject as ISerializedTranslationFile;
       deserializedObject = {
         version: '1',
-        file: {
-          description: {
-            type: 'file',
-            configuration: DownloadUploadConfiguration.singleInstance(),
-            name: v1Object.name
-          },
-          size: v1Object.size,
-          content: v1Object.fileContent
-        },
+        file: new GenericFile(new DownloadUploadFileDescription(null), v1Object.name, v1Object.size, v1Object.fileContent)
+            .serialize(serializationService),
         editedContent: v1Object.editedContent,
         explicitSourceLanguage: v1Object.explicitSourceLanguage
       };
       if (v1Object.masterContent) {
-        deserializedObject.master = {
-          description: {
-            type: 'file',
-            configuration: DownloadUploadConfiguration.singleInstance(),
-            name: v1Object.masterName
-          },
-          size: 0,
-          content: v1Object.masterContent
-        };
+        deserializedObject.master =
+            new GenericFile(new DownloadUploadFileDescription(null), v1Object.masterName, 0, v1Object.masterContent)
+            .serialize(serializationService);
       }
     }
     const newInstance = new TranslationFile();
-    newInstance._file = deserializedObject.file;
+    newInstance._file = GenericFile.deserialize(serializationService, deserializedObject.file);
     newInstance._explicitSourceLanguage = deserializedObject.explicitSourceLanguage;
     try {
       const encoding = null; // unknown, lib can find it
       let optionalMaster: {xmlContent: string, path: string, encoding: string} = null;
       if (deserializedObject.master) {
+        newInstance._master = GenericFile.deserialize(serializationService, deserializedObject.master);
         optionalMaster = {
-          xmlContent: deserializedObject.master.content,
-          path: deserializedObject.master.description.name,
+          xmlContent: newInstance._master.content,
+          path: newInstance._master.description.name,
           encoding: encoding
         };
-        newInstance._master = deserializedObject.master;
       }
       newInstance._translationFile = TranslationMessagesFileFactory.fromUnknownFormatFileContent(
           deserializedObject.editedContent,
-          deserializedObject.file.description.name,
+          newInstance._file.description.name,
           encoding,
           optionalMaster);
       newInstance.readTransUnits();
@@ -206,18 +196,12 @@ export class TranslationFile {
   }
 
   public fileDescription(): IFileDescription {
-    // TODO
-    return new DownloadedFile(null);
+    return this._file.description;
   }
 
   public editedFile(): IFile {
-    // TODO
     const content = this.editedContent();
-    return {
-      description: this._file.description,
-      size: content.length,
-      content: content
-    };
+    return this._file.copyWithNewContent(content);
   }
 
   /**
@@ -347,12 +331,12 @@ export class TranslationFile {
    * Return a string representation of translation file content.
    * This will be stored in BackendService.
    */
-  public serialize(): string {
+  public serialize(serializationService: SerializationService): string {
     const serializedObject: ISerializedTranslationFileV2 = {
       version: '2',
-      file: this._file,
+      file: this._file.serialize(serializationService),
       editedContent: this.editedContent(),
-      master: this._master,
+      master: (this._master) ? this._master.serialize(serializationService) : null,
       explicitSourceLanguage: this._explicitSourceLanguage
     };
     return JSON.stringify(serializedObject);

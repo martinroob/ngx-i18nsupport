@@ -54,7 +54,7 @@ export class TranslatePageComponent implements OnInit {
   }
 
   save() {
-    this.translationService.saveProject(this.currentProject());
+    this.translationService.downloadProject(this.currentProject());
   }
 
   isInReviewMode(): boolean {
