@@ -1,7 +1,7 @@
 <h1 mat-dialog-title i18n *ngIf="selectableFileType === 'file'">Select a file</h1>
 <h1 mat-dialog-title i18n *ngIf="selectableFileType === 'dir'">Select a directory</h1>
 <h1 mat-dialog-title i18n *ngIf="!selectableFileType">Select a file or directory</h1>
-<div mat-dialog-content>
+<div mat-dialog-content id="content">
   <ng-container *ngIf="root | async; let currentRoot; else loadingOrError">
     <h2 mat-dialog-title>{{currentRoot?.configuration.label}}</h2>
     <app-file-explorer
@@ -12,12 +12,12 @@
             (selectedFile)="selectedFile($event)" >
     </app-file-explorer>
   </ng-container>
-  <ng-template #loadingOrError i18n>
+  <ng-template #loadingOrError>
     <div *ngIf="errorLoading$ | async; let errorMessage; else loading">
-      Error loading: {{errorMessage}}.
+      <ng-container i18n>Error loading: {{errorMessage}}.</ng-container>
     </div>
-    <ng-template #loading i18n>
-      Loading ...
+    <ng-template #loading>
+      <ng-container i18n>Loading ...</ng-container>
     </ng-template>
   </ng-template>
 </div>

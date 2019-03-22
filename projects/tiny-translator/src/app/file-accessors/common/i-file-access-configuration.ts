@@ -1,12 +1,12 @@
+import {FileAccessorType} from './file-accessor-type';
+import {SerializationService} from '../../model/serialization.service';
+import {IFileDescription} from './i-file-description';
+
 /**
  * A generic configuration of a file access service.
  * It contains informations like access tokens, directory names, etc.
  * The details depend on the concrete file accessor.
  */
-import {FileAccessorType} from './file-accessor-type';
-import {SerializationService} from '../../model/serialization.service';
-import {IFileDescription} from './i-file-description';
-
 export interface IFileAccessConfiguration {
     type: FileAccessorType;
     id?: string; // id is auto set when stored

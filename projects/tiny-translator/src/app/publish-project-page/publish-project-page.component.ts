@@ -1,7 +1,7 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {TinyTranslatorService} from '../model/tiny-translator.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {MatDialog} from '@angular/material';
+import {MatDialog, MatSnackBar} from '@angular/material';
 import {IFileDescription} from '../file-accessors/common/i-file-description';
 import {Observable} from 'rxjs';
 import {ConfirmDialogComponent, ConfirmDialogData} from '../confirm-dialog/confirm-dialog.component';
@@ -23,10 +23,12 @@ export class PublishProjectPageComponent implements OnInit {
   @ViewChild('confirmSaveInfo') confirmSaveInfo: ElementRef;
   @ViewChild('confirmModifyQuestion') confirmModifyQuestion: ElementRef;
   @ViewChild('confirmModifyInfo') confirmModifyInfo: ElementRef;
+  @ViewChild('publishOkMessage') publishOkMessage: ElementRef;
 
   constructor(private tinyTranslatorService: TinyTranslatorService,
               private formBuilder: FormBuilder,
-              private dialog: MatDialog) { }
+              private dialog: MatDialog,
+              private snackBar: MatSnackBar) { }
 
   ngOnInit() {
     this.translationFile = this.tinyTranslatorService.currentProject().translationFile.fileDescription();
@@ -73,7 +75,7 @@ export class PublishProjectPageComponent implements OnInit {
     return dialogRef.afterClosed();
   }
 
-  configurations(): IFileAccessConfiguration[] {
+  configurations(): Observable<IFileAccessConfiguration[]> {
     return this.tinyTranslatorService.getFileAccessConfigurations();
   }
 
@@ -87,18 +89,19 @@ export class PublishProjectPageComponent implements OnInit {
       () => this.openConfirmSaveDialog()
     ).subscribe(() => {
             this.error = null;
+            this.snackBar.open(this.textFromElementRef(this.publishOkMessage), undefined, {
+              duration: 3000,
+            });
       }, (error) => {
           this.error = error.toString();
       });
   }
 
   setSaveAs(f: IFileDescription) {
-    console.log('saveAs', f);
     this._saveAs = f;
   }
 
   private saveAs(): IFileDescription|null {
-    // TODO saveAs might be a directory
-    return this._saveAs;
+    return this._saveAs === this.translationFile ? null : this._saveAs;
   }
 }

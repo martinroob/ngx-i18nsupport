@@ -101,7 +101,6 @@ export class GithubAccessorService implements IFileAccessService {
     const message = commitData.message;
     return this.stats(file).pipe(
       map((stats: IFileStats) => {
-        console.log('stats', stats);
         if (stats.status !== FileStatus.EXISTS_NOT) {
           if (commitData.override) {
             return (stats as any).sha;

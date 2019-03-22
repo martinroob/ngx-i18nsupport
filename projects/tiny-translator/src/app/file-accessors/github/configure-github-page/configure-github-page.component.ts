@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import {FileAccessorType} from '../../common/file-accessor-type';
 import {GithubConfiguration} from '../github-configuration';
 import {BackendServiceAPI} from '../../../model/backend-service-api';
+import {map} from 'rxjs/operators';
+import {BehaviorSubject, combineLatest, Observable} from 'rxjs';
 
 @Component({
   selector: 'app-configure-github-page',
@@ -10,45 +12,50 @@ import {BackendServiceAPI} from '../../../model/backend-service-api';
 })
 export class ConfigureGithubPageComponent implements OnInit {
 
-  githubConfigurations: GithubConfiguration[];
-  activeConfigurations: {[index: number]: {valid: boolean, configuration: GithubConfiguration}};
+  githubConfigurations: Observable<GithubConfiguration[]>;
+  addedConfiguration: BehaviorSubject<GithubConfiguration>;
 
   constructor(
       private backendServiceAPI: BackendServiceAPI) {
-    this.githubConfigurations =
-        this.backendServiceAPI.fileAccessConfigurations()
-            .filter(config => config.type === FileAccessorType.GITHUB)
-            .map(config => config  as GithubConfiguration);
   }
 
   ngOnInit() {
-    this.activeConfigurations = [];
-  }
-
-  changeActiveConfiguration(index: number, newValue: {valid: boolean, configuration: GithubConfiguration}) {
-    this.activeConfigurations[index] = newValue;
-  }
-
-  isActiveConfigurationValid(index: number): boolean {
-    return this.activeConfigurations[index] && this.activeConfigurations[index].valid;
-  }
-
-  storeActiveConfiguration(index: number) {
-    if (this.isActiveConfigurationValid(index)) {
-      this.storeConfiguration(this.activeConfigurations[index].configuration);
-    }
+    this.addedConfiguration = new BehaviorSubject<GithubConfiguration>(null);
+    this.githubConfigurations = combineLatest(
+      this.backendServiceAPI.fileAccessConfigurations().pipe(
+        map(configs => configs
+          .filter(config => config.type === FileAccessorType.GITHUB)
+          .map(config => config  as GithubConfiguration))
+      ), this.addedConfiguration
+    ).pipe(
+        map(values => {
+          const configs = values[0];
+          const added = values[1];
+          return (added === null) ? configs : configs.concat([added]);
+        })
+    );
   }
 
   addConfiguration() {
-    this.githubConfigurations.push(new GithubConfiguration(null, '', '', null, null, null));
+    this.addedConfiguration.next(new GithubConfiguration(null, '', '', null, null, null));
   }
 
   storeConfiguration(configuration: GithubConfiguration) {
+    if (!configuration.id) {
+      this.addedConfiguration.next(null);
+    }
     this.backendServiceAPI.storeFileAccessConfiguration(configuration);
   }
 
   deleteConfiguration(configuration: GithubConfiguration) {
-    this.backendServiceAPI.deleteFileAccessConfiguration(configuration);
-    this.githubConfigurations = this.githubConfigurations.filter(config => config !== configuration);
+    if (!configuration.id) {
+      this.addedConfiguration.next(null);
+    } else {
+      this.backendServiceAPI.deleteFileAccessConfiguration(configuration);
+    }
+  }
+
+  isExpanded(configuration: GithubConfiguration): boolean {
+    return configuration.id === null;
   }
 }

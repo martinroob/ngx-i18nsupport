@@ -5,6 +5,7 @@ import {IFileAccessConfiguration} from '../file-accessors/common/i-file-access-c
 import {FileAccessServiceFactoryService} from '../file-accessors/common/file-access-service-factory.service';
 import {FileAccessorType} from '../file-accessors/common/file-accessor-type';
 import {SerializationService} from './serialization.service';
+import {BehaviorSubject, Observable, of} from 'rxjs';
 
 @Injectable()
 export class BackendLocalStorageService extends BackendServiceAPI {
@@ -15,6 +16,8 @@ export class BackendLocalStorageService extends BackendServiceAPI {
   private KEY_CURRENT_TRANSUNIT_ID = this.PRAEFIX + 'currenttransunit.id';
   private KEY_APIKEY = this.PRAEFIX + 'googletranslate.apikey';
   private PRAEFIX_FILE_ACCESS_CONFIGURATION = this.PRAEFIX + 'fileaccessconfiguration.';
+
+  private _fileAccessConfigurations: BehaviorSubject<IFileAccessConfiguration[]>;
 
   constructor(
       private fileAccessServiceFactoryService: FileAccessServiceFactoryService,
@@ -117,34 +120,55 @@ export class BackendLocalStorageService extends BackendServiceAPI {
    * Store a file access configuration.
    * @param configuration the configuration to store.
    */
-  storeFileAccessConfiguration(configuration: IFileAccessConfiguration) {
-    if (!configuration.id) {
+  storeFileAccessConfiguration(configuration: IFileAccessConfiguration): Observable<IFileAccessConfiguration> {
+    const added = !configuration.id;
+    if (added) {
       configuration.id = BackendServiceAPI.generateUUID();
     }
     const key = this.keyForFileAccessConfiguration(configuration);
-    const serialization = this.fileAccessServiceFactoryService.getFileAccessService(configuration.type).serialize(this.serializationService, configuration);
+    const serialization = this.fileAccessServiceFactoryService.getFileAccessService(configuration.type)
+      .serialize(this.serializationService, configuration);
     localStorage.setItem(key, serialization);
+    if (this._fileAccessConfigurations) {
+      const configs = this._fileAccessConfigurations.getValue();
+      const changedConfigs = added ?
+        [...configs, configuration] :
+        configs.map(conf => conf.id === configuration.id ? configuration : conf);
+      this._fileAccessConfigurations.next(changedConfigs);
+    }
+    return of(configuration);
   }
 
-  deleteFileAccessConfiguration(configuration: IFileAccessConfiguration) {
+  deleteFileAccessConfiguration(configuration: IFileAccessConfiguration): Observable<IFileAccessConfiguration> {
     if (configuration && configuration.id) {
       const key = this.keyForFileAccessConfiguration(configuration);
       localStorage.removeItem(key);
+      if (this._fileAccessConfigurations) {
+        const changedConfigs = this._fileAccessConfigurations.getValue().filter(conf => conf.id !== configuration.id);
+        this._fileAccessConfigurations.next(changedConfigs);
+      }
+      return of(configuration);
+    } else {
+      return of(null);
     }
   }
 
   /**
    * Return all saved file access configurations.
    */
-  fileAccessConfigurations(): IFileAccessConfiguration[] {
-    const configKeys = this.getFileAccessConfigurationKeys();
-    return configKeys
+  fileAccessConfigurations(): Observable<IFileAccessConfiguration[]> {
+    if (!this._fileAccessConfigurations) {
+      const configKeys = this.getFileAccessConfigurationKeys();
+      const configs = configKeys
         .map(key => {
           const fileAccessorType = this.getFileAccessorTypeFromKey(key);
           const accessorService = this.fileAccessServiceFactoryService.getFileAccessService(fileAccessorType);
           return accessorService.deserialize(this.serializationService, localStorage.getItem(key));
         })
         .sort((cfg1, cfg2) => cfg1.shortLabel().localeCompare(cfg2.shortLabel()));
+      this._fileAccessConfigurations = new BehaviorSubject<IFileAccessConfiguration[]>(configs);
+    }
+    return this._fileAccessConfigurations;
   }
 
   private keyForFileAccessConfiguration(configuration: IFileAccessConfiguration): string {

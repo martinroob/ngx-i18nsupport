@@ -7,24 +7,13 @@
   <p>The link above describes its purpose and how to create it.</p>
 </div>
 <div fxLayout="column" fxLayoutGap="10px">
-  <mat-expansion-panel *ngFor="let configuration of githubConfigurations; let i = index">
+  <mat-expansion-panel *ngFor="let configuration of githubConfigurations | async; let i = index" [expanded]="isExpanded(configuration)">
     <mat-expansion-panel-header i18n>{{configuration.fullLabel().label}}</mat-expansion-panel-header>
     <app-github-config-editor
             [githubConfiguration]="configuration"
-            (configurationChange)="changeActiveConfiguration(i, $event)">
+            (storeConfiguration)="storeConfiguration($event)"
+            (deleteConfiguration)="deleteConfiguration($event)">
     </app-github-config-editor>
-    <mat-action-row>
-      <button color="primary" mat-button i18n (click)="storeActiveConfiguration(i)"
-              [disabled]="!isActiveConfigurationValid(i)"
-              matTooltip="The configuration including your API token will be stored in the local storage of your browser. It will not be sent to anywhere but the Github API Service." i18n-matTooltip>
-        <mat-icon>save</mat-icon>
-        <span i18n>Store configuration</span>
-      </button>
-      <button mat-button matTooltip="Delete this configuration" i18n-matTooltip (click)="deleteConfiguration(configuration)">
-        <mat-icon>delete</mat-icon>
-        <span i18n>Delete configuration</span>
-      </button>
-    </mat-action-row>
   </mat-expansion-panel>
-  <button mat-fab (click)="addConfiguration()" matTooltip="Add another configuration" i18n-matTooltip><mat-icon>add</mat-icon></button>
+  <button mat-fab (click)="addConfiguration()" [disabled]="addedConfiguration.getValue()" matTooltip="Add another configuration" i18n-matTooltip><mat-icon>add</mat-icon></button>
 </div>

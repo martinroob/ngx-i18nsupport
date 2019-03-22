@@ -10,11 +10,11 @@ import {SaveAsExplorerDialogComponent, SaveAsExplorerDialogData} from '../save-a
  * Normally readonly, but if you set "configurations", there will be a button opening a save as dialog.
  */
 @Component({
-  selector: 'app-file',
-  templateUrl: './file.component.html',
-  styleUrls: ['./file.component.css']
+  selector: 'app-file-to-save',
+  templateUrl: './file-to-save.component.html',
+  styleUrls: ['./file-to-save.component.scss']
 })
-export class FileComponent implements OnInit, OnChanges {
+export class FileToSaveComponent implements OnInit, OnChanges {
 
   /**
    * The configurations that can be used to save file.
@@ -53,6 +53,7 @@ export class FileComponent implements OnInit, OnChanges {
     });
     dialogRef.afterClosed().subscribe((result: IFileDescription) => {
       if (result) {
+        console.log('selected file', result);
         this.selectedFile.emit(result);
       }
     });

@@ -18,7 +18,7 @@ export interface IFileDescription {
   serialize(serializationService: SerializationService): string;
 
   /**
-   * Test, wether it is a directory.
+   * Test, whether it is a directory.
    */
   isDirectory(): boolean;
 

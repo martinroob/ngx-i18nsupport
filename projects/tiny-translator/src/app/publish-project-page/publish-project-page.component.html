@@ -3,11 +3,11 @@
   <form id="publishProjectForm" fxLayout="column" [formGroup]="form">
     <p i18n>Publish it at the following location</p>
     <div fxLayout="row" fxLayoutGap="10px">
-      <app-file
+      <app-file-to-save
               [file]="_saveAs"
-              [configurations]="configurations()"
+              [configurations]="configurations()|async"
               (selectedFile)="setSaveAs($event)">
-      </app-file>
+      </app-file-to-save>
     </div>
     <mat-form-field fxFlex="90%">
       <mat-label i18n>commit message</mat-label>
@@ -25,5 +25,6 @@
     <span i18n #confirmSaveInfo>File already exists.</span>
     <span i18n #confirmModifyQuestion>Do you really want to override this file?</span>
     <span i18n #confirmModifyInfo>The file has been modified after you loaded it.</span>
+    <span i18n #publishOkMessage>File successfully saved.</span>
   </div>
 </div>

@@ -54,9 +54,8 @@ import {FileExplorerDialogComponent} from './file-accessors/common/file-explorer
 import {PublishProjectPageComponent} from './publish-project-page/publish-project-page.component';
 import {GithubConfigEditorDialogComponent} from './file-accessors/github/github-config-editor-dialog/github-config-editor-dialog.component';
 import {ConfirmDialogComponent} from './confirm-dialog/confirm-dialog.component';
-import {FileAccessConfigurationEditorDialogComponent} from './file-accessors/common/file-access-configuration-editor-dialog/file-access-configuration-editor-dialog.component';
 import {SaveAsExplorerComponent} from './file-accessors/common/save-as-explorer/save-as-explorer.component';
-import {FileComponent} from './file-accessors/common/file/file.component';
+import {FileToSaveComponent} from './file-accessors/common/file-to-save/file-to-save.component';
 import {SaveAsExplorerDialogComponent} from './file-accessors/common/save-as-explorer-dialog/save-as-explorer-dialog.component';
 
 @NgModule({
@@ -69,8 +68,7 @@ import {SaveAsExplorerDialogComponent} from './file-accessors/common/save-as-exp
     ConfirmDialogComponent,
     CreateProjectPageComponent,
     EditProjectPageComponent,
-    FileAccessConfigurationEditorDialogComponent,
-    FileComponent,
+    FileToSaveComponent,
     FileExplorerComponent,
     FileExplorerDialogComponent,
     FilterStatusComponent,
@@ -122,7 +120,6 @@ import {SaveAsExplorerDialogComponent} from './file-accessors/common/save-as-exp
   ],
   entryComponents: [
     ConfirmDialogComponent,
-    FileAccessConfigurationEditorDialogComponent,
     FileExplorerDialogComponent,
     GithubConfigEditorDialogComponent,
     SaveAsExplorerDialogComponent,

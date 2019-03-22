@@ -1,5 +1,6 @@
 import {TranslationProject} from './translation-project';
 import {IFileAccessConfiguration} from '../file-accessors/common/i-file-access-configuration';
+import {Observable, of} from 'rxjs';
 
 /**
  * Interface of BackendService.
@@ -101,14 +102,18 @@ export class BackendServiceAPI {
    * Store a file access configuration.
    * @param configuration the configuration to store.
    */
-  storeFileAccessConfiguration(configuration: IFileAccessConfiguration) {}
+  storeFileAccessConfiguration(configuration: IFileAccessConfiguration): Observable<IFileAccessConfiguration> {
+    return null;
+  }
 
-  deleteFileAccessConfiguration(configuration: IFileAccessConfiguration) {}
+  deleteFileAccessConfiguration(configuration: IFileAccessConfiguration): Observable<IFileAccessConfiguration> {
+    return null;
+  }
 
   /**
    * Return all saved file access configurations.
    */
-  fileAccessConfigurations(): IFileAccessConfiguration[] {
-    return [];
+  fileAccessConfigurations(): Observable<IFileAccessConfiguration[]> {
+    return of([]);
   }
 }

@@ -4,7 +4,6 @@ import {TranslationProject} from '../../../model/translation-project';
 import {FILETYPE_XTB} from '@ngx-i18nsupport/ngx-i18nsupport-lib';
 import {IFileDescription} from '../../common/i-file-description';
 import {DownloadUploadFileDescription} from '../download-upload-file-description';
-import {GithubConfiguration} from '../../github/github-configuration';
 import {DownloadUploadConfiguration} from '../download-upload-configuration';
 
 @Component({
@@ -44,7 +43,8 @@ export class TranslationFileUploadComponent implements OnInit {
     }
     if (input.files && input.files.length > 0) {
       const file: File = input.files.item(0);
-      this.fileSelected.emit(new DownloadUploadFileDescription(file));
+      this.fileSelected.emit(
+        DownloadUploadFileDescription.fromBrowserFile(DownloadUploadConfiguration.singleInstance(), file));
     }
   }
 
@@ -54,7 +54,8 @@ export class TranslationFileUploadComponent implements OnInit {
     }
     if (input.files && input.files.length > 0) {
       const file: File = input.files.item(0);
-      this.masterXmlFileSelected.emit(new DownloadUploadFileDescription(file));
+      this.masterXmlFileSelected.emit(
+        DownloadUploadFileDescription.fromBrowserFile(DownloadUploadConfiguration.singleInstance(), file));
     }
   }
 

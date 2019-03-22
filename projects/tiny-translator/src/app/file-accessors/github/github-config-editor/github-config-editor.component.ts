@@ -1,8 +1,8 @@
-import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {AbstractControl, AsyncValidatorFn, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {GithubBranch, GithubDirectory, GithubFileContents, GithubApiService, GithubRepo} from '../github-api.service';
 import {catchError, finalize, first, map, switchMap} from 'rxjs/operators';
-import {combineLatest, Observable, of, Subscription} from 'rxjs';
+import {Observable, of} from 'rxjs';
 import {GithubConfiguration} from '../github-configuration';
 import {IFileDescription} from '../../common/i-file-description';
 import {MatDialog} from '@angular/material';
@@ -13,19 +13,18 @@ import {FileExplorerDialogComponent, FileExplorerDialogData} from '../../common/
   templateUrl: './github-config-editor.component.html',
   styleUrls: ['./github-config-editor.component.css']
 })
-export class GithubConfigEditorComponent implements OnInit, OnChanges, OnDestroy {
+export class GithubConfigEditorComponent implements OnInit, OnChanges {
 
   @Input() githubConfiguration: GithubConfiguration;
-  @Output() configurationChange: EventEmitter<{valid: boolean, configuration: GithubConfiguration}>
-    = new EventEmitter<{valid: boolean, configuration: GithubConfiguration}>();
-
-  _currentConfiguration: {valid: boolean, configuration: GithubConfiguration};
+  @Output() storeConfiguration: EventEmitter<GithubConfiguration>
+    = new EventEmitter<GithubConfiguration>();
+  @Output() deleteConfiguration: EventEmitter<GithubConfiguration>
+    = new EventEmitter<GithubConfiguration>();
 
   form: FormGroup;
   private _apiTokenValid = false;
   private _repos: GithubRepo[] = []; // repos for selected api token read from api
   private _branches: GithubBranch[] = []; // branches for selected repo read from api
-  private subscription: Subscription;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -34,20 +33,10 @@ export class GithubConfigEditorComponent implements OnInit, OnChanges, OnDestroy
 
   ngOnInit() {
     this.initForm();
-    this.subscription = combineLatest(this.form.valueChanges, this.form.statusChanges).subscribe(() => {
-      // on every change reset this cache
-      this._currentConfiguration = null;
-      this.emitCurrentConfiguration();
-    });
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log('conf update');
     this.updateForm();
-  }
-
-  ngOnDestroy(): void {
-    this.subscription.unsubscribe();
   }
 
   checkApiTokenValidator(): AsyncValidatorFn {
@@ -208,32 +197,19 @@ export class GithubConfigEditorComponent implements OnInit, OnChanges, OnDestroy
     }
   }
 
-  private createCurrentConfiguration(actualPath: string): {valid: boolean, configuration: GithubConfiguration} {
-      const id = (this.githubConfiguration) ? this.githubConfiguration.id : null;
-      const reponame = this.form.value.repo;
-      const repo: GithubRepo = this._repos.find(r => r.name === reponame);
-      const owner = (repo) ? repo.owner : null;
-      return {
-        valid: this.form.valid,
-        configuration: new GithubConfiguration(
-          id,
-          this.form.value.apiToken,
-          owner,
-          reponame,
-          this.form.value.branch,
-          actualPath)
-      };
-  }
-
-  private emitCurrentConfiguration() {
-    this.configurationChange.emit(this.currentConfiguration());
-  }
-
-  public currentConfiguration(): {valid: boolean, configuration: GithubConfiguration} {
-    if (!this._currentConfiguration) {
-      this._currentConfiguration = this.createCurrentConfiguration(this.form.value.path);
-    }
-    return this._currentConfiguration;
+  private currentConfiguration(actualPath: string): GithubConfiguration {
+    const id = (this.githubConfiguration) ? this.githubConfiguration.id : null;
+    const reponame = this.form.value.repo;
+    const repo: GithubRepo = this._repos.find(r => r.name === reponame);
+    const owner = (repo) ? repo.owner : null;
+    return new GithubConfiguration(
+      id,
+      this.form.value.apiToken,
+      owner,
+      reponame,
+      this.form.value.branch,
+      actualPath
+    );
   }
 
   availableBranches(): string[] {
@@ -245,7 +221,7 @@ export class GithubConfigEditorComponent implements OnInit, OnChanges, OnDestroy
   }
 
   openPathBrowser() {
-    const conf = this.createCurrentConfiguration('').configuration;
+    const conf = this.currentConfiguration('');
       const dialogRef = this.dialog.open(FileExplorerDialogComponent, {
           data: {
               configuration: conf,
@@ -260,5 +236,13 @@ export class GithubConfigEditorComponent implements OnInit, OnChanges, OnDestroy
           }
       });
 
+  }
+
+  storeConfigurationClicked() {
+    this.storeConfiguration.emit(this.currentConfiguration(this.form.value.path));
+  }
+
+  deleteConfigurationClicked() {
+    this.deleteConfiguration.emit(this.currentConfiguration(this.form.value.path));
   }
 }

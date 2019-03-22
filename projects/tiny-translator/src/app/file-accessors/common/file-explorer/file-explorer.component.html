@@ -1,5 +1,6 @@
 <form [formGroup]="form">
   <mat-form-field *ngIf="configurations">
+    <mat-label i18n>select a configuration..</mat-label>
     <mat-select placeholder="select a configuration.." i18n-placeholder formControlName="selectedConfigurationIndex" name="selectedConfigurationIndex">
       <mat-option *ngFor="let accessor of configurations; let i = index" [value]="i" i18n>{{accessor.type}} {{accessor.shortLabel()}}</mat-option>
     </mat-select>

@@ -65,9 +65,12 @@ export class GithubConfiguration implements IFileAccessConfiguration {
 
     public fullLabel(): { maticon?: string; icon?: string; label: string } {
         const branch = (this._branch) ? this._branch : 'master';
+        const owner = (this._owner) ? this._owner : '?';
+        const repo = (this._repo) ? this._repo : '?';
+        const path = (this._path) ? this._path : '';
         return {
             icon: 'Octocat.jpg',
-            label: this._owner + '/' + this._repo + '@' + branch + ' /' + this.path
+            label: `${owner}/${repo}@${branch}/${path}`
         };
     }
 

@@ -10,6 +10,7 @@ import {IFileAccessConfiguration} from '../common/i-file-access-configuration';
 import {DownloadUploadConfiguration} from './download-upload-configuration';
 import {SerializationService} from '../../model/serialization.service';
 import {GenericFile} from '../common/generic-file';
+import {IFileDescription} from '../common/i-file-description';
 
 @Injectable()
 export class DownloadUploadService implements IFileAccessService {
@@ -18,7 +19,10 @@ export class DownloadUploadService implements IFileAccessService {
         private fileReaderService: AsynchronousFileReaderService,
         private downloaderService: DownloaderService) {}
 
-    load(description: DownloadUploadFileDescription): Observable<IFile> {
+    load(description: DownloadUploadFileDescription): Observable<IFile|IFileDescription> {
+        if (description.isDirectory()) {
+            return of(description);
+        }
         const file = description.browserFile;
         return this.fileReaderService.readFile(file).pipe(
             map(result => {

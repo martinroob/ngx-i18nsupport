@@ -3,8 +3,6 @@ import {DownloadUploadService} from '../download-upload/download-upload.service'
 import {IFileAccessService} from './i-file-access-service';
 import {FileAccessorType} from './file-accessor-type';
 import {GithubAccessorService} from '../github/github-accessor.service';
-import {IFileAccessConfiguration} from './i-file-access-configuration';
-import {BackendLocalStorageService} from '../../model/backend-local-storage.service';
 
 /**
  * This service returns a suitable service used to load and save a translation file.

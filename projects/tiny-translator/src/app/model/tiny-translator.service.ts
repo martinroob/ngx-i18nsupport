@@ -179,7 +179,8 @@ export class TinyTranslatorService {
       fileToSave = fileToSave.copyForNewDescription(saveAs);
     }
     const fileAccessService =
-      this.fileAccessServiceFactoryService.getFileAccessService(project.translationFile.fileDescription().configuration.type);
+      this.fileAccessServiceFactoryService.getFileAccessService(fileToSave.description.configuration.type);
+    console.log('publish', fileAccessService, fileToSave);
     return fileAccessService.stats(fileToSave).pipe(
       switchMap((stats: IFileStats) => {
         if (saveAs && stats.status !== FileStatus.EXISTS_NOT) {
@@ -192,7 +193,7 @@ export class TinyTranslatorService {
             tap(doSave => {commitData.override = doSave; })
           );
         }
-        return of(false);
+        return of(true);
       }),
       switchMap((doSave: boolean) => {
         if (doSave) {
@@ -338,8 +339,10 @@ export class TinyTranslatorService {
   /**
    * Get all available accessor configurations from backend.
    */
-  getFileAccessConfigurations(): IFileAccessConfiguration[] {
-    return [DownloadUploadConfiguration.singleInstance(), ...this.backendService.fileAccessConfigurations()];
+  getFileAccessConfigurations(): Observable<IFileAccessConfiguration[]> {
+    return this.backendService.fileAccessConfigurations().pipe(
+      map(configs => [DownloadUploadConfiguration.singleInstance(), ...configs])
+    );
   }
 
 }

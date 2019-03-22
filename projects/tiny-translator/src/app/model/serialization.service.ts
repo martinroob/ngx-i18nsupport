@@ -30,7 +30,7 @@ export class SerializationService {
     const obj: SerializedFormOfDescription = JSON.parse(serializedForm);
     switch (obj.accessorType) {
       case FileAccessorType.DOWNLOAD_UPLOAD:
-        return DownloadUploadFileDescription.deserialize();
+        return DownloadUploadFileDescription.deserialize(this, serializedForm);
       case FileAccessorType.GITHUB:
         return GithubFileDescription.deserialize(this, serializedForm);
     }
@@ -41,7 +41,7 @@ export class SerializationService {
     const obj: SerializedFormOfConfiguration = JSON.parse(serializedForm);
     switch (obj.accessorType) {
       case FileAccessorType.DOWNLOAD_UPLOAD:
-        return DownloadUploadConfiguration.deserialize();
+        return DownloadUploadConfiguration.deserialize(this, serializedForm);
       case FileAccessorType.GITHUB:
         return GithubConfiguration.deserialize(this, serializedForm);
     }

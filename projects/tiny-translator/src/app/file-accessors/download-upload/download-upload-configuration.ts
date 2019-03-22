@@ -2,6 +2,7 @@ import {IFileAccessConfiguration} from '../common/i-file-access-configuration';
 import {FileAccessorType} from '../common/file-accessor-type';
 import {SerializationService} from '../../model/serialization.service';
 import {IFileDescription} from '../common/i-file-description';
+import {DownloadUploadFileDescription} from './download-upload-file-description';
 
 interface SerializedFormV1 {
     accessorType: FileAccessorType.DOWNLOAD_UPLOAD;
@@ -20,7 +21,7 @@ export class DownloadUploadConfiguration implements IFileAccessConfiguration {
         return this._instance;
     }
 
-    static deserialize(): DownloadUploadConfiguration {
+    static deserialize(serializationService: SerializationService, serializedForm: string): DownloadUploadConfiguration {
         return this._instance;
     }
 
@@ -38,12 +39,13 @@ export class DownloadUploadConfiguration implements IFileAccessConfiguration {
 
     public fullLabel(): { maticon?: string; icon?: string; label: string } {
         return {
+            maticon: 'save',
             label: ''
         };
     }
 
     public rootDescription(): IFileDescription {
-        return null;
+        return new DownloadUploadFileDescription('dir', this, null);
     }
 
     /**

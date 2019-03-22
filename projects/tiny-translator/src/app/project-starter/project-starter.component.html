@@ -8,7 +8,7 @@
     </div>
     <mat-form-field>
       <mat-select placeholder="load translation file from.." i18n-placeholder formControlName="selectedFileAccessConfigurationIndex" name="selectedFileAccessConfigurationIndex">
-        <mat-option *ngFor="let accessor of fileAccessConfigurations(); let i = index" [value]="i" i18n>{{accessor.type}} {{accessor.shortLabel()}}</mat-option>
+        <mat-option *ngFor="let accessor of fileAccessConfigurations() | async; let i = index" [value]="i" i18n>{{accessor.type}} {{accessor.shortLabel()}}</mat-option>
       </mat-select>
     </mat-form-field>
     <ng-container [ngSwitch]="selectedFileAccessConfiguration().type">

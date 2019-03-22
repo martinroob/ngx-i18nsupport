@@ -9,7 +9,6 @@ import {FileAccessServiceFactoryService} from '../file-access-service-factory.se
 import {isNullOrUndefined} from '../../../common/util';
 import {IFileAccessConfiguration} from '../i-file-access-configuration';
 import {FormBuilder, FormGroup} from '@angular/forms';
-import {DownloadUploadFileDescription} from '../../download-upload/download-upload-file-description';
 
 /** Flat node with expandable and level information */
 class DynamicFlatNode {
@@ -173,7 +172,7 @@ class DynamicFileDataSource {
       return of(current);
     }
     const nodeToExpand = current.data[current.index];
-    const pathParts = current.path.split('/');
+    const pathParts = (current.path) ? current.path.split('/') : [];
     if (!nodeToExpand || current.pathIndex >= pathParts.length) {
       return of({data: current.data, index: current.index, path: current.path, pathIndex: -1});
     }
@@ -279,7 +278,6 @@ export class FileExplorerComponent implements OnInit {
   }
 
   set currentRoot(newRoot: IFileDescription) {
-    console.log('new root', newRoot);
     if (newRoot) {
       const accessService = this.fileAccessServiceFactoryService.getFileAccessService(newRoot.configuration.type);
       const database = new FileData(newRoot, accessService, (this.selectableFileType === 'dir'));
@@ -294,8 +292,9 @@ export class FileExplorerComponent implements OnInit {
           this.activeNode = node;
           this.selected(this.activeNode);
         });
-        this.selectedFile.emit(newRoot);
       }
+      console.log('file-explorer root changed', newRoot);
+      this.selectedFile.emit(newRoot);
     } else {
       this.dataSource = null;
     }

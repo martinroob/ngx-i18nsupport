@@ -4,9 +4,8 @@
   <p>{{configuration.fullLabel().label}}/{{file.path}}</p>
   <ng-container *ngIf="configurations">
     <button color="accent" mat-icon-button i18n (click)="openSaveAsExplorer()"
-            matTooltip="Open a browser to select the path" i18n-matTooltip>
-      <mat-icon>explore</mat-icon>
-      <span i18n>Browse...</span>
+            matTooltip="Select another location..." i18n-matTooltip>
+      <mat-icon>edit</mat-icon>
     </button>
   </ng-container>
 </div>

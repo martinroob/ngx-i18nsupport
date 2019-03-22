@@ -6,6 +6,8 @@ import {FormBuilder, FormGroup} from '@angular/forms';
 import {IFileDescription} from '../file-accessors/common/i-file-description';
 import {FileAccessorType} from '../file-accessors/common/file-accessor-type';
 import {FileAccessServiceFactoryService} from '../file-accessors/common/file-access-service-factory.service';
+import {IFileAccessConfiguration} from '../file-accessors/common/i-file-access-configuration';
+import {Observable} from 'rxjs';
 
 /**
  * The ProjectStarter is an upload component.
@@ -25,7 +27,7 @@ export class ProjectStarterComponent implements OnInit {
   form: FormGroup;
   private selectedFile: IFileDescription;
   private selectedMasterXmbFile: IFileDescription;
-  private _fileAccessConfigurations;
+  private _fileAccessConfigurations: Observable<IFileAccessConfiguration[]>;
 
   constructor(private formBuilder: FormBuilder,
               private translatorService: TinyTranslatorService,
@@ -51,7 +53,7 @@ export class ProjectStarterComponent implements OnInit {
     }
   }
 
-  fileAccessConfigurations() {
+  fileAccessConfigurations(): Observable<IFileAccessConfiguration[]> {
     return this._fileAccessConfigurations;
   }
 

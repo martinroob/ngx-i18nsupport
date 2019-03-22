@@ -34,6 +34,10 @@ export class GenericFile implements IFile {
         return JSON.stringify(v1Object);
     }
 
+    /**
+     * Return a copy that has some edited content.
+     * @param newContent the changed content
+     */
     public copyWithNewContent(newContent: string): IFile {
         return new GenericFile(this.description, this.name, newContent.length, newContent);
     }

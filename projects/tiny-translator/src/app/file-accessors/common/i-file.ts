@@ -1,9 +1,9 @@
-/**
- * A file loaded from any source (Upload, GitHub, ..)
- */
 import {IFileDescription} from './i-file-description';
 import {SerializationService} from '../../model/serialization.service';
 
+/**
+ * A file loaded from any source (Upload, GitHub, ..)
+ */
 export interface IFile {
     description: IFileDescription; // all infos from where the file was loaded
     size: number; // size in bytes

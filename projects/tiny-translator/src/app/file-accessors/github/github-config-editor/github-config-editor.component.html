@@ -54,10 +54,21 @@
         Path is not a directory!
       </mat-error>
     </mat-form-field>
-    <button color="accent" mat-icon-button i18n (click)="openPathBrowser()"
-        matTooltip="Open a browser to select the path" i18n-matTooltip>
-      <mat-icon>explore</mat-icon>
-      <span i18n>Browse...</span>
+    <button color="accent" mat-icon-button (click)="openPathBrowser()"
+        matTooltip="Select a path" i18n-matTooltip>
+      <mat-icon>edit</mat-icon>
     </button>
   </div>
+  <mat-action-row>
+    <button color="primary" mat-button (click)="storeConfigurationClicked()"
+            [disabled]="!form.valid"
+            matTooltip="The configuration including your API token will be stored in the local storage of your browser. It will not be sent to anywhere but the Github API Service." i18n-matTooltip>
+      <mat-icon>save</mat-icon>
+      <span i18n>Store configuration</span>
+    </button>
+    <button mat-button matTooltip="Delete this configuration" i18n-matTooltip (click)="deleteConfigurationClicked()">
+      <mat-icon>delete</mat-icon>
+      <span i18n>Delete configuration</span>
+    </button>
+  </mat-action-row>
 </form>

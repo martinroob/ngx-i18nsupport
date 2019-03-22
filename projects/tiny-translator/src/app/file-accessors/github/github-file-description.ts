@@ -51,7 +51,7 @@ export class GithubFileDescription implements IFileDescription {
     }
 
     /**
-     * Test, wether it is a directory.
+     * Test, whether it is a directory.
      */
     public isDirectory(): boolean {
         return this.type === 'dir';

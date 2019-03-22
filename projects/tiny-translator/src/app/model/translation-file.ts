@@ -121,14 +121,16 @@ export class TranslationFile {
       const v1Object = deserializedJsonObject as ISerializedTranslationFile;
       deserializedObject = {
         version: '1',
-        file: new GenericFile(new DownloadUploadFileDescription(null), v1Object.name, v1Object.size, v1Object.fileContent)
+        file: new GenericFile(DownloadUploadFileDescription.deserialize(serializationService, null),
+          v1Object.name, v1Object.size, v1Object.fileContent)
             .serialize(serializationService),
         editedContent: v1Object.editedContent,
         explicitSourceLanguage: v1Object.explicitSourceLanguage
       };
       if (v1Object.masterContent) {
         deserializedObject.master =
-            new GenericFile(new DownloadUploadFileDescription(null), v1Object.masterName, 0, v1Object.masterContent)
+            new GenericFile(DownloadUploadFileDescription.deserialize(serializationService, null),
+              v1Object.masterName, 0, v1Object.masterContent)
             .serialize(serializationService);
       }
     }

@@ -19,7 +19,7 @@ export interface FileExplorerDialogData {
 @Component({
   selector: 'app-file-explorer-dialog',
   templateUrl: './file-explorer-dialog.component.html',
-  styleUrls: ['./file-explorer-dialog.component.css']
+  styleUrls: ['./file-explorer-dialog.component.scss']
 })
 export class FileExplorerDialogComponent implements OnInit {
 

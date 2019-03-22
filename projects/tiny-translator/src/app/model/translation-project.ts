@@ -2,9 +2,6 @@ import {TranslationFile} from './translation-file';
 import {TranslationFileView} from './translation-file-view';
 import {isNullOrUndefined} from '../common/util';
 import {AutoTranslateSummaryReport} from './auto-translate-summary-report';
-import {IFile} from '../file-accessors/common/i-file';
-import {IFileDescription} from '../file-accessors/common/i-file-description';
-import {DownloadUploadFileDescription} from '../file-accessors/download-upload/download-upload-file-description';
 import {SerializationService} from './serialization.service';
 
 /**
