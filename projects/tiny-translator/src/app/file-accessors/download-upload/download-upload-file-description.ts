@@ -1,7 +1,6 @@
 import {SerializationService} from '../../model/serialization.service';
 import {FileAccessorType} from '../common/file-accessor-type';
 import {IFileDescription} from '../common/i-file-description';
-import {DownloadUploadConfiguration} from './download-upload-configuration';
 import {IFileAccessConfiguration} from '../common/i-file-access-configuration';
 
 interface SerializedFormV1 {
@@ -11,8 +10,6 @@ interface SerializedFormV1 {
 }
 
 export class DownloadUploadFileDescription implements IFileDescription {
-
-    static _rootDir: DownloadUploadFileDescription;
 
     name: string;
     children = [];
@@ -41,6 +38,13 @@ export class DownloadUploadFileDescription implements IFileDescription {
 
     get path(): string {
         return this.name;
+    }
+
+    /**
+     * Download targets are never equal.
+     */
+    public equals(another: IFileDescription): boolean {
+        return false;
     }
 
     public isDirectory(): boolean {

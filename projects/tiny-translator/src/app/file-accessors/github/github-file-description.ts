@@ -50,6 +50,18 @@ export class GithubFileDescription implements IFileDescription {
         return JSON.stringify(v1Object);
     }
 
+    public equals(another: IFileDescription): boolean {
+        if (!another || !another.configuration) {
+            return false;
+        }
+        if (!this.configuration.equals(another.configuration)) {
+            return false;
+        }
+        return this.type === another.type
+          && this.name === another.name
+          && this.path === another.path;
+    }
+
     /**
      * Test, whether it is a directory.
      */

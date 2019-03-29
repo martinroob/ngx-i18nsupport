@@ -39,6 +39,7 @@ export class FileExplorerDialogComponent implements OnInit {
     this.configuration = data.configuration;
     this.file = data.file;
     this.selectableFileType = data.selectableFileType;
+    this._selectedFile = null;
   }
 
   ngOnInit() {

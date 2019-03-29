@@ -33,6 +33,10 @@ export class DownloadUploadConfiguration implements IFileAccessConfiguration {
         return JSON.stringify(v1Object);
     }
 
+    public equals(another: IFileAccessConfiguration): boolean {
+        return another && another.type === FileAccessorType.DOWNLOAD_UPLOAD;
+    }
+
     public shortLabel(): string {
         return '';
     }

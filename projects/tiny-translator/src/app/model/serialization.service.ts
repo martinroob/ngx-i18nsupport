@@ -6,6 +6,13 @@ import {DownloadUploadFileDescription} from '../file-accessors/download-upload/d
 import {DownloadUploadConfiguration} from '../file-accessors/download-upload/download-upload-configuration';
 import {GithubConfiguration} from '../file-accessors/github/github-configuration';
 import {GithubFileDescription} from '../file-accessors/github/github-file-description';
+import {IFile} from '../file-accessors/common/i-file';
+import {GenericFile} from '../file-accessors/common/generic-file';
+import {GithubFile} from '../file-accessors/github/github-file';
+
+interface SerializedFormOfFile {
+  type?: 'github';
+}
 
 interface SerializedFormOfDescription {
   accessorType: FileAccessorType;
@@ -25,6 +32,16 @@ interface SerializedFormOfConfiguration {
 export class SerializationService {
 
   constructor() { }
+
+  public deserializeIFile(serializedForm: string): IFile {
+    const obj: SerializedFormOfFile = JSON.parse(serializedForm);
+    switch (obj.type) {
+      case 'github':
+        return GithubFile.deserialize(this, serializedForm);
+      default:
+        return GenericFile.deserialize(this, serializedForm);
+    }
+  }
 
   public deserializeIFileDescription(serializedForm: string): IFileDescription {
     const obj: SerializedFormOfDescription = JSON.parse(serializedForm);

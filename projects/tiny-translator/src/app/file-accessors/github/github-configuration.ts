@@ -59,6 +59,17 @@ export class GithubConfiguration implements IFileAccessConfiguration {
         this._id = newId;
     }
 
+    public equals(another: IFileAccessConfiguration): boolean {
+        if (!another || another.type !== FileAccessorType.GITHUB) {
+            return false;
+        }
+        const anotherGitConfiguration = another as GithubConfiguration;
+        return this.apiToken === anotherGitConfiguration.apiToken
+          && this.repo === anotherGitConfiguration.repo
+          && this.branch === anotherGitConfiguration.branch
+          && this.path === anotherGitConfiguration.path;
+    }
+
     public shortLabel(): string {
         return 'repository ' + this._repo;
     }

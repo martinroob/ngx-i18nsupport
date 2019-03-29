@@ -1,4 +1,4 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core';
 import {TinyTranslatorService} from '../model/tiny-translator.service';
 import {TranslationProject, UserRole, WorkflowType} from '../model/translation-project';
 import {isNullOrUndefined} from '../common/util';
@@ -7,7 +7,7 @@ import {IFileDescription} from '../file-accessors/common/i-file-description';
 import {FileAccessorType} from '../file-accessors/common/file-accessor-type';
 import {FileAccessServiceFactoryService} from '../file-accessors/common/file-access-service-factory.service';
 import {IFileAccessConfiguration} from '../file-accessors/common/i-file-access-configuration';
-import {Observable} from 'rxjs';
+import {Observable, Subscription} from 'rxjs';
 
 /**
  * The ProjectStarter is an upload component.
@@ -18,7 +18,7 @@ import {Observable} from 'rxjs';
   templateUrl: './project-starter.component.html',
   styleUrls: ['./project-starter.component.scss']
 })
-export class ProjectStarterComponent implements OnInit {
+export class ProjectStarterComponent implements OnInit, OnDestroy {
 
   @Output() addProject: EventEmitter<TranslationProject> = new EventEmitter();
 
@@ -28,6 +28,8 @@ export class ProjectStarterComponent implements OnInit {
   private selectedFile: IFileDescription;
   private selectedMasterXmbFile: IFileDescription;
   private _fileAccessConfigurations: Observable<IFileAccessConfiguration[]>;
+  private _currentFileAccessConfigurations: IFileAccessConfiguration[];
+  private subscriptions: Subscription;
 
   constructor(private formBuilder: FormBuilder,
               private translatorService: TinyTranslatorService,
@@ -36,9 +38,16 @@ export class ProjectStarterComponent implements OnInit {
   ngOnInit() {
     this.initForm();
     this._fileAccessConfigurations = this.translatorService.getFileAccessConfigurations();
-    this.form.valueChanges.subscribe(formValue => {
-      this.valueChanged(formValue);
-    });
+    this.subscriptions = this._fileAccessConfigurations.subscribe(configs => this._currentFileAccessConfigurations = configs);
+    this.subscriptions.add(
+      this.form.valueChanges.subscribe(formValue => {
+        this.valueChanged(formValue);
+      })
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
   }
 
   private initForm() {
@@ -57,8 +66,12 @@ export class ProjectStarterComponent implements OnInit {
     return this._fileAccessConfigurations;
   }
 
-  selectedFileAccessConfiguration() {
-    return this._fileAccessConfigurations[this.form.value['selectedFileAccessConfigurationIndex']];
+  selectedFileAccessConfiguration(): IFileAccessConfiguration {
+    if (this._currentFileAccessConfigurations) {
+      return this._currentFileAccessConfigurations[this.form.value['selectedFileAccessConfigurationIndex']];
+    } else {
+      return null;
+    }
   }
 
   fileSelectionChange(file: IFileDescription) {

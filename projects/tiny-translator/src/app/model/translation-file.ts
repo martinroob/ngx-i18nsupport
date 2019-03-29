@@ -87,7 +87,7 @@ export class TranslationFile {
         }
         newInstance._translationFile =
             TranslationMessagesFileFactory.fromUnknownFormatFileContent(
-                loadedFile.content, loadedFile.description.name, null, optionalMaster);
+                loadedFile.content, loadedFile.description.name, 'utf-8', optionalMaster);
         if (newInstance._translationFile.i18nFormat() === FORMAT_XMB) {
           newInstance._error = 'xmb files cannot be translated, use xtb instead'; // TODO i18n
         }
@@ -135,13 +135,13 @@ export class TranslationFile {
       }
     }
     const newInstance = new TranslationFile();
-    newInstance._file = GenericFile.deserialize(serializationService, deserializedObject.file);
+    newInstance._file = serializationService.deserializeIFile(deserializedObject.file);
     newInstance._explicitSourceLanguage = deserializedObject.explicitSourceLanguage;
     try {
       const encoding = null; // unknown, lib can find it
       let optionalMaster: {xmlContent: string, path: string, encoding: string} = null;
       if (deserializedObject.master) {
-        newInstance._master = GenericFile.deserialize(serializationService, deserializedObject.master);
+        newInstance._master = serializationService.deserializeIFile(deserializedObject.master);
         optionalMaster = {
           xmlContent: newInstance._master.content,
           path: newInstance._master.description.name,
@@ -174,7 +174,7 @@ export class TranslationFile {
   }
 
   get name(): string {
-    return this._file.description.name;
+    return (this._file && this._file.description) ? this._file.description.name : '';
   }
 
   /**

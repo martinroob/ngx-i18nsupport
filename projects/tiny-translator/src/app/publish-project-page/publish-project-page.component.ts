@@ -87,11 +87,13 @@ export class PublishProjectPageComponent implements OnInit {
       },
       () => this.openConfirmModifiedDialog(),
       () => this.openConfirmSaveDialog()
-    ).subscribe(() => {
+    ).subscribe((done: boolean) => {
             this.error = null;
-            this.snackBar.open(this.textFromElementRef(this.publishOkMessage), undefined, {
-              duration: 3000,
-            });
+            if (done) {
+              this.snackBar.open(this.textFromElementRef(this.publishOkMessage), undefined, {
+                duration: 3000,
+              });
+            }
       }, (error) => {
           this.error = error.toString();
       });

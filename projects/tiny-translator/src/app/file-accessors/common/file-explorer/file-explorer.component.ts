@@ -293,8 +293,9 @@ export class FileExplorerComponent implements OnInit {
           this.selected(this.activeNode);
         });
       }
-      console.log('file-explorer root changed', newRoot);
-      this.selectedFile.emit(newRoot);
+      if (this.fileTypeMatches(newRoot)) {
+        this.selectedFile.emit(newRoot);
+      }
     } else {
       this.dataSource = null;
     }
@@ -306,6 +307,7 @@ export class FileExplorerComponent implements OnInit {
       this.selectedFile.emit(node.node);
       this.activeNode = node;
     } else {
+      this.selectedFile.emit(null);
       this.activeNode = null;
     }
   }

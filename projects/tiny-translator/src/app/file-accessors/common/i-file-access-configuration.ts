@@ -12,6 +12,13 @@ export interface IFileAccessConfiguration {
     id?: string; // id is auto set when stored
 
     /**
+     * Test for equality.
+     * They are equal if they describe the same storage position.
+     * @param another file description
+     */
+    equals(another: IFileAccessConfiguration): boolean;
+
+    /**
      * Return a short text that describes the configuration.
      * This is used in the GUI to show available configurations.
      */

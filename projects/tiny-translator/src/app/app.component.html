@@ -3,7 +3,7 @@
     <mat-toolbar-row>
       <span id="apptitle">Tiny Translator</span>
       <span>&nbsp;</span>
-      <div fxLayout="row" fxLayoutAlign="space-between" fxLayoutGap="10px" fxLayoutWrap>
+      <div fxLayout="row wrap" fxLayoutAlign="space-between" fxLayoutGap="10px">
         <app-language code="en" [showCode]="false"></app-language>
         <app-language code="de" [showCode]="false"></app-language>
         <app-language code="fr" [showCode]="false"></app-language>
@@ -16,12 +16,17 @@
       </div>
     </mat-toolbar-row>
     <mat-toolbar-row>
-      <button mat-icon-button [matMenuTriggerFor]="menu">
+      <button mat-icon-button [matMenuTriggerFor]="menu" matTooltip="Open menu... (configuration options, ...)" i18n-matTooltip>
         <mat-icon>more_vert</mat-icon>
       </button>
-      <a mat-icon-button routerLink="/home" routerLinkActive="active"><mat-icon>home</mat-icon></a>
+      <a mat-icon-button routerLink="/home" routerLinkActive="active" matTooltip="List of available projects..." i18n-matTooltip>
+        <mat-icon>home</mat-icon>
+      </a>
       <a mat-icon-button routerLink="/editproject" routerLinkActive="active" matTooltip="Details of the project (click to open)" i18n-matTooltip>
         <mat-icon>edit</mat-icon>
+      </a>
+      <a mat-icon-button routerLink="/translate" routerLinkActive="active" matTooltip="Translate the project" i18n-matTooltip>
+        <mat-icon>translate</mat-icon>
         {{currentProjectName() | abbreviate: 30}}
       </a>
       <!-- main menu -->

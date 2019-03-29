@@ -17,17 +17,14 @@
     "start-ru": "ng serve tiny-translator --configuration=ru",
     "serve-prod-ngsw": "npm run build-prod-en && http-server ../../dist/tiny-translator/en -p 8080",
     "serve-prod": "http-server buildtest -p 8080",
-
     "build-prod": "npm run build-prod-en && npm run build-prod-de && npm run build-prod-fr && npm run build-prod-ru && cpx ./src/ghpages/* ../../dist/tiny-translator",
     "build-prod-en": "cross-env-shell LANG=\"en\" npm run build-prod-lang",
     "build-prod-de": "cross-env-shell LANG=\"de\" npm run build-prod-lang",
     "build-prod-fr": "cross-env-shell LANG=\"fr-google\" npm run build-prod-lang",
     "build-prod-ru": "cross-env-shell LANG=\"ru-google\" npm run build-prod-lang",
-
     "prebuild-prod-lang": "cross-env-shell replace %BASE_HREF% /tiny-translator/$LANG/ src/environments/environment.prod.ts",
     "build-prod-lang": "cross-env-shell ng build tiny-translator --configuration=$LANG",
     "postbuild-prod-lang": "cross-env-shell replace /tiny-translator/$LANG/ %BASE_HREF% src/environments/environment.prod.ts",
-
     "publish2githubpages": "angular-cli-ghpages --dir=../../dist/tiny-translator --repo=https://GH_TOKEN@github.com/martinroob/tiny-translator.git --no-silent",
     "dockerbuild": "docker build -t tiny-translator:0.13 .",
     "publish2dockerhub": "docker push $DOCKER_ID_USER/tiny-translator:0.13"
@@ -49,10 +46,12 @@
   },
   "homepage": "https://github.com/martinroob/ngx-i18nsupport/projects/tiny-translator#readme",
   "dependencies": {
+    "@ngx-i18nsupport/ngx-i18nsupport-lib": "^1.11.0",
+    "@types/js-base64": "^2.3.1",
     "core-js": "^2.4.1",
     "file-saver": "^2.0.0",
     "flag-icon-css": "^2.8.0",
-    "@ngx-i18nsupport/ngx-i18nsupport-lib": "^1.11.0"
+    "js-base64": "^2.5.1"
   },
   "devDependencies": {
     "replace": "^0.3.0"

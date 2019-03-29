@@ -53,7 +53,6 @@ export class FileToSaveComponent implements OnInit, OnChanges {
     });
     dialogRef.afterClosed().subscribe((result: IFileDescription) => {
       if (result) {
-        console.log('selected file', result);
         this.selectedFile.emit(result);
       }
     });

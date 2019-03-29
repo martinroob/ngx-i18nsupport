@@ -18,6 +18,13 @@ export interface IFileDescription {
   serialize(serializationService: SerializationService): string;
 
   /**
+   * Test for equality.
+   * They are equal if they describe the same storage position.
+   * @param another file description
+   */
+  equals(another: IFileDescription): boolean;
+
+  /**
    * Test, whether it is a directory.
    */
   isDirectory(): boolean;

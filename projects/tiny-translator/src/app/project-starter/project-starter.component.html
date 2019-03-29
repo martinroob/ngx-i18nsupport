@@ -11,7 +11,7 @@
         <mat-option *ngFor="let accessor of fileAccessConfigurations() | async; let i = index" [value]="i" i18n>{{accessor.type}} {{accessor.shortLabel()}}</mat-option>
       </mat-select>
     </mat-form-field>
-    <ng-container [ngSwitch]="selectedFileAccessConfiguration().type">
+    <ng-container *ngIf="selectedFileAccessConfiguration()" [ngSwitch]="selectedFileAccessConfiguration().type">
       <app-translation-file-upload *ngSwitchCase="'Browser Upload and Download'"
                                    [createdProject]="createdProject"
                                    [configuration]="selectedFileAccessConfiguration()"

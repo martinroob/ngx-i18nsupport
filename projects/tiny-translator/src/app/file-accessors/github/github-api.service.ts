@@ -9,6 +9,9 @@ import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {isArray, isNullOrUndefined} from '../../common/util';
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
+import {Base64} from 'js-base64';
+import toBase64 = Base64.toBase64;
+import fromBase64 = Base64.fromBase64;
 
 /**
  * Representation of a repository.
@@ -283,7 +286,7 @@ export class GithubApiService {
         apiKey,
         {
           message: message,
-          content: btoa(newContents.content),
+          content: this.toBase64(newContents.content),
           sha: newContents.sha,
           branch: branch.name
         } as ContentsUpdateInputAPI
@@ -307,7 +310,7 @@ export class GithubApiService {
     let decodedContent: string|undefined;
     if (!isNullOrUndefined(content) && !isNullOrUndefined(contentApiResponse.encoding)) {
       if (contentApiResponse.encoding === 'base64') {
-        decodedContent = atob(content);
+        decodedContent = this.fromBase64(content);
       } else {
         decodedContent = '??? unknown encoding' + contentApiResponse.encoding;
       }
@@ -364,4 +367,13 @@ export class GithubApiService {
       return path;
     }
   }
+
+  private toBase64(str: string): string {
+    return toBase64(str);
+  }
+
+  private fromBase64(b64str: string): string {
+    return fromBase64(b64str);
+  }
+
 }

@@ -6,9 +6,9 @@ import {GithubConfiguration} from './github-configuration';
 import {catchError, first, map, switchMap} from 'rxjs/operators';
 import {GithubApiService, GithubBranch, GithubDirectory, GithubFileContents} from './github-api.service';
 import {SerializationService} from '../../model/serialization.service';
-import {GenericFile} from '../common/generic-file';
 import {IFile} from '../common/i-file';
 import {GithubFileDescription} from './github-file-description';
+import {GithubFile} from './github-file';
 
 function pathjoin(path: string, subdir: string) {
   if (subdir && subdir.startsWith('/')) {
@@ -18,24 +18,6 @@ function pathjoin(path: string, subdir: string) {
     return path + subdir;
   }
   return (path) ? path + '/' + subdir : subdir;
-}
-
-class GithubFile extends GenericFile {
-  sha?: string; // SHA1 of loaded file
-
-  constructor(_description: IFileDescription, _name: string, _size: number, _content: string, _sha: string) {
-    super(_description, _name, _size, _content);
-    this.sha = _sha;
-  }
-
-  public serialize(serializationService: SerializationService): string {
-    return JSON.stringify({
-      description: this.description.serialize(serializationService),
-      content: this.content,
-      size: this.size,
-      sha: this.sha
-    });
-  }
 }
 
 @Injectable({
@@ -101,17 +83,20 @@ export class GithubAccessorService implements IFileAccessService {
     const message = commitData.message;
     return this.stats(file).pipe(
       map((stats: IFileStats) => {
+        console.log('stats', stats, commitData);
         if (stats.status !== FileStatus.EXISTS_NOT) {
           if (commitData.override) {
+            console.log('sha', (stats as any).sha);
             return (stats as any).sha;
           } else {
-            return throwError('file exists');
+            throw Error('file exists');
           }
         } else {
           return null;
         }
       }),
       switchMap((sha: string) => {
+        console.log('sha', sha);
         content.sha = sha;
         return this.githubApiService.updateContent(branch, content, message, apiKey).pipe(
           map((newFileContent: GithubFileContents) => {

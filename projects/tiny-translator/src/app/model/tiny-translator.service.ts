@@ -141,18 +141,6 @@ export class TinyTranslatorService {
     }
   }
 
-  /**
-   * Check, wether there are errors in any of the selected files.
-   * @return true if there are errors
-   */
-  public hasErrors(): boolean {
-    if (!this._projects || this._projects.length === 0) {
-      return false;
-    }
-    const projectWithErrors = this._projects.find((p) => p.hasErrors());
-    return !isNullOrUndefined(projectWithErrors);
-  }
-
   public projects(): TranslationProject[] {
     return this._projects;
   }
@@ -173,25 +161,28 @@ export class TinyTranslatorService {
     saveAs: IFileDescription|null,
     commitData: ICommitData,
     confirmModifiedCallback: () => Observable<boolean>,
-    confirmOverrideCallback: () => Observable<boolean>): Observable<string> {
+    confirmOverrideCallback: () => Observable<boolean>): Observable<boolean> {
     let fileToSave = project.translationFile.editedFile();
-    if (saveAs) {
+    const isSavePositionChanged = !!saveAs && !saveAs.equals(fileToSave.description);
+    if (isSavePositionChanged) {
       fileToSave = fileToSave.copyForNewDescription(saveAs);
     }
     const fileAccessService =
       this.fileAccessServiceFactoryService.getFileAccessService(fileToSave.description.configuration.type);
-    console.log('publish', fileAccessService, fileToSave);
     return fileAccessService.stats(fileToSave).pipe(
       switchMap((stats: IFileStats) => {
-        if (saveAs && stats.status !== FileStatus.EXISTS_NOT) {
+        if (isSavePositionChanged && stats.status !== FileStatus.EXISTS_NOT) {
           return confirmOverrideCallback().pipe(
             tap(doSave => {commitData.override = doSave; })
           );
         }
-        if (!saveAs && stats.status === FileStatus.CHANGED) {
+        if (!isSavePositionChanged && stats.status === FileStatus.CHANGED) {
           return confirmModifiedCallback().pipe(
             tap(doSave => {commitData.override = doSave; })
           );
+        }
+        if (!isSavePositionChanged) {
+          commitData.override = true;
         }
         return of(true);
       }),
@@ -206,11 +197,11 @@ export class TinyTranslatorService {
                 }
               }),
               map(() => {
-                return 'done';
+                return true;
               })
             );
         } else {
-          return of('cancelled');
+          return of(false);
         }
       })
     );
