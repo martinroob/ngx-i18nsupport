@@ -23,29 +23,50 @@
           <context context-type="linenumber">3</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="ec407a5b4049c9c8702502bd66a07a1362ef27f5" datatype="html">
+        <source>Open menu... (configuration options, ...)</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/app.component.html</context>
+          <context context-type="linenumber">19</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c0e0e5ac611e1647b09330558dfd480c4533da06" datatype="html">
+        <source>List of available projects...</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/app.component.html</context>
+          <context context-type="linenumber">22</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="cecce9108254c2771317c2fd8a6ace406579041d" datatype="html">
         <source>Details of the project (click to open)</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.component.html</context>
-          <context context-type="linenumber">23</context>
+          <context context-type="linenumber">25</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/project-status/project-status.component.html</context>
           <context context-type="linenumber">3</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="043c4f6a1f6586d26a66781883f0c3b7baf6cb5f" datatype="html">
+        <source>Translate the project</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/app.component.html</context>
+          <context context-type="linenumber">28</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="f910da141cd85b858d496c9109b13c8f8b769db4" datatype="html">
         <source>Save...</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.component.html</context>
-          <context context-type="linenumber">32</context>
+          <context context-type="linenumber">37</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5a96c7f7a29ee51b58316aa6cb9f914c10368d95" datatype="html">
         <source>export current translation state to file (download)</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.component.html</context>
-          <context context-type="linenumber">30</context>
+          <context context-type="linenumber">35</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/translation-file-status/translation-file-status.component.html</context>
@@ -56,77 +77,77 @@
         <source>Publish...</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.component.html</context>
-          <context context-type="linenumber">37</context>
+          <context context-type="linenumber">42</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5d2465e705d21b4893f6426c6ba4025c879ae14d" datatype="html">
         <source>publish translated state to Github...</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.component.html</context>
-          <context context-type="linenumber">35</context>
+          <context context-type="linenumber">40</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cef361477efc32e23085b30937c2d881f8e47a31" datatype="html">
         <source>Settings...</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.component.html</context>
-          <context context-type="linenumber">41</context>
+          <context context-type="linenumber">46</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5935cd5a3b963b7f7ee556c22233d95046a4136d" datatype="html">
         <source>Google Translate units...</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.component.html</context>
-          <context context-type="linenumber">46</context>
+          <context context-type="linenumber">51</context>
         </context-group>
       </trans-unit>
       <trans-unit id="b3da02a762691a868113c1555c0a74c2252c31d3" datatype="html">
         <source>Translate all untranslated units with Google Translate</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.component.html</context>
-          <context context-type="linenumber">44</context>
+          <context context-type="linenumber">49</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ddeefedd697a412f0ceb040b8c0365fb9322b1d5" datatype="html">
         <source>Last results...</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.component.html</context>
-          <context context-type="linenumber">51</context>
+          <context context-type="linenumber">56</context>
         </context-group>
       </trans-unit>
       <trans-unit id="199c0c9528e7ded8511f4c5dcceacb0f4de13d15" datatype="html">
         <source>Open summary page of last autotranslate run</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.component.html</context>
-          <context context-type="linenumber">49</context>
+          <context context-type="linenumber">54</context>
         </context-group>
       </trans-unit>
       <trans-unit id="954e65c064c236881a386e836f8d411b4d29d910" datatype="html">
         <source>Google Translate settings...</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.component.html</context>
-          <context context-type="linenumber">59</context>
+          <context context-type="linenumber">64</context>
         </context-group>
       </trans-unit>
       <trans-unit id="d4b7dbc9a30d91dd5a1b88251d7a654f00e6ef52" datatype="html">
         <source>configure Google Translate API Key</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.component.html</context>
-          <context context-type="linenumber">57</context>
+          <context context-type="linenumber">62</context>
         </context-group>
       </trans-unit>
       <trans-unit id="a7add4ea2cfa0d5bb9303e63d79b03ce98203a8e" datatype="html">
         <source>Github access settings..</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.component.html</context>
-          <context context-type="linenumber">64</context>
+          <context context-type="linenumber">69</context>
         </context-group>
       </trans-unit>
       <trans-unit id="d32cdd56b133925d40d2112556f1828f68f8ca30" datatype="html">
         <source>configure Github API access</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.component.html</context>
-          <context context-type="linenumber">62</context>
+          <context context-type="linenumber">67</context>
         </context-group>
       </trans-unit>
       <trans-unit id="860553e954e6ab29671885c3ea589593657d06ca" datatype="html">
