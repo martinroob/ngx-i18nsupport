@@ -42,8 +42,8 @@
   },
   "devDependencies": {
     "@angular-devkit/core": "^7.0.0",
-    "@angular-devkit/schematics": "^7.0.0",
-    "@angular-devkit/architect": "^0.11.0"
+    "@angular-devkit/architect": "~0.12.1",
+    "@angular-devkit/schematics": "~7.2.1"
   },
   "peerDependencies": {
     "@angular/common": "^7.0.0",
