@@ -10,7 +10,7 @@
     "@angular-devkit/core" "7.2.1"
     rxjs "6.3.3"
 
-"@angular-devkit/architect@0.13.7":
+"@angular-devkit/architect@0.13.7", "@angular-devkit/architect@~0.13.7":
   version "0.13.7"
   resolved "https://registry.yarnpkg.com/@angular-devkit/architect/-/architect-0.13.7.tgz#b09e80dedeacddb86a94d3002c7fb8627733554f"
   integrity sha512-1N4R7cuwbbz7Z76v0Fi5nkxg6eS6FA58Y7SnTYCxI2HRJ1lqlafRjr89eoKzzbCH8ZGa7NG0wfRXtUwF/IrGmQ==
@@ -109,7 +109,7 @@
     "@angular-devkit/core" "7.2.1"
     rxjs "6.3.3"
 
-"@angular-devkit/core@7.2.1", "@angular-devkit/core@^7.0.0":
+"@angular-devkit/core@7.2.1":
   version "7.2.1"
   resolved "https://registry.yarnpkg.com/@angular-devkit/core/-/core-7.2.1.tgz#8c6df59eab77bcc98a348c8cdf9eb217c8b751a5"
   integrity sha512-zOozPswSM1cTkltw5LeSPoZ/fJ2d3vN304IVgKgrM5/Fs54bd7nTaBcAK+HvjKS+5KmykYrXW47Q4CdFJikluQ==
@@ -131,7 +131,7 @@
     rxjs "6.3.3"
     source-map "0.7.3"
 
-"@angular-devkit/core@7.3.7":
+"@angular-devkit/core@7.3.7", "@angular-devkit/core@~7.3.7":
   version "7.3.7"
   resolved "https://registry.yarnpkg.com/@angular-devkit/core/-/core-7.3.7.tgz#9b93e8b88bc776c6b08895799123d718a20e3b41"
   integrity sha512-RRDCqSX4wF3Nxxls+W0BzCHz2HYWFP6bUpWxmzXF8EETGlZq/b/ZsEnVV41jtsqC4PCTks4k0qUFMaKE7XCupg==
@@ -150,7 +150,7 @@
     "@angular-devkit/core" "7.2.1"
     rxjs "6.3.3"
 
-"@angular-devkit/schematics@7.3.7":
+"@angular-devkit/schematics@7.3.7", "@angular-devkit/schematics@~7.3.7":
   version "7.3.7"
   resolved "https://registry.yarnpkg.com/@angular-devkit/schematics/-/schematics-7.3.7.tgz#268465d355aa03d16189d0ea89467703dae4d581"
   integrity sha512-XHrr63E6p9kLNR83D4AcUkdBFLw4yxeQihual3I88eJUPJdHAvQYkp1sBThlMkNmBWPVagUD4efknkUFfRkFmg==
