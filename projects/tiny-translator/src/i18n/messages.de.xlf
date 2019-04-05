@@ -146,9 +146,9 @@
       <context-group purpose="location"><context context-type="sourcefile">src/app/file-accessors/download-upload/translation-file-upload/translation-file-upload.component.html</context><context context-type="linenumber">11</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/file-accessors/download-upload/translation-file-upload/translation-file-upload.component.html</context><context context-type="linenumber">24</context></context-group></trans-unit><trans-unit id="686caf7bde6c9cd30d6ec1226436bc50594115f0" datatype="html">
         <source>You selected an xtb file.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/>"/>
             This file type only contains one language, the target language.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/>"/>
-            To show you the original source texts, you should also select the master xmb file.</source><target state="new">You selected an xtb file.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/>"/>
-            This file type only contains one language, the target language.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/>"/>
-            To show you the original source texts, you should also select the master xmb file.</target>
+            To show you the original source texts, you should also select the master xmb file.</source><target state="final">Sie haben eine xtb-Datei ausgewählt.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/>"/>
+Solche Dateien enthalten nur die Zielsprache, aber nicht die Ausgangssprache.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/>"/>
+Um auch die Ausgangsprache zu haben, wählen Sie bitte die zugehörige Master xmb-Datei.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/file-accessors/download-upload/translation-file-upload/translation-file-upload.component.html</context>
           <context context-type="linenumber">15</context>
@@ -159,15 +159,15 @@
       <context-group purpose="location"><context context-type="sourcefile">src/app/file-accessors/download-upload/translation-file-upload/translation-file-upload.component.html</context><context context-type="linenumber">23</context></context-group></trans-unit><trans-unit id="f37c5b108d6695635b0f5b359ba981e5fc0ffa5f" datatype="html">
         <source>Select the file you want to translate.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/>"/>
     The file can be of format XLIFF 1.2, XLIFF 2.0 or XMB.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/>"/>
-    The file will be stored in your browser local storage until you export the translated version.</source><target state="new">Select the file you want to translate.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/>"/>
-    The file can be of format XLIFF 1.2, XLIFF 2.0 or XMB.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/>"/>
-    The file will be stored in your browser local storage until you export the translated version.</target>
+    The file will be stored in your browser local storage until you export the translated version.</source><target state="final">Auswahl der zu übersetzenden Datei.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/>"/>
+Die Datei kann das Format XLIFF 1.2, XLIFF 2.0 oder XMB haben.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/>"/>
+Die Datei wird im lokalen Speicher des Browsers abgelegt, bis Sie die übersetzte Version exportieren.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/file-accessors/github/translation-file-from-github/translation-file-from-github.component.html</context>
           <context context-type="linenumber">2</context>
         </context-group>
       </trans-unit><trans-unit id="cbbc5cd6c094ae50d9025c58c8634c64184b0828" datatype="html">
-        <source>Open Github Browser...</source><target state="new">Open Github Browser...</target>
+        <source>Open Github Browser...</source><target state="final">Öffnen Github Browser...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/file-accessors/github/translation-file-from-github/translation-file-from-github.component.html</context>
           <context context-type="linenumber">5</context>
@@ -200,43 +200,43 @@
         <target state="final">Abbruch</target>
         
       <context-group purpose="location"><context context-type="sourcefile">src/app/confirm-dialog/confirm-dialog.component.html</context><context context-type="linenumber">6</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/file-accessors/common/file-explorer-dialog/file-explorer-dialog.component.html</context><context context-type="linenumber">25</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/file-accessors/common/save-as-explorer-dialog/save-as-explorer-dialog.component.html</context><context context-type="linenumber">10</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/file-accessors/github/github-config-editor-dialog/github-config-editor-dialog.component.html</context><context context-type="linenumber">8</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/translate-unit-warning-confirm-dialog/translate-unit-warning-confirm-dialog.component.html</context><context context-type="linenumber">9</context></context-group></trans-unit><trans-unit id="6fc5e65900ae1415d3170d5d2842f0dcae1b6645" datatype="html">
-        <source>Accept</source><target state="new">Accept</target>
+        <source>Accept</source><target state="final">OK</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/confirm-dialog/confirm-dialog.component.html</context>
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit><trans-unit id="2795d5e4d1eddeb43fa2ba6401725fcb02b0b850" datatype="html">
-        <source>Select a file</source><target state="new">Select a file</target>
+        <source>Select a file</source><target state="final">Wählen Sie eine Datei</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/file-accessors/common/file-explorer-dialog/file-explorer-dialog.component.html</context>
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit><trans-unit id="531bdad672bb6315d337390aa146fbb67fd7ccb8" datatype="html">
-        <source>Select a directory</source><target state="new">Select a directory</target>
+        <source>Select a directory</source><target state="final">Wählen Sie ein Verzeichnis</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/file-accessors/common/file-explorer-dialog/file-explorer-dialog.component.html</context>
           <context context-type="linenumber">2</context>
         </context-group>
       </trans-unit><trans-unit id="5d35417e90245771bcce3e30757d263b9f4da26e" datatype="html">
-        <source>Select a file or directory</source><target state="new">Select a file or directory</target>
+        <source>Select a file or directory</source><target state="final">Wählen Sie eine Datei oder ein Verzeichnis</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/file-accessors/common/file-explorer-dialog/file-explorer-dialog.component.html</context>
           <context context-type="linenumber">3</context>
         </context-group>
       </trans-unit><trans-unit id="e41fd2d209994d797b1061f72e472ff2d4ea6fe1" datatype="html">
-        <source>Error loading: <x id="INTERPOLATION" equiv-text="{{errorMessage}}"/>.</source><target state="new">Error loading: <x id="INTERPOLATION" equiv-text="{{errorMessage}}"/>.</target>
+        <source>Error loading: <x id="INTERPOLATION" equiv-text="{{errorMessage}}"/>.</source><target state="final">Fehler beim Laden: <x id="INTERPOLATION"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/file-accessors/common/file-explorer-dialog/file-explorer-dialog.component.html</context>
           <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit><trans-unit id="6d5f426f02915905607a0e40b46ca25e89f9ac90" datatype="html">
-        <source>Loading ...</source><target state="new">Loading ...</target>
+        <source>Loading ...</source><target state="final">Laden ...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/file-accessors/common/file-explorer-dialog/file-explorer-dialog.component.html</context>
           <context context-type="linenumber">20</context>
         </context-group>
       </trans-unit><trans-unit id="be5c752b58791dd799bc5d5482d4351e06f18673" datatype="html">
-        <source>Ok</source><target state="new">Ok</target>
+        <source>Ok</source><target state="final">Ok</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/file-accessors/common/file-explorer-dialog/file-explorer-dialog.component.html</context>
           <context context-type="linenumber">26</context>
@@ -246,7 +246,7 @@
           <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit><trans-unit id="baeaf98a596c84d0ff2daa212fc2f112874591a9" datatype="html">
-        <source>Select a file to save</source><target state="new">Select a file to save</target>
+        <source>Select a file to save</source><target state="final">Wählen Sie eine Datei zum Speichern</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/file-accessors/common/save-as-explorer-dialog/save-as-explorer-dialog.component.html</context>
           <context context-type="linenumber">1</context>
@@ -254,7 +254,7 @@
       </trans-unit><trans-unit id="88931f9de27d40a95b51791a186727122014fe16" datatype="html">
         <source>
       <x id="START_TAG_MAT-ICON" ctype="x-mat-icon" equiv-text="&lt;mat-icon>"/>edit<x id="CLOSE_TAG_MAT-ICON" ctype="x-mat-icon" equiv-text="&lt;/mat-icon>"/>
-    </source><target state="new">
+    </source><target state="final">
       <x id="START_TAG_MAT-ICON" ctype="x-mat-icon" equiv-text="&lt;mat-icon>"/>edit<x id="CLOSE_TAG_MAT-ICON" ctype="x-mat-icon" equiv-text="&lt;/mat-icon>"/>
     </target>
         <context-group purpose="location">
@@ -262,13 +262,13 @@
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit><trans-unit id="d472cb3987b6e3f87d9dc5d11929aab228c19c56" datatype="html">
-        <source>Select another location...</source><target state="new">Select another location...</target>
+        <source>Select another location...</source><target state="final">Wählen Sie einen anderen Ablageort...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/file-accessors/common/file-to-save/file-to-save.component.html</context>
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit><trans-unit id="20aba25477c3abdfaa92c34d4d0a2505e66c8add" datatype="html">
-        <source>select a configuration..</source><target state="new">select a configuration..</target>
+        <source>select a configuration..</source><target state="final">Wählen Sie eine Konfiguration..</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/file-accessors/common/file-explorer/file-explorer.component.html</context>
           <context context-type="linenumber">3</context>
@@ -278,7 +278,7 @@
           <context context-type="linenumber">4</context>
         </context-group>
       </trans-unit><trans-unit id="583dd100b81e81c87fd54fb7198a87f62020caea" datatype="html">
-        <source><x id="INTERPOLATION" equiv-text="{{accessor.type}}"/> <x id="INTERPOLATION_1" equiv-text="{{accessor.shortLabel()}}"/></source><target state="new"><x id="INTERPOLATION" equiv-text="{{accessor.type}}"/> <x id="INTERPOLATION_1" equiv-text="{{accessor.shortLabel()}}"/></target>
+        <source><x id="INTERPOLATION" equiv-text="{{accessor.type}}"/> <x id="INTERPOLATION_1" equiv-text="{{accessor.shortLabel()}}"/></source><target state="final"><x id="INTERPOLATION" equiv-text="{{accessor.type}}"/> <x id="INTERPOLATION_1" equiv-text="{{accessor.shortLabel()}}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/file-accessors/common/file-explorer/file-explorer.component.html</context>
           <context context-type="linenumber">5</context>
@@ -349,16 +349,16 @@
         <target state="final">Export der Übersetzungen (download)</target>
         
       <context-group purpose="location"><context context-type="sourcefile">src/app/app.component.html</context><context context-type="linenumber">35</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/translation-file-status/translation-file-status.component.html</context><context context-type="linenumber">30</context></context-group></trans-unit><trans-unit id="45d15fb554ba946ec2b81ce1f54b279a6f7fb97e" datatype="html">
-        <source>Publish...</source><target state="new">Publish...</target>
+        <source>Publish...</source><target state="final">Veröffentlichen...</target>
         
       <context-group purpose="location"><context context-type="sourcefile">src/app/app.component.html</context><context context-type="linenumber">42</context></context-group></trans-unit><trans-unit id="5d2465e705d21b4893f6426c6ba4025c879ae14d" datatype="html">
-        <source>publish translated state to Github...</source><target state="new">publish translated state to Github...</target>
+        <source>publish translated state to Github...</source><target state="final">Speichern der Übersetzung in Github...</target>
         
       <context-group purpose="location"><context context-type="sourcefile">src/app/app.component.html</context><context context-type="linenumber">40</context></context-group></trans-unit><trans-unit id="cef361477efc32e23085b30937c2d881f8e47a31" datatype="html">
-        <source>Settings...</source><target state="new">Settings...</target>
+        <source>Settings...</source><target state="final">Einstellungen...</target>
         
       <context-group purpose="location"><context context-type="sourcefile">src/app/app.component.html</context><context context-type="linenumber">46</context></context-group></trans-unit><trans-unit id="5935cd5a3b963b7f7ee556c22233d95046a4136d" datatype="html">
-        <source>Google Translate units...</source><target state="new">Google Translate units...</target>
+        <source>Google Translate units...</source><target state="final">Google Translate units...</target>
         
       <context-group purpose="location"><context context-type="sourcefile">src/app/app.component.html</context><context context-type="linenumber">51</context></context-group></trans-unit><trans-unit id="5ca62f8d7b9cfe1b70df406e02fb5402cda34782" datatype="html">
         <source>In normalization mode all markup contained in the messsages is shown in a simplified, format neutral way.</source>
@@ -391,13 +391,13 @@
         <target state="final">Details des Projekts (Klicken Sie hier zum Öffnen der Details)</target>
         
       <context-group purpose="location"><context context-type="sourcefile">src/app/app.component.html</context><context context-type="linenumber">25</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/project-status/project-status.component.html</context><context context-type="linenumber">3</context></context-group></trans-unit><trans-unit id="043c4f6a1f6586d26a66781883f0c3b7baf6cb5f" datatype="html">
-        <source>Translate the project</source><target state="new">Translate the project</target>
+        <source>Translate the project</source><target state="final">Übersetzen des Projekts</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.component.html</context>
           <context context-type="linenumber">28</context>
         </context-group>
       </trans-unit><trans-unit id="f910da141cd85b858d496c9109b13c8f8b769db4" datatype="html">
-        <source>Save...</source><target state="new">Save...</target>
+        <source>Save...</source><target state="final">Speichern...</target>
         
       <context-group purpose="location"><context context-type="sourcefile">src/app/app.component.html</context><context context-type="linenumber">37</context></context-group></trans-unit><trans-unit id="bc1dd546b5bf6ce79f355319167889865afa6be2" datatype="html">
         <source>As a reviewer translation is disabled. You can only mark translated units as reviewed</source>
@@ -408,19 +408,19 @@
         <target state="final">Sie arbeiten aktuell als "Reviewer" !</target>
         
       <context-group purpose="location"><context context-type="sourcefile">src/app/project-status/project-status.component.html</context><context context-type="linenumber">16</context></context-group></trans-unit><trans-unit id="02788b0d768c4a13a291d7b8792d7682006501bd" datatype="html">
-        <source>Publish project</source><target state="new">Publish project</target>
+        <source>Publish project</source><target state="final">Veröffentlichen des Projekts</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/publish-project-page/publish-project-page.component.html</context>
           <context context-type="linenumber">2</context>
         </context-group>
       </trans-unit><trans-unit id="0689ca7354e7f29ea1eb4e19e225a4895f9ae822" datatype="html">
-        <source>Publish it at the following location</source><target state="new">Publish it at the following location</target>
+        <source>Publish it at the following location</source><target state="final">Veröffentlichen an folgendem Speicherort</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/publish-project-page/publish-project-page.component.html</context>
           <context context-type="linenumber">4</context>
         </context-group>
       </trans-unit><trans-unit id="d969cf6305baf32baf2bda03b16c3c7a46be2c13" datatype="html">
-        <source>commit message</source><target state="new">commit message</target>
+        <source>commit message</source><target state="final">commit Nachricht</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/publish-project-page/publish-project-page.component.html</context>
           <context context-type="linenumber">13</context>
@@ -430,13 +430,13 @@
           <context context-type="linenumber">14</context>
         </context-group>
       </trans-unit><trans-unit id="223aae0477f79f0bc4436c1c57619415f04cbbb3" datatype="html">
-        <source>Publish</source><target state="new">Publish</target>
+        <source>Publish</source><target state="final">Veröffentlichen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/publish-project-page/publish-project-page.component.html</context>
           <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit><trans-unit id="a89b81ab3ae5610b839fb0827e0cc1dae6b3fcaa" datatype="html">
-        <source>Do you really want to override this file?</source><target state="new">Do you really want to override this file?</target>
+        <source>Do you really want to override this file?</source><target state="final">Wollen Sie die Datei wirklich überschreiben?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/publish-project-page/publish-project-page.component.html</context>
           <context context-type="linenumber">24</context>
@@ -446,25 +446,25 @@
           <context context-type="linenumber">26</context>
         </context-group>
       </trans-unit><trans-unit id="8c48e99a61e1ef2d657766fdbbfd9c327ee8d087" datatype="html">
-        <source>File already exists.</source><target state="new">File already exists.</target>
+        <source>File already exists.</source><target state="final">Datei existiert schon.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/publish-project-page/publish-project-page.component.html</context>
           <context context-type="linenumber">25</context>
         </context-group>
       </trans-unit><trans-unit id="69bfd5783fba51c9543862a19e00522603c6ceb2" datatype="html">
-        <source>The file has been modified after you loaded it.</source><target state="new">The file has been modified after you loaded it.</target>
+        <source>The file has been modified after you loaded it.</source><target state="final">Die Datei wurde verändert, nachdem Sie sie geladen haben.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/publish-project-page/publish-project-page.component.html</context>
           <context context-type="linenumber">27</context>
         </context-group>
       </trans-unit><trans-unit id="2e202a128aac61dad1d9da66db99fc673bbaf914" datatype="html">
-        <source>File successfully saved.</source><target state="new">File successfully saved.</target>
+        <source>File successfully saved.</source><target state="final">Ok, Datei gespeichert.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/publish-project-page/publish-project-page.component.html</context>
           <context context-type="linenumber">28</context>
         </context-group>
       </trans-unit><trans-unit id="6fc2c1a8969bb0645d798d2066d264882d206fcc" datatype="html">
-        <source>name</source><target state="new">name</target>
+        <source>name</source><target state="final">Name</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/file-accessors/common/save-as-explorer/save-as-explorer.component.html</context>
           <context context-type="linenumber">10</context>
@@ -560,7 +560,7 @@
         <target state="final">Testen Sie einen Aufruf</target>
         
       <context-group purpose="location"><context context-type="sourcefile">src/app/configure-auto-translate-page/configure-auto-translate-page.component.html</context><context context-type="linenumber">47</context></context-group></trans-unit><trans-unit id="49729ef4ade0b3b12f050d47924b868cb6e15d76" datatype="html">
-        <source>Github access settings</source><target state="new">Github access settings</target>
+        <source>Github access settings</source><target state="final">Github Einstellungen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/file-accessors/github/configure-github-page/configure-github-page.component.html</context>
           <context context-type="linenumber">1</context>
@@ -568,27 +568,27 @@
       </trans-unit><trans-unit id="e725898deb5714ff1bdd0c7313a0bd07e945d9ab" datatype="html">
         <source>
   By configuring an access to Github you can directly import translation files to TinyTranslator and store the translation in your Github repositories.
-</source><target state="new">
-  By configuring an access to Github you can directly import translation files to TinyTranslator and store the translation in your Github repositories.
+</source><target state="final">
+Wenn Sie einen Github-Zugang konfigurieren, können Sie Datei direkt aus Github übernehmen und auch wieder speichern.
 </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/file-accessors/github/configure-github-page/configure-github-page.component.html</context>
           <context context-type="linenumber">2</context>
         </context-group>
       </trans-unit><trans-unit id="0c1057a12a796b135d9920c5181c00ab2a4f600d" datatype="html">
-        <source>To use Github you need a <x id="START_LINK" ctype="x-a" equiv-text="&lt;a>"/>Github Personal API token<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/>.</source><target state="new">To use Github you need a <x id="START_LINK" ctype="x-a" equiv-text="&lt;a>"/>Github Personal API token<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/>.</target>
+        <source>To use Github you need a <x id="START_LINK" ctype="x-a" equiv-text="&lt;a>"/>Github Personal API token<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/>.</source><target state="final">Zur Nutzung von Github benötigen Sie ein <x id="START_LINK" ctype="x-a" equiv-text="&lt;a>"/>Github Personal API token<x id="CLOSE_LINK" ctype="x-a"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/file-accessors/github/configure-github-page/configure-github-page.component.html</context>
           <context context-type="linenumber">6</context>
         </context-group>
       </trans-unit><trans-unit id="22d5e7e281d92a5015dbd1674b395939f8bf84d9" datatype="html">
-        <source><x id="INTERPOLATION" equiv-text="{{configuration.fullLabel().label}}"/></source><target state="new"><x id="INTERPOLATION" equiv-text="{{configuration.fullLabel().label}}"/></target>
+        <source><x id="INTERPOLATION" equiv-text="{{configuration.fullLabel().label}}"/></source><target state="final"><x id="INTERPOLATION" equiv-text="{{configuration.fullLabel().label}}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/file-accessors/github/configure-github-page/configure-github-page.component.html</context>
           <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit><trans-unit id="3cc12742d456132c10c520517175579ec35e51a9" datatype="html">
-        <source>Add another configuration</source><target state="new">Add another configuration</target>
+        <source>Add another configuration</source><target state="final">Hinzufügen weitere Konfiguration</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/file-accessors/github/configure-github-page/configure-github-page.component.html</context>
           <context context-type="linenumber">18</context>
@@ -598,17 +598,17 @@
         <target state="final">Konfigurieren Sie den Google Translate API-Schlüssel</target>
         
       <context-group purpose="location"><context context-type="sourcefile">src/app/app.component.html</context><context context-type="linenumber">62</context></context-group></trans-unit><trans-unit id="a7add4ea2cfa0d5bb9303e63d79b03ce98203a8e" datatype="html">
-        <source>Github access settings..</source><target state="new">Github access settings..</target>
+        <source>Github access settings..</source><target state="final">Github Einstellungen..</target>
         
       <context-group purpose="location"><context context-type="sourcefile">src/app/app.component.html</context><context context-type="linenumber">69</context></context-group></trans-unit><trans-unit id="d32cdd56b133925d40d2112556f1828f68f8ca30" datatype="html">
-        <source>configure Github API access</source><target state="new">configure Github API access</target>
+        <source>configure Github API access</source><target state="final">Konfigurieren Github API Zugang</target>
         
       <context-group purpose="location"><context context-type="sourcefile">src/app/app.component.html</context><context context-type="linenumber">67</context></context-group></trans-unit><trans-unit id="b3da02a762691a868113c1555c0a74c2252c31d3" datatype="html">
         <source>Translate all untranslated units with Google Translate</source>
         <target state="final">Übersetzen Sie alle nicht übersetzten Einheiten mit Google Translate</target>
         
       <context-group purpose="location"><context context-type="sourcefile">src/app/app.component.html</context><context context-type="linenumber">49</context></context-group></trans-unit><trans-unit id="ddeefedd697a412f0ceb040b8c0365fb9322b1d5" datatype="html">
-        <source>Last results...</source><target state="new">Last results...</target>
+        <source>Last results...</source><target state="final">Letzte Ergebnisse...</target>
         
       <context-group purpose="location"><context context-type="sourcefile">src/app/app.component.html</context><context context-type="linenumber">56</context></context-group></trans-unit><trans-unit id="84fde7a04ebc8c588e3ff102e614ae5e1ff76b86" datatype="html">
         <source>press to get a translation suggestion from Google Translate</source>
@@ -667,7 +667,7 @@
         <target state="final">Öffnen Übersicht über die Ergebnisse des letzten Autotranslation-Laufs</target>
         
       <context-group purpose="location"><context context-type="sourcefile">src/app/app.component.html</context><context context-type="linenumber">54</context></context-group></trans-unit><trans-unit id="954e65c064c236881a386e836f8d411b4d29d910" datatype="html">
-        <source>Google Translate settings...</source><target state="new">Google Translate settings...</target>
+        <source>Google Translate settings...</source><target state="final">Google Translate Einstellungen...</target>
         
       <context-group purpose="location"><context context-type="sourcefile">src/app/app.component.html</context><context context-type="linenumber">64</context></context-group></trans-unit><trans-unit id="50947a36dc35b04f2f8cef573952d0f2fb69c92e" datatype="html">
         <source>Autotranslated units</source>
@@ -702,7 +702,7 @@
         <source><x id="INTERPOLATION" equiv-text="{{translationFileView?.currentTransUnitIndex()}}"/> of <x id="INTERPOLATION_1" equiv-text="{{translationFileView?.scrollabeTransUnitsLength()}}"/></source>
         
       <target state="translated"><x id="INTERPOLATION"/> von <x id="INTERPOLATION_1"/></target><context-group purpose="location"><context context-type="sourcefile">src/app/filter-status/filter-status.component.html</context><context context-type="linenumber">15</context></context-group></trans-unit><trans-unit id="cec4d8aa5f18618eb58780513d3fe5eecdb02713" datatype="html">
-        <source>Github API token</source><target state="new">Github API token</target>
+        <source>Github API token</source><target state="final">Github API token</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/file-accessors/github/github-config-editor/github-config-editor.component.html</context>
           <context context-type="linenumber">3</context>
@@ -712,7 +712,7 @@
           <context context-type="linenumber">4</context>
         </context-group>
       </trans-unit><trans-unit id="21a181ebefba435aa0e557c648d4afdf1e055356" datatype="html">
-        <source>The configuration including your API token will be stored in the local storage of your browser. It will not be sent to anywhere but the Github API Service.</source><target state="new">The configuration including your API token will be stored in the local storage of your browser. It will not be sent to anywhere but the Github API Service.</target>
+        <source>The configuration including your API token will be stored in the local storage of your browser. It will not be sent to anywhere but the Github API Service.</source><target state="final">Die Konfiguration inklusive API Token wird im loklaen Speicher des Browsers gespeichert. Sie wird ausschließlich an den Github API Service weitergeben.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/file-accessors/github/github-config-editor/github-config-editor.component.html</context>
           <context context-type="linenumber">5</context>
@@ -724,8 +724,7 @@
       </trans-unit><trans-unit id="6f6235e7e7022d5f7dc8e1669b15c5dd999f21f9" datatype="html">
         <source>
       The token is not valid!
-    </source><target state="new">
-      The token is not valid!
+    </source><target state="final">Das Token ist nicht gültig!
     </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/file-accessors/github/github-config-editor/github-config-editor.component.html</context>
@@ -734,15 +733,15 @@
       </trans-unit><trans-unit id="9ecbeb9456828e67aa6be2088daf139374f78cf4" datatype="html">
         <source>
       Token is <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>required<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/>
-    </source><target state="new">
-      Token is <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>required<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/>
+    </source><target state="final">
+Token <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>MUSS<x id="CLOSE_TAG_STRONG" ctype="x-strong"/> angegeben werden
     </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/file-accessors/github/github-config-editor/github-config-editor.component.html</context>
           <context context-type="linenumber">9</context>
         </context-group>
       </trans-unit><trans-unit id="b5d7e0f76b28cf2eb837848dfb7ee4a784e49951" datatype="html">
-        <source>Github repository</source><target state="new">Github repository</target>
+        <source>Github repository</source><target state="final">Github Repository</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/file-accessors/github/github-config-editor/github-config-editor.component.html</context>
           <context context-type="linenumber">14</context>
@@ -754,8 +753,8 @@
       </trans-unit><trans-unit id="772038c48c8ad29ad936e5980c29027e8fd74163" datatype="html">
         <source>
       Repository does not exist!
-    </source><target state="new">
-      Repository does not exist!
+    </source><target state="final">
+      Repository existiert nicht!
     </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/file-accessors/github/github-config-editor/github-config-editor.component.html</context>
@@ -764,8 +763,8 @@
       </trans-unit><trans-unit id="dcff2a26b9f9da711bb182450836d1362729faa2" datatype="html">
         <source>
       Repository cannot be checked (invalid API token)!
-    </source><target state="new">
-      Repository cannot be checked (invalid API token)!
+    </source><target state="final">
+      Repository kann nicht validiert werden (ungültiges API token)!
     </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/file-accessors/github/github-config-editor/github-config-editor.component.html</context>
@@ -774,15 +773,15 @@
       </trans-unit><trans-unit id="32998725d739fe9cf8d0259eb84aba3fe48540e4" datatype="html">
         <source>
       Repository is <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>required<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/>
-    </source><target state="new">
-      Repository is <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>required<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/>
+    </source><target state="final">
+      Repository <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>MUSS<x id="CLOSE_TAG_STRONG" ctype="x-strong"/> angegeben werden
     </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/file-accessors/github/github-config-editor/github-config-editor.component.html</context>
           <context context-type="linenumber">27</context>
         </context-group>
       </trans-unit><trans-unit id="926206cb8fb5bbbe54078a14dca36d66a1c59269" datatype="html">
-        <source>Github branch</source><target state="new">Github branch</target>
+        <source>Github branch</source><target state="final">Github Branch</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/file-accessors/github/github-config-editor/github-config-editor.component.html</context>
           <context context-type="linenumber">32</context>
@@ -794,8 +793,8 @@
       </trans-unit><trans-unit id="869b6862277f78a0419a3aa56e0478d930840daa" datatype="html">
         <source>
       Branch does not exist!
-    </source><target state="new">
-      Branch does not exist!
+    </source><target state="final">
+Branch existiert nicht!
     </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/file-accessors/github/github-config-editor/github-config-editor.component.html</context>
@@ -804,15 +803,15 @@
       </trans-unit><trans-unit id="8f530e4e715e9729fb2526f4b4512367bcacf357" datatype="html">
         <source>
       Branch cannot be checked (invalid API token)!
-    </source><target state="new">
-      Branch cannot be checked (invalid API token)!
+    </source><target state="final">
+Branch kann nicht validiert werden (ungültiges API token)!
     </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/file-accessors/github/github-config-editor/github-config-editor.component.html</context>
           <context context-type="linenumber">42</context>
         </context-group>
       </trans-unit><trans-unit id="f76c8233aa8f36c52a7f974dc9de667c1cc1ea6f" datatype="html">
-        <source>path</source><target state="new">path</target>
+        <source>path</source><target state="final">Pfad</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/file-accessors/github/github-config-editor/github-config-editor.component.html</context>
           <context context-type="linenumber">48</context>
@@ -824,8 +823,8 @@
       </trans-unit><trans-unit id="a8d525dd91c8256dced77f35624d01df06dbc322" datatype="html">
         <source>
         Path does not exist!
-      </source><target state="new">
-        Path does not exist!
+      </source><target state="final">
+Pfad existiert nicht!
       </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/file-accessors/github/github-config-editor/github-config-editor.component.html</context>
@@ -834,45 +833,43 @@
       </trans-unit><trans-unit id="517364a54dc0e62ab322919de9e62cad4c93630c" datatype="html">
         <source>
         Path is not a directory!
-      </source><target state="new">
-        Path is not a directory!
-      </target>
+      </source><target state="final">Pfad ist kein Verzeichnis!      </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/file-accessors/github/github-config-editor/github-config-editor.component.html</context>
           <context context-type="linenumber">53</context>
         </context-group>
       </trans-unit><trans-unit id="d1c3e5d173ed2dc42fe463816ac16701dd1824f9" datatype="html">
-        <source>Select a path</source><target state="new">Select a path</target>
+        <source>Select a path</source><target state="final">Wählen Sie einen Pfad</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/file-accessors/github/github-config-editor/github-config-editor.component.html</context>
           <context context-type="linenumber">58</context>
         </context-group>
       </trans-unit><trans-unit id="c6db193442d502a229eb2ed7bc9341a52eec3872" datatype="html">
-        <source>Store configuration</source><target state="new">Store configuration</target>
+        <source>Store configuration</source><target state="final">Speichern Konfiguration</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/file-accessors/github/github-config-editor/github-config-editor.component.html</context>
           <context context-type="linenumber">67</context>
         </context-group>
       </trans-unit><trans-unit id="497264713e03c80eb949e60a3738698f33529a09" datatype="html">
-        <source>Delete configuration</source><target state="new">Delete configuration</target>
+        <source>Delete configuration</source><target state="final">Löschen Konfiguration</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/file-accessors/github/github-config-editor/github-config-editor.component.html</context>
           <context context-type="linenumber">71</context>
         </context-group>
       </trans-unit><trans-unit id="346b43635541e723486844c2ed821675dea9e92c" datatype="html">
-        <source>Delete this configuration</source><target state="new">Delete this configuration</target>
+        <source>Delete this configuration</source><target state="final">Löschen dieser Konfiguration</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/file-accessors/github/github-config-editor/github-config-editor.component.html</context>
           <context context-type="linenumber">69</context>
         </context-group>
       </trans-unit><trans-unit id="f51f24873a8234f2940d59cccf5e52ba6cae5299" datatype="html">
-        <source>edit config</source><target state="new">edit config</target>
+        <source>edit config</source><target state="final">Bearbeiten Konfiguration</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/file-accessors/github/github-config-editor-dialog/github-config-editor-dialog.component.html</context>
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit><trans-unit id="7e6c975ebea8b5f8b120905ca7acf9f8edf59d8e" datatype="html">
-        <source>OK</source><target state="new">OK</target>
+        <source>OK</source><target state="final">OK</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/file-accessors/github/github-config-editor-dialog/github-config-editor-dialog.component.html</context>
           <context context-type="linenumber">7</context>
@@ -902,13 +899,13 @@ Markieren als 'Übersetzt', aber nicht ok.</target><context-group purpose="locat
         <source>Ignore</source>
         
       <target state="final">Nein danke</target><context-group purpose="location"><context context-type="sourcefile">src/app/update-available/update-available.component.html</context><context context-type="linenumber">3</context></context-group></trans-unit><trans-unit id="ec407a5b4049c9c8702502bd66a07a1362ef27f5" datatype="html">
-        <source>Open menu... (configuration options, ...)</source><target state="new">Open menu... (configuration options, ...)</target>
+        <source>Open menu... (configuration options, ...)</source><target state="final">Öffnen Menu... (Einstellungen, ...)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.component.html</context>
           <context context-type="linenumber">19</context>
         </context-group>
       </trans-unit><trans-unit id="c0e0e5ac611e1647b09330558dfd480c4533da06" datatype="html">
-        <source>List of available projects...</source><target state="new">List of available projects...</target>
+        <source>List of available projects...</source><target state="final">Liste der verfügbaren Projekte...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.component.html</context>
           <context context-type="linenumber">22</context>
