@@ -183,12 +183,6 @@
           <context context-type="sourcefile">src/app/file-accessors/github/configure-github-page/configure-github-page.component.html</context>
           <context context-type="linenumber">6</context>
         </context-group>
-      </trans-unit><trans-unit id="22d5e7e281d92a5015dbd1674b395939f8bf84d9" datatype="html">
-        <source><x id="INTERPOLATION" equiv-text="{{configuration.fullLabel().label}}"/></source><target state="new"><x id="INTERPOLATION" equiv-text="{{configuration.fullLabel().label}}"/></target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/file-accessors/github/configure-github-page/configure-github-page.component.html</context>
-          <context context-type="linenumber">11</context>
-        </context-group>
       </trans-unit><trans-unit id="3cc12742d456132c10c520517175579ec35e51a9" datatype="html">
         <source>Add another configuration</source><target state="new">Add another configuration</target>
         <context-group purpose="location">
@@ -497,16 +491,6 @@
           <context context-type="sourcefile">src/app/file-accessors/common/save-as-explorer-dialog/save-as-explorer-dialog.component.html</context>
           <context context-type="linenumber">1</context>
         </context-group>
-      </trans-unit><trans-unit id="88931f9de27d40a95b51791a186727122014fe16" datatype="html">
-        <source>
-      <x id="START_TAG_MAT-ICON" ctype="x-mat-icon" equiv-text="&lt;mat-icon>"/>edit<x id="CLOSE_TAG_MAT-ICON" ctype="x-mat-icon" equiv-text="&lt;/mat-icon>"/>
-    </source><target state="new">
-      <x id="START_TAG_MAT-ICON" ctype="x-mat-icon" equiv-text="&lt;mat-icon>"/>edit<x id="CLOSE_TAG_MAT-ICON" ctype="x-mat-icon" equiv-text="&lt;/mat-icon>"/>
-    </target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/file-accessors/common/file-to-save/file-to-save.component.html</context>
-          <context context-type="linenumber">7</context>
-        </context-group>
       </trans-unit><trans-unit id="d472cb3987b6e3f87d9dc5d11929aab228c19c56" datatype="html">
         <source>Select another location...</source><target state="new">Select another location...</target>
         <context-group purpose="location">
@@ -525,15 +509,9 @@
         </context-group>
       </trans-unit><trans-unit id="583dd100b81e81c87fd54fb7198a87f62020caea" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{accessor.type}}"/> <x id="INTERPOLATION_1" equiv-text="{{accessor.shortLabel()}}"/></source><target state="new"><x id="INTERPOLATION" equiv-text="{{accessor.type}}"/> <x id="INTERPOLATION_1" equiv-text="{{accessor.shortLabel()}}"/></target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/file-accessors/common/file-explorer/file-explorer.component.html</context>
-          <context context-type="linenumber">5</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/project-starter/project-starter.component.html</context>
-          <context context-type="linenumber">11</context>
-        </context-group>
-      </trans-unit>
+        
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/project-starter/project-starter.component.html</context><context context-type="linenumber">11</context></context-group></trans-unit>
       <trans-unit id="9d306bade90ca878105dfc2772851c5d0fa5fcf2" datatype="html">
         <source>No Translation Unit</source>
         <target state="translated">Нет единицы перевода</target>

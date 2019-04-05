@@ -120,7 +120,7 @@
       <context-group purpose="location"><context context-type="sourcefile">src/app/translate-unit-list/translate-unit-list.component.html</context><context context-type="linenumber">23</context></context-group></trans-unit><trans-unit id="411824aef3035f4697dc817a3e95fbb2ad3f3bf2" datatype="html">
         <source>Select the file you want to translate.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/>"/>
             The file can be of format XLIFF 1.2, XLIFF 2.0 or XMB.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/>"/>
-            The file will be stored in your browser local storage until you export the translated version.</source><target state="final">Auswahl Übersetungsdatei.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/>"/>
+            The file will be stored in your browser local storage until you export the translated version.</source><target state="translated">Auswahl Übersetungsdatei.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/>"/>
             Unterstützte Formate sind XLIFF 1.2, XLIFF 2.0 oder XMB.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/>"/>
             Die Datei wird im Browser gespeichert bis Sie sie veröffentlichen.</target>
         <context-group purpose="location">
@@ -146,7 +146,7 @@
       <context-group purpose="location"><context context-type="sourcefile">src/app/file-accessors/download-upload/translation-file-upload/translation-file-upload.component.html</context><context context-type="linenumber">11</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/file-accessors/download-upload/translation-file-upload/translation-file-upload.component.html</context><context context-type="linenumber">24</context></context-group></trans-unit><trans-unit id="686caf7bde6c9cd30d6ec1226436bc50594115f0" datatype="html">
         <source>You selected an xtb file.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/>"/>
             This file type only contains one language, the target language.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/>"/>
-            To show you the original source texts, you should also select the master xmb file.</source><target state="final">Sie haben eine xtb-Datei ausgewählt.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/>"/>
+            To show you the original source texts, you should also select the master xmb file.</source><target state="translated">Sie haben eine xtb-Datei ausgewählt.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/>"/>
 Solche Dateien enthalten nur die Zielsprache, aber nicht die Ausgangssprache.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/>"/>
 Um auch die Ausgangsprache zu haben, wählen Sie bitte die zugehörige Master xmb-Datei.</target>
         <context-group purpose="location">
@@ -159,7 +159,7 @@ Um auch die Ausgangsprache zu haben, wählen Sie bitte die zugehörige Master xm
       <context-group purpose="location"><context context-type="sourcefile">src/app/file-accessors/download-upload/translation-file-upload/translation-file-upload.component.html</context><context context-type="linenumber">23</context></context-group></trans-unit><trans-unit id="f37c5b108d6695635b0f5b359ba981e5fc0ffa5f" datatype="html">
         <source>Select the file you want to translate.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/>"/>
     The file can be of format XLIFF 1.2, XLIFF 2.0 or XMB.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/>"/>
-    The file will be stored in your browser local storage until you export the translated version.</source><target state="final">Auswahl der zu übersetzenden Datei.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/>"/>
+    The file will be stored in your browser local storage until you export the translated version.</source><target state="translated">Auswahl der zu übersetzenden Datei.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/>"/>
 Die Datei kann das Format XLIFF 1.2, XLIFF 2.0 oder XMB haben.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/>"/>
 Die Datei wird im lokalen Speicher des Browsers abgelegt, bis Sie die übersetzte Version exportieren.</target>
         <context-group purpose="location">
@@ -251,16 +251,6 @@ Die Datei wird im lokalen Speicher des Browsers abgelegt, bis Sie die übersetzt
           <context context-type="sourcefile">src/app/file-accessors/common/save-as-explorer-dialog/save-as-explorer-dialog.component.html</context>
           <context context-type="linenumber">1</context>
         </context-group>
-      </trans-unit><trans-unit id="88931f9de27d40a95b51791a186727122014fe16" datatype="html">
-        <source>
-      <x id="START_TAG_MAT-ICON" ctype="x-mat-icon" equiv-text="&lt;mat-icon>"/>edit<x id="CLOSE_TAG_MAT-ICON" ctype="x-mat-icon" equiv-text="&lt;/mat-icon>"/>
-    </source><target state="final">
-      <x id="START_TAG_MAT-ICON" ctype="x-mat-icon" equiv-text="&lt;mat-icon>"/>edit<x id="CLOSE_TAG_MAT-ICON" ctype="x-mat-icon" equiv-text="&lt;/mat-icon>"/>
-    </target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/file-accessors/common/file-to-save/file-to-save.component.html</context>
-          <context context-type="linenumber">7</context>
-        </context-group>
       </trans-unit><trans-unit id="d472cb3987b6e3f87d9dc5d11929aab228c19c56" datatype="html">
         <source>Select another location...</source><target state="final">Wählen Sie einen anderen Ablageort...</target>
         <context-group purpose="location">
@@ -279,15 +269,9 @@ Die Datei wird im lokalen Speicher des Browsers abgelegt, bis Sie die übersetzt
         </context-group>
       </trans-unit><trans-unit id="583dd100b81e81c87fd54fb7198a87f62020caea" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{accessor.type}}"/> <x id="INTERPOLATION_1" equiv-text="{{accessor.shortLabel()}}"/></source><target state="final"><x id="INTERPOLATION" equiv-text="{{accessor.type}}"/> <x id="INTERPOLATION_1" equiv-text="{{accessor.shortLabel()}}"/></target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/file-accessors/common/file-explorer/file-explorer.component.html</context>
-          <context context-type="linenumber">5</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/project-starter/project-starter.component.html</context>
-          <context context-type="linenumber">11</context>
-        </context-group>
-      </trans-unit><trans-unit id="8fef9621af4e75f6004de0ec95ba7d6b003db416" datatype="html">
+        
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/project-starter/project-starter.component.html</context><context context-type="linenumber">11</context></context-group></trans-unit><trans-unit id="8fef9621af4e75f6004de0ec95ba7d6b003db416" datatype="html">
         <source>
           mark as translated
         </source>
@@ -568,7 +552,7 @@ Die Datei wird im lokalen Speicher des Browsers abgelegt, bis Sie die übersetzt
       </trans-unit><trans-unit id="e725898deb5714ff1bdd0c7313a0bd07e945d9ab" datatype="html">
         <source>
   By configuring an access to Github you can directly import translation files to TinyTranslator and store the translation in your Github repositories.
-</source><target state="final">
+</source><target state="translated">
 Wenn Sie einen Github-Zugang konfigurieren, können Sie Datei direkt aus Github übernehmen und auch wieder speichern.
 </target>
         <context-group purpose="location">
@@ -580,12 +564,6 @@ Wenn Sie einen Github-Zugang konfigurieren, können Sie Datei direkt aus Github 
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/file-accessors/github/configure-github-page/configure-github-page.component.html</context>
           <context context-type="linenumber">6</context>
-        </context-group>
-      </trans-unit><trans-unit id="22d5e7e281d92a5015dbd1674b395939f8bf84d9" datatype="html">
-        <source><x id="INTERPOLATION" equiv-text="{{configuration.fullLabel().label}}"/></source><target state="final"><x id="INTERPOLATION" equiv-text="{{configuration.fullLabel().label}}"/></target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/file-accessors/github/configure-github-page/configure-github-page.component.html</context>
-          <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit><trans-unit id="3cc12742d456132c10c520517175579ec35e51a9" datatype="html">
         <source>Add another configuration</source><target state="final">Hinzufügen weitere Konfiguration</target>
@@ -724,7 +702,7 @@ Wenn Sie einen Github-Zugang konfigurieren, können Sie Datei direkt aus Github 
       </trans-unit><trans-unit id="6f6235e7e7022d5f7dc8e1669b15c5dd999f21f9" datatype="html">
         <source>
       The token is not valid!
-    </source><target state="final">Das Token ist nicht gültig!
+    </source><target state="translated">Das Token ist nicht gültig!
     </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/file-accessors/github/github-config-editor/github-config-editor.component.html</context>
@@ -733,7 +711,7 @@ Wenn Sie einen Github-Zugang konfigurieren, können Sie Datei direkt aus Github 
       </trans-unit><trans-unit id="9ecbeb9456828e67aa6be2088daf139374f78cf4" datatype="html">
         <source>
       Token is <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>required<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/>
-    </source><target state="final">
+    </source><target state="translated">
 Token <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>MUSS<x id="CLOSE_TAG_STRONG" ctype="x-strong"/> angegeben werden
     </target>
         <context-group purpose="location">
@@ -753,7 +731,7 @@ Token <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>MUSS<x
       </trans-unit><trans-unit id="772038c48c8ad29ad936e5980c29027e8fd74163" datatype="html">
         <source>
       Repository does not exist!
-    </source><target state="final">
+    </source><target state="translated">
       Repository existiert nicht!
     </target>
         <context-group purpose="location">
@@ -763,7 +741,7 @@ Token <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>MUSS<x
       </trans-unit><trans-unit id="dcff2a26b9f9da711bb182450836d1362729faa2" datatype="html">
         <source>
       Repository cannot be checked (invalid API token)!
-    </source><target state="final">
+    </source><target state="translated">
       Repository kann nicht validiert werden (ungültiges API token)!
     </target>
         <context-group purpose="location">
@@ -773,7 +751,7 @@ Token <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>MUSS<x
       </trans-unit><trans-unit id="32998725d739fe9cf8d0259eb84aba3fe48540e4" datatype="html">
         <source>
       Repository is <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>required<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/>
-    </source><target state="final">
+    </source><target state="translated">
       Repository <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>MUSS<x id="CLOSE_TAG_STRONG" ctype="x-strong"/> angegeben werden
     </target>
         <context-group purpose="location">
@@ -793,7 +771,7 @@ Token <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>MUSS<x
       </trans-unit><trans-unit id="869b6862277f78a0419a3aa56e0478d930840daa" datatype="html">
         <source>
       Branch does not exist!
-    </source><target state="final">
+    </source><target state="translated">
 Branch existiert nicht!
     </target>
         <context-group purpose="location">
@@ -803,7 +781,7 @@ Branch existiert nicht!
       </trans-unit><trans-unit id="8f530e4e715e9729fb2526f4b4512367bcacf357" datatype="html">
         <source>
       Branch cannot be checked (invalid API token)!
-    </source><target state="final">
+    </source><target state="translated">
 Branch kann nicht validiert werden (ungültiges API token)!
     </target>
         <context-group purpose="location">
@@ -823,7 +801,7 @@ Branch kann nicht validiert werden (ungültiges API token)!
       </trans-unit><trans-unit id="a8d525dd91c8256dced77f35624d01df06dbc322" datatype="html">
         <source>
         Path does not exist!
-      </source><target state="final">
+      </source><target state="translated">
 Pfad existiert nicht!
       </target>
         <context-group purpose="location">
@@ -833,7 +811,7 @@ Pfad existiert nicht!
       </trans-unit><trans-unit id="517364a54dc0e62ab322919de9e62cad4c93630c" datatype="html">
         <source>
         Path is not a directory!
-      </source><target state="final">Pfad ist kein Verzeichnis!      </target>
+      </source><target state="translated">Pfad ist kein Verzeichnis!      </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/file-accessors/github/github-config-editor/github-config-editor.component.html</context>
           <context context-type="linenumber">53</context>
