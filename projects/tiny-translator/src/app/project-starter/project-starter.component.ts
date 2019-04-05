@@ -1,9 +1,13 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core';
 import {TinyTranslatorService} from '../model/tiny-translator.service';
 import {TranslationProject, UserRole, WorkflowType} from '../model/translation-project';
-import {FILETYPE_XTB} from '@ngx-i18nsupport/ngx-i18nsupport-lib';
-import {isNullOrUndefined} from 'util';
+import {isNullOrUndefined} from '../common/util';
 import {FormBuilder, FormGroup} from '@angular/forms';
+import {IFileDescription} from '../file-accessors/common/i-file-description';
+import {FileAccessorType} from '../file-accessors/common/file-accessor-type';
+import {FileAccessServiceFactoryService} from '../file-accessors/common/file-access-service-factory.service';
+import {IFileAccessConfiguration} from '../file-accessors/common/i-file-access-configuration';
+import {Observable, Subscription} from 'rxjs';
 
 /**
  * The ProjectStarter is an upload component.
@@ -14,51 +18,75 @@ import {FormBuilder, FormGroup} from '@angular/forms';
   templateUrl: './project-starter.component.html',
   styleUrls: ['./project-starter.component.scss']
 })
-export class ProjectStarterComponent implements OnInit {
+export class ProjectStarterComponent implements OnInit, OnDestroy {
 
   @Output() addProject: EventEmitter<TranslationProject> = new EventEmitter();
 
-  private createdProject: TranslationProject;
+  createdProject: TranslationProject;
 
   form: FormGroup;
-  private selectedFiles: FileList;
-  private selectedMasterXmbFiles: FileList;
+  private selectedFile: IFileDescription;
+  private selectedMasterXmbFile: IFileDescription;
+  private _fileAccessConfigurations: Observable<IFileAccessConfiguration[]>;
+  private _currentFileAccessConfigurations: IFileAccessConfiguration[];
+  private subscriptions: Subscription;
 
-  constructor(private formBuilder: FormBuilder, private translatorService: TinyTranslatorService) { }
+  constructor(private formBuilder: FormBuilder,
+              private translatorService: TinyTranslatorService,
+              private fileAccessServiceFactoryService: FileAccessServiceFactoryService) { }
 
   ngOnInit() {
     this.initForm();
-    this.form.valueChanges.subscribe(formValue => {
-      this.valueChanged(formValue);
-    });
+    this._fileAccessConfigurations = this.translatorService.getFileAccessConfigurations();
+    this.subscriptions = this._fileAccessConfigurations.subscribe(configs => this._currentFileAccessConfigurations = configs);
+    this.subscriptions.add(
+      this.form.valueChanges.subscribe(formValue => {
+        this.valueChanged(formValue);
+      })
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
   }
 
   private initForm() {
     if (!this.form) {
       this.form = this.formBuilder.group({
         projectName: [''],
+        selectedFileAccessConfigurationIndex: 0,
         workflowType: ['singleuser'],
         userRole: ['translator'],
-        selectedFiles: [''],
-        selectedMasterXmbFiles: [''],
         sourceLanguage: [''],
       });
     }
   }
 
-  fileSelectionChange(input: HTMLInputElement) {
-    this.selectedFiles = input.files;
+  fileAccessConfigurations(): Observable<IFileAccessConfiguration[]> {
+    return this._fileAccessConfigurations;
+  }
+
+  selectedFileAccessConfiguration(): IFileAccessConfiguration {
+    if (this._currentFileAccessConfigurations) {
+      return this._currentFileAccessConfigurations[this.form.value['selectedFileAccessConfigurationIndex']];
+    } else {
+      return null;
+    }
+  }
+
+  fileSelectionChange(file: IFileDescription) {
+    this.selectedFile = file;
     this.valueChanged(this.form.value);
   }
 
-  masterXmlFileSelectionChange(input: HTMLInputElement) {
-    this.selectedMasterXmbFiles = input.files;
+  masterXmlFileSelectionChange(file: IFileDescription) {
+    this.selectedMasterXmbFile = file;
     this.valueChanged(this.form.value);
   }
 
   valueChanged(formValue) {
-    const translationFile = (this.selectedFiles) ? this.selectedFiles.item(0) : null;
-    const masterXmbFile = (this.selectedMasterXmbFiles) ? this.selectedMasterXmbFiles.item(0) : null;
+    const translationFile = this.selectedFile;
+    const masterXmbFile = this.selectedMasterXmbFile;
     this.translatorService.createProject(
       formValue.projectName,
       translationFile,
@@ -111,40 +139,6 @@ export class ProjectStarterComponent implements OnInit {
       this.addProject.emit(this.createdProject);
   }
 
-  selectedFilesFormatted(): string {
-    return this.fileListFormatted(this.selectedFiles);
-  }
-
-  selectedMasterFilesFormatted(): string {
-    return this.fileListFormatted(this.selectedMasterXmbFiles);
-  }
-
-  private fileListFormatted(fileList: FileList): string {
-    if (fileList) {
-      let result = '';
-      for (let i = 0; i < fileList.length; i++) {
-        if (i > 0) {
-          result = result + ', ';
-        }
-        result = result + fileList.item(i).name;
-      }
-      return result;
-    } else {
-      return '';
-    }
-  }
-
-  /**
-   * If the first file was a xmb file, master is needed.
-   * Enables the input for a second file, the master xmb.
-   */
-  isMasterXmbFileNeeded(): boolean {
-    return this.isFileSelected() &&
-      this.createdProject &&
-      this.createdProject.translationFile &&
-      this.createdProject.translationFile.fileType() === FILETYPE_XTB;
-  }
-
   /**
    * Check, wether all needed is typed in.
    * Enables the add button.
@@ -154,7 +148,7 @@ export class ProjectStarterComponent implements OnInit {
   }
 
   isFileSelected(): boolean {
-    return this.selectedFiles && this.selectedFiles.length > 0 && !!this.createdProject;
+    return this.selectedFile && !!this.createdProject;
   }
 
   needsExplicitSourceLanguage(): boolean {

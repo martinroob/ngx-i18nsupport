@@ -1,7 +1,8 @@
 import {ITransUnit, INormalizedMessage, STATE_NEW, IICUMessageTranslation} from '@ngx-i18nsupport/ngx-i18nsupport-lib';
 import {TranslationFile} from './translation-file';
 import {NormalizedMessage} from './normalized-message';
-import {format, isNullOrUndefined} from 'util';
+import {format} from 'util';
+import {isNullOrUndefined} from '../common/util';
 import {AutoTranslateResult} from './auto-translate-result';
 
 /**

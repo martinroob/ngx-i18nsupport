@@ -17,7 +17,7 @@ import { TranslationFileStatusComponent } from './translation-file-status/transl
 import { HomePageComponent } from './home-page/home-page.component';
 import { TranslatePageComponent } from './translate-page/translate-page.component';
 import { TranslateUnitComponent } from './translate-unit/translate-unit.component';
-import {DownloaderService} from './model/downloader.service';
+import {DownloaderService} from './file-accessors/download-upload/downloader.service';
 import { TranslateUnitListComponent } from './translate-unit-list/translate-unit-list.component';
 import { AbbreviatePipe } from './common/abbreviate.pipe';
 import { LanguageComponent } from './language/language.component';
@@ -31,7 +31,7 @@ import { ProjectListComponent } from './project-list/project-list.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { CreateProjectPageComponent } from './create-project-page/create-project-page.component';
 import { ProjectStatusComponent } from './project-status/project-status.component';
-import {AsynchronousFileReaderService} from './model/asynchronous-file-reader.service';
+import {AsynchronousFileReaderService} from './file-accessors/download-upload/asynchronous-file-reader.service';
 import { NormalizedMessageInputComponent } from './normalized-message-input/normalized-message-input.component';
 import {TranslateUnitWarningConfirmDialogComponent} from './translate-unit-warning-confirm-dialog/translate-unit-warning-confirm-dialog.component';
 import {AppMaterialModule} from './app-material.module';
@@ -43,30 +43,56 @@ import { TranslationUnitFilterService } from './model/filters/translation-unit-f
 import { FilterStatusComponent } from './filter-status/filter-status.component';
 import { FilterPageComponent } from './filter-page/filter-page.component';
 import { UpdateAvailableComponent } from './update-available/update-available.component';
+import {TranslationFileUploadComponent} from './file-accessors/download-upload/translation-file-upload/translation-file-upload.component';
+import {DownloadUploadService} from './file-accessors/download-upload/download-upload.service';
+import {TranslationFileFromGithubComponent} from './file-accessors/github/translation-file-from-github/translation-file-from-github.component';
+import {GithubAccessorService} from './file-accessors/github/github-accessor.service';
+import {GithubConfigEditorComponent} from './file-accessors/github/github-config-editor/github-config-editor.component';
+import {ConfigureGithubPageComponent} from './file-accessors/github/configure-github-page/configure-github-page.component';
+import {FileExplorerComponent} from './file-accessors/common/file-explorer/file-explorer.component';
+import {FileExplorerDialogComponent} from './file-accessors/common/file-explorer-dialog/file-explorer-dialog.component';
+import {PublishProjectPageComponent} from './publish-project-page/publish-project-page.component';
+import {GithubConfigEditorDialogComponent} from './file-accessors/github/github-config-editor-dialog/github-config-editor-dialog.component';
+import {ConfirmDialogComponent} from './confirm-dialog/confirm-dialog.component';
+import {SaveAsExplorerComponent} from './file-accessors/common/save-as-explorer/save-as-explorer.component';
+import {FileToSaveComponent} from './file-accessors/common/file-to-save/file-to-save.component';
+import {SaveAsExplorerDialogComponent} from './file-accessors/common/save-as-explorer-dialog/save-as-explorer-dialog.component';
 
 @NgModule({
   declarations: [
+    AbbreviatePipe,
     AppComponent,
-    ProjectStarterComponent,
-    TranslationFileStatusComponent,
+    AutoTranslateSummaryPageComponent,
+    ConfigureAutoTranslatePageComponent,
+    ConfigureGithubPageComponent,
+    ConfirmDialogComponent,
+    CreateProjectPageComponent,
+    EditProjectPageComponent,
+    FileToSaveComponent,
+    FileExplorerComponent,
+    FileExplorerDialogComponent,
+    FilterStatusComponent,
+    FilterPageComponent,
+    GithubConfigEditorComponent,
+    GithubConfigEditorDialogComponent,
     HomePageComponent,
+    LanguageComponent,
+    NormalizedMessageInputComponent,
+    ProjectComponent,
+    ProjectEditorComponent,
+    ProjectListComponent,
+    ProjectStarterComponent,
+    ProjectStatusComponent,
+    PublishProjectPageComponent,
+    SaveAsExplorerComponent,
+    SaveAsExplorerDialogComponent,
+    TranslationFileStatusComponent,
     TranslatePageComponent,
     TranslateUnitComponent,
     TranslateUnitListComponent,
-    LanguageComponent,
-    AbbreviatePipe,
-    ProjectComponent,
-    ProjectListComponent,
-    CreateProjectPageComponent,
-    ProjectStatusComponent,
-    NormalizedMessageInputComponent,
+    TranslationFileUploadComponent,
+    TranslationFileFromGithubComponent,
     TranslateUnitWarningConfirmDialogComponent,
-    EditProjectPageComponent,
-    ProjectEditorComponent,
-    ConfigureAutoTranslatePageComponent,
-    AutoTranslateSummaryPageComponent,
-    FilterStatusComponent,
-    FilterPageComponent,
     UpdateAvailableComponent
   ],
   imports: [
@@ -85,12 +111,21 @@ import { UpdateAvailableComponent } from './update-available/update-available.co
     TinyTranslatorService,
     AsynchronousFileReaderService,
     DownloaderService,
+    DownloadUploadService,
+    GithubAccessorService,
     ActiveProjectGuard,
     {provide: BackendServiceAPI, useClass: BackendLocalStorageService},
     {provide: AutoTranslateServiceAPI, useClass: AutoTranslateGoogleService},
     TranslationUnitFilterService,
   ],
-  entryComponents: [TranslateUnitWarningConfirmDialogComponent, UpdateAvailableComponent],
+  entryComponents: [
+    ConfirmDialogComponent,
+    FileExplorerDialogComponent,
+    GithubConfigEditorDialogComponent,
+    SaveAsExplorerDialogComponent,
+    TranslateUnitWarningConfirmDialogComponent,
+    UpdateAvailableComponent
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

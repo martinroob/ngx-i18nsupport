@@ -47,12 +47,14 @@ export interface BrowserBuilderOptions extends BrowserBuilderBaseOptions {
     serviceWorker?: boolean;
     optimization?: boolean;
     outputHashing?: 'all';
+    resourcesOutputPath?: string;
     extractCss?: boolean;
     namedChunks?: boolean;
     aot?: boolean;
     extractLicenses?: boolean;
     vendorChunk?: boolean;
     buildOptimizer?: boolean;
+    ngswConfigPath?: string;
     budgets?: {
         type: string;
         maximumWarning?: string;
@@ -73,6 +75,11 @@ export interface ServerBuilderOptions {
     tsConfig: string;
     main: string;
     fileReplacements?: FileReplacements[];
+    optimization?: {
+        scripts?: boolean;
+        styles?: boolean;
+    };
+    sourceMap?: boolean;
 }
 
 export interface AppShellBuilderOptions {

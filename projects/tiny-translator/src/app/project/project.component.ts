@@ -10,7 +10,7 @@ import {TranslationFile} from '../model/translation-file';
 export class ProjectComponent implements OnInit {
 
   @Input() project: TranslationProject;
-  @Input() showActions: boolean = true;
+  @Input() showActions = true;
 
   @Output() onStartWork: EventEmitter<TranslationProject> = new EventEmitter();
   @Output() onDeleteProject: EventEmitter<TranslationProject> = new EventEmitter();

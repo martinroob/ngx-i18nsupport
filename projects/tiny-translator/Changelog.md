@@ -1,3 +1,12 @@
+<a name="0.15.0"></a>
+# 0.15.0 (2019-04-05)
+
+### Features
+
+* **Application** Tiny Translator now can directly import files from Github and write them back too. ([#129](https://github.com/martinroob/ngx-i18nsupport/issues/129)).
+
+* **Application** Technology update to Angular 7.2, no functionality changes.
+
 <a name="0.14.0"></a>
 # 0.14.0 (2018-12-02)
 

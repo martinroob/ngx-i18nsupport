@@ -1,12 +1,32 @@
 import {TranslationProject} from './translation-project';
-import {InjectionToken} from '@angular/core';
+import {IFileAccessConfiguration} from '../file-accessors/common/i-file-access-configuration';
+import {Observable, of} from 'rxjs';
 
 /**
  * Interface of BackendService.
  * A BackendService can store and retrieve translation projects.
  * It also can store an API key for Google Translate.
+ * And it can store FileAccessConfigurations.
  */
 export class BackendServiceAPI {
+
+  /**
+   * Helper function to generate a unique ID.
+   * (from http://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript)
+   * @return a unique id
+   */
+  static generateUUID(): string {
+    // Public Domain/MIT
+    let d = new Date().getTime();
+    if (typeof performance !== 'undefined' && typeof performance.now === 'function') {
+      d += performance.now(); // use high-precision timer if available
+    }
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+      const r = (d + Math.random() * 16) % 16 | 0;
+      d = Math.floor(d / 16);
+      return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+    });
+  }
 
   /**
    * Store a project.
@@ -32,7 +52,7 @@ export class BackendServiceAPI {
 
   /**
    * ID if current project.
-   * @return {string} id of current project or null
+   * @return id of current project or null
    */
   currentProjectId(): string {
     return null;
@@ -48,7 +68,7 @@ export class BackendServiceAPI {
 
   /**
    * ID of last active TransUnit
-   * @return {string} active unit or null.
+   * @return active unit or null.
    */
   currentTransUnitId(): string {
     return null;
@@ -56,7 +76,7 @@ export class BackendServiceAPI {
 
   /**
    * Delete a project from store.
-   * @param project
+   * @param project to delete
    */
   deleteProject(project: TranslationProject) {
 
@@ -64,7 +84,7 @@ export class BackendServiceAPI {
 
   /**
    * Save API Key in store.
-   * @param key
+   * @param key to store
    */
   storeAutoTranslateApiKey(key: string) {
 
@@ -72,27 +92,28 @@ export class BackendServiceAPI {
 
   /**
    * Get API key from store.
-   * @return {null}
+   * @return the key
    */
   autoTranslateApiKey(): string {
     return null;
   }
 
   /**
-   * Helper function to generate a unique ID.
-   * (from http://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript)
-   * @return {string}
+   * Store a file access configuration.
+   * @param configuration the configuration to store.
    */
-  static generateUUID(): string {
-    // Public Domain/MIT
-    var d = new Date().getTime();
-    if (typeof performance !== 'undefined' && typeof performance.now === 'function'){
-      d += performance.now(); //use high-precision timer if available
-    }
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-      var r = (d + Math.random() * 16) % 16 | 0;
-      d = Math.floor(d / 16);
-      return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
-    });
+  storeFileAccessConfiguration(configuration: IFileAccessConfiguration): Observable<IFileAccessConfiguration> {
+    return null;
+  }
+
+  deleteFileAccessConfiguration(configuration: IFileAccessConfiguration): Observable<IFileAccessConfiguration> {
+    return null;
+  }
+
+  /**
+   * Return all saved file access configurations.
+   */
+  fileAccessConfigurations(): Observable<IFileAccessConfiguration[]> {
+    return of([]);
   }
 }

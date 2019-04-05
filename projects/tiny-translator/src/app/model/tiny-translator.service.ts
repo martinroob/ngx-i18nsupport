@@ -1,18 +1,20 @@
 import {Injectable} from '@angular/core';
 import {TranslationFile} from './translation-file';
-import {isNullOrUndefined} from 'util';
+import {isNullOrUndefined} from '../common/util';
 import {BackendServiceAPI} from './backend-service-api';
 import {TranslationProject, WorkflowType} from './translation-project';
-import {Observable, of} from 'rxjs';
-import {DownloaderService} from './downloader.service';
-import {AsynchronousFileReaderService} from './asynchronous-file-reader.service';
-import {
-  AutoTranslateDisabledReasonKey,
-  AutoTranslateServiceAPI
-} from './auto-translate-service-api';
+import {combineLatest, Observable, of} from 'rxjs';
+import {AutoTranslateDisabledReasonKey, AutoTranslateServiceAPI} from './auto-translate-service-api';
 import {AutoTranslateSummaryReport} from './auto-translate-summary-report';
 import {TranslationUnit} from './translation-unit';
-import {map} from 'rxjs/operators';
+import {map, switchMap, tap} from 'rxjs/operators';
+import {IFileDescription} from '../file-accessors/common/i-file-description';
+import {FileStatus, ICommitData, IFileAccessService, IFileStats} from '../file-accessors/common/i-file-access-service';
+import {FileAccessServiceFactoryService} from '../file-accessors/common/file-access-service-factory.service';
+import {IFileAccessConfiguration} from '../file-accessors/common/i-file-access-configuration';
+import {FileAccessorType} from '../file-accessors/common/file-accessor-type';
+import {IFile} from '../file-accessors/common/i-file';
+import {DownloadUploadConfiguration} from '../file-accessors/download-upload/download-upload-configuration';
 
 @Injectable()
 export class TinyTranslatorService {
@@ -28,8 +30,7 @@ export class TinyTranslatorService {
   private _currentProject: TranslationProject;
 
   constructor(private backendService: BackendServiceAPI,
-              private fileReaderService: AsynchronousFileReaderService,
-              private downloaderService: DownloaderService,
+              private fileAccessServiceFactoryService: FileAccessServiceFactoryService,
               private autoTranslateService: AutoTranslateServiceAPI) {
     this._projects = this.backendService.projects();
     const currentProjectId = this.backendService.currentProjectId();
@@ -65,13 +66,24 @@ export class TinyTranslatorService {
    * @param workflowType Type of workflow used in project (singleUser versus withReview).
    * @return TranslationProject
    */
-  public createProject(projectName: string, file: File, masterXmbFile?: File, workflowType?: WorkflowType): Observable<TranslationProject> {
-    const uploadingFile = this.fileReaderService.readFile(file);
-    const readingMaster = this.fileReaderService.readFile(masterXmbFile);
-    return TranslationFile.fromUploadedFile(uploadingFile, readingMaster)
-      .pipe(map((translationfile: TranslationFile) => {
-        return new TranslationProject(projectName, translationfile, workflowType);
-      }));
+  public createProject(projectName: string,
+                       file: IFileDescription,
+                       masterXmbFile?: IFileDescription,
+                       workflowType?: WorkflowType): Observable<TranslationProject> {
+    if (isNullOrUndefined(file)) {
+      return of(new TranslationProject(projectName, null, workflowType));
+    }
+    const fileAccessService: IFileAccessService = this.fileAccessServiceFactoryService.getFileAccessService(file.configuration.type);
+    return combineLatest(fileAccessService.load(file), (masterXmbFile) ? fileAccessService.load(masterXmbFile) : of(null)).pipe(
+        map(contentArray => {
+          const loadedFile = contentArray[0];
+          const loadedMaster = contentArray[1];
+          return TranslationFile.fromFile(loadedFile as IFile, loadedMaster);
+        }),
+        map((translationFile: TranslationFile) => {
+          return new TranslationProject(projectName, translationFile, workflowType);
+        })
+    );
   }
 
   public setCurrentProject(project: TranslationProject) {
@@ -129,18 +141,6 @@ export class TinyTranslatorService {
     }
   }
 
-  /**
-   * Check, wether there are errors in any of the selected files.
-   * @return true if there are errors
-   */
-  public hasErrors(): boolean {
-    if (!this._projects || this._projects.length === 0) {
-      return false;
-    }
-    const projectWithErrors = this._projects.find((p) => p.hasErrors());
-    return !isNullOrUndefined(projectWithErrors);
-  }
-
   public projects(): TranslationProject[] {
     return this._projects;
   }
@@ -149,10 +149,62 @@ export class TinyTranslatorService {
     this.backendService.store(project);
   }
 
-  public saveProject(project: TranslationProject) {
-    this.downloaderService.downloadXliffFile(project.translationFile.name, project.translationFile.editedContent());
+  public downloadProject(project: TranslationProject) {
+    this.fileAccessServiceFactoryService.getFileAccessService(FileAccessorType.DOWNLOAD_UPLOAD)
+        .save(project.translationFile.editedFile());
     project.translationFile.markExported();
     this.commitChanges(project);
+  }
+
+  public publishProject(
+    project: TranslationProject,
+    saveAs: IFileDescription|null,
+    commitData: ICommitData,
+    confirmModifiedCallback: () => Observable<boolean>,
+    confirmOverrideCallback: () => Observable<boolean>): Observable<boolean> {
+    let fileToSave = project.translationFile.editedFile();
+    const isSavePositionChanged = !!saveAs && !saveAs.equals(fileToSave.description);
+    if (isSavePositionChanged) {
+      fileToSave = fileToSave.copyForNewDescription(saveAs);
+    }
+    const fileAccessService =
+      this.fileAccessServiceFactoryService.getFileAccessService(fileToSave.description.configuration.type);
+    return fileAccessService.stats(fileToSave).pipe(
+      switchMap((stats: IFileStats) => {
+        if (isSavePositionChanged && stats.status !== FileStatus.EXISTS_NOT) {
+          return confirmOverrideCallback().pipe(
+            tap(doSave => {commitData.override = doSave; })
+          );
+        }
+        if (!isSavePositionChanged && stats.status === FileStatus.CHANGED) {
+          return confirmModifiedCallback().pipe(
+            tap(doSave => {commitData.override = doSave; })
+          );
+        }
+        if (!isSavePositionChanged) {
+          commitData.override = true;
+        }
+        return of(true);
+      }),
+      switchMap((doSave: boolean) => {
+        if (doSave) {
+          return fileAccessService.save(fileToSave, commitData)
+            .pipe(
+              tap(() => {
+                if (!saveAs) {
+                  project.translationFile.markExported();
+                  this.commitChanges(project);
+                }
+              }),
+              map(() => {
+                return true;
+              })
+            );
+        } else {
+          return of(false);
+        }
+      })
+    );
   }
 
   public deleteProject(project: TranslationProject) {
@@ -273,6 +325,15 @@ export class TinyTranslatorService {
     } else {
       return of(new AutoTranslateSummaryReport());
     }
+  }
+
+  /**
+   * Get all available accessor configurations from backend.
+   */
+  getFileAccessConfigurations(): Observable<IFileAccessConfiguration[]> {
+    return this.backendService.fileAccessConfigurations().pipe(
+      map(configs => [DownloadUploadConfiguration.singleInstance(), ...configs])
+    );
   }
 
 }

@@ -1,0 +1,8 @@
+<h3 matDialogTitle>{{question}}</h3>
+<div mat-dialog-content>
+  <p *ngIf="info" class="info">{{info}}</p>
+</div>
+<div mat-dialog-actions>
+  <button mat-button color="primary" matDialogClose (click)="cancel()" i18n>Cancel</button>
+  <button mat-button color="primary" matDialogClose (click)="accept()" i18n>Accept</button>
+</div>

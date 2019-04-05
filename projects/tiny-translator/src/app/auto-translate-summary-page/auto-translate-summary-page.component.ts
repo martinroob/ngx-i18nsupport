@@ -11,7 +11,7 @@ import {
   FILTER_AUTOTRANSLATED, FILTER_AUTOTRANSLATED_FAILED, FILTER_AUTOTRANSLATED_IGNORED,
   TranslationUnitFilterService
 } from '../model/filters/translation-unit-filter.service';
-import {isNullOrUndefined} from 'util';
+import {isNullOrUndefined} from '../common/util';
 import {TranslationUnit} from '../model/translation-unit';
 
 @Component({

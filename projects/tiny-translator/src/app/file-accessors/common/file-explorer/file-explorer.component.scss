@@ -1,0 +1,15 @@
+@import '~@angular/material/theming';
+@import '../../../../styles.scss';
+
+form {
+    max-height: 50vh;
+    overflow: auto;
+}
+
+.background-highlight {
+    background-color: mat-color($dit-app-accent);
+}
+
+tree-progress-bar {
+    margin-left: 30px;
+}

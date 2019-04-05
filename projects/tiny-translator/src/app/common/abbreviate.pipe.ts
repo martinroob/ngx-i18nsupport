@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import {isNullOrUndefined, isString} from 'util';
+import {isNullOrUndefined, isString} from '../common/util';
 
 /**
  * A Pipe to abbreviate long text.

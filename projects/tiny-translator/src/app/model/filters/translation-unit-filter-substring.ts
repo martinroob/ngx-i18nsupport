@@ -1,6 +1,6 @@
 import {ITranslationUnitFilter} from './i-translation-unit-filter';
 import {TranslationUnit} from '../translation-unit';
-import {isNullOrUndefined} from 'util';
+import {isNullOrUndefined} from '../../common/util';
 /**
  * Filter that filters units, that contain a given substring in source or target.
  * Created by martin on 01.06.2017.

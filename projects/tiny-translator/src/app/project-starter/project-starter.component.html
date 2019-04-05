@@ -6,29 +6,25 @@
         <input type="text" placeholder="Project name" i18n-placeholder matInput formControlName="projectName" name="projectName"/>
       </mat-form-field>
     </div>
-    <div fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="start center">
-      <p fxFlex="50%" i18n>Select the file you want to translate.<br>
-        The file can be of format XLIFF 1.2, XLIFF 2.0 or XMB.<br>
-        The file will be stored in your browser local storage until you export the translated version.</p>
-      <div fxLayout="column" fxFlexAlign="end" fxFlex="40%">
-        <input type="file" id="fileupload" (change)="fileSelectionChange(input)" formControlName="selectedFiles" name="selectedFiles" class="inputfile" #input/>
-        <label for="fileupload">
-          <mat-icon>open_in_browser</mat-icon>&nbsp;<span i18n>Upload a translation file (xlf, xtb)</span></label>
-        <div><span i18n>selected: </span>{{selectedFilesFormatted()}}</div>
-      </div>
-    </div>
-    <div *ngIf="isMasterXmbFileNeeded()" fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="start center">
-      <p fxFlex="50%" i18n>You selected an xtb file.<br>
-        This file type only contains one language, the target language.<br>
-        To show you the original source texts, you should also select the master xmb file.</p>
-      <div fxFlex="50%" fxLayout="column">
-        <input type="file" id="masterfileupload" (change)="masterXmlFileSelectionChange(masterinput)" formControlName="selectedMasterXmbFiles" name="selectedMasterXmbFiles" class="inputfile"
-               #masterinput/>
-        <label for="masterfileupload">
-          <mat-icon>open_in_browser</mat-icon>&nbsp;<span i18n>Upload master xmb file</span></label>
-        <div><span i18n>selected: </span>{{selectedMasterFilesFormatted()}}</div>
-      </div>
-    </div>
+    <mat-form-field>
+      <mat-select placeholder="load translation file from.." i18n-placeholder formControlName="selectedFileAccessConfigurationIndex" name="selectedFileAccessConfigurationIndex">
+        <mat-option *ngFor="let accessor of fileAccessConfigurations() | async; let i = index" [value]="i" i18n>{{accessor.type}} {{accessor.shortLabel()}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <ng-container *ngIf="selectedFileAccessConfiguration()" [ngSwitch]="selectedFileAccessConfiguration().type">
+      <app-translation-file-upload *ngSwitchCase="'Browser Upload and Download'"
+                                   [createdProject]="createdProject"
+                                   [configuration]="selectedFileAccessConfiguration()"
+                                   (fileSelected)="fileSelectionChange($event)"
+                                   (masterXmlFileSelected)="masterXmlFileSelectionChange($event)">
+      </app-translation-file-upload>
+      <app-translation-file-from-github *ngSwitchCase="'Github'"
+                                        [createdProject]="createdProject"
+                                        [configuration]="selectedFileAccessConfiguration()"
+                                        (fileSelected)="fileSelectionChange($event)"
+                                        (masterXmlFileSelected)="masterXmlFileSelectionChange($event)">
+      </app-translation-file-from-github>
+    </ng-container>
     <p><b i18n>Selected translation file:</b></p>
     <app-translation-file-status *ngIf="isFileSelected()"
                                  [translationFileView]="createdProject?.translationFileView"

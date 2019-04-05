@@ -1,6 +1,6 @@
 import {INormalizedMessage, IICUMessage, IICUMessageTranslation} from '@ngx-i18nsupport/ngx-i18nsupport-lib';
 import {ValidationErrors} from '@angular/forms';
-import {isNullOrUndefined} from 'util';
+import {isNullOrUndefined} from '../common/util';
 import {AutoTranslateServiceAPI} from './auto-translate-service-api';
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';

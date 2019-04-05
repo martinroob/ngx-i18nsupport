@@ -1,0 +1,32 @@
+<form [formGroup]="form">
+  <mat-form-field *ngIf="configurations">
+    <mat-label i18n>select a configuration..</mat-label>
+    <mat-select placeholder="select a configuration.." i18n-placeholder formControlName="selectedConfigurationIndex" name="selectedConfigurationIndex">
+      <mat-option *ngFor="let accessor of configurations; let i = index" [value]="i">{{accessor.type}} {{accessor.shortLabel()}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-tree *ngIf="dataSource" [dataSource]="dataSource" [treeControl]="treeControl" class="file-explorer-tree">
+    <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding
+                   (click)="selected(node)"
+                   [ngClass]="{ 'background-highlight': activeNode === node }">
+      <button mat-icon-button disabled></button>
+      {{node.item}}
+    </mat-tree-node>
+    <mat-tree-node *matTreeNodeDef="let node; when: hasChild" matTreeNodePadding
+                   (click)="selected(node)"
+                   [ngClass]="{ 'background-highlight': activeNode === node }">
+      <button mat-icon-button matTreeNodeToggle>
+        <mat-icon class="mat-icon-rtl-mirror">
+          {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+        </mat-icon>
+      </button>
+      <mat-icon *ngIf="node.maticon">{{node.maticon}}</mat-icon>
+      <img *ngIf="node.icon" class="mat-icon" src="assets/{{node.icon}}">
+      {{node.item}}
+      <mat-progress-bar *ngIf="node.isLoading"
+                        mode="indeterminate"
+                        class="tree-progress-bar">
+      </mat-progress-bar>
+    </mat-tree-node>
+  </mat-tree>
+</form>

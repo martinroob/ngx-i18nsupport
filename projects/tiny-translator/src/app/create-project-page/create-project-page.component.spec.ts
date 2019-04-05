@@ -5,8 +5,8 @@ import {ProjectStarterComponent} from '../project-starter/project-starter.compon
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {TinyTranslatorService} from '../model/tiny-translator.service';
 import {BackendServiceAPI} from '../model/backend-service-api';
-import {AsynchronousFileReaderService} from '../model/asynchronous-file-reader.service';
-import {DownloaderService} from '../model/downloader.service';
+import {AsynchronousFileReaderService} from '../file-accessors/download-upload/asynchronous-file-reader.service';
+import {DownloaderService} from '../file-accessors/download-upload/downloader.service';
 import {AppModule} from '../app.module';
 
 describe('CreateProjectPageComponent', () => {

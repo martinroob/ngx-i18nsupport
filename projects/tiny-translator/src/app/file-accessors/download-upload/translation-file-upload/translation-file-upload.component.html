@@ -1,0 +1,27 @@
+<form id="fileUploadForm" fxLayout="column" [formGroup]="form">
+    <div fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="start center">
+        <p fxFlex="50%" i18n>Select the file you want to translate.<br>
+            The file can be of format XLIFF 1.2, XLIFF 2.0 or XMB.<br>
+            The file will be stored in your browser local storage until you export the translated version.</p>
+        <div fxLayout="column" fxFlexAlign="end" fxFlex="40%">
+            <input type="file" id="fileupload" (change)="fileSelectionChange(input)" formControlName="selectedFiles"
+                   name="selectedFiles" class="inputfile" #input/>
+            <label for="fileupload">
+                <mat-icon>open_in_browser</mat-icon>&nbsp;<span i18n>Upload a translation file (xlf, xtb)</span></label>
+            <div><span i18n>selected: </span>{{selectedFilesFormatted()}}</div>
+        </div>
+    </div>
+    <div *ngIf="isMasterXmbFileNeeded()" fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="start center">
+        <p fxFlex="50%" i18n>You selected an xtb file.<br>
+            This file type only contains one language, the target language.<br>
+            To show you the original source texts, you should also select the master xmb file.</p>
+        <div fxFlex="50%" fxLayout="column">
+            <input type="file" id="masterfileupload" (change)="masterXmlFileSelectionChange(masterinput)"
+                   formControlName="selectedMasterXmbFiles" name="selectedMasterXmbFiles" class="inputfile"
+                   #masterinput/>
+            <label for="masterfileupload">
+                <mat-icon>open_in_browser</mat-icon>&nbsp;<span i18n>Upload master xmb file</span></label>
+            <div><span i18n>selected: </span>{{selectedMasterFilesFormatted()}}</div>
+        </div>
+    </div>
+</form>

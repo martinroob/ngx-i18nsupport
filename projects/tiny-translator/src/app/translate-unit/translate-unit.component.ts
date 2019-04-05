@@ -9,7 +9,7 @@ import {TranslationFileView} from '../model/translation-file-view';
 import {WorkflowType} from '../model/translation-project';
 import {STATE_FINAL, STATE_TRANSLATED} from '@ngx-i18nsupport/ngx-i18nsupport-lib';
 import {AutoTranslateServiceAPI} from '../model/auto-translate-service-api';
-import {isNullOrUndefined} from 'util';
+import {isNullOrUndefined} from '../common/util';
 import {map} from 'rxjs/operators';
 
 export enum NavigationDirection {

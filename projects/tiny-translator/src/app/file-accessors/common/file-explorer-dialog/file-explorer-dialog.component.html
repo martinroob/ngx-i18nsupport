@@ -1,0 +1,27 @@
+<h1 mat-dialog-title i18n *ngIf="selectableFileType === 'file'">Select a file</h1>
+<h1 mat-dialog-title i18n *ngIf="selectableFileType === 'dir'">Select a directory</h1>
+<h1 mat-dialog-title i18n *ngIf="!selectableFileType">Select a file or directory</h1>
+<div mat-dialog-content id="content">
+  <ng-container *ngIf="root | async; let currentRoot; else loadingOrError">
+    <h2 mat-dialog-title>{{currentRoot?.configuration.label}}</h2>
+    <app-file-explorer
+            [configurations]="configurations"
+            [root]="currentRoot"
+            [file]="file"
+            [selectableFileType] = "selectableFileType"
+            (selectedFile)="selectedFile($event)" >
+    </app-file-explorer>
+  </ng-container>
+  <ng-template #loadingOrError>
+    <div *ngIf="errorLoading$ | async; let errorMessage; else loading">
+      <ng-container i18n>Error loading: {{errorMessage}}.</ng-container>
+    </div>
+    <ng-template #loading>
+      <ng-container i18n>Loading ...</ng-container>
+    </ng-template>
+  </ng-template>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="cancel()" i18n>Cancel</button>
+  <button mat-button color="primary" [disabled]="!isFileSelected()" [mat-dialog-close]="result()" cdkFocusInitial i18n>Ok</button>
+</div>

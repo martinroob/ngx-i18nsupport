@@ -1,3 +1,3 @@
-<div fxLayout="row" fxLayoutWrap>
+<div fxLayout="row wrap">
   <app-project *ngFor="let project of projects" [project]="project" (onSave)="saveProject($event)" (onStartWork)="startWork($event)" (onDeleteProject)="deleteProject($event)"></app-project>
 </div>

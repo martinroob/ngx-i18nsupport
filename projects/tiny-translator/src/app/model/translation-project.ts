@@ -1,7 +1,8 @@
 import {TranslationFile} from './translation-file';
 import {TranslationFileView} from './translation-file-view';
-import {isNullOrUndefined} from 'util';
+import {isNullOrUndefined} from '../common/util';
 import {AutoTranslateSummaryReport} from './auto-translate-summary-report';
+import {SerializationService} from './serialization.service';
 
 /**
  * Workflow type determines, how you work with the tool.
@@ -45,14 +46,14 @@ export class TranslationProject {
 
   /**
    * Create a project from the serialization.
-   * @param serializationString
-   * @return {TranslationProject}
+   * @param serializationString string returned from serialize()
+   * @return deserialized project
    */
-  static deserialize(serializationString: string): TranslationProject {
+  static deserialize(serializationService: SerializationService, serializationString: string): TranslationProject {
     const deserializedObject: any = JSON.parse(serializationString);
     const project = new TranslationProject(
       deserializedObject.name,
-      TranslationFile.deserialize(deserializedObject.translationFile),
+      TranslationFile.deserialize(serializationService, deserializedObject.translationFile),
       deserializedObject.workflowType);
     project.id = deserializedObject.id;
     project.setUserRole(deserializedObject.userRole);
@@ -70,11 +71,11 @@ export class TranslationProject {
    * Return a string represenation of project state.
    * This will be stored in BackendService.
    */
-  public serialize(): string {
+  public serialize(serializationService: SerializationService): string {
     const serializedObject = {
       id: this.id,
       name: this.name,
-      translationFile: this.translationFile.serialize(),
+      translationFile: this.translationFile.serialize(serializationService),
       workflowType: this.workflowType,
       userRole: this.userRole
     };
@@ -126,8 +127,15 @@ export class TranslationProject {
   }
 
   /**
-   * Return Report about last executed Autotranslate run.
-   * @return {AutoTranslateSummaryReport}
+   * Check, wether a publish is possible.
+   */
+  public canPublish(): boolean {
+    return this.translationFile && this.translationFile.fileDescription().configuration.canPublish();
+  }
+
+  /**
+   * Return report about last executed Autotranslate run.
+   * @return report about last executed Autotranslate run.
    */
   public autoTranslateSummaryReport(): AutoTranslateSummaryReport {
     return this._autoTranslateSummaryReport;
@@ -135,7 +143,7 @@ export class TranslationProject {
 
   /**
    * Store summary of last executed AutoTranslate run.
-   * @param summary
+   * @param summary summary of last executed AutoTranslate run
    */
   public setAutoTranslateSummaryReport(summary: AutoTranslateSummaryReport) {
     this._autoTranslateSummaryReport = summary;

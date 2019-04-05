@@ -5,7 +5,8 @@
     </mat-card-title>
   </mat-card-header>
   <mat-card-content>
-    <app-translation-file-status [translationFileView]="project?.translationFileView" [translationFile]="project?.translationFile" (onSave)="save($event)"></app-translation-file-status>
+    <app-translation-file-status [translationFileView]="project?.translationFileView" [translationFile]="project?.translationFile"
+                                 (saved)="save($event)"></app-translation-file-status>
   </mat-card-content>
   <mat-card-actions *ngIf="showActions">
     <button mat-icon-button *ngIf="!project?.translationFile?.isDirty()" (click)="deleteProject()"  matTooltip="Delete Project" i18n-matTooltip><mat-icon>delete</mat-icon></button>
