@@ -417,7 +417,7 @@ export class XliffMergeParameters {
      */
     public i18nFile(): string {
         return join(this.srcDir(),
-            (this._i18nFile ? this._i18nFile : this.i18nBaseFile() + '.' + this.i18nFormat())
+            (this._i18nFile ? this._i18nFile : this.i18nBaseFile() + '.' + this.suffixForGeneratedI18nFile())
         ).replace(/\\/g, '/');
     }
 
