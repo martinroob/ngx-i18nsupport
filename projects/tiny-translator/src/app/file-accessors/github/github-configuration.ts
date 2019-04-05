@@ -110,6 +110,9 @@ export class GithubConfiguration implements IFileAccessConfiguration {
     }
 
     public directoryDescription(dirPath: string): IFileDescription {
+        if (!dirPath) {
+            dirPath = '';
+        }
         const slashIndex = dirPath.lastIndexOf('/');
         const newName = (slashIndex >= 0) ? dirPath.substr(slashIndex + 1) : dirPath;
         return new GithubFileDescription('dir', this, dirPath, newName);

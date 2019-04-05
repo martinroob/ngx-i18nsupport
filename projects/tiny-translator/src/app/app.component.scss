@@ -34,5 +34,12 @@ mat-toolbar .mat-toolbar-layout mat-toolbar-row {
 }
 
 #githublogo {
-  width: 30px;
+  background-image: url('../assets/Octocat.jpg');
+  width: 24px;
+  background-size: contain;
+  background-position: 50%;
+  background-repeat: no-repeat;
+  position: relative;
+  display: inline-block;
+  line-height: 1em;
 }

@@ -2,7 +2,7 @@
   <mat-form-field *ngIf="configurations">
     <mat-label i18n>select a configuration..</mat-label>
     <mat-select placeholder="select a configuration.." i18n-placeholder formControlName="selectedConfigurationIndex" name="selectedConfigurationIndex">
-      <mat-option *ngFor="let accessor of configurations; let i = index" [value]="i" i18n>{{accessor.type}} {{accessor.shortLabel()}}</mat-option>
+      <mat-option *ngFor="let accessor of configurations; let i = index" [value]="i">{{accessor.type}} {{accessor.shortLabel()}}</mat-option>
     </mat-select>
   </mat-form-field>
   <mat-tree *ngIf="dataSource" [dataSource]="dataSource" [treeControl]="treeControl" class="file-explorer-tree">
@@ -21,7 +21,7 @@
         </mat-icon>
       </button>
       <mat-icon *ngIf="node.maticon">{{node.maticon}}</mat-icon>
-      <img *ngIf="node.icon" class="mat-icon" src="../assets/{{node.icon}}">
+      <img *ngIf="node.icon" class="mat-icon" src="assets/{{node.icon}}">
       {{node.item}}
       <mat-progress-bar *ngIf="node.isLoading"
                         mode="indeterminate"

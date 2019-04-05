@@ -31,7 +31,7 @@ This is a **monorepo** containing projects
 
 | Project | Tool | Version |
 |---|---|---|
-**[tiny-translator](projects/tiny-translator)** | [`https://martinroob.github.io/tiny-translator`](https://martinroob.github.io/tiny-translator) | v0.14
+**[tiny-translator](projects/tiny-translator)** | [`https://martinroob.github.io/tiny-translator`](https://martinroob.github.io/tiny-translator) | v0.15
 
 [travis-badge]: https://travis-ci.org/martinroob/ngx-i18nsupport.svg?branch=master
 [travis-badge-url]: https://travis-ci.org/martinroob/ngx-i18nsupport

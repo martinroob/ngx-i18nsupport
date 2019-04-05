@@ -8,7 +8,7 @@
 </div>
 <div fxLayout="column" fxLayoutGap="10px">
   <mat-expansion-panel *ngFor="let configuration of githubConfigurations | async; let i = index" [expanded]="isExpanded(configuration)">
-    <mat-expansion-panel-header i18n>{{configuration.fullLabel().label}}</mat-expansion-panel-header>
+    <mat-expansion-panel-header>{{configuration.fullLabel().label}}</mat-expansion-panel-header>
     <app-github-config-editor
             [githubConfiguration]="configuration"
             (storeConfiguration)="storeConfiguration($event)"

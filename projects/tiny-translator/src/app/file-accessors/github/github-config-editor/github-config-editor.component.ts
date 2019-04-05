@@ -232,7 +232,7 @@ export class GithubConfigEditorComponent implements OnInit, OnChanges {
 
       dialogRef.afterClosed().subscribe((result: IFileDescription) => {
           if (result) {
-              this.form.get('path').patchValue(result.name);
+              this.form.get('path').patchValue(result.path);
           }
       });
 
