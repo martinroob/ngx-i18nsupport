@@ -1,3 +1,11 @@
+<a name="1.1.3"></a>
+# 1.1.3 (2019-04-06)
+
+### Bug fixes
+* **xliffmerge** XliffMerge: State is set back to translated even if source did not change.
+This was caused by some cr lf handling issues, which are fixed now.
+([#128](https://github.com/martinroob/ngx-i18nsupport/issues/128))
+
 <a name="1.1.2"></a>
 # 1.1.2 (2019-01-26)
 

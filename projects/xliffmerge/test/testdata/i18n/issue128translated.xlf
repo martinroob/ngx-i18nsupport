@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- issue 128 when source is unchanged but has different line ending translation state should not change -->
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file datatype="plaintext" date="2018-11-14T14:52:51.3060268Z" original="3223941_9" source-language="de" target-language="en">
+        <body>
+            <trans-unit id="issue128" datatype="html">
+                <source>
+                    Ein CR-LF-Problem</source>
+                <target state="final">
+                    A CR-LF problem</target>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">awesome.component.html</context>
+                    <context context-type="linenumber">2</context>
+                </context-group>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

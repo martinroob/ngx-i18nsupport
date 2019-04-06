@@ -1,3 +1,11 @@
+<a name="1.1.3"></a>
+# 1.1.2 (2019-04-06)
+
+### Features
+* **tooling** installs the newest version 1.1.3 of xliffmerge now.
+
+* **tooling** Upgrade to Angular 7.2.
+
 <a name="1.1.2"></a>
 # 1.1.2 (2019-01-26)
 
