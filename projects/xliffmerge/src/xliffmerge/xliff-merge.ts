@@ -24,9 +24,9 @@ import {AutoTranslateSummaryReport} from '../autotranslate/auto-translate-summar
 
 export class XliffMerge {
 
-    private commandOutput: CommandOutput;
+    private readonly commandOutput: CommandOutput;
 
-    private options: ProgramOptions;
+    private readonly options: ProgramOptions;
 
     private parameters: XliffMergeParameters;
 
@@ -309,7 +309,7 @@ export class XliffMerge {
         const languageSpecificMessagesFile: ITranslationMessagesFile =
             this.master.createTranslationFileForLang(lang, languageXliffFilePath, isDefaultLang, this.parameters.useSourceAsTarget());
         return this.autoTranslate(this.master.sourceLanguage(), lang, languageSpecificMessagesFile).pipe(
-            map((summary) => {
+            map((/* summary */) => {
             // write it to file
             TranslationMessagesFileReader.save(languageSpecificMessagesFile, this.parameters.beautifyOutput());
             this.commandOutput.info('created new file "%s" for target-language="%s"', languageXliffFilePath, lang);
@@ -375,7 +375,7 @@ export class XliffMerge {
             } else {
                 // check for changed source content and change it if needed
                 // (can only happen if ID is explicitely set, otherwise ID would change if source content is changed.
-                if (transUnit.supportsSetSourceContent() && masterTransUnit.sourceContent() !== transUnit.sourceContent()) {
+                if (transUnit.supportsSetSourceContent() && !this.areSourcesNearlyEqual(masterTransUnit, transUnit)) {
                     transUnit.setSourceContent(masterTransUnit.sourceContent());
                     if (isDefaultLang) {
                         // #81 changed source must be copied to target for default lang
@@ -479,10 +479,9 @@ export class XliffMerge {
         languageSpecificMessagesFile: ITranslationMessagesFile,
         lastProcessedUnit: ITransUnit): ITransUnit {
 
-        const masterSourceString = masterTransUnit.sourceContentNormalized().asDisplayString(NORMALIZATION_FORMAT_DEFAULT).trim();
         let changedTransUnit: ITransUnit = null;
         languageSpecificMessagesFile.forEachTransUnit((languageTransUnit) => {
-             if (languageTransUnit.sourceContentNormalized().asDisplayString(NORMALIZATION_FORMAT_DEFAULT).trim() === masterSourceString) {
+             if (this.areSourcesNearlyEqual(languageTransUnit, masterTransUnit)) {
                  changedTransUnit = languageTransUnit;
              }
         });
@@ -500,6 +499,20 @@ export class XliffMerge {
             mergedTransUnit.setTargetState(STATE_TRANSLATED);
         }
         return mergedTransUnit;
+    }
+
+    /**
+     * test wether the sources of 2 trans units are equal ignoring white spaces.
+     * @param tu1 tu1
+     * @param tu2 tu2
+     */
+    private areSourcesNearlyEqual(tu1: ITransUnit, tu2: ITransUnit): boolean {
+        if ((tu1 && !tu2) || (tu2 && !tu1)) {
+            return false;
+        }
+        const s1Normalized = tu1.sourceContentNormalized().asDisplayString(NORMALIZATION_FORMAT_DEFAULT).trim();
+        const s2Normalized = tu2.sourceContentNormalized().asDisplayString(NORMALIZATION_FORMAT_DEFAULT).trim();
+        return s1Normalized === s2Normalized;
     }
 
     private areSourceReferencesEqual(

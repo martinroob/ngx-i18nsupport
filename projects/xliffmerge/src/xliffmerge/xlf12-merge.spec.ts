@@ -779,6 +779,34 @@ describe('XliffMerge XLIFF 1.2 format tests', () => {
             done();
         });
 
+        it('should not change translation state when source is unchanged but has different line ending (#128)', (done) => {
+            FileUtil.copy(SRCDIR + 'issue128master.xlf', MASTER);
+            const langfileName = WORKDIR + 'messages.en.xlf';
+            FileUtil.copy(SRCDIR + 'issue128translated.xlf', langfileName);
+            const originalContent = FileUtil.read(langfileName, 'UTF-8');
+            const contentWithoutCRLF = originalContent.replace(/[\n\r]/g, '');
+            expect(originalContent).not.toBe(contentWithoutCRLF);
+            FileUtil.replaceContent(langfileName, contentWithoutCRLF, 'UTF-8');
+            const ws: WriterToString = new WriterToString();
+            const commandOut = new CommandOutput(ws);
+            const profileContent: IConfigFile = {
+                xliffmergeOptions: {
+                    defaultLanguage: 'de',
+                    srcDir: WORKDIR,
+                    genDir: WORKDIR,
+                    i18nFile: MASTERFILE,
+                    beautifyOutput: false
+                }
+            };
+            const xliffMergeCmd = XliffMerge.createFromOptions(commandOut, {languages: ['de', 'en']}, profileContent);
+            xliffMergeCmd.run();
+            expect(ws.writtenData()).not.toContain('ERROR');
+            const langFileEnglish: ITranslationMessagesFile = readXliff(xliffMergeCmd.generatedI18nFile('en'));
+            const tu: ITransUnit = langFileEnglish.transUnitWithId('issue128');
+            expect(tu.targetState()).toBe(STATE_FINAL);
+            done();
+        });
+
         describe('autotranslate via google translate', () => {
 
             let apikey: string;
