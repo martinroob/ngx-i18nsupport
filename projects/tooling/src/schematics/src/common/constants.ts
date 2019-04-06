@@ -12,7 +12,7 @@ export const xliffmergePackage = '@ngx-i18nsupport/ngx-i18nsupport';
  * This value will be written into package.json of the project that uses ng add.
  * TODO must be changed for every new release.
  */
-export const xliffmergeVersion = '^1.1.2';
+export const xliffmergeVersion = '^1.1.3';
 
 /**
  * The default language (i18nLocale) when you do not specify anything.
