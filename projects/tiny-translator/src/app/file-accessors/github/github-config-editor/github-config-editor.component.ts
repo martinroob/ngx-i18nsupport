@@ -5,7 +5,7 @@ import {catchError, finalize, first, map, switchMap} from 'rxjs/operators';
 import {Observable, of} from 'rxjs';
 import {GithubConfiguration} from '../github-configuration';
 import {IFileDescription} from '../../common/i-file-description';
-import {MatDialog} from '@angular/material';
+import { MatDialog } from "@angular/material/dialog";
 import {FileExplorerDialogComponent, FileExplorerDialogData} from '../../common/file-explorer-dialog/file-explorer-dialog.component';
 
 @Component({

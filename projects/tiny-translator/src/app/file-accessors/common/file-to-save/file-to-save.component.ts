@@ -2,7 +2,7 @@ import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges
 import {IFileAccessConfiguration} from '../i-file-access-configuration';
 import {IFileDescription} from '../i-file-description';
 import {FileExplorerDialogComponent, FileExplorerDialogData} from '../file-explorer-dialog/file-explorer-dialog.component';
-import {MatDialog} from '@angular/material';
+import { MatDialog } from "@angular/material/dialog";
 import {SaveAsExplorerDialogComponent, SaveAsExplorerDialogData} from '../save-as-explorer-dialog/save-as-explorer-dialog.component';
 
 /**
