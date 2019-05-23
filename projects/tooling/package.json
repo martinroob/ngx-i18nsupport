@@ -16,7 +16,6 @@
     "copy:builders": "cpx \"./src/builders/**\" ../../dist/tooling/src/builders",
     "pretest": "npm run build",
     "test": "jasmine ../../dist/tooling/src/**/*spec.js",
-    "debugtest": "node %NODE_DEBUG_OPTION% ../../node_modules/jasmine/bin/jasmine.js ../../dist/tooling/src/**/*spec.js",
     "precover": "npm run build",
     "cover": "istanbul cover --dir ../../coverage/tooling --root ../../dist/tooling/src --include-all-sources ../../node_modules/jasmine/bin/jasmine.js -- ../../dist/tooling/src/**/*spec.js"
   },
@@ -41,12 +40,12 @@
     "@ngx-i18nsupport/ngx-i18nsupport": "^1.1.0"
   },
   "devDependencies": {
-    "@angular-devkit/core": "~7.3.7",
-    "@angular-devkit/architect": "~0.13.7",
-    "@angular-devkit/schematics": "~7.3.7"
+    "@angular-devkit/core": "^8.0.0-rc.4",
+    "@angular-devkit/architect": "^0.800.0-rc.4",
+    "@angular-devkit/schematics": "^8.0.0-rc.4"
   },
   "peerDependencies": {
-    "@angular/common": "^7.0.0",
-    "@angular/core": "^7.0.0"
+    "@angular/common": "^8.0.0",
+    "@angular/core": "^8.0.0"
   }
 }

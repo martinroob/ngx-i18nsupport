@@ -4,7 +4,7 @@
 
 import {UnitTestTree} from '@angular-devkit/schematics/testing';
 import {Schema as WorkspaceOptions} from '@schematics/angular/workspace/schema';
-import {Schema as ApplicationOptions} from '@schematics/angular/application/schema';
+import {Schema as ApplicationOptions, Style} from '@schematics/angular/application/schema';
 import {Schema as LibraryOptions} from '@schematics/angular/library/schema';
 import {IPackageJson} from './package-json-snapshot';
 import {WorkspaceSchema} from '../../schematics-core/utility/workspace-models';
@@ -24,7 +24,7 @@ export const appOptions: ApplicationOptions = {
     inlineTemplate: false,
     minimal: true,
     routing: false,
-    style: 'css',
+    style: Style.Css,
     skipTests: true,
     skipPackageJson: true,
 };

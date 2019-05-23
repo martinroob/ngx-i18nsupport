@@ -5,18 +5,18 @@
 **/
 import {Observable, of} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
-import {asWindowsPath, getSystemPath, join, Path} from '@angular-devkit/core';
-import {Builder, BuilderConfiguration, BuilderContext, BuildEvent} from '@angular-devkit/architect';
+import {asWindowsPath, getSystemPath, join, normalize, Path} from '@angular-devkit/core';
+import {BuilderContext, BuilderOutput} from '@angular-devkit/architect';
 import {XliffmergeBuilderSchema} from './schema';
 import {XliffMerge, CommandOutput, WriterToString, ProgramOptions, IXliffMergeOptions, IConfigFile} from '@ngx-i18nsupport/ngx-i18nsupport';
 import {isAbsolute} from 'path';
 
-export class XliffmergeBuilder implements Builder<XliffmergeBuilderSchema> {
+export class XliffmergeBuilder {
 
     constructor(private context: BuilderContext) {
     }
 
-    run(builderConfig: BuilderConfiguration<Partial<XliffmergeBuilderSchema>>): Observable<BuildEvent> {
+    run(builderConfig: Partial<XliffmergeBuilderSchema>): Observable<BuilderOutput> {
         const programOptions: ProgramOptions = this.createProgramOptionsFromConfig(builderConfig);
         const options: IConfigFile|undefined = (programOptions.profilePath) ?
             undefined :
@@ -41,21 +41,21 @@ export class XliffmergeBuilder implements Builder<XliffmergeBuilderSchema> {
         );
     }
 
-    createProgramOptionsFromConfig(builderConfig: BuilderConfiguration<Partial<XliffmergeBuilderSchema>>): ProgramOptions {
-        const profile = builderConfig.options.profile;
+    createProgramOptionsFromConfig(builderConfig: Partial<XliffmergeBuilderSchema>): ProgramOptions {
+        const profile = builderConfig.profile;
         if (profile) {
-            const root = this.context.workspace.root;
-            const profilePath = `${getSystemPath(root)}/${profile}`;
+            const wsRoot = normalize(this.context.workspaceRoot);
+            const profilePath = `${getSystemPath(wsRoot)}/${profile}`;
             return {profilePath: profilePath};
         } else {
             return {};
         }
     }
 
-    createProfileContentFromConfig(builderConfig: BuilderConfiguration<Partial<XliffmergeBuilderSchema>>): IConfigFile|undefined {
-        const xliffmergeOptions: IXliffMergeOptions|undefined = builderConfig.options.xliffmergeOptions;
+    createProfileContentFromConfig(builderConfig: Partial<XliffmergeBuilderSchema>): IConfigFile|undefined {
+        const xliffmergeOptions: IXliffMergeOptions|undefined = builderConfig.xliffmergeOptions;
         if (xliffmergeOptions) {
-            const wsRoot: Path = this.context.workspace.root;
+            const wsRoot = normalize(this.context.workspaceRoot);
             // replace all pathes in options by absolute paths
             xliffmergeOptions.srcDir = this.adjustPathToWorkspaceRoot(wsRoot, xliffmergeOptions.srcDir);
             xliffmergeOptions.genDir = this.adjustPathToWorkspaceRoot(wsRoot, xliffmergeOptions.genDir);

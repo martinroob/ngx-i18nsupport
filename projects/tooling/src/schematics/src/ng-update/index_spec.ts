@@ -326,7 +326,6 @@ describe('Migration to v1.1', () => {
 
             // Check angular.json changes
             expect(loggerOutput).toContain('added architect builder xliffmerge to project projectWithXliffmerge');
-            console.log('output', loggerOutput);
             const angularJsonAfterMigration: WorkspaceSchema = readAngularJson(appTree);
             expect(angularJsonAfterMigration).toBeTruthy();
             // @ts-ignore
