@@ -3,10 +3,9 @@ import {AppConfig, APP_CONFIG} from './app.config';
 import {TinyTranslatorService} from './model/tiny-translator.service';
 import {Router} from '@angular/router';
 import {SwUpdate} from '@angular/service-worker';
-import { MatSnackBar } from "@angular/material/snack-bar";
-import {UpdateAvailableEvent} from '@angular/service-worker/src/low_level';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import {UpdateAvailableEvent} from '@angular/service-worker';
 import {UpdateAvailableComponent} from './update-available/update-available.component';
-import {ICommitData} from './file-accessors/common/i-file-access-service';
 
 @Component({
   selector: 'app-root',

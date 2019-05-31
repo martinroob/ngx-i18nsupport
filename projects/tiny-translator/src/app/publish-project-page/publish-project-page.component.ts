@@ -20,11 +20,11 @@ export class PublishProjectPageComponent implements OnInit {
   form: FormGroup;
   error: string;
 
-  @ViewChild('confirmSaveQuestion') confirmSaveQuestion: ElementRef;
-  @ViewChild('confirmSaveInfo') confirmSaveInfo: ElementRef;
-  @ViewChild('confirmModifyQuestion') confirmModifyQuestion: ElementRef;
-  @ViewChild('confirmModifyInfo') confirmModifyInfo: ElementRef;
-  @ViewChild('publishOkMessage') publishOkMessage: ElementRef;
+  @ViewChild('confirmSaveQuestion', { static: false }) confirmSaveQuestion: ElementRef;
+  @ViewChild('confirmSaveInfo', { static: false }) confirmSaveInfo: ElementRef;
+  @ViewChild('confirmModifyQuestion', { static: false }) confirmModifyQuestion: ElementRef;
+  @ViewChild('confirmModifyInfo', { static: false }) confirmModifyInfo: ElementRef;
+  @ViewChild('publishOkMessage', { static: false }) publishOkMessage: ElementRef;
 
   constructor(private tinyTranslatorService: TinyTranslatorService,
               private formBuilder: FormBuilder,
