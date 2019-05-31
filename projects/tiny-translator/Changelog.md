@@ -1,3 +1,8 @@
+<a name="0.16.0"></a>
+# 0.16.0 (2019-05-31)
+
+### Features
+* **Application** upgraded to Angular 8
 <a name="0.15.0"></a>
 # 0.15.0 (2019-04-05)
 

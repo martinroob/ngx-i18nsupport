@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {TranslationUnit} from '../model/translation-unit';
-import {MatRadioChange} from '@angular/material';
+import { MatRadioChange } from "@angular/material/radio";
 import {TranslationFileView} from '../model/translation-file-view';
 import {WorkflowType} from '../model/translation-project';
 import {Subject, Subscription} from 'rxjs';

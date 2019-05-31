@@ -1,5 +1,5 @@
 import {Component, OnInit, Optional} from '@angular/core';
-import {MatSnackBarRef} from '@angular/material';
+import { MatSnackBarRef } from "@angular/material/snack-bar";
 import {SwUpdate, UpdateAvailableEvent} from '@angular/service-worker';
 import {take} from 'rxjs/operators';
 

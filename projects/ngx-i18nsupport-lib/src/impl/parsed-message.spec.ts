@@ -335,7 +335,7 @@ describe('normalized message test spec', () => {
                 expect('').toBe('should have thrown an error "invalid category"');
             } catch (error) {
                 expect(error.toString())
-                    .toBe('Error: invalid plural category "verdammtviele", allowed are =<n> and zero,one,two,few,many,other');
+                    .toBe('Error: invalid plural category "verdammtviele", allowed are =<n> and [ \'zero\', \'one\', \'two\', \'few\', \'many\', \'other\' ]');
             }
         });
 

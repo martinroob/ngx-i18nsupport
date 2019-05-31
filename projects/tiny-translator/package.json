@@ -1,7 +1,7 @@
 {
   "name": "tiny-translator",
   "description": "A tiny web application to translate xliff files",
-  "version": "0.15.0",
+  "version": "0.16.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve tiny-translator",

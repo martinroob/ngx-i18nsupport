@@ -3,7 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { TranslateUnitComponent } from './translate-unit.component';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {FormBuilder} from '@angular/forms';
-import {MatDialog, MatDialogModule, MatDialogRef} from '@angular/material';
+import { MatDialog, MatDialogModule, MatDialogRef } from "@angular/material/dialog";
 import {AppModule} from '../app.module';
 
 describe('TranslateUnitComponent', () => {

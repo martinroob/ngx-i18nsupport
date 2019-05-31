@@ -1,6 +1,7 @@
 import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange, SimpleChanges} from '@angular/core';
 import {TranslationUnit} from '../model/translation-unit';
-import {MatDialog, MatSnackBar} from '@angular/material';
+import { MatDialog } from "@angular/material/dialog";
+import { MatSnackBar } from "@angular/material/snack-bar";
 import {NormalizedMessage} from '../model/normalized-message';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {Observable, of} from 'rxjs';
