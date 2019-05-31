@@ -1,5 +1,11 @@
+<a name="8.0.0"></a>
+# 8.0.0 (2019-05-31)
+
+### Features
+* **tooling** Upgrade to Angular 8.0.
+
 <a name="1.1.3"></a>
-# 1.1.2 (2019-04-06)
+# 1.1.3 (2019-04-06)
 
 ### Features
 * **tooling** installs the newest version 1.1.3 of xliffmerge now.
