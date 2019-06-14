@@ -35,6 +35,9 @@ export class SerializationService {
 
   public deserializeIFile(serializedForm: string): IFile {
     const obj: SerializedFormOfFile = JSON.parse(serializedForm);
+    if (!obj) {
+      return null;
+    }
     switch (obj.type) {
       case 'github':
         return GithubFile.deserialize(this, serializedForm);
@@ -45,6 +48,9 @@ export class SerializationService {
 
   public deserializeIFileDescription(serializedForm: string): IFileDescription {
     const obj: SerializedFormOfDescription = JSON.parse(serializedForm);
+    if (!obj) {
+      return null;
+    }
     switch (obj.accessorType) {
       case FileAccessorType.DOWNLOAD_UPLOAD:
         return DownloadUploadFileDescription.deserialize(this, serializedForm);
@@ -56,6 +62,9 @@ export class SerializationService {
 
   public deserializeIFileConfiguration(serializedForm: string): IFileAccessConfiguration {
     const obj: SerializedFormOfConfiguration = JSON.parse(serializedForm);
+    if (!obj) {
+      return null;
+    }
     switch (obj.accessorType) {
       case FileAccessorType.DOWNLOAD_UPLOAD:
         return DownloadUploadConfiguration.deserialize(this, serializedForm);

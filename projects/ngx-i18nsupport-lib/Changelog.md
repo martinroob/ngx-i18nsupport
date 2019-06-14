@@ -1,3 +1,11 @@
+<a name="1.12.0"></a>
+# 1.12.0 (2019-06-14)
+
+### Features
+
+* **API** 
+Added 2 testing methods to the `INormalizedMessage` API, `isICUMessage()` and `containsICUMessageRef()`.
+
 <a name="1.11.0"></a>
 # 1.11.0 (2018-11-09)
 

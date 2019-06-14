@@ -672,6 +672,77 @@ describe('XliffMerge XLIFF 1.2 format tests', () => {
             done();
         });
 
+        it('allowIdChange feature with added ICU message (#138)', (done) => {
+            const ID_OLD_ICU = 'oldicu';
+            const ID_OLD_ICUREF = 'oldicuref';
+            const ID_CHANGED_ICU = 'changedicu';
+            const ID_CHANGED_ICUREF = 'changedicuref';
+            const ID_ADDDED_ICU = 'newicu';
+            const ID_ADDDED_ICUREF = 'newicuref';
+            const TRANSLATED_FILE = 'issue138IdChangeICU.de.xlf';
+            FileUtil.copy(SRCDIR + 'issue138IdChangeICUMaster.xlf', MASTER);
+            FileUtil.copy(SRCDIR + TRANSLATED_FILE, WORKDIR + 'messages.de.xlf');
+            const ws: WriterToString = new WriterToString();
+            const commandOut = new CommandOutput(ws);
+            const profileContent: IConfigFile = {
+                xliffmergeOptions: {
+                    defaultLanguage: 'en',
+                    srcDir: WORKDIR,
+                    genDir: WORKDIR,
+                    i18nFile: MASTERFILE,
+                    allowIdChange: true
+                }
+            };
+            const xliffMergeCmd = XliffMerge.createFromOptions(commandOut, {languages: ['en', 'de']}, profileContent);
+            xliffMergeCmd.run();
+            expect(ws.writtenData()).not.toContain('ERROR');
+            expect(ws.writtenData()).toContain('WARNING: merged 2 trans-units from master to "de"');
+            expect(ws.writtenData()).toContain('WARNING: found 2 changed id\'s in "de"');
+            expect(ws.writtenData()).toContain('WARNING: removed 2 unused trans-units in "de"');
+
+            // check that added ids are merged
+            const langFileGerman: ITranslationMessagesFile = readXliff(xliffMergeCmd.generatedI18nFile('de'));
+            FileUtil.copy(xliffMergeCmd.generatedI18nFile('de'), 'test/' + 'issue138.de.xlf'); // TODO delete this line
+            expect(langFileGerman.numberOfTransUnits()).toBe(6);
+
+            const tuOldIcuRef: ITransUnit = langFileGerman.transUnitWithId(ID_OLD_ICUREF);
+            expect(tuOldIcuRef).toBeTruthy();
+            const tuOldIcu: ITransUnit = langFileGerman.transUnitWithId(ID_OLD_ICU);
+            expect(tuOldIcu).toBeTruthy();
+
+            expect(tuOldIcuRef.targetContent()).toContain('<x id="ICU" equiv-text="{ fruit, select, Windstorm {...}');
+            expect(tuOldIcuRef.targetState()).toBe(STATE_TRANSLATED);
+
+            expect(tuOldIcu.sourceContent()).toContain('Windstorm {Windstorm}');
+            expect(tuOldIcu.targetContent()).toContain('Windstorm {Stürmer}');
+            expect(tuOldIcu.targetState()).toBe(STATE_TRANSLATED);
+
+            const tuChangedIcuRef: ITransUnit = langFileGerman.transUnitWithId(ID_CHANGED_ICUREF);
+            expect(tuChangedIcuRef).toBeTruthy();
+            const tuChangedIcu: ITransUnit = langFileGerman.transUnitWithId(ID_CHANGED_ICU);
+            expect(tuChangedIcu).toBeTruthy();
+
+            expect(tuChangedIcuRef.targetContent()).toContain('<x id="ICU" equiv-text="{ choice, select, A {...}');
+            expect(tuChangedIcuRef.targetState()).toBe(STATE_TRANSLATED);
+
+            expect(tuChangedIcu.sourceContent()).toContain('A {A}');
+            expect(tuChangedIcu.targetContent()).toContain('A {A1}');
+            expect(tuChangedIcu.targetState()).toBe(STATE_TRANSLATED);
+
+            const tuAddedIcuRef: ITransUnit = langFileGerman.transUnitWithId(ID_ADDDED_ICUREF);
+            expect(tuAddedIcuRef).toBeTruthy();
+            const tuAddedIcu: ITransUnit = langFileGerman.transUnitWithId(ID_ADDDED_ICU);
+            expect(tuAddedIcu).toBeTruthy();
+
+            expect(tuAddedIcuRef.targetContent()).toContain('<x id="ICU" equiv-text="{ fruit, select, Apple {...}');
+            expect(tuAddedIcuRef.targetState()).toBe(STATE_NEW);
+
+            expect(tuAddedIcu.sourceContent()).toContain('Apple {Apple}');
+            expect(tuAddedIcu.targetContent()).toBe(tuAddedIcu.sourceContent());
+            expect(tuAddedIcu.targetState()).toBe(STATE_NEW);
+            done();
+        });
+
         it('should report an error with filename when there is something wrong', (done) => {
             FileUtil.copy(SRCDIR + 'schrott.xlf', MASTER);
             const ws: WriterToString = new WriterToString();
