@@ -1,3 +1,10 @@
+<a name="1.1.4"></a>
+# 1.1.4 (2019-06-14)
+
+### Bug fixes
+* **xliffmerge** allowIdChange causing incorrect transunit placements in ICU messages.
+([#138](https://github.com/martinroob/ngx-i18nsupport/issues/138))
+
 <a name="1.1.3"></a>
 # 1.1.3 (2019-04-06)
 

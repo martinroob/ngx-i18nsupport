@@ -1,3 +1,9 @@
+<a name="8.0.1"></a>
+# 8.0.1 (2019-06-14)
+
+### Features
+* **tooling** installs the newest version 1.1.4 of xliffmerge now.
+
 <a name="8.0.0"></a>
 # 8.0.0 (2019-05-31)
 
