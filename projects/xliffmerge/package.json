@@ -42,7 +42,7 @@
   "dependencies": {
     "chalk": "^2.4.1",
     "he": "^1.1.1",
-    "@ngx-i18nsupport/ngx-i18nsupport-lib": "^1.11.0",
+    "@ngx-i18nsupport/ngx-i18nsupport-lib": "^1.12.0",
     "request": "^2.85.0"
   },
   "devDependencies": {

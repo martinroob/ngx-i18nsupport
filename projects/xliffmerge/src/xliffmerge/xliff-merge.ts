@@ -510,8 +510,24 @@ export class XliffMerge {
         if ((tu1 && !tu2) || (tu2 && !tu1)) {
             return false;
         }
-        const s1Normalized = tu1.sourceContentNormalized().asDisplayString(NORMALIZATION_FORMAT_DEFAULT).trim();
-        const s2Normalized = tu2.sourceContentNormalized().asDisplayString(NORMALIZATION_FORMAT_DEFAULT).trim();
+        const tu1Normalized = tu1.sourceContentNormalized();
+        const tu2Normalized = tu2.sourceContentNormalized();
+        if (tu1Normalized.isICUMessage()) {
+            if (tu2Normalized.isICUMessage()) {
+                const icu1Normalized = tu1Normalized.getICUMessage().asNativeString().trim();
+                const icu2Normalized = tu2Normalized.getICUMessage().asNativeString().trim();
+                return icu1Normalized === icu2Normalized;
+            } else {
+                return false;
+            }
+        }
+        if (tu1Normalized.containsICUMessageRef()) {
+            const icuref1Normalized = tu1Normalized.asNativeString().trim();
+            const icuref2Normalized = tu2Normalized.asNativeString().trim();
+            return icuref1Normalized === icuref2Normalized;
+        }
+        const s1Normalized = tu1Normalized.asDisplayString(NORMALIZATION_FORMAT_DEFAULT).trim();
+        const s2Normalized = tu2Normalized.asDisplayString(NORMALIZATION_FORMAT_DEFAULT).trim();
         return s1Normalized === s2Normalized;
     }
 
