@@ -175,6 +175,23 @@ export class ParsedMessage implements INormalizedMessage {
     }
 
     /**
+     * Test wether this message is an ICU message.
+     * @return true, if it is an ICU message.
+     */
+    isICUMessage(): boolean {
+        return this._parts.length === 1 && this._parts[0].type === ParsedMessagePartType.ICU_MESSAGE;
+    }
+
+    /**
+     * Test wether this message contains an ICU message reference.
+     * ICU message references are something like <x ID="ICU"../>.
+     * @return true, if there is an ICU message reference in the message.
+     */
+    containsICUMessageRef(): boolean {
+        return this._parts.findIndex(part => part.type === ParsedMessagePartType.ICU_MESSAGE_REF) >= 0;
+    }
+
+    /**
      * If this message is an ICU message, returns its structure.
      * Otherwise this method returns null.
      * @return ICUMessage or null.

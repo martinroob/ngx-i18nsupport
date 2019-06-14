@@ -6,13 +6,13 @@ import {IICUMessage, IICUMessageTranslation} from './i-icu-message';
  * Markup can be placeholders or html tags.
  */
 
-export type ValidationErrors = {
+export interface ValidationErrors {
     [key: string]: any;
     placeholderAdded?: string;
     placeholderRemoved?: string;
     tagAdded?: string;
     tagRemoved?: string;
-};
+}
 
 export interface INormalizedMessage {
 
@@ -42,6 +42,19 @@ export interface INormalizedMessage {
      * Includes all format specific markup like <ph id="INTERPOLATION" ../> ..
      */
     asNativeString(): string;
+
+    /**
+     * Test wether this message is an ICU message.
+     * @return true, if it is an ICU message.
+     */
+    isICUMessage(): boolean;
+
+    /**
+     * Test wether this message contains an ICU message reference.
+     * ICU message references are something like <x ID="ICU"../>.
+     * @return true, if there is an ICU message reference in the message.
+     */
+    containsICUMessageRef(): boolean;
 
     /**
      * If this message is an ICU message, returns its structure.

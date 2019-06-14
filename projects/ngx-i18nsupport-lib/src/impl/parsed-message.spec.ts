@@ -199,6 +199,13 @@ describe('normalized message test spec', () => {
             expect(translatedMessage.validateWarnings()).toBeFalsy();
         });
 
+        it('should parse and detect ICU message refs', () => {
+            const original = 'a text with <ICU-Message-Ref_0/>';
+            const sourceMessage = parsedMessageFor(original);
+            expect(sourceMessage.containsICUMessageRef());
+            expect(parsedMessageFor('no ICU message ref').containsICUMessageRef()).toBeFalsy();
+        });
+
         it('should report an error if you remove an ICU ref in the translation', () => {
             const original = 'a text with <ICU-Message-Ref_0/>';
             const translation = 'a text without icu-ref';
@@ -256,6 +263,7 @@ describe('normalized message test spec', () => {
             const original = '{n, plural, =0 {kein Schaf} =1 {ein Schaf} other {Schafe}}';
             const sourceICUMessage = parsedICUMessage(original);
             expect(sourceICUMessage).toBeTruthy();
+            expect(sourceICUMessage.isICUMessage);
             expect(sourceICUMessage.getICUMessage()).toBeTruthy();
             expect(sourceICUMessage.getICUMessage().isPluralMessage()).toBeTruthy();
             expect(sourceICUMessage.getICUMessage().getCategories().length).toBe(3);
@@ -269,6 +277,7 @@ describe('normalized message test spec', () => {
             const original = '{gender, select, m {männlich} f {weiblich}}';
             const sourceICUMessage = parsedICUMessage(original);
             expect(sourceICUMessage).toBeTruthy();
+            expect(sourceICUMessage.isICUMessage);
             expect(sourceICUMessage.getICUMessage()).toBeTruthy();
             expect(sourceICUMessage.getICUMessage().isPluralMessage()).toBeFalsy();
             expect(sourceICUMessage.getICUMessage().getCategories().length).toBe(2);
@@ -335,7 +344,7 @@ describe('normalized message test spec', () => {
                 expect('').toBe('should have thrown an error "invalid category"');
             } catch (error) {
                 expect(error.toString())
-                    .toBe('Error: invalid plural category "verdammtviele", allowed are =<n> and [ \'zero\', \'one\', \'two\', \'few\', \'many\', \'other\' ]');
+                    .toBe('Error: invalid plural category "verdammtviele", allowed are =<n> and zero,one,two,few,many,other');
             }
         });
 
