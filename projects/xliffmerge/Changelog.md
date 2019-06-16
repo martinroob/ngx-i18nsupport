@@ -1,3 +1,10 @@
+<a name="1.1.5"></a>
+# 1.1.5 (2019-06-16)
+
+### Bug fixes
+* **xliffmerge** Install broken on 1.1.4.
+([#141](https://github.com/martinroob/ngx-i18nsupport/issues/141))
+
 <a name="1.1.4"></a>
 # 1.1.4 (2019-06-14)
 
