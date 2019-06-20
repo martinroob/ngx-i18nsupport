@@ -1,3 +1,12 @@
+<a name="1.12.1"></a>
+# 1.12.1 (2019-06-20)
+
+### Bugfixes
+
+* **internal** 
+[#142](https://github.com/martinroob/ngx-i18nsupport/issues/142) Cannot find module '@ngx-i18nsupport/ngx-i18nsupport-lib'
+Due to a wrong publishing former version 1.12.0 was totally corrupted.
+
 <a name="1.12.0"></a>
 # 1.12.0 (2019-06-14)
 

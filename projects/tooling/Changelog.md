@@ -1,3 +1,11 @@
+<a name="8.0.3"></a>
+# 8.0.3 (2019-06-20)
+
+### Bugfix
+* **tooling** installs the newest version 1.1.6 of xliffmerge now.
+([#142](https://github.com/martinroob/ngx-i18nsupport/issues/142))
+There was a problem with the build process.
+
 <a name="8.0.2"></a>
 # 8.0.2 (2019-06-16)
 
