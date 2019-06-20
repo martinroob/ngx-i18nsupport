@@ -1,3 +1,11 @@
+<a name="1.1.6"></a>
+# 1.1.6 (2019-06-20)
+
+### Bug fixes
+* **xliffmerge** Install broken on 1.1.5.
+[#142](https://github.com/martinroob/ngx-i18nsupport/issues/142) Cannot find module '@ngx-i18nsupport/ngx-i18nsupport-lib'
+Due to a wrong publishing former version 1.12.0 was totally corrupted.
+
 <a name="1.1.5"></a>
 # 1.1.5 (2019-06-16)
 
