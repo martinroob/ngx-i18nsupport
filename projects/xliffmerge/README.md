@@ -29,7 +29,7 @@ It is described in the official documentation Angular Cookbook [Internationaliza
 
 Said in one sentence, 
 * markup your strings to translate in your templates with an attribute `i18n`
-* run the Amgular extraction tool (`ng-xi18n`) to extract the strings in an XML Format called [[XLIFF-1.2]](http://docs.oasis-open.org/xliff/v1.2/os/xliff-core.html)
+* run the Angular extraction tool (`ng-xi18n`) to extract the strings in an XML Format called [[XLIFF-1.2]](http://docs.oasis-open.org/xliff/v1.2/os/xliff-core.html)
 * copy and then translate the extracted file for every language you plan to support
 * run the ng compiler to generate a special version of your app for the different languages
 
