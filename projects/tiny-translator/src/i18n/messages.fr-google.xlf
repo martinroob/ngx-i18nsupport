@@ -902,7 +902,7 @@
       </trans-unit><trans-unit id="517364a54dc0e62ab322919de9e62cad4c93630c" datatype="html">
         <source>
         Path is not a directory!
-      </source><target state="translated">Path n'est pas un répertoire!</target>
+      </source><target state="translated">Le chemin n'est pas un répertoire!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/file-accessors/github/github-config-editor/github-config-editor.component.html</context>
           <context context-type="linenumber">53</context>
