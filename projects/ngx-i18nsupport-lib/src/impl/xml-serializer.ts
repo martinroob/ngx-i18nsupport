@@ -161,11 +161,11 @@ export class XmlSerializer {
                 return;
             case node.ATTRIBUTE_NODE:
                 const attrNode = <Attr> node;
-                return buf.push(' ', attrNode.name, '="', attrNode.value.replace(/[<&"]/g, this._xmlEncoder), '"');
+                return buf.push(' ', attrNode.name, '="', attrNode.value.replace(/[<>&"]/g, this._xmlEncoder), '"');
             case node.TEXT_NODE:
                 const textNode = <Text> node;
                 if (!options.beautify || partOfMixedContent || !this.containsOnlyWhiteSpace(textNode.data)) {
-                    return buf.push(textNode.data.replace(/[<&]/g, this._xmlEncoder));
+                    return buf.push(textNode.data.replace(/[<>&]/g, this._xmlEncoder));
                 }
                 return;
             case node.CDATA_SECTION_NODE:
