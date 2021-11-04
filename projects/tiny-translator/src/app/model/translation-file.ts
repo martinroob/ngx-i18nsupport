@@ -139,7 +139,7 @@ export class TranslationFile {
     newInstance._explicitSourceLanguage = deserializedObject.explicitSourceLanguage;
     try {
       const encoding = null; // unknown, lib can find it
-      let optionalMaster: {xmlContent: string, path: string, encoding: string} = null;
+      let optionalMaster: {xmlContent: string, path: string, encoding: BufferEncoding } = null;
       if (deserializedObject.master) {
         newInstance._master = serializationService.deserializeIFile(deserializedObject.master);
         optionalMaster = {

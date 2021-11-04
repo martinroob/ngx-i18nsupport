@@ -14,7 +14,7 @@ export abstract class AbstractTranslationMessagesFile implements ITranslationMes
 
     protected _filename: string;
 
-    protected _encoding: string;
+    protected _encoding: BufferEncoding ;
 
     protected _parsedDocument: Document;
 
@@ -50,8 +50,8 @@ export abstract class AbstractTranslationMessagesFile implements ITranslationMes
      */
     protected parseContent(
         xmlString: string,
-        path: string, encoding: string,
-        optionalMaster?: { xmlContent: string, path: string, encoding: string })
+        path: string, encoding: BufferEncoding ,
+        optionalMaster?: { xmlContent: string, path: string, encoding: BufferEncoding  })
         : void {
         this._filename = path;
         this._encoding = encoding;

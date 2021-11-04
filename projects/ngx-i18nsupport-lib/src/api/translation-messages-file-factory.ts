@@ -31,8 +31,8 @@ export class TranslationMessagesFileFactory implements ITranslationMessagesFileF
     public static fromFileContent(i18nFormat: string,
                                   xmlContent: string,
                                   path: string,
-                                  encoding: string,
-                                  optionalMaster?: {xmlContent: string, path: string, encoding: string}): ITranslationMessagesFile {
+                                  encoding: BufferEncoding ,
+                                  optionalMaster?: {xmlContent: string, path: string, encoding: BufferEncoding }): ITranslationMessagesFile {
         return new TranslationMessagesFileFactory().createFileFromFileContent(i18nFormat, xmlContent, path, encoding, optionalMaster);
     }
 
@@ -51,8 +51,8 @@ export class TranslationMessagesFileFactory implements ITranslationMessagesFileF
      */
     public static fromUnknownFormatFileContent(xmlContent: string,
                                   path: string,
-                                  encoding: string,
-                                  optionalMaster?: {xmlContent: string, path: string, encoding: string}): ITranslationMessagesFile {
+                                  encoding: BufferEncoding ,
+                                  optionalMaster?: {xmlContent: string, path: string, encoding: BufferEncoding }): ITranslationMessagesFile {
         return new TranslationMessagesFileFactory().createFileFromUnknownFormatFileContent(xmlContent, path, encoding, optionalMaster);
     }
 
@@ -71,8 +71,8 @@ export class TranslationMessagesFileFactory implements ITranslationMessagesFileF
     createFileFromFileContent(i18nFormat: string,
                               xmlContent: string,
                               path: string,
-                              encoding: string,
-                              optionalMaster?: { xmlContent: string, path: string, encoding: string }): ITranslationMessagesFile {
+                              encoding: BufferEncoding ,
+                              optionalMaster?: { xmlContent: string, path: string, encoding: BufferEncoding  }): ITranslationMessagesFile {
         if (i18nFormat === FORMAT_XLIFF12) {
             return new XliffFile(xmlContent, path, encoding);
         }
@@ -104,8 +104,8 @@ export class TranslationMessagesFileFactory implements ITranslationMessagesFileF
      */
     createFileFromUnknownFormatFileContent(xmlContent: string,
                                            path: string,
-                                           encoding: string,
-                                           optionalMaster?: { xmlContent: string, path: string, encoding: string })
+                                           encoding: BufferEncoding ,
+                                           optionalMaster?: { xmlContent: string, path: string, encoding: BufferEncoding  })
         : ITranslationMessagesFile {
         let formatCandidates = [FORMAT_XLIFF12, FORMAT_XLIFF20, FORMAT_XMB, FORMAT_XTB];
         if (path && path.endsWith('xmb')) {

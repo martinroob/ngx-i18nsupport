@@ -24,7 +24,7 @@ describe('XliffMerge XLIFF 2.0 format tests', () => {
     const WORKDIR = 'test/work/';
     const SRCDIR = 'test/testdata/i18n/';
 
-    const ENCODING = 'UTF-8';
+    const ENCODING = 'utf-8';
 
     /**
      * Helper function to read XLIFF 2.0 from File
@@ -737,7 +737,7 @@ describe('XliffMerge XLIFF 2.0 format tests', () => {
             expect(ws.writtenData()).not.toContain('ERROR');
             const translationJsonFilename = xliffMergeCmd.generatedNgxTranslateFile('de');
             expect(FileUtil.exists(translationJsonFilename)).toBeTruthy();
-            const fileContent = FileUtil.read(translationJsonFilename, 'UTF-8');
+            const fileContent = FileUtil.read(translationJsonFilename, 'utf-8');
             const translation: any = JSON.parse(fileContent);
             expect(translation).toBeTruthy();
             expect(translation.myapp).toBeTruthy();
@@ -766,7 +766,7 @@ describe('XliffMerge XLIFF 2.0 format tests', () => {
             expect(ws.writtenData()).not.toContain('ERROR');
             const translationJsonFilename = xliffMergeCmd.generatedNgxTranslateFile('de');
             expect(FileUtil.exists(translationJsonFilename)).toBeTruthy();
-            const fileContent = FileUtil.read(translationJsonFilename, 'UTF-8');
+            const fileContent = FileUtil.read(translationJsonFilename, 'utf-8');
             const translation: any = JSON.parse(fileContent);
             expect(translation).toBeTruthy();
             expect(translation.placeholders).toBeTruthy();
@@ -795,7 +795,7 @@ describe('XliffMerge XLIFF 2.0 format tests', () => {
             expect(ws.writtenData()).not.toContain('ERROR');
             const translationJsonFilename = xliffMergeCmd.generatedNgxTranslateFile('de');
             expect(FileUtil.exists(translationJsonFilename)).toBeTruthy();
-            const fileContent = FileUtil.read(translationJsonFilename, 'UTF-8');
+            const fileContent = FileUtil.read(translationJsonFilename, 'utf-8');
             const translation: any = JSON.parse(fileContent);
             expect(translation).toBeTruthy();
             expect(translation.embeddedhtml).toBeTruthy();
@@ -825,7 +825,7 @@ describe('XliffMerge XLIFF 2.0 format tests', () => {
             expect(ws.writtenData()).not.toContain('ERROR');
             const translationJsonFilename = xliffMergeCmd.generatedNgxTranslateFile('de');
             expect(FileUtil.exists(translationJsonFilename)).toBeTruthy();
-            const fileContent = FileUtil.read(translationJsonFilename, 'UTF-8');
+            const fileContent = FileUtil.read(translationJsonFilename, 'utf-8');
             const translation: any = JSON.parse(fileContent);
             expect(translation).toBeTruthy();
             expect(translation.dateservice.monday).toBe('Montag');
@@ -855,7 +855,7 @@ describe('XliffMerge XLIFF 2.0 format tests', () => {
             expect(ws.writtenData()).not.toContain('ERROR');
             const translationJsonFilename = xliffMergeCmd.generatedNgxTranslateFile('de');
             expect(FileUtil.exists(translationJsonFilename)).toBeTruthy();
-            const fileContent = FileUtil.read(translationJsonFilename, 'UTF-8');
+            const fileContent = FileUtil.read(translationJsonFilename, 'utf-8');
             const translation: any = JSON.parse(fileContent);
             expect(translation).toBeTruthy();
             expect(translation.dateservice.monday).toBe('Montag');

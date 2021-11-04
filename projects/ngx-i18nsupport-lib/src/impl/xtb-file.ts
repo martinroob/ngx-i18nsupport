@@ -31,16 +31,16 @@ export class XtbFile extends AbstractTranslationMessagesFile implements ITransla
      * @return XmbFile
      */
     constructor(private _translationMessageFileFactory: ITranslationMessagesFileFactory,
-                xmlString: string, path: string, encoding: string,
-                optionalMaster?: { xmlContent: string, path: string, encoding: string }) {
+                xmlString: string, path: string, encoding: BufferEncoding ,
+                optionalMaster?: { xmlContent: string, path: string, encoding: BufferEncoding  }) {
         super();
         this._warnings = [];
         this._numberOfTransUnitsWithMissingId = 0;
         this.initializeFromContent(xmlString, path, encoding, optionalMaster);
     }
 
-    private initializeFromContent(xmlString: string, path: string, encoding: string,
-                                  optionalMaster?: { xmlContent: string, path: string, encoding: string }): XtbFile {
+    private initializeFromContent(xmlString: string, path: string, encoding: BufferEncoding ,
+                                  optionalMaster?: { xmlContent: string, path: string, encoding: BufferEncoding  }): XtbFile {
         this.parseContent(xmlString, path, encoding);
         if (this._parsedDocument.getElementsByTagName('translationbundle').length !== 1) {
             throw new Error(format('File "%s" seems to be no xtb file (should contain a translationbundle element)', path));

@@ -16,7 +16,7 @@ describe('ngx-i18nsupport-lib xliff 1.2 test spec', () => {
 
     const SRCDIR = 'test/testdata/i18n/';
 
-    const ENCODING = 'UTF-8';
+    const ENCODING = 'utf-8';
 
     /**
      * Helper function to read Xliff from File

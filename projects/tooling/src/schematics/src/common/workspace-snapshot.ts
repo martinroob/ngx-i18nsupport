@@ -216,7 +216,7 @@ export class WorkspaceSnaphot {
             if (!content) {
                 return null;
             }
-            const contentString = content.toString('UTF-8');
+            const contentString = content.toString('utf-8');
             const profileContent = JSON.parse(contentString) as {xliffmergeOptions: IXliffMergeOptions};
             return {
                 xliffmergeOptions: profileContent.xliffmergeOptions,

@@ -215,7 +215,7 @@ export class XliffMerge {
             this.master = TranslationMessagesFileReader.fromFile(
                 this.parameters.i18nFormat(),
                 this.parameters.i18nFile(),
-                this.parameters.encoding());
+                this.parameters.encoding() as BufferEncoding);
             this.master.warnings().forEach((warning: string) => {
                 this.commandOutput.warn(warning);
             });

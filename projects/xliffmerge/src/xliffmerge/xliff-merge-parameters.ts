@@ -28,7 +28,7 @@ export class XliffMergeParameters {
     private _i18nBaseFile: string;
     private _i18nFile: string;
     private _i18nFormat: string;
-    private _encoding: string;
+    private _encoding: BufferEncoding ;
     private _genDir: string;
     private _languages: string[];
     private _removeUnusedIds: boolean;
@@ -71,7 +71,7 @@ export class XliffMergeParameters {
     private static readProfileCandidate(profilePath: string): IConfigFile {
         let content: string;
         try {
-            content = fs.readFileSync(profilePath, 'UTF-8');
+            content = fs.readFileSync(profilePath, 'utf-8');
         } catch (err) {
             return null;
         }
@@ -134,7 +134,7 @@ export class XliffMergeParameters {
         }
         let content: string;
         try {
-            content = fs.readFileSync(profilePath, 'UTF-8');
+            content = fs.readFileSync(profilePath, 'utf-8');
         } catch (err) {
             this.errorsFound.push(new XliffMergeError('could not read profile "' + profilePath + '"'));
             return null;
@@ -463,8 +463,8 @@ export class XliffMergeParameters {
      * The encoding used to write new XLIFF-files.
      * @return encoding
      */
-    public encoding(): string {
-        return this._encoding ? this._encoding : 'UTF-8';
+    public encoding(): BufferEncoding {
+        return this._encoding ? this._encoding : 'utf-8';
     }
 
      /**

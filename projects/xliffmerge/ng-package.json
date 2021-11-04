@@ -2,11 +2,10 @@
   "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
   "dest": "../../dist/ngx-i18nsupport",
   "lib": {
-    "entryFile": "src/public_api.ts",
-    "umdModuleIds": {
-    }
+    "entryFile": "src/public_api.ts"
   },
-  "whitelistedNonPeerDependencies": [
+
+  "allowedNonPeerDependencies": [
     "@ngx-i18nsupport/ngx-i18nsupport-lib",
     "chalk",
     "he",

@@ -61,7 +61,7 @@ export class NgxTranslateExtractor {
     public extractTo(outputFile: string) {
         const translations: NgxTranslations = this.toNgxTranslations(this.extract());
         if (translations && Object.keys(translations).length > 0) {
-            FileUtil.replaceContent(outputFile, JSON.stringify(translations, null, 4), 'UTF-8');
+            FileUtil.replaceContent(outputFile, JSON.stringify(translations, null, 4), 'utf-8');
         } else {
             if (FileUtil.exists(outputFile)) {
                 FileUtil.deleteFile(outputFile);

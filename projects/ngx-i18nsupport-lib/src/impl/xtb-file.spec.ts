@@ -1,5 +1,11 @@
-import {TranslationMessagesFileFactory, ITranslationMessagesFile, ITransUnit, INormalizedMessage,
-    STATE_NEW, STATE_FINAL} from '../api/index';
+import {
+    INormalizedMessage,
+    ITranslationMessagesFile,
+    ITransUnit,
+    STATE_FINAL,
+    STATE_NEW,
+    TranslationMessagesFileFactory
+} from '../api/index';
 import * as fs from 'fs';
 import {DOMParser} from 'xmldom';
 import {DOMUtilities} from './dom-utilities';
@@ -13,7 +19,7 @@ describe('ngx-i18nsupport-lib xtb test spec', () => {
 
     const SRCDIR = 'test/testdata/i18n/';
 
-    const ENCODING = 'UTF-8';
+    const ENCODING = 'utf-8' as BufferEncoding;
 
     /**
      * Helper function to read Xtb from 2 Files, the xtb and the master
@@ -221,7 +227,7 @@ describe('ngx-i18nsupport-lib xtb test spec', () => {
             expect(tu.sourceReferences()[0].linenumber).toBe(7);
         });
 
-        it ('should run through 3 different states while translating', () => {
+        it('should run through 3 different states while translating', () => {
             const file: ITranslationMessagesFile = readFile(TRANSLATION_EN_XTB, MASTER_DE_XMB);
             const tu: ITransUnit = file.transUnitWithId(ID_MY_FIRST);
             expect(tu).toBeTruthy();
@@ -241,7 +247,11 @@ describe('ngx-i18nsupport-lib xtb test spec', () => {
             expect(tu.supportsSetSourceReferences()).toBeFalsy();
             tu.setSourceReferences([{sourcefile: 'x', linenumber: 1}]);
             expect(tu.sourceReferences().length).toBe(2); // shall be unchanged
-            const masterContent = {xmlContent: fs.readFileSync(MASTER_DE_XMB, ENCODING), path: MASTER_DE_XMB, encoding: 'UTF-8'};
+            const masterContent = {
+                xmlContent: fs.readFileSync(MASTER_DE_XMB, ENCODING),
+                path: MASTER_DE_XMB,
+                encoding: 'utf-8' as BufferEncoding
+            };
             const file2: ITranslationMessagesFile =
                 TranslationMessagesFileFactory.fromUnknownFormatFileContent(file.editedContent(), null, null, masterContent);
             const tu2: ITransUnit = file2.transUnitWithId(ID_WITH_TWO_SOURCEREFS);
@@ -258,7 +268,11 @@ describe('ngx-i18nsupport-lib xtb test spec', () => {
             expect(tu).toBeTruthy();
             expect(tu.sourceReferences().length).toBe(2);
             tu.translate('a translated value');
-            const masterContent = {xmlContent: fs.readFileSync(MASTER_DE_XMB, ENCODING), path: MASTER_DE_XMB, encoding: 'UTF-8'};
+            const masterContent = {
+                xmlContent: fs.readFileSync(MASTER_DE_XMB, ENCODING),
+                path: MASTER_DE_XMB,
+                encoding: 'utf-8' as BufferEncoding
+            };
             const file2: ITranslationMessagesFile =
                 TranslationMessagesFileFactory.fromUnknownFormatFileContent(file.editedContent(), null, null, masterContent);
             const tu2: ITransUnit = file2.transUnitWithId(ID_WITH_TWO_SOURCEREFS);
@@ -317,7 +331,7 @@ describe('ngx-i18nsupport-lib xtb test spec', () => {
             expect(tu2).toBeFalsy(); // should not exist any more
         });
 
-        it ('should copy a transunit from file a to file b', () => {
+        it('should copy a transunit from file a to file b', () => {
             const file: ITranslationMessagesFile = readUnknownFormatFile(MASTER_1_XMB);
             const tu: ITransUnit = file.transUnitWithId(ID_TO_MERGE);
             expect(tu).toBeTruthy();
@@ -331,7 +345,7 @@ describe('ngx-i18nsupport-lib xtb test spec', () => {
             expect(targetTu.targetContent()).toBe('Test for merging units');
         });
 
-        it ('should not copy source to target for non default lang if not wanted', () => {
+        it('should not copy source to target for non default lang if not wanted', () => {
             const file: ITranslationMessagesFile = readUnknownFormatFile(MASTER_1_XMB);
             const tu: ITransUnit = file.transUnitWithId(ID_UNTRANSLATED_DESCRIPTION);
             expect(tu).toBeTruthy();
@@ -345,7 +359,7 @@ describe('ngx-i18nsupport-lib xtb test spec', () => {
             expect(tu2.targetContent()).toBeFalsy();
         });
 
-        it ('should copy a transunit from file a to file b and leave content blank (xliffmerge #103)', () => {
+        it('should copy a transunit from file a to file b and leave content blank (xliffmerge #103)', () => {
             const file: ITranslationMessagesFile = readUnknownFormatFile(MASTER_1_XMB);
             const tu: ITransUnit = file.transUnitWithId(ID_TO_MERGE);
             expect(tu).toBeTruthy();
@@ -360,7 +374,7 @@ describe('ngx-i18nsupport-lib xtb test spec', () => {
             expect(targetTu.targetContent()).toBe('');
         });
 
-        it ('should copy a transunit to a specified position (#53)', () => {
+        it('should copy a transunit to a specified position (#53)', () => {
             const file: ITranslationMessagesFile = readUnknownFormatFile(MASTER_1_XMB);
             const tu: ITransUnit = file.transUnitWithId(ID_TO_MERGE);
             expect(tu).toBeTruthy();
@@ -381,7 +395,7 @@ describe('ngx-i18nsupport-lib xtb test spec', () => {
             expect(targetTu.targetContent()).toBe('Test for merging units');
         });
 
-        it ('should copy a transunit to first position (#53)', () => {
+        it('should copy a transunit to first position (#53)', () => {
             const file: ITranslationMessagesFile = readUnknownFormatFile(MASTER_1_XMB);
             const tu: ITransUnit = file.transUnitWithId(ID_TO_MERGE);
             expect(tu).toBeTruthy();
@@ -400,7 +414,7 @@ describe('ngx-i18nsupport-lib xtb test spec', () => {
             expect(targetTu.targetContent()).toBe('Test for merging units');
         });
 
-        it ('should copy a transunit from file a to file b and set a praefix and suffix', () => {
+        it('should copy a transunit from file a to file b and set a praefix and suffix', () => {
             const file: ITranslationMessagesFile = readUnknownFormatFile(MASTER_1_XMB);
             const tu: ITransUnit = file.transUnitWithId(ID_TO_MERGE);
             expect(tu).toBeTruthy();
@@ -416,7 +430,7 @@ describe('ngx-i18nsupport-lib xtb test spec', () => {
             expect(targetTu.targetContent()).toBe('%%Test for merging units!!');
         });
 
-        it ('should copy a transunit from file a to file b, but should not set a praefix and suffix for ICU messages', () => {
+        it('should copy a transunit from file a to file b, but should not set a praefix and suffix for ICU messages', () => {
             const file: ITranslationMessagesFile = readUnknownFormatFile(MASTER_1_XMB);
             const tu: ITransUnit = file.transUnitWithId(ID_ICU_SELECT_2);
             expect(tu).toBeTruthy();
@@ -433,7 +447,7 @@ describe('ngx-i18nsupport-lib xtb test spec', () => {
             expect(targetTu.targetContent()).not.toContain('!!');
         });
 
-        it ('should translate using NormalizedMessage (plain text case, no placeholders, no markup)', () => {
+        it('should translate using NormalizedMessage (plain text case, no placeholders, no markup)', () => {
             const file: ITranslationMessagesFile = readFile(TRANSLATION_EN_XTB, MASTER_DE_XMB);
             const tu: ITransUnit = file.transUnitWithId(ID_MY_FIRST);
             expect(tu).toBeTruthy();

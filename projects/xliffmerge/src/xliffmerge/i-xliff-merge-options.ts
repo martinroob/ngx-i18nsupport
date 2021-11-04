@@ -31,7 +31,7 @@ export interface IXliffMergeOptions {
     i18nBaseFile?: string; // Basename for i18n input and output, default is 'messages'
     i18nFile?: string;  // master file, if not absolute, it is relative to srcDir
     i18nFormat?: string; // xlf or xmb
-    encoding?: string;  // encoding to write xml
+    encoding?: BufferEncoding;  // encoding to write xml
     genDir?: string;    // directory, where the files are written to
     angularCompilerOptions?: {
         genDir?: string;    // same as genDir, just to be compatible with ng-xi18n

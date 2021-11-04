@@ -22,14 +22,14 @@ export class XliffFile extends AbstractTranslationMessagesFile implements ITrans
      * This is read from the file, but if you know it before, you can avoid reading the file twice.
      * @return XliffFile
      */
-    constructor(xmlString: string, path: string, encoding: string) {
+    constructor(xmlString: string, path: string, encoding: BufferEncoding ) {
         super();
         this._warnings = [];
         this._numberOfTransUnitsWithMissingId = 0;
         this.initializeFromContent(xmlString, path, encoding);
     }
 
-    private initializeFromContent(xmlString: string, path: string, encoding: string): XliffFile {
+    private initializeFromContent(xmlString: string, path: string, encoding: BufferEncoding ): XliffFile {
         this.parseContent(xmlString, path, encoding);
         const xliffList = this._parsedDocument.getElementsByTagName('xliff');
         if (xliffList.length !== 1) {

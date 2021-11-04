@@ -1,7 +1,7 @@
 /**
  * Created by roobm on 21.03.2017.
  */
-import {TranslationMessagesFileFactory, ITranslationMessagesFile} from '@ngx-i18nsupport/ngx-i18nsupport-lib';
+import {ITranslationMessagesFile, TranslationMessagesFileFactory} from '@ngx-i18nsupport/ngx-i18nsupport-lib';
 import {FileUtil} from '../common/file-util';
 import {XmlReader} from './xml-reader';
 
@@ -20,7 +20,7 @@ export class TranslationMessagesFileReader {
      */
     public static fromFile(i18nFormat: string,
                            path: string,
-                           encoding: string,
+                           encoding: BufferEncoding,
                            optionalMasterFilePath?: string): ITranslationMessagesFile {
         const xmlContent = XmlReader.readXmlFileContent(path, encoding);
         const optionalMaster = TranslationMessagesFileReader.masterFileContent(optionalMasterFilePath, encoding);
@@ -35,7 +35,7 @@ export class TranslationMessagesFileReader {
      * @return XliffFile
      */
     public static fromUnknownFormatFile(path: string,
-                                        encoding: string,
+                                        encoding: BufferEncoding,
                                         optionalMasterFilePath?: string): ITranslationMessagesFile {
         const xmlContent = XmlReader.readXmlFileContent(path, encoding);
         const optionalMaster = TranslationMessagesFileReader.masterFileContent(optionalMasterFilePath, encoding);
@@ -48,8 +48,8 @@ export class TranslationMessagesFileReader {
      * @param encoding encoding
      * @return content and encoding of file
      */
-    private static masterFileContent(optionalMasterFilePath: string, encoding: string)
-        : {xmlContent: string, path: string, encoding: string} {
+    private static masterFileContent(optionalMasterFilePath: string, encoding: BufferEncoding)
+        : { xmlContent: string, path: string, encoding: BufferEncoding } {
         if (optionalMasterFilePath) {
             const masterXmlContent = XmlReader.readXmlFileContent(optionalMasterFilePath, encoding);
             return {
@@ -71,7 +71,7 @@ export class TranslationMessagesFileReader {
      * Default is false.
      */
     public static save(messagesFile: ITranslationMessagesFile, beautifyOutput?: boolean) {
-        FileUtil.replaceContent(messagesFile.filename(), messagesFile.editedContent(beautifyOutput), messagesFile.encoding());
+        FileUtil.replaceContent(messagesFile.filename(), messagesFile.editedContent(beautifyOutput), messagesFile.encoding() as BufferEncoding);
     }
 }
 

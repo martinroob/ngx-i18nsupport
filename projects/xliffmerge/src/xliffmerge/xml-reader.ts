@@ -5,7 +5,7 @@ import {FileUtil} from '../common/file-util';
  */
 
 export class XmlReader {
-    static DEFAULT_ENCODING = 'UTF-8';
+    static DEFAULT_ENCODING = 'utf-8' as BufferEncoding;
 
     /**
      * Read an xml-File.
@@ -14,12 +14,12 @@ export class XmlReader {
      * This is read from the file, but if you know it before, you can avoid reading the file twice.
      * @return file content and encoding found in the file.
      */
-    public static readXmlFileContent(path: string, encoding?: string): {content: string, encoding: string} {
+    public static readXmlFileContent(path: string, encoding?: BufferEncoding): {content: string, encoding: BufferEncoding } {
         if (!encoding) {
-            encoding = XmlReader.DEFAULT_ENCODING;
+            encoding = XmlReader.DEFAULT_ENCODING as BufferEncoding;
         }
         let content: string = FileUtil.read(path, encoding);
-        const foundEncoding = XmlReader.encodingFromXml(content);
+        const foundEncoding = XmlReader.encodingFromXml(content) as BufferEncoding;
         if (foundEncoding !== encoding) {
             // read again with the correct encoding
             content = FileUtil.read(path, foundEncoding);

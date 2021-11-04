@@ -43,7 +43,7 @@ export function readAsJson<T>(tree: UnitTestTree, path: string): T {
     if (!content) {
         throw new Error('file ' + path + ' not found in tree');
     }
-    const contentString = content.toString('UTF-8');
+    const contentString = content.toString('utf-8');
     return JSON.parse(contentString) as T;
 }
 
