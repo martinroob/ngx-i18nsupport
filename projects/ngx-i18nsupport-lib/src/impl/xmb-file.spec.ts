@@ -11,7 +11,7 @@ describe('ngx-i18nsupport-lib xmb test spec', () => {
 
     const SRCDIR = 'test/testdata/i18n/';
 
-    const ENCODING = 'UTF-8';
+    const ENCODING = 'utf-8';
 
     /**
      * Helper function to read Xmb from File

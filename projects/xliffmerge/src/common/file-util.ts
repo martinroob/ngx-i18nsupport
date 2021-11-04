@@ -23,7 +23,7 @@ export class FileUtil {
      * @param encoding encoding
      * @return content of file
      */
-    public static read(filename: string, encoding: string) {
+    public static read(filename: string, encoding: BufferEncoding) {
         return fs.readFileSync(filename, encoding);
     }
 
@@ -33,7 +33,7 @@ export class FileUtil {
      * @param newContent newContent
      * @param encoding encoding
      */
-    public static replaceContent(filename: string, newContent: string, encoding: string) {
+    public static replaceContent(filename: string, newContent: string, encoding: BufferEncoding) {
         fs.writeFileSync(filename, newContent, {encoding: encoding});
     }
 
@@ -59,9 +59,9 @@ export class FileUtil {
      */
     public static deleteFolderRecursive(path: string) {
         let files = [];
-        if (fs.existsSync(path) ) {
+        if (fs.existsSync(path)) {
             files = fs.readdirSync(path);
-            files.forEach(function(file) {
+            files.forEach(function (file) {
                 const curPath = path + '/' + file;
                 if (fs.lstatSync(curPath).isDirectory()) { // recurse
                     FileUtil.deleteFolderRecursive(curPath);
@@ -80,9 +80,9 @@ export class FileUtil {
      */
     public static deleteFolderContentRecursive(path: string) {
         let files = [];
-        if (fs.existsSync(path) ) {
+        if (fs.existsSync(path)) {
             files = fs.readdirSync(path);
-            files.forEach(function(file) {
+            files.forEach(function (file) {
                 const curPath = path + '/' + file;
                 if (fs.lstatSync(curPath).isDirectory()) { // recurse
                     FileUtil.deleteFolderRecursive(curPath);

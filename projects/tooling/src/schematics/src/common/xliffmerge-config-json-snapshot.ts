@@ -73,7 +73,7 @@ export class XliffmergeConfigJsonSnapshot {
             }
             throw new SchematicsException(msg);
         }
-        const contentString = content.toString('UTF-8');
+        const contentString = content.toString('utf-8');
         return JSON.parse(contentString) as IConfigFile;
     }
 }

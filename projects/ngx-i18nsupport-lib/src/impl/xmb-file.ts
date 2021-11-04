@@ -36,7 +36,7 @@ export class XmbFile extends AbstractTranslationMessagesFile implements ITransla
      */
     constructor(
         private _translationMessageFileFactory: ITranslationMessagesFileFactory,
-        xmlString: string, path: string, encoding: string) {
+        xmlString: string, path: string, encoding: BufferEncoding ) {
 
         super();
         this._warnings = [];
@@ -44,7 +44,7 @@ export class XmbFile extends AbstractTranslationMessagesFile implements ITransla
         this.initializeFromContent(xmlString, path, encoding);
     }
 
-    private initializeFromContent(xmlString: string, path: string, encoding: string): XmbFile {
+    private initializeFromContent(xmlString: string, path: string, encoding: BufferEncoding ): XmbFile {
         this.parseContent(xmlString, path, encoding);
         if (this._parsedDocument.getElementsByTagName('messagebundle').length !== 1) {
             throw new Error(format('File "%s" seems to be no xmb file (should contain a messagebundle element)', path));

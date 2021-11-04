@@ -16,7 +16,7 @@ export class WriterToString extends Writable {
         this.resultString = '';
     }
 
-    public _write(chunk: any, encoding: string, callback: Function): void {
+    public _write(chunk: any, encoding: BufferEncoding, callback: Function): void {
         let chunkString;
         if (isString(chunk)) {
             chunkString = chunk;

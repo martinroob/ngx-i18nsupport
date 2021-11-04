@@ -16,8 +16,8 @@ export interface ITranslationMessagesFileFactory {
     createFileFromFileContent(i18nFormat: string,
                               xmlContent: string,
                               path: string,
-                              encoding: string,
-                              optionalMaster?: { xmlContent: string, path: string, encoding: string }): ITranslationMessagesFile;
+                              encoding: BufferEncoding ,
+                              optionalMaster?: { xmlContent: string, path: string, encoding: BufferEncoding  }): ITranslationMessagesFile;
 
     /**
      * Read file function for any file with unknown format.
@@ -34,7 +34,7 @@ export interface ITranslationMessagesFileFactory {
      */
     createFileFromUnknownFormatFileContent(xmlContent: string,
                                            path: string,
-                                           encoding: string,
-                                           optionalMaster?: { xmlContent: string, path: string, encoding: string })
+                                           encoding: BufferEncoding ,
+                                           optionalMaster?: { xmlContent: string, path: string, encoding: BufferEncoding  })
         : ITranslationMessagesFile;
 }

@@ -25,7 +25,7 @@ describe('XliffMerge XLIFF 1.2 format tests', () => {
     const WORKDIR = 'test/work/';
     const SRCDIR = 'test/testdata/i18n/';
 
-    const ENCODING = 'UTF-8';
+    const ENCODING = 'utf-8';
 
     /**
      * Helper function to read Xliff from File
@@ -854,10 +854,10 @@ describe('XliffMerge XLIFF 1.2 format tests', () => {
             FileUtil.copy(SRCDIR + 'issue128master.xlf', MASTER);
             const langfileName = WORKDIR + 'messages.en.xlf';
             FileUtil.copy(SRCDIR + 'issue128translated.xlf', langfileName);
-            const originalContent = FileUtil.read(langfileName, 'UTF-8');
+            const originalContent = FileUtil.read(langfileName, 'utf-8');
             const contentWithoutCRLF = originalContent.replace(/[\n\r]/g, '');
             expect(originalContent).not.toBe(contentWithoutCRLF);
-            FileUtil.replaceContent(langfileName, contentWithoutCRLF, 'UTF-8');
+            FileUtil.replaceContent(langfileName, contentWithoutCRLF, 'utf-8');
             const ws: WriterToString = new WriterToString();
             const commandOut = new CommandOutput(ws);
             const profileContent: IConfigFile = {
@@ -1184,7 +1184,7 @@ describe('XliffMerge XLIFF 1.2 format tests', () => {
             expect(ws.writtenData()).not.toContain('ERROR');
             const translationJsonFilename = xliffMergeCmd.generatedNgxTranslateFile('de');
             expect(FileUtil.exists(translationJsonFilename)).toBeTruthy();
-            const fileContent = FileUtil.read(translationJsonFilename, 'UTF-8');
+            const fileContent = FileUtil.read(translationJsonFilename, 'utf-8');
             const translation: any = JSON.parse(fileContent);
             expect(translation).toBeTruthy();
             expect(translation.myapp).toBeTruthy();
@@ -1212,7 +1212,7 @@ describe('XliffMerge XLIFF 1.2 format tests', () => {
             expect(ws.writtenData()).not.toContain('ERROR');
             const translationJsonFilename = xliffMergeCmd.generatedNgxTranslateFile('de');
             expect(FileUtil.exists(translationJsonFilename)).toBeTruthy();
-            const fileContent = FileUtil.read(translationJsonFilename, 'UTF-8');
+            const fileContent = FileUtil.read(translationJsonFilename, 'utf-8');
             const translation: any = JSON.parse(fileContent);
             expect(translation).toBeTruthy();
             expect(translation.placeholders).toBeTruthy();
@@ -1240,7 +1240,7 @@ describe('XliffMerge XLIFF 1.2 format tests', () => {
             expect(ws.writtenData()).not.toContain('ERROR');
             const translationJsonFilename = xliffMergeCmd.generatedNgxTranslateFile('de');
             expect(FileUtil.exists(translationJsonFilename)).toBeTruthy();
-            const fileContent = FileUtil.read(translationJsonFilename, 'UTF-8');
+            const fileContent = FileUtil.read(translationJsonFilename, 'utf-8');
             const translation: any = JSON.parse(fileContent);
             expect(translation).toBeTruthy();
             expect(translation.embeddedhtml).toBeTruthy();
@@ -1290,7 +1290,7 @@ describe('XliffMerge XLIFF 1.2 format tests', () => {
             expect(ws.writtenData()).not.toContain('ERROR');
             const translationJsonFilename = xliffMergeCmd.generatedNgxTranslateFile('de');
             expect(FileUtil.exists(translationJsonFilename)).toBeTruthy();
-            const fileContent = FileUtil.read(translationJsonFilename, 'UTF-8');
+            const fileContent = FileUtil.read(translationJsonFilename, 'utf-8');
             const translation: any = JSON.parse(fileContent);
             expect(translation).toBeTruthy();
             expect(translation.dateservice.monday).toBe('Montag');
@@ -1319,7 +1319,7 @@ describe('XliffMerge XLIFF 1.2 format tests', () => {
             expect(ws.writtenData()).not.toContain('ERROR');
             const translationJsonFilename = xliffMergeCmd.generatedNgxTranslateFile('de');
             expect(FileUtil.exists(translationJsonFilename)).toBeTruthy();
-            const fileContent = FileUtil.read(translationJsonFilename, 'UTF-8');
+            const fileContent = FileUtil.read(translationJsonFilename, 'utf-8');
             const translation: any = JSON.parse(fileContent);
             expect(translation).toBeTruthy();
             expect(translation.dateservice.monday).toBe('Montag');

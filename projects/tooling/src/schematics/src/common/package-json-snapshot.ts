@@ -195,7 +195,7 @@ export class PackageJsonSnapshot {
         if (!content) {
             throw new SchematicsException(`${packageJsonPath} does not exist`);
         }
-        const contentString = content.toString('UTF-8');
+        const contentString = content.toString('utf-8');
         return JSON.parse(contentString) as IPackageJson;
     }
 }
